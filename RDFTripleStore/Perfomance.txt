@@ -1,0 +1,16 @@
+build 1.ttl  6929,9764ms
+get first's 1000 triples  4,1932ms
+search by object as subject from first's 1000 triples  7,9822ms
+search by predicate from first's 1000 triples 0,385ms
+build 1.ttl  7516,6697ms
+get first's 1000 triples  6,0202ms
+search by object as subject from first's 1000 triples  3,7786ms
+search by predicate from first's 1000 triples 0,3878ms
+build 1.ttl  7762,1096ms
+get first's 1000 triples  4,1687ms
+search by object as subject from first's 1000 triples  18746,5806ms
+build 1.ttl  7422,2094ms
+get first's 100 triples  5,5995ms
+search by object as subject from first's 100 triples  1522,567ms
+search by predicate from first's 100 triples 5553,9335ms
+search by object as subject from first's 100 triples  2830,6549ms
