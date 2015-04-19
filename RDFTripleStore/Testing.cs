@@ -16,7 +16,7 @@ namespace RDFTripleStore
         /// </summary>
         /// <param name="graph"> тестируемый граф должен реализовать интерфейс <see cref="IGraph<string,string,ObjectVariants>"/></param>
         /// <param name="millions">в данных пока предполагаются варианты: 1, 10, 100, 1000</param>
-        public static void TestBuild(this IGraph<string, string, ObjectVariants> graph, int millions)
+        public static void TestBuild(this IGraph<Triple<string, string, ObjectVariants>> graph, int millions)
         {
             Perfomance.ComputeTime(() =>
                 graph.Build(
@@ -29,7 +29,7 @@ namespace RDFTripleStore
         /// </summary>
         /// <param name="graph"> тестируемый граф должен реализовать интерфейс <seealso cref="IGraph<string,string,ObjectVariants>"/></param>
         /// <param name="turtleFileName"> путь к внешнему файлу ttl</param>
-        public static void TestBuild(this IGraph<string, string, ObjectVariants> graph, string turtleFileName)
+        public static void TestBuild(this IGraph<Triple<string, string, ObjectVariants>> graph, string turtleFileName)
         {
             Perfomance.ComputeTime(() =>
                 graph.Build(
@@ -47,7 +47,7 @@ namespace RDFTripleStore
         /// <typeparam name="Tp"></typeparam>
         /// <typeparam name="To"></typeparam>
         /// <param name="graph"></param>
-        public static void TestSearch(this IGraph<string, string, ObjectVariants> graph)
+        public static void TestSearch(this IGraph<Triple<string, string, ObjectVariants>> graph)
         {
             var all = graph.Search();
             Triple<string, string, ObjectVariants>[] ts100 = null;

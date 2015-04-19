@@ -19,7 +19,12 @@ namespace Task15UniversalIndex
         {
             Clear();
             table_cell.Fill(new object[0]);
-            foreach (var el in values) table_cell.Root.AppendElement(new object[] { false, el });
+            foreach (var el in values)
+            {
+                object v = new object[] { false, el };
+                table_cell.Root.AppendElement(v);
+                //table_cell.Root.AppendElement(new object[] { false, el });
+            }
             table_cell.Flush();
         }
         public void Warmup() { foreach (var v in table_cell.Root.ElementValues()); }
