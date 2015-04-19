@@ -10,7 +10,7 @@ namespace RDFTripleStore
     {
         static void Main(string[] args)
         {
-             RamGraph graph=new RamGraph();
+            RamGraph graph=new RamGraph();
             graph.TestBuild(1);
             graph.TestSearch();
         }

@@ -14,3 +14,8 @@ get first's 100 triples  5,5995ms
 search by object as subject from first's 100 triples  1522,567ms
 search by predicate from first's 100 triples 5553,9335ms
 search by object as subject from first's 100 triples  2830,6549ms
+build 1.ttl  9872,1355ms
+get first's 100 triples  4,7193ms
+search by object as subject from first's 100 triples  2042,9823ms
+search by predicate from first's 100 triples  11249,1478ms
+search by subject predicate and object from first's 100 triples, compare correctness  3841,8537ms
