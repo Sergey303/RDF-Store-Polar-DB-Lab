@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using RDFTripleStore;
 
 namespace GoTripleStore
 {
@@ -11,6 +10,8 @@ namespace GoTripleStore
         public static void Main()
         {
             Console.WriteLine("Start GoTripleStore.");
+            var query = ReadTripleStringsFromTurtle.LoadGraph(Config.Source_data_folder_path + "1.ttl");
+            Console.WriteLine(query.Count());
         }
     }
 }

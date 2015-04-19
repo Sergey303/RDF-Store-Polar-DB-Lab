@@ -48,6 +48,16 @@
   <ItemGroup>
     <Content Include="Concepts.txt" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\RDFTripleStore\RDFTripleStore.csproj">
+      <Project>{16601fe6-f095-410b-9f63-efc948c2b939}</Project>
+      <Name>RDFTripleStore</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\UniversalIndex\UniversalIndex.csproj">
+      <Project>{e4ab7a63-7b55-43e9-b1aa-c8e0f8aa87e3}</Project>
+      <Name>UniversalIndex</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

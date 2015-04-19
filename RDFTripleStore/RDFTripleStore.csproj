@@ -65,7 +65,6 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="config.ini" />
     <None Include="XmlSchema.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>XmlSchema.Designer.cs</LastGenOutput>
