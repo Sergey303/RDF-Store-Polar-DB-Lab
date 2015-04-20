@@ -123,7 +123,7 @@ namespace RDFTripleStore
     }
     public class OV_iri : ObjectVariants
     {
-        public string full_id;
+        public readonly string full_id;
 
         public OV_iri(string fullId)
         {
@@ -140,10 +140,14 @@ namespace RDFTripleStore
             get { return full_id; }
         }
 
+        public override int GetHashCode()
+        {
+            return full_id.GetHashCode();
+        }
     }
     public class OV_string : ObjectVariants
     {
-        public string value;
+        public readonly string value;
 
         public OV_string(string value)
         {
@@ -160,10 +164,14 @@ namespace RDFTripleStore
             get { return value; }
         }
 
+        public override int GetHashCode()
+        {
+            return value.GetHashCode();
+        }
     }
     public class OV_iriint : ObjectVariants
     {
-        public int code;
+        public readonly int code;
 
         public OV_iriint(int code)
         {
@@ -179,11 +187,14 @@ namespace RDFTripleStore
         {
             get { return code; }
         }
-
+        public override int GetHashCode()
+        {
+            return code.GetHashCode();
+        }
     }
     public class OV_bool : ObjectVariants
     {
-        public bool value;
+        public readonly bool value;
 
         public OV_bool(bool value)
         {
@@ -199,11 +210,14 @@ namespace RDFTripleStore
         {
             get { return value; }
         }
-
+        public override int GetHashCode()
+        {
+            return value.GetHashCode();
+        }
     }
     public class OV_int : ObjectVariants
     {
-        public int value;
+        public readonly int value;
 
         public OV_int(int value)
         {
@@ -219,11 +233,14 @@ namespace RDFTripleStore
         {
             get { return value; }
         }
-
+        public override int GetHashCode()
+        {
+            return value.GetHashCode();
+        }
     }
     public class OV_double : ObjectVariants
     {
-        public double value;
+        public readonly double value;
 
         public OV_double(double value)
         {
@@ -239,11 +256,14 @@ namespace RDFTripleStore
         {
             get { return value; }
         }
-
+        public override int GetHashCode()
+        {
+            return value.GetHashCode();
+        }
     }
     public class OV_decimal : ObjectVariants
     {
-        public decimal value;
+        public readonly decimal value;
 
         public OV_decimal(decimal value)
         {
@@ -259,11 +279,14 @@ namespace RDFTripleStore
         {
             get { return value; }
         }
-
+        public override int GetHashCode()
+        {
+            return value.GetHashCode();
+        }
     }
     public class OV_float : ObjectVariants
     {
-        public float value;
+        public readonly float value;
 
         public OV_float(float value)
         {
@@ -279,11 +302,14 @@ namespace RDFTripleStore
         {
             get { return value; }
         }
-
+        public override int GetHashCode()
+        {
+            return value.GetHashCode();
+        }
     }
     public class OV_typed : ObjectVariants
     {
-        public string value; public string turi;
+        public readonly string value; public readonly string turi;
 
         public OV_typed(string value, string turi)
         {
@@ -308,10 +334,14 @@ namespace RDFTripleStore
         {
             return new Comparer3(Variant,turi, value);
         }
+        public override int GetHashCode()
+        {
+            return value.GetHashCode()+37*turi.GetHashCode();
+        }
     }
     public class OV_typedint : ObjectVariants
     {
-        private readonly string value; public int curi;
+        private readonly string value; public readonly int curi;
 
         public OV_typedint(string value, int curi)
         {
@@ -332,10 +362,14 @@ namespace RDFTripleStore
         {
             return new Comparer3(Variant, curi, value);
         }
+        public override int GetHashCode()
+        {
+            return value.GetHashCode() + 37 * curi.GetHashCode();
+        }
     }
     public class OV_time : ObjectVariants
     {
-        public TimeSpan value;
+        public readonly TimeSpan value;
 
         public OV_time(TimeSpan value)
         {
@@ -351,11 +385,14 @@ namespace RDFTripleStore
         {
             get { return value.Ticks; }
         }
-
+       public override int GetHashCode()
+        {
+            return value.GetHashCode();
+        }
     }
     public class OV_date : ObjectVariants
     {
-        public DateTime value;
+        public readonly DateTime value;
 
         public OV_date(DateTime value)
         {
@@ -372,11 +409,14 @@ namespace RDFTripleStore
             get { return value.ToBinary(); }
         }
 
-
+        public override int GetHashCode()
+        {
+            return value.GetHashCode();
+        }
     }
     public class OV_dateTime : ObjectVariants
     {
-        public DateTime value;
+        public readonly DateTime value;
 
         public OV_dateTime(DateTime value)
         {
@@ -392,11 +432,14 @@ namespace RDFTripleStore
         {
             get { return value.ToBinary(); }
         }
-
+        public override int GetHashCode()
+        {
+            return value.GetHashCode();
+        }
     }
     public class OV_dateTimeZone : ObjectVariants
     {
-        public DateTimeOffset value;
+        public readonly DateTimeOffset value;
 
         public OV_dateTimeZone(DateTimeOffset value)
         {
@@ -412,11 +455,14 @@ namespace RDFTripleStore
         {
             get { return value.ToFileTime(); }
         }
-
+        public override int GetHashCode()
+        {
+            return value.GetHashCode();
+        }
     }
     public class OV_langstring : ObjectVariants
     {
-        public string value; public string lang;
+        public readonly string value; public readonly string lang;
 
         public OV_langstring(string value, string lang)
         {
@@ -437,7 +483,10 @@ namespace RDFTripleStore
         {
             return new Comparer3(Variant, value, lang);
         }
-
+        public override int GetHashCode()
+        {
+            return value.GetHashCode()+73*lang.GetHashCode();
+        }
     }
 
 }
