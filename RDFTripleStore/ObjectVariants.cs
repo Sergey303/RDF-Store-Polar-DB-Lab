@@ -2,7 +2,7 @@ using System;
 
 namespace RDFTripleStore
 {
-    public abstract class ObjectVariants
+    public abstract class ObjectVariants 
     {
         public  abstract ObjectVariantEnum Variant { get; }
         public abstract object WritableValue { get; }
@@ -115,6 +115,11 @@ namespace RDFTripleStore
         }
 
         private static readonly Random random = new Random();
+
+        public virtual IComparable ToComparable()
+        {
+            return new Comparer2(Variant, (IComparable)WritableValue);
+        }
     }
     public class OV_iri : ObjectVariants
     {
@@ -299,6 +304,10 @@ namespace RDFTripleStore
             }
         }
 
+        public override IComparable ToComparable()
+        {
+            return new Comparer3(Variant,turi, value);
+        }
     }
     public class OV_typedint : ObjectVariants
     {
@@ -319,7 +328,10 @@ namespace RDFTripleStore
         {
             get { return new object[] { value, curi }; }
         }
-
+        public override IComparable ToComparable()
+        {
+            return new Comparer3(Variant, curi, value);
+        }
     }
     public class OV_time : ObjectVariants
     {
@@ -421,7 +433,10 @@ namespace RDFTripleStore
         {
             get { return new object[] { value, lang }; }
         }
-
+        public override IComparable ToComparable()
+        {
+            return new Comparer3(Variant, value, lang);
+        }
 
     }
 

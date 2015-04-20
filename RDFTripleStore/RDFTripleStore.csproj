@@ -45,6 +45,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Compare2-3.cs" />
     <Compile Include="Config.cs" />
     <Compile Include="IGraph.cs" />
     <Compile Include="ObjectVariantEnum.cs" />
