@@ -34,7 +34,7 @@ namespace RDFTripleStore
                 new PTypeRecord(new NamedType("str", new PType(PTypeEnumeration.sstring)),
                     new NamedType("type", new PType(PTypeEnumeration.integer)))));
     }
-    class ObjectVariantsEx
+ public   static class ObjectVariantsEx
     {
         //public static readonly Func<object, IComparable>[] w2c = new Func<object, IComparable>[]
         //    {
@@ -58,9 +58,32 @@ namespace RDFTripleStore
 
         //public static IComparable Writeble2Comparable(object[] @object)
         //{
-        //    return w2c[(int) @object[0]](@object[1]);
+        //    return w2c[(int)@object[0]](@object[1]);
         //}
+        public static readonly Func<object, ObjectVariants>[] w2ov = 
+            {
+                  s=>new OV_iri((string) s), 
+                  s=>new OV_iriint((int) s), 
+                  s=>new OV_bool((bool) s), 
+                  s=>new OV_string((string) s),
+                 strLang=> new OV_langstring((string) ((object[])strLang)[0], (string) ((object[])strLang)[1]),
+                  s=>new OV_double((double) s), 
+                  s=>new OV_decimal((decimal) s),   
+                  s=>new OV_float((float) s),   
+                  s=>new OV_int((int) s),   
+                  s=>new OV_dateTimeZone(DateTimeOffset.FromFileTime((long) s)),   
+                  s=>new OV_dateTime(DateTime.FromBinary((long) s)),   
+                  s=>new OV_date(DateTime.FromBinary((long) s)),   
+                  s=>new OV_time(TimeSpan.FromTicks((long) s)),   
+                  typed=>new OV_typed((string) ((object[])typed)[1], (string) ((object[])typed)[0]),   
+                  typed=>new OV_typedint((string) ((object[])typed)[1], (int) ((object[])typed)[0]),   
+            };
 
+
+        public static ObjectVariants Writeble2OVariant(object[] @object)
+        {
+            return w2ov[(int)@object[0]](@object[1]);
+        }
     }
 
    }
