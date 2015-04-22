@@ -52,7 +52,10 @@
     <Compile Include="ObjectVariants.cs" />
     <Compile Include="Perfomance.cs" />
     <Compile Include="Program.cs" />
+    <Compile Include="PrologueFullString.cs" />
     <Compile Include="RamGraph.cs" />
+    <Compile Include="parsers\RDFTurtle\Parser.cs" />
+    <Compile Include="parsers\RDFTurtle\Scanner.cs" />
     <Compile Include="ReadTripleStringsFromTurtle.cs" />
     <Compile Include="SpecialTypes.cs" />
     <Compile Include="Testing.cs" />
@@ -66,10 +69,23 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <None Include="parsers\coc.bat" />
+    <None Include="parsers\Parser.frame" />
+    <None Include="parsers\SPARQL.ATG" />
+    <None Include="parsers\RDFTurtle.ATG" />
+    <None Include="parsers\RDFTurtle\Parser.cs.old" />
+    <None Include="parsers\RDFTurtle\Scanner.cs.old" />
+    <None Include="parsers\Scanner.frame" />
     <None Include="XmlSchema.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>XmlSchema.Designer.cs</LastGenOutput>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="parsers\Coco.exe" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="parsers\SPARQL\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

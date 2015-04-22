@@ -1,0 +1,1 @@
+coco RDFTurtle.ATG -namespace RDFTripleStore.RDFTurtle	-o "RDFTurtle"

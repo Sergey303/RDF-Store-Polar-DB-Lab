@@ -104,7 +104,7 @@ namespace RDFTripleStore
                 return new OV_typed(p, typeUriNode);
         }
 
-        public string CreateBlankNode(string graph, string blankNodeString = null)
+        public static string CreateBlankNode(string graph, string blankNodeString = null)
         {
             if (blankNodeString == null)
                 blankNodeString = "blank" + (long)(random.NextDouble() * 1000 * 1000 * 1000 * 1000);
