@@ -11,7 +11,7 @@ namespace RDFTripleStore
         static void Main(string[] args)
         {
             RamGraph graph=new RamGraph();
-            graph.TestBuild(1);
+            graph.TestReadTtl_Cocor(1);
             graph.TestSearch();
         }
     }

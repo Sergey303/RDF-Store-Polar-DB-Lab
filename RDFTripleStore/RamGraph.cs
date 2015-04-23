@@ -15,7 +15,15 @@ namespace RDFTripleStore
             this.triples = triples.ToList();
         }
 
-        public virtual IEnumerable<Triple<string, string, ObjectVariants>> Search(object subject = null, object predicate = null, ObjectVariants obj = null)
+       public void Build(IGenerator<List<Triple<string, string, ObjectVariants>>> generator)
+       {
+           triples=new List<Triple<string, string, ObjectVariants>>();
+           generator.Start(list =>
+               triples.AddRange(list));
+       }
+
+     
+       public virtual IEnumerable<Triple<string, string, ObjectVariants>> Search(object subject = null, object predicate = null, ObjectVariants obj = null)
         {
             if (subject == null && predicate == null && obj == null) return triples;
             if (predicate == null && obj == null) return triples.Where(t => t.Subject == subject);

@@ -24,3 +24,30 @@ get first's 100 triples  67,4365ms
 search by object as subject from first's 100 triples  1153,8329ms
 search by predicate from first's 100 triples  2277,555ms
 search by subject predicate and object from first's 100 triples, compare correctness  2331,5447ms
+
+
+cocor загрузка
+
+паральльная 
+build 1.ttl  13271,4825ms
+get first's 100 triples  4,1489ms
+search by object as subject from first's 100 triples  927,4498ms
+search by predicate from first's 100 triples  1843,8466ms
+search by subject predicate and object from first's 100 triples, compare correctness  1804,3567ms
+build 1.ttl  12955,683ms
+get first's 100 triples  3,9423ms
+search by object as subject from first's 100 triples  935,4318ms
+search by predicate from first's 100 triples  1789,9068ms
+search by subject predicate and object from first's 100 triples, compare correctness  1837,2928ms
+
+последовательная
+build 1.ttl  13048,749ms
+get first's 100 triples  4,1159ms
+search by object as subject from first's 100 triples  952,911ms
+search by predicate from first's 100 triples  1800,5111ms
+search by subject predicate and object from first's 100 triples, compare correctness  1817,2533ms
+build 1.ttl  12856,2046ms
+get first's 100 triples  4,0388ms
+search by object as subject from first's 100 triples  929,0064ms
+search by predicate from first's 100 triples  1810,5755ms
+search by subject predicate and object from first's 100 triples, compare correctness  1769,6152ms

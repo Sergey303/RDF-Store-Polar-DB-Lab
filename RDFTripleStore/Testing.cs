@@ -1,8 +1,11 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
+using RDFTripleStore.RDFTurtle;
 
 namespace RDFTripleStore
 {
@@ -16,12 +19,67 @@ namespace RDFTripleStore
         /// </summary>
         /// <param name="graph"> тестируемый граф должен реализовать интерфейс <see cref="IGraph<string,string,ObjectVariants>"/></param>
         /// <param name="millions">в данных пока предполагаются варианты: 1, 10, 100, 1000</param>
-        public static void TestBuild(this IGraph<Triple<string, string, ObjectVariants>> graph, int millions)
+        public static void TestReadTtl(this IGraph<Triple<string, string, ObjectVariants>> graph, int millions)
         {
             Perfomance.ComputeTime(() =>
                 graph.Build(
                     ReadTripleStringsFromTurtle.LoadGraph(
                         Config.Source_data_folder_path + millions + ".ttl")), "build " + millions + ".ttl ", true);
+        }          
+
+        /// <summary>
+        /// запускает Build и  замеряет время.
+        /// </summary>
+        /// <param name="graph"> тестируемый граф должен реализовать интерфейс <seealso cref="IGraph<string,string,ObjectVariants>"/></param>
+        /// <param name="turtleFileName"> путь к внешнему файлу ttl</param>
+        public static void TestReadTtl(this IGraph<Triple<string, string, ObjectVariants>> graph, string turtleFileName)
+        {
+            Perfomance.ComputeTime(() =>
+                graph.Build(
+                    ReadTripleStringsFromTurtle.LoadGraph(turtleFileName)),
+                "build " + turtleFileName + " ", true);
+        }
+
+        /// <summary>
+        /// запускает Build и  замеряет время.
+        ///    использует <see cref="TripleGeneratorBufferedParallel"/>
+        /// 
+        /// </summary>
+        /// <param name="graph"> тестируемый граф должен реализовать интерфейс <see cref="IGraph<string,string,ObjectVariants>"/></param>
+        /// <param name="millions">в данных пока предполагаются варианты: 1, 10, 100, 1000</param>
+        public static void TestReadTtl_Cocor(this IGraph<Triple<string, string, ObjectVariants>> graph, int millions)
+        {
+
+            Perfomance.ComputeTime(() =>
+            {
+                var generator = new TripleGeneratorBufferedParallel(Config.Source_data_folder_path + millions + ".ttl", "g");
+                graph.Build(generator);
+            },
+                "build " + millions + ".ttl ", true);
+        }
+
+        /// <summary>
+        /// Я пока не смог организовать выдачу потока триплетов из парсера.
+        /// Парсер выполняет делегат для каждого триплета.
+        /// Этот метод группирует триплеты в буфер и выполняет указанный делегат над буфером триплетов.
+        /// </summary>
+        /// <param name="parser"></param>
+        /// <param name="foreachBuffer">делегат выполняемый над буффером, когда тот заполнен, после чего очищает его.</param>
+        /// <param name="bufferlength">максимальная длина. Чем больше, тем реже будет выполняется делегат.</param>
+        private static void ForeachBuffer(RDFTurtle.Parser parser, Action<List<Triple<string,string, ObjectVariants>>> foreachBuffer, int bufferlength=1000)
+        {
+                            var buffer=new List<Triple<string, string, ObjectVariants>>(bufferlength);
+         parser.ft = (s, s1, arg3) =>
+            {
+                buffer.Add(new Triple<string, string, ObjectVariants>(s, s1, arg3));
+                if (buffer.Count == bufferlength)
+                {
+                    foreachBuffer(buffer);
+                    //buffer=new List<Triple<string, string, ObjectVariants>>();
+                    buffer.Clear();
+                }
+            };
+               parser.Parse();
         }
 
         /// <summary>
@@ -29,13 +87,13 @@ namespace RDFTripleStore
         /// </summary>
         /// <param name="graph"> тестируемый граф должен реализовать интерфейс <seealso cref="IGraph<string,string,ObjectVariants>"/></param>
         /// <param name="turtleFileName"> путь к внешнему файлу ttl</param>
-        public static void TestBuild(this IGraph<Triple<string, string, ObjectVariants>> graph, string turtleFileName)
+        public static void TestReadTtl_Cocor(this IGraph<Triple<string, string, ObjectVariants>> graph, string turtleFileName)
         {
             Perfomance.ComputeTime(() =>
-                graph.Build(
-                    ReadTripleStringsFromTurtle.LoadGraph(turtleFileName)),
+                graph.Build(new TripleGeneratorBufferedParallel(turtleFileName,"g")),
                 "build " + turtleFileName + " ", true);
         }
+
 
         /// <summary>
         /// Замеряет время:

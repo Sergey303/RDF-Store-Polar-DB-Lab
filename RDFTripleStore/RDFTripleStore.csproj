@@ -45,8 +45,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="GoGraphStringBased.cs" />
+    <Compile Include="TripleGeneratorBuffered.cs" />
+    <Compile Include="TripleGeneratorBufferedParallel.cs" />
+    <Compile Include="TriplesGenerator.cs" />
     <Compile Include="Compare2-3.cs" />
     <Compile Include="Config.cs" />
+    <Compile Include="IGenerator.cs" />
     <Compile Include="IGraph.cs" />
     <Compile Include="ObjectVariantEnum.cs" />
     <Compile Include="ObjectVariants.cs" />
@@ -86,6 +91,12 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="parsers\SPARQL\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\UniversalIndex\UniversalIndex.csproj">
+      <Project>{E4AB7A63-7B55-43E9-B1AA-C8E0F8AA87E3}</Project>
+      <Name>UniversalIndex</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
