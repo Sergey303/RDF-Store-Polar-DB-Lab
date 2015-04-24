@@ -19,7 +19,7 @@ namespace GoTripleStore
                 new NamedType("subject", new PType(PTypeEnumeration.sstring)),
                 new NamedType("predicate", new PType(PTypeEnumeration.sstring)),
                 new NamedType("obj", ObjectVariantsPolarType.ObjectVariantPolarType));
-            Func<object,TripleSPO> keyproducer = v =>
+            Func<object, TripleSPO> keyproducer = v =>
                 {
                     object[] va = (object[])((object[])v)[1];
                     return new TripleSPO()
@@ -34,7 +34,7 @@ namespace GoTripleStore
             spo_ind_arr = new IndexViewImmutable<TripleSPO>(path + "spo_ind")
             {
                 Table = table,
-                KeyProducer = keyproducer 
+                KeyProducer = keyproducer
             };
             spo_ind = new IndexDynamic<TripleSPO, IndexViewImmutable<TripleSPO>>(false)
             {
@@ -49,6 +49,10 @@ namespace GoTripleStore
             table.Fill(triples.Select(tr => new object[] { tr.Subject, tr.Predicate, tr.Object.ToWritable() }));
             spo_ind_arr.Build();
         }
+        void Build(IGenerator<List<Triple<string, string, ObjectVariants>>> generator)
+        {
+            throw new NotImplementedException();
+        }
 
         public IEnumerable<Triple<string, string, ObjectVariants>> Search(object subject = null, object predicate = null, ObjectVariants obj = null)
         {
@@ -56,7 +60,7 @@ namespace GoTripleStore
             {
                 string ssubj = (string)subject;
                 string spred = (string)predicate;
-                TripleSPO key_triple = new TripleSPO() { triple = new Triple<string,string,ObjectVariants>(ssubj, spred, null) };
+                TripleSPO key_triple = new TripleSPO() { triple = new Triple<string, string, ObjectVariants>(ssubj, spred, null) };
                 PaEntry tab_entity = table.TableCell.Root.Element(0);
                 IEnumerable<PaEntry> entities = spo_ind.GetAllByKey(key_triple);
                 var ou_triples = entities.Select(ent =>
@@ -86,6 +90,5 @@ namespace GoTripleStore
                 return cmp;
             }
         }
-
     }
 }
