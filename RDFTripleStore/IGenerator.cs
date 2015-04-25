@@ -3,8 +3,9 @@
 namespace RDFTripleStore
 {
     /// <summary>
-    /// Альтернатива <see cref="System.Collections.IEnumerable<T>"/> 
+    /// Альтернатива <see cref="System.Collections.IEnumerable{T}"/> 
     /// Применимо, где нельзя порождать поток.
+    /// Содержит метод  Start.
     /// </summary>
     /// <typeparam name="T"></typeparam>
     public interface IGenerator<T>

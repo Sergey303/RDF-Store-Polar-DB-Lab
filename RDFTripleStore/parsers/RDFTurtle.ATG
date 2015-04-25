@@ -1,4 +1,5 @@
 using System;
+using RDFCommon;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -87,7 +88,7 @@ RDFTurtle
 /*____________________________________________*/
 	Objectlist<string s, string p>	=(. ObjectVariants ov; .)	Object<out ov> (. ft(s,p,ov); .) {',' Object<out ov> (. ft(s,p,ov); .) }.
 /*____________________________________________*/
-	Verb<out string p>	=  (. p=null; .)	(Iri<out p> | 'a' (. p = SpecialTypes.RdfType.FullName; .)).
+	Verb<out string p>	=  (. p=null; .)	(Iri<out p> | 'a' (. p = SpecialTypesClass.RdfType.FullName; .)).
 /*____________________________________________*/
 	Subject <out string value>	=  (. value=null; .) (Iri <out value> | Blanknode<out value> | Collection<out value>).
    /*____________________________________________	Predicate	=	Iri. ____________________________________________*/
@@ -100,8 +101,8 @@ RDFTurtle
 /*____________________________________________*/
 	Collection<out string value>	=	'(' (. ObjectVariants ov; var nodes = new List<ObjectVariants>(); .) 
 	{ Object<out ov> (.  nodes.Add(ov); .) } ')'
-	(. var rdfFirst = SpecialTypes.RdfFirst.FullName;
-            var rdfRest = SpecialTypes.RdfRest.FullName;
+	(. var rdfFirst = SpecialTypesClass.RdfFirst.FullName;
+            var rdfRest = SpecialTypesClass.RdfRest.FullName;
                 string sparqlBlankNodeFirst = ObjectVariants.CreateBlankNode(graphName);
                 string sparqlBlankNodeNext = ObjectVariants.CreateBlankNode(graphName);
             foreach (var node in nodes.Take(nodes.Count - 1))
@@ -110,7 +111,7 @@ RDFTurtle
                 ft(sparqlBlankNodeNext, rdfRest, new OV_iri(sparqlBlankNodeNext = ObjectVariants.CreateBlankNode(graphName)));
             }
             ft(sparqlBlankNodeNext, rdfFirst, nodes[nodes.Count - 1]);
-            ft(sparqlBlankNodeNext, rdfRest, new OV_iri(SpecialTypes.Nil.FullName));
+            ft(sparqlBlankNodeNext, rdfRest, new OV_iri(SpecialTypesClass.Nil.FullName));
             value = sparqlBlankNodeFirst;
 	 .).
 /*____________________________________________*/

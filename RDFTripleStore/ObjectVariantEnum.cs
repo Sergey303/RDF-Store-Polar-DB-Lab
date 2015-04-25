@@ -1,5 +1,6 @@
 using System;
 using PolarDB;
+using RDFTripleStore.ObjectVariants;
 
 namespace RDFTripleStore
 {
@@ -60,7 +61,7 @@ namespace RDFTripleStore
         {
             return w2c[(int)@object[0]](@object[1]);
         }
-        public static readonly Func<object, ObjectVariants>[] w2ov = 
+        public static readonly Func<object, ObjectVariants.ObjectVariants>[] w2ov = 
             {
                   s=>new OV_iri((string) s), 
                   s=>new OV_iriint((int) s), 
@@ -80,7 +81,7 @@ namespace RDFTripleStore
             };
 
 
-        public static ObjectVariants Writeble2OVariant(this object[] @object)
+        public static ObjectVariants.ObjectVariants Writeble2OVariant(this object[] @object)
         {
             return w2ov[(int)@object[0]](@object[1]);
         }

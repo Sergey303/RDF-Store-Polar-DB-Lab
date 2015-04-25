@@ -1,4 +1,4 @@
-namespace RDFTripleStore
+namespace RDFCommon
 {
     public class UriPrefixed
     {

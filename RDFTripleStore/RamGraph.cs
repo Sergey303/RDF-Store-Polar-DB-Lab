@@ -1,29 +1,27 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using RDFCommon;
 
 namespace RDFTripleStore
 {
-   public class RamGraph   :IGraph<Triple<string, string, ObjectVariants>>
+   public class RamGraph   :IGraph<Triple<string, string, ObjectVariants.ObjectVariants>>
     {
-        private List<Triple<string, string, ObjectVariants>> triples;
+        private List<Triple<string, string, ObjectVariants.ObjectVariants>> triples;
 
-        public virtual void Build(IEnumerable<Triple<string, string, ObjectVariants>> triples)
+        public virtual void Build(IEnumerable<Triple<string, string, ObjectVariants.ObjectVariants>> triples)
         {
             this.triples = triples.ToList();
         }
 
-       public void Build(IGenerator<List<Triple<string, string, ObjectVariants>>> generator)
+       public void Build(IGenerator<List<Triple<string, string, ObjectVariants.ObjectVariants>>> generator)
        {
-           triples=new List<Triple<string, string, ObjectVariants>>();
+           triples=new List<Triple<string, string, ObjectVariants.ObjectVariants>>();
            generator.Start(list =>
                triples.AddRange(list));
        }
 
      
-       public virtual IEnumerable<Triple<string, string, ObjectVariants>> Search(object subject = null, object predicate = null, ObjectVariants obj = null)
+       public virtual IEnumerable<Triple<string, string, ObjectVariants.ObjectVariants>> Search(object subject = null, object predicate = null, ObjectVariants.ObjectVariants obj = null)
         {
             if (subject == null && predicate == null && obj == null) return triples;
             if (predicate == null && obj == null) return triples.Where(t => t.Subject == subject);

@@ -1,1 +1,1 @@
-coco RDFTurtle.ATG -namespace RDFTripleStore.RDFTurtle	-o "RDFTurtle"
+coco RDFTurtle.ATG -namespace RDFTripleStore.parsers.RDFTurtle	-o "RDFTurtle"

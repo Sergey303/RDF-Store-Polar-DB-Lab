@@ -1,12 +1,10 @@
 ﻿using System;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using RDFTripleStore.RDFTurtle;
+using RDFCommon;
+using RDFTripleStore.parsers.RDFTurtle;
 
 namespace RDFTripleStore
 {
-    public class TriplesGenerator : IGenerator<Triple<string, string, ObjectVariants>>
+    public class TriplesGenerator : IGenerator<Triple<string, string, ObjectVariants.ObjectVariants>>
     {
         private readonly Parser parser;
 
@@ -21,9 +19,9 @@ namespace RDFTripleStore
         }
 
 
-        public void Start(Action<Triple<string, string, ObjectVariants>> onGenerate)
+        public void Start(Action<Triple<string, string, ObjectVariants.ObjectVariants>> onGenerate)
         {
-            parser.ft = (s, s1, arg3) => onGenerate(new Triple<string, string, ObjectVariants>(s, s1, arg3));
+            parser.ft = (s, s1, arg3) => onGenerate(new Triple<string, string, ObjectVariants.ObjectVariants>(s, s1, arg3));
             parser.Parse();
         }
     }

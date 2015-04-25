@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
 
-namespace RDFTripleStore
+namespace RDFCommon
 {
     public class PrologueFullString
     {
