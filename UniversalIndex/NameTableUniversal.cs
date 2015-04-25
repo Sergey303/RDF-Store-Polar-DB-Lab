@@ -100,6 +100,15 @@ namespace Task15UniversalIndex
             if (q == null) return -1;
             return (int)((object[])((object[])q)[1])[0];
         }
+        public string GetStringByCode(int cod)
+        {
+            var qu = offsets.GetAllByKey(cod)
+                //.Where() // какие-то проверки?
+                .Select(ent => ent.Get())
+                .FirstOrDefault();
+            if (qu == null) return null;
+            return (string)((object[])((object[])qu)[1])[1];
+        }
 
         public class HashedString : IComparable
         {

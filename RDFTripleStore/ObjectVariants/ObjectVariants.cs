@@ -122,6 +122,6 @@ namespace RDFTripleStore.ObjectVariants
             return new Comparer2(Variant, (IComparable)WritableValue);
         }
 
-    
-    }
+
+        }
 }

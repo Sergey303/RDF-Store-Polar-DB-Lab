@@ -10,9 +10,10 @@ namespace RDFTripleStore
     //}
     public interface IGraph<Tri>
     {
-        void Build(IEnumerable<Tri> triples);
-        void Build(IGenerator<List<Triple<string, string, ObjectVariants.ObjectVariants>>> generator);
-        IEnumerable<Tri> Search(object subject = null, object predicate = null, ObjectVariants.ObjectVariants obj = null);
+        //void Build(IEnumerable<Tri> triples);
+        void Build(IEnumerable<Triple<string, string, ObjectVariants>> triples);
+        void Build(IGenerator<List<Triple<string, string, ObjectVariants>>> generator);
+        IEnumerable<Tri> Search(object subject = null, object predicate = null, ObjectVariants obj = null);
         
     }
 }

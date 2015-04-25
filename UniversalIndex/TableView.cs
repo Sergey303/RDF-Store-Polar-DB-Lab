@@ -23,7 +23,6 @@ namespace Task15UniversalIndex
             {
                 object v = new object[] { false, el };
                 table_cell.Root.AppendElement(v);
-                //table_cell.Root.AppendElement(new object[] { false, el });
             }
             table_cell.Flush();
         }
