@@ -46,10 +46,11 @@ namespace GoTripleStore
 
         public void Build(IEnumerable<Triple<string, string, ObjectVariants>> triples)
         {
+            table.Clear();
             table.Fill(triples.Select(tr => new object[] { tr.Subject, tr.Predicate, tr.Object.ToWritable() }));
             spo_ind_arr.Build();
         }
-        void Build(IGenerator<List<Triple<string, string, ObjectVariants>>> generator)
+        public void Build(IGenerator<List<Triple<string, string, ObjectVariants>>> generator)
         {
             throw new NotImplementedException();
         }
@@ -66,7 +67,9 @@ namespace GoTripleStore
                 var ou_triples = entities.Select(ent =>
                 {
                     object[] three = (object[])(((object[])ent.Get())[1]);
-                    return new Triple<string, string, ObjectVariants>((string)three[0], (string)three[1], null);
+                    ObjectVariants ov = ((object[])three[2]).Writeble2OVariant();
+                    return new Triple<string, string, ObjectVariants>((string)three[0], (string)three[1], 
+                        ov);
                 });
                 return ou_triples;
             }

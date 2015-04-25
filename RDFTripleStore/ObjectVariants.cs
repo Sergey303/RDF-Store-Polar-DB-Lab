@@ -168,6 +168,10 @@ namespace RDFTripleStore
         {
             return value.GetHashCode();
         }
+        public override string ToString()
+        {
+            return this.value;
+        }
     }
     public class OV_iriint : ObjectVariants
     {
