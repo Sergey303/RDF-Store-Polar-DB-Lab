@@ -1,24 +1,24 @@
-using System;
+using RDFCommon;
 
-namespace RDFTripleStore.ObjectVariants
+namespace RDFTripleStore.OVns
 {
-    public class OV_time : ObjectVariants
+    public class OV_float : ObjectVariants, ILiteralNode
     {
-        public readonly TimeSpan value;
+        public readonly float value;
 
-        public OV_time(TimeSpan value)
+        public OV_float(float value)
         {
             this.value = value;
         }
 
         public override ObjectVariantEnum Variant
         {
-            get { return ObjectVariantEnum.Time; }
+            get { return ObjectVariantEnum.Float; }
         }
 
         public override object WritableValue
         {
-            get { return value.Ticks; }
+            get { return value; }
         }
 
         // override object.Equals
@@ -36,7 +36,7 @@ namespace RDFTripleStore.ObjectVariants
                 return false;
             }
 
-            return value == ((OV_time)obj).value;
+            return value == ((OV_float)obj).value;
 
         }
 
@@ -45,5 +45,9 @@ namespace RDFTripleStore.ObjectVariants
         {
             return value.GetHashCode();
         }
+
+        public dynamic Content { get { return value; } }
+        public string DataType { get { return SpecialTypesClass.Float.FullName; } }
+
     }
 }

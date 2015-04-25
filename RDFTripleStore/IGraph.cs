@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using RDFCommon;
+using RDFTripleStore.OVns;
 
 namespace RDFTripleStore
 {

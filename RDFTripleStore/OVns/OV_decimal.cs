@@ -1,26 +1,25 @@
 using RDFCommon;
 
-namespace RDFTripleStore.ObjectVariants
+namespace RDFTripleStore.OVns
 {
-    public class OV_string : ObjectVariants, ILiteralNode
+    public class OV_decimal : ObjectVariants, ILiteralNode
     {
-        public readonly string value;
+        public readonly decimal value;
 
-        public OV_string(string value)
+        public OV_decimal(decimal value)
         {
             this.value = value;
         }
 
         public override ObjectVariantEnum Variant
         {
-            get { return ObjectVariantEnum.Str; }
+            get { return ObjectVariantEnum.Decimal; }
         }
 
         public override object WritableValue
         {
             get { return value; }
         }
-
 
         // override object.Equals
         public override bool Equals(object obj)
@@ -37,7 +36,7 @@ namespace RDFTripleStore.ObjectVariants
                 return false;
             }
 
-            return value == ((OV_string)obj).value;
+            return value == ((OV_decimal)obj).value;
 
         }
 
@@ -48,6 +47,7 @@ namespace RDFTripleStore.ObjectVariants
         }
 
         public dynamic Content { get { return value; } }
-        public string DataType { get { return SpecialTypesClass.Integer.FullName; } }
+        public string DataType { get { return SpecialTypesClass.Decimal.FullName; } }
+
     }
 }

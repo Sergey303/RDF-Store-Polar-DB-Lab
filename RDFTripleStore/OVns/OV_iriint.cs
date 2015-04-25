@@ -1,24 +1,22 @@
-using RDFCommon;
-
-namespace RDFTripleStore.ObjectVariants
+namespace RDFTripleStore.OVns
 {
-    public class OV_decimal : ObjectVariants, ILiteralNode
+    public class OV_iriint : ObjectVariants
     {
-        public readonly decimal value;
+        public readonly int code;
 
-        public OV_decimal(decimal value)
+        public OV_iriint(int code)
         {
-            this.value = value;
+            this.code = code;
         }
 
         public override ObjectVariantEnum Variant
         {
-            get { return ObjectVariantEnum.Decimal; }
+            get { return ObjectVariantEnum.IriInt; }
         }
 
         public override object WritableValue
         {
-            get { return value; }
+            get { return code; }
         }
 
         // override object.Equals
@@ -36,18 +34,14 @@ namespace RDFTripleStore.ObjectVariants
                 return false;
             }
 
-            return value == ((OV_decimal)obj).value;
+            return code == ((OV_iriint)obj).code;
 
         }
 
         // override object.GetHashCode
         public override int GetHashCode()
         {
-            return value.GetHashCode();
+            return code.GetHashCode();
         }
-
-        public dynamic Content { get { return value; } }
-        public string DataType { get { return SpecialTypesClass.Decimal.FullName; } }
-
     }
 }

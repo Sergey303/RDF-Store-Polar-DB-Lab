@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using RDFCommon;
 using RDFTripleStore;
+using RDFTripleStore.OVns;
 using Task15UniversalIndex;
 using PolarDB;
 

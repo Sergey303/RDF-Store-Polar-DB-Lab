@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using PolarDB;
 using RDFCommon;
-
+using RDFTripleStore.OVns;
 using Task15UniversalIndex;
 
 namespace RDFTripleStore
 {
-    public class GoGraphStringBased : IGraph<Triple<string, string, ObjectVariants.ObjectVariants>>
+    public class GoGraphStringBased : IGraph<Triple<string, string, ObjectVariants>>
     {
         private TableView table;
         private IndexViewImmutable<TripleSPO> spo_ind_arr;
@@ -24,8 +24,8 @@ namespace RDFTripleStore
                     object[] va = (object[])((object[])v)[1];
                     return new TripleSPO()
                     {
-                        triple = new Triple<string, string, ObjectVariants.ObjectVariants>((string)va[0], (string)va[1],
-                            ObjectVariants.ObjectVariants.CreateLiteralNode(false))
+                        triple = new Triple<string, string, ObjectVariants>((string)va[0], (string)va[1],
+                            ObjectVariants.CreateLiteralNode(false))
                     };
                 };
             // Опорная таблица
@@ -44,7 +44,7 @@ namespace RDFTripleStore
             };
         }
 
-        public void Build(IEnumerable<Triple<string, string, ObjectVariants.ObjectVariants>> triples)
+        public void Build(IEnumerable<Triple<string, string, ObjectVariants>> triples)
         {   
                 table.Fill(triples.Select(triple2Writable));
 
@@ -52,12 +52,12 @@ namespace RDFTripleStore
 
         }
 
-        private object[] triple2Writable(Triple<string, string, ObjectVariants.ObjectVariants> tr)
+        private object[] triple2Writable(Triple<string, string, ObjectVariants> tr)
         {
             return new object[] {tr.Subject, tr.Predicate, tr.Object.ToWritable()};
         }
 
-        public void Build(IGenerator<List<Triple<string, string, ObjectVariants.ObjectVariants>>> generator)
+        public void Build(IGenerator<List<Triple<string, string, ObjectVariants>>> generator)
         {
             generator.Start(list =>
             {
@@ -67,19 +67,19 @@ namespace RDFTripleStore
             spo_ind_arr.Build();
         }
 
-        public IEnumerable<Triple<string, string, ObjectVariants.ObjectVariants>> Search(object subject = null, object predicate = null, ObjectVariants.ObjectVariants obj = null)
+        public IEnumerable<Triple<string, string, ObjectVariants>> Search(object subject = null, object predicate = null, ObjectVariants obj = null)
         {
             if (subject != null)
             {
                 string ssubj = (string)subject;
                 string spred = (string)predicate;
-                TripleSPO key_triple = new TripleSPO() { triple = new Triple<string,string,ObjectVariants.ObjectVariants>(ssubj, spred, null) };
+                TripleSPO key_triple = new TripleSPO() { triple = new Triple<string,string,ObjectVariants>(ssubj, spred, null) };
                 PaEntry tab_entity = table.TableCell.Root.Element(0);
                 IEnumerable<PaEntry> entities = spo_ind.GetAllByKey(key_triple);
                 var ou_triples = entities.Select(ent =>
                 {
                     object[] three = (object[])(((object[])ent.Get())[1]);
-                    return new Triple<string, string, ObjectVariants.ObjectVariants>((string)three[0], (string)three[1], null);
+                    return new Triple<string, string, ObjectVariants>((string)three[0], (string)three[1], null);
                 });
                 return ou_triples;
             }
@@ -89,7 +89,7 @@ namespace RDFTripleStore
         // Структуры, играющие роль ключа
         public class TripleSPO : IComparable
         {
-            public Triple<string, string, ObjectVariants.ObjectVariants> triple { get; set; }
+            public Triple<string, string, ObjectVariants> triple { get; set; }
             public int CompareTo(object another)
             {
                 if (!(another is TripleSPO)) throw new Exception("kdjfk");

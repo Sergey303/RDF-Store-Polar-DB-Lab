@@ -1,25 +1,26 @@
-using System;
+using RDFCommon;
 
-namespace RDFTripleStore.ObjectVariants
+namespace RDFTripleStore.OVns
 {
-    public class OV_dateTime : ObjectVariants
+    public class OV_iri : ObjectVariants, IIriNode, IBlankNode
     {
-        public readonly DateTime value;
+        private readonly string uriString;
 
-        public OV_dateTime(DateTime value)
+        public OV_iri(string fullId)
         {
-            this.value = value;
+            uriString = fullId;
         }
 
         public override ObjectVariantEnum Variant
         {
-            get { return ObjectVariantEnum.DateTime; }
+            get { return ObjectVariantEnum.Iri; }
         }
 
         public override object WritableValue
         {
-            get { return value.ToBinary(); }
+            get { return UriString; }
         }
+
 
         // override object.Equals
         public override bool Equals(object obj)
@@ -36,14 +37,21 @@ namespace RDFTripleStore.ObjectVariants
                 return false;
             }
 
-            return value == ((OV_dateTime)obj).value;
+            return uriString == ((OV_iri)obj).uriString;
 
         }
 
         // override object.GetHashCode
         public override int GetHashCode()
         {
-            return value.GetHashCode();
+            return uriString.GetHashCode();
         }
+
+        public string UriString
+        {
+            get { return uriString; }
+        }
+
+        public string Name { get { return uriString; } }
     }
 }

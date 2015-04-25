@@ -1,6 +1,6 @@
 using System;
 
-namespace RDFTripleStore.ObjectVariants
+namespace RDFTripleStore.OVns
 {
     public class OV_typedint : ObjectVariants
     {

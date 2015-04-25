@@ -1,7 +1,7 @@
 using System;
 using RDFCommon;
 
-namespace RDFTripleStore.ObjectVariants
+namespace RDFTripleStore.OVns
 {
     public class OV_langstring : ObjectVariants, ILanguageLiteral 
     {

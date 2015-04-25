@@ -2,13 +2,13 @@
 using System.Collections.Generic;
 using System.IO;
 using RDFCommon;
-using RDFTripleStore.ObjectVariants;
+using RDFTripleStore.OVns;
 
 namespace RDFTripleStore
 {
     public static class ReadTripleStringsFromTurtle
     {
-        public static IEnumerable<Triple<string, string, ObjectVariants.ObjectVariants>> LoadGraph(string datafile)
+        public static IEnumerable<Triple<string, string, ObjectVariants>> LoadGraph(string datafile)
         {
             int ntriples = 0;
             string subject = null;
@@ -88,12 +88,12 @@ namespace RDFTripleStore
                                 datatype = GetEntityString(namespaces, qname);
                             }
                         }
-                        yield return new Triple<string, string, ObjectVariants.ObjectVariants>(subject, predicate,
+                        yield return new Triple<string, string, ObjectVariants>(subject, predicate,
                             lang != null
-                                ? ObjectVariants.ObjectVariants.CreateLang(sdata, lang)
+                                ? ObjectVariants.CreateLang(sdata, lang)
                                 : datatype != null
-                                    ? ObjectVariants.ObjectVariants.CreateLiteralNode(sdata, datatype)
-                                    : ObjectVariants.ObjectVariants.CreateLiteralNode(sdata));
+                                    ? ObjectVariants.CreateLiteralNode(sdata, datatype)
+                                    : ObjectVariants.CreateLiteralNode(sdata));
 
                     }
                     else
@@ -103,7 +103,7 @@ namespace RDFTripleStore
                             ? rest_line.Substring(1, rest_line.Length - 2)
                             : GetEntityString(namespaces, rest_line);
 
-                        yield return new Triple<string, string, ObjectVariants.ObjectVariants>(subject, predicate,
+                        yield return new Triple<string, string, ObjectVariants>(subject, predicate,
                             new OV_iri(entity));
                     }
                     ntriples++;

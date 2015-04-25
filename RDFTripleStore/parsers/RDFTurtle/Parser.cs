@@ -6,7 +6,7 @@ using System.Linq;
 
 
 using System;
-using RDFTripleStore.ObjectVariants;
+using RDFTripleStore.OVns;
 
 namespace RDFTripleStore.parsers.RDFTurtle {
 
@@ -42,7 +42,7 @@ public class Parser {
 
 public string graphName;
 
-public Action<string, string, ObjectVariants.ObjectVariants> ft;
+public Action<string, string, ObjectVariants> ft;
 private readonly PrologueFullString prologue = new PrologueFullString();
 
 /*______________________________________________*/
@@ -205,7 +205,7 @@ private readonly PrologueFullString prologue = new PrologueFullString();
 
 	void Blanknodepropertylist(out string value) {
 		Expect(22);
-		value= ObjectVariants.ObjectVariants.CreateBlankNode(graphName); 
+		value= ObjectVariants.CreateBlankNode(graphName); 
 		Predicateobjectlist(value);
 		Expect(23);
 	}
@@ -221,7 +221,7 @@ private readonly PrologueFullString prologue = new PrologueFullString();
 	}
 
 	void Objectlist(string s, string p) {
-		ObjectVariants.ObjectVariants ov; 
+		ObjectVariants ov; 
 		Object(out ov);
 		ft(s,p,ov); 
 		while (la.kind == 20) {
@@ -231,7 +231,7 @@ private readonly PrologueFullString prologue = new PrologueFullString();
 		}
 	}
 
-	void Object(out ObjectVariants.ObjectVariants value) {
+	void Object(out ObjectVariants value) {
 		value=null;  string iri; 
 		if (StartOf(3)) {
 			if (la.kind == 1 || la.kind == 2 || la.kind == 3) {
@@ -271,16 +271,16 @@ private readonly PrologueFullString prologue = new PrologueFullString();
 		value=null; 
 		if (la.kind == 4) {
 			Get();
-			value=ObjectVariants.ObjectVariants.CreateBlankNode(t.val,graphName); 
+			value=ObjectVariants.CreateBlankNode(t.val,graphName); 
 		} else if (la.kind == 13) {
 			Get();
-			value=ObjectVariants.ObjectVariants.CreateBlankNode(graphName); 
+			value=ObjectVariants.CreateBlankNode(graphName); 
 		} else SynErr(37);
 	}
 
 	void Collection(out string value) {
 		Expect(24);
-		ObjectVariants.ObjectVariants ov; var nodes = new List<ObjectVariants.ObjectVariants>(); 
+		ObjectVariants ov; var nodes = new List<ObjectVariants>(); 
 		while (StartOf(7)) {
 			Object(out ov);
 			nodes.Add(ov); 
@@ -288,12 +288,12 @@ private readonly PrologueFullString prologue = new PrologueFullString();
 		Expect(25);
 		var rdfFirst = SpecialTypesClass.RdfFirst.FullName;
 		       var rdfRest = SpecialTypesClass.RdfRest.FullName;
-		           string sparqlBlankNodeFirst = ObjectVariants.ObjectVariants.CreateBlankNode(graphName);
-		           string sparqlBlankNodeNext = ObjectVariants.ObjectVariants.CreateBlankNode(graphName);
+		           string sparqlBlankNodeFirst = ObjectVariants.CreateBlankNode(graphName);
+		           string sparqlBlankNodeNext = ObjectVariants.CreateBlankNode(graphName);
 		       foreach (var node in nodes.Take(nodes.Count - 1))
 		       {
 		           ft(sparqlBlankNodeNext, rdfFirst, node);
-		           ft(sparqlBlankNodeNext, rdfRest, new OV_iri(sparqlBlankNodeNext = ObjectVariants.ObjectVariants.CreateBlankNode(graphName)));
+		           ft(sparqlBlankNodeNext, rdfRest, new OV_iri(sparqlBlankNodeNext = ObjectVariants.CreateBlankNode(graphName)));
 		       }
 		       ft(sparqlBlankNodeNext, rdfFirst, nodes[nodes.Count - 1]);
 		       ft(sparqlBlankNodeNext, rdfRest, new OV_iri(SpecialTypesClass.Nil.FullName));
@@ -301,46 +301,46 @@ private readonly PrologueFullString prologue = new PrologueFullString();
 		
 	}
 
-	void Rdfliteral(out ObjectVariants.ObjectVariants value) {
+	void Rdfliteral(out ObjectVariants value) {
 		value=null; 
 		String();
 		string str=t.val; 
 		if (la.kind == 5 || la.kind == 26) {
 			if (la.kind == 5) {
 				Get();
-				value=ObjectVariants.ObjectVariants.CreateLang(str, t.val); 
+				value=ObjectVariants.CreateLang(str, t.val); 
 			} else {
 				Get();
 				string literalType; 
 				Iri(out literalType);
-				value = ObjectVariants.ObjectVariants.CreateLiteralNode(str, literalType); 
+				value = ObjectVariants.CreateLiteralNode(str, literalType); 
 			}
 		}
-		if(value==null) value=ObjectVariants.ObjectVariants.CreateLiteralNode(str); 
+		if(value==null) value=ObjectVariants.CreateLiteralNode(str); 
 	}
 
-	void Numericliteral(out ObjectVariants.ObjectVariants value) {
+	void Numericliteral(out ObjectVariants value) {
 		value=null; 
 		if (la.kind == 6) {
 			Get();
-			value=ObjectVariants.ObjectVariants.CreateLiteralNode(t.val); 
+			value=ObjectVariants.CreateLiteralNode(t.val); 
 		} else if (la.kind == 7) {
 			Get();
-			value=ObjectVariants.ObjectVariants.CreateLiteralNode(t.val); 
+			value=ObjectVariants.CreateLiteralNode(t.val); 
 		} else if (la.kind == 8) {
 			Get();
-			value=ObjectVariants.ObjectVariants.CreateLiteralNode(t.val); 
+			value=ObjectVariants.CreateLiteralNode(t.val); 
 		} else SynErr(38);
 	}
 
-	void Booleanliteral(out ObjectVariants.ObjectVariants value) {
+	void Booleanliteral(out ObjectVariants value) {
 		value=null; 
 		if (la.kind == 27) {
 			Get();
-			value = ObjectVariants.ObjectVariants.CreateLiteralNode(true); 
+			value = ObjectVariants.CreateLiteralNode(true); 
 		} else if (la.kind == 28) {
 			Get();
-			value=ObjectVariants.ObjectVariants.CreateLiteralNode(false); 
+			value=ObjectVariants.CreateLiteralNode(false); 
 		} else SynErr(39);
 	}
 

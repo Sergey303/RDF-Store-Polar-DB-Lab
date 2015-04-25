@@ -1,22 +1,24 @@
-namespace RDFTripleStore.ObjectVariants
-{
-    public class OV_iriint : ObjectVariants
-    {
-        public readonly int code;
+using System;
 
-        public OV_iriint(int code)
+namespace RDFTripleStore.OVns
+{
+    public class OV_time : ObjectVariants
+    {
+        public readonly TimeSpan value;
+
+        public OV_time(TimeSpan value)
         {
-            this.code = code;
+            this.value = value;
         }
 
         public override ObjectVariantEnum Variant
         {
-            get { return ObjectVariantEnum.IriInt; }
+            get { return ObjectVariantEnum.Time; }
         }
 
         public override object WritableValue
         {
-            get { return code; }
+            get { return value.Ticks; }
         }
 
         // override object.Equals
@@ -34,14 +36,14 @@ namespace RDFTripleStore.ObjectVariants
                 return false;
             }
 
-            return code == ((OV_iriint)obj).code;
+            return value == ((OV_time)obj).value;
 
         }
 
         // override object.GetHashCode
         public override int GetHashCode()
         {
-            return code.GetHashCode();
+            return value.GetHashCode();
         }
     }
 }

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using RDFCommon;
 
 using RDFTripleStore;
-using RDFTripleStore.ObjectVariants;
+using RDFTripleStore.OVns;
 
 
 namespace SparqlTesting

@@ -1,26 +1,26 @@
-using System;
 using RDFCommon;
 
-namespace RDFTripleStore.ObjectVariants
+namespace RDFTripleStore.OVns
 {
-    public class OV_bool : ObjectVariants, ILiteralNode
+    public class OV_string : ObjectVariants, ILiteralNode
     {
-        public readonly bool value;
+        public readonly string value;
 
-        public OV_bool(bool value)
+        public OV_string(string value)
         {
             this.value = value;
         }
 
         public override ObjectVariantEnum Variant
         {
-            get { return ObjectVariantEnum.Bool; }
+            get { return ObjectVariantEnum.Str; }
         }
 
         public override object WritableValue
         {
             get { return value; }
         }
+
 
         // override object.Equals
         public override bool Equals(object obj)
@@ -37,17 +37,17 @@ namespace RDFTripleStore.ObjectVariants
                 return false;
             }
 
-            return value == ((OV_bool)obj).value;
+            return value == ((OV_string)obj).value;
 
         }
 
-// override object.GetHashCode
+        // override object.GetHashCode
         public override int GetHashCode()
-        {                         
+        {
             return value.GetHashCode();
         }
 
         public dynamic Content { get { return value; } }
-        public string DataType { get { return SpecialTypesClass.Bool.FullName; } }
+        public string DataType { get { return SpecialTypesClass.Integer.FullName; } }
     }
 }

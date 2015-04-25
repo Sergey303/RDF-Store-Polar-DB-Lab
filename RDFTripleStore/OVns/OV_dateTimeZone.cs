@@ -1,26 +1,26 @@
+using System;
 using RDFCommon;
 
-namespace RDFTripleStore.ObjectVariants
+namespace RDFTripleStore.OVns
 {
-    public class OV_iri : ObjectVariants, IIriNode, IBlankNode
+    public class OV_dateTimeZone : ObjectVariants, ILiteralNode
     {
-        private readonly string uriString;
+        public readonly DateTimeOffset value;
 
-        public OV_iri(string fullId)
+        public OV_dateTimeZone(DateTimeOffset value)
         {
-            uriString = fullId;
+            this.value = value;
         }
 
         public override ObjectVariantEnum Variant
         {
-            get { return ObjectVariantEnum.Iri; }
+            get { return ObjectVariantEnum.DateTimeZone; }
         }
 
         public override object WritableValue
         {
-            get { return UriString; }
+            get { return value.ToFileTime(); }
         }
-
 
         // override object.Equals
         public override bool Equals(object obj)
@@ -37,21 +37,18 @@ namespace RDFTripleStore.ObjectVariants
                 return false;
             }
 
-            return uriString == ((OV_iri)obj).uriString;
+            return value == ((OV_dateTimeZone)obj).value;
 
         }
 
         // override object.GetHashCode
         public override int GetHashCode()
         {
-            return uriString.GetHashCode();
+            return value.GetHashCode();
         }
 
-        public string UriString
-        {
-            get { return uriString; }
-        }
+        public dynamic Content { get { return value; } }
+        public string DataType { get { return SpecialTypesClass.DayTimeDuration.FullName; } }
 
-        public string Name { get { return uriString; } }
     }
 }

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Antlr4.Runtime;
-using RDFTripleStore.ObjectVariants;
+using RDFTripleStore.OVns;
 using SparqlParseRun;
 
 namespace RDFTripleStore

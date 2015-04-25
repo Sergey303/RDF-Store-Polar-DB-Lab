@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using RDFCommon;
-using RDFTripleStore.ObjectVariants;
+using RDFTripleStore.OVns;
 using RDFTripleStore.parsers.RDFTurtle;
 
 namespace RDFTripleStore
@@ -21,7 +21,7 @@ namespace RDFTripleStore
         /// </summary>
         /// <param name="graph"> тестируемый граф должен реализовать интерфейс <see cref="IGraph<string,string,ObjectVariants>"/></param>
         /// <param name="millions">в данных пока предполагаются варианты: 1, 10, 100, 1000</param>
-        public static void TestReadTtl(this IGraph<Triple<string, string, ObjectVariants.ObjectVariants>> graph, int millions)
+        public static void TestReadTtl(this IGraph<Triple<string, string, ObjectVariants>> graph, int millions)
         {
             Perfomance.ComputeTime(() =>
                 graph.Build(
@@ -34,7 +34,7 @@ namespace RDFTripleStore
         /// </summary>
         /// <param name="graph"> тестируемый граф должен реализовать интерфейс <seealso cref="IGraph<string,string,ObjectVariants>"/></param>
         /// <param name="turtleFileName"> путь к внешнему файлу ttl</param>
-        public static void TestReadTtl(this IGraph<Triple<string, string, ObjectVariants.ObjectVariants>> graph, string turtleFileName)
+        public static void TestReadTtl(this IGraph<Triple<string, string, ObjectVariants>> graph, string turtleFileName)
         {
             Perfomance.ComputeTime(() =>
                 graph.Build(
@@ -49,7 +49,7 @@ namespace RDFTripleStore
         /// </summary>
         /// <param name="graph"> тестируемый граф должен реализовать интерфейс <see cref="IGraph<string,string,ObjectVariants>"/></param>
         /// <param name="millions">в данных пока предполагаются варианты: 1, 10, 100, 1000</param>
-        public static void TestReadTtl_Cocor(this IGraph<Triple<string, string, ObjectVariants.ObjectVariants>> graph, int millions)
+        public static void TestReadTtl_Cocor(this IGraph<Triple<string, string, ObjectVariants>> graph, int millions)
         {
 
             Perfomance.ComputeTime(() =>
@@ -68,12 +68,12 @@ namespace RDFTripleStore
         /// <param name="parser"></param>
         /// <param name="foreachBuffer">делегат выполняемый над буффером, когда тот заполнен, после чего очищает его.</param>
         /// <param name="bufferlength">максимальная длина. Чем больше, тем реже будет выполняется делегат.</param>
-        private static void ForeachBuffer(Parser parser, Action<List<Triple<string,string, ObjectVariants.ObjectVariants>>> foreachBuffer, int bufferlength=1000)
+        private static void ForeachBuffer(Parser parser, Action<List<Triple<string,string, ObjectVariants>>> foreachBuffer, int bufferlength=1000)
         {
-                            var buffer=new List<Triple<string, string, ObjectVariants.ObjectVariants>>(bufferlength);
+                            var buffer=new List<Triple<string, string, ObjectVariants>>(bufferlength);
          parser.ft = (s, s1, arg3) =>
             {
-                buffer.Add(new Triple<string, string, ObjectVariants.ObjectVariants>(s, s1, arg3));
+                buffer.Add(new Triple<string, string, ObjectVariants>(s, s1, arg3));
                 if (buffer.Count == bufferlength)
                 {
                     foreachBuffer(buffer);
@@ -89,7 +89,7 @@ namespace RDFTripleStore
         /// </summary>
         /// <param name="graph"> тестируемый граф должен реализовать интерфейс <seealso cref="IGraph<string,string,ObjectVariants>"/></param>
         /// <param name="turtleFileName"> путь к внешнему файлу ttl</param>
-        public static void TestReadTtl_Cocor(this IGraph<Triple<string, string, ObjectVariants.ObjectVariants>> graph, string turtleFileName)
+        public static void TestReadTtl_Cocor(this IGraph<Triple<string, string, ObjectVariants>> graph, string turtleFileName)
         {
             Perfomance.ComputeTime(() =>
                 graph.Build(new TripleGeneratorBufferedParallel(turtleFileName,"g")),
@@ -107,10 +107,10 @@ namespace RDFTripleStore
         /// <typeparam name="Tp"></typeparam>
         /// <typeparam name="To"></typeparam>
         /// <param name="graph"></param>
-        public static void TestSearch(this IGraph<Triple<string, string, ObjectVariants.ObjectVariants>> graph)
+        public static void TestSearch(this IGraph<Triple<string, string, ObjectVariants>> graph)
         {
             var all = graph.Search();
-            Triple<string, string, ObjectVariants.ObjectVariants>[] ts100 = null;
+            Triple<string, string, ObjectVariants>[] ts100 = null;
             Perfomance.ComputeTime(() =>
             {
                 ts100 = all.Take(100).ToArray();

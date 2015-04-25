@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Threading;
 using RDFCommon;
+using RDFTripleStore.OVns;
 
 namespace RDFTripleStore
 {
@@ -11,7 +12,7 @@ namespace RDFTripleStore
     /// непрерывно читает входной файл и записывает получаемые порции в Queue<List<Triple<string, string, ObjectVariants>>>
     /// в основном исполняемом потоке отслеживается Queue: если есть элементы, то они "возвращаются" механизмом выполнения указанного делегата.
     /// </summary>
-    public class TripleGeneratorBufferedParallel : IGenerator<List<Triple<string, string, ObjectVariants.ObjectVariants>>>
+    public class TripleGeneratorBufferedParallel : IGenerator<List<Triple<string, string, ObjectVariants>>>
     {
         private TripleGeneratorBuffered tg;
 
@@ -24,9 +25,9 @@ namespace RDFTripleStore
         /// синхронизация буферов с помощью очереди.  
        /// </summary>
         /// <param name="onGenerate"> в основном потоке вынимает из очереди порции и выполняет onGenerate</param>
-        public void Start(Action<List<Triple<string, string, ObjectVariants.ObjectVariants>>> onGenerate)
+        public void Start(Action<List<Triple<string, string, ObjectVariants>>> onGenerate)
         {
-            var queue=new Queue<List<Triple<string, string, ObjectVariants.ObjectVariants>>>();
+            var queue=new Queue<List<Triple<string, string, ObjectVariants>>>();
 
             var thread = new Thread(() =>
                 tg.Start(b =>
@@ -52,7 +53,7 @@ namespace RDFTripleStore
                 }
                 else
                 {
-                    List<Triple<string, string, ObjectVariants.ObjectVariants>> buffer;
+                    List<Triple<string, string, ObjectVariants>> buffer;
                     lock (queue)
                     {
                         buffer = queue.Dequeue();

@@ -1,19 +1,19 @@
 using RDFCommon;
 
-namespace RDFTripleStore.ObjectVariants
+namespace RDFTripleStore.OVns
 {
-    public class OV_float : ObjectVariants, ILiteralNode
+    public class OV_bool : ObjectVariants, ILiteralNode
     {
-        public readonly float value;
+        public readonly bool value;
 
-        public OV_float(float value)
+        public OV_bool(bool value)
         {
             this.value = value;
         }
 
         public override ObjectVariantEnum Variant
         {
-            get { return ObjectVariantEnum.Float; }
+            get { return ObjectVariantEnum.Bool; }
         }
 
         public override object WritableValue
@@ -36,18 +36,17 @@ namespace RDFTripleStore.ObjectVariants
                 return false;
             }
 
-            return value == ((OV_float)obj).value;
+            return value == ((OV_bool)obj).value;
 
         }
 
-        // override object.GetHashCode
+// override object.GetHashCode
         public override int GetHashCode()
-        {
+        {                         
             return value.GetHashCode();
         }
 
         public dynamic Content { get { return value; } }
-        public string DataType { get { return SpecialTypesClass.Float.FullName; } }
-
+        public string DataType { get { return SpecialTypesClass.Bool.FullName; } }
     }
 }
