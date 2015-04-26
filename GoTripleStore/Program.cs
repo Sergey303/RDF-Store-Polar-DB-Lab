@@ -18,7 +18,7 @@ namespace GoTripleStore
             var query = ReadTripleStringsFromTurtle.LoadGraph(Config.Source_data_folder_path + "1.ttl");
             
             GoGraphIntBased cgraph = new GoGraphIntBased(path);
-            bool toload = false;
+            bool toload = true;
             if (toload)
             {
                 sw.Restart();

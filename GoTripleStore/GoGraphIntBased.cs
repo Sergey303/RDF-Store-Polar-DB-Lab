@@ -211,6 +211,11 @@ namespace GoTripleStore
                 }
                 return cmp;
             }
+            public override int GetHashCode()
+            {
+                //return s.GetHashCode() ^ p.GetHashCode();
+                return s.GetHashCode() + 7777 * p.GetHashCode();
+            }
         }
     }
 }
