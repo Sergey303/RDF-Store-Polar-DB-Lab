@@ -12,7 +12,7 @@ namespace RDFTripleStore
     {
         private TableView table;
 
-        private IndexDynamic<Comparer, IndexViewImmutable<Comparer>> spo_ind;
+        private IndexDynamic<TripleSPO, IndexViewImmutable<TripleSPO>> spo_ind;
         private IndexDynamic<Comparer, IndexViewImmutable<Comparer>> po_ind;
         private IndexDynamic<Comparer, IndexViewImmutable<Comparer>> os_ind;
         protected NodeGenerator ng = new NodeGenerator();
@@ -22,29 +22,29 @@ namespace RDFTripleStore
                 new NamedType("subject", new PType(PTypeEnumeration.sstring)),
                 new NamedType("predicate", new PType(PTypeEnumeration.sstring)),
                 new NamedType("obj", ObjectVariantsPolarType.ObjectVariantPolarType));
-            Func<object, Comparer3> spokeyproducer = v =>
+            Func<object, TripleSPO> spokeyproducer = v =>
                 {
                     object[] va = (object[])((object[])v)[1];
-                    return new Comparer3((string) va[0], (string) va[1], new Comparer(va[2].ToOVariant().ToComparable()));
+                    return new TripleSPO((string)va[0], (string)va[1], va[2].ToOVariant()); //.ToComparable()
                 };
             Func<object, Comparer> pokeyproducer = v =>
             {
                 object[] va = (object[])((object[])v)[1];
-                return new Comparer2((string)va[1], new Comparer(va[2].ToOVariant().ToComparable()));
+                return new Comparer2((string)va[1], va[2].ToOVariant().ToComparable());
             };
             Func<object, Comparer2> oskeyproducer = v =>
             {
                 object[] va = (object[])((object[])v)[1];
-                return new Comparer2(new Comparer(va[2].ToOVariant().ToComparable()),(string)va[0]);
+                return new Comparer2(va[2].ToOVariant().ToComparable(),(string)va[0]);
             };     
             // Опорная таблица
             table = new TableView(path + "stable", tp_tabelement);
             // Индекс spo
 
-            spo_ind = new IndexDynamic<Comparer, IndexViewImmutable<Comparer>>(false)
+            spo_ind = new IndexDynamic<TripleSPO, IndexViewImmutable<TripleSPO>>(false)
             {
                 Table = table,
-                IndexArray = new IndexViewImmutable<Comparer>(path + "spo_ind")
+                IndexArray = new IndexViewImmutable<TripleSPO>(path + "spo_ind")
                 {
                     Table = table,
                     KeyProducer = spokeyproducer
@@ -83,6 +83,7 @@ namespace RDFTripleStore
                     foreach (var tr in list)
                         table.AppendValue(new object[] {tr.Subject, tr.Predicate, tr.Object.ToWritable()});
                 });
+
             spo_ind.IndexArray.Build();
             po_ind.IndexArray.Build();
             os_ind.IndexArray.Build();
@@ -127,8 +128,8 @@ namespace RDFTripleStore
         public IEnumerable<Triple<ISubjectNode, IPredicateNode, IObjectNode>> GetTriplesWithSubject(ISubjectNode s)
         {
             string ssubj = (((IIriNode)s)).UriString;
-         
-            IEnumerable<PaEntry> entities = spo_ind.GetAllByKey(new Comparer(ssubj));
+
+            IEnumerable<PaEntry> entities = spo_ind.GetAllByKey(new TripleSPO(ssubj,null,null));
             return entities.Select(ent =>
             {
                 object[] three1 = (object[])(((object[])ent.Get())[1]);
@@ -141,7 +142,7 @@ namespace RDFTripleStore
             string ssubj = (((IIriNode)subject)).UriString;
             string spred = (((IIriNode) predicate)).UriString;
             Comparer2 key_triple = new Comparer2(ssubj, spred);
-            IEnumerable<PaEntry> entities = spo_ind.GetAllByKey(key_triple);
+            IEnumerable<PaEntry> entities = spo_ind.GetAllByKey(new TripleSPO(ssubj, spred,null));
             return entities.Select(ent =>
             {
                 object[] three1 = (object[])(((object[])ent.Get())[1]);
@@ -222,13 +223,22 @@ namespace RDFTripleStore
 
         public void FromTurtle(string path)
         {
-            var generator = new TripleGeneratorBufferedParallel(path, "g");
-            Build(generator);
+         //   Build(new TripleGeneratorBufferedParallel(path, "g"));
+            table.Clear();
+            table.Fill(ReadTripleStringsFromTurtle.LoadGraph(path).Select(tr => new object[] { tr.Subject.ToLower(), tr.Predicate.ToLower(), tr.Object.ToWritable() }));
+            spo_ind.Build();
+            po_ind.Build();
+            os_ind.Build();
         }
 
         // Структуры, играющие роль ключа
         public class TripleSPO : IComparable
         {
+            public TripleSPO(string s, string p, ObjectVariants toComparable)
+            {
+             triple=new Triple<string, string, ObjectVariants>(s,p,toComparable);
+            }
+
             public Triple<string, string, ObjectVariants> triple { get; set; }
             public int CompareTo(object another)
             {

@@ -152,8 +152,17 @@ namespace RDFTripleStore
             {
                 sparqlStore.ReloadFrom(Config.Source_data_folder_path + millions + ".ttl");
             }, "build " + millions + ".ttl ");
+         //   Console.WriteLine(sparqlStore.GetTriplesWithSubject(sparqlStore.NodeGenerator.CreateUriNode("http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromVendor1/")));
             Perfomance.ComputeTime(() =>
             {
+                Console.WriteLine(
+                   sparqlStore.Run(
+                       @"PREFIX dataFromVendor1: <http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromVendor1/>
+SELECT ?property ?hasValue 
+WHERE {
+  { dataFromVendor1:Offer1 ?property ?hasValue }
+"));
+                Console.WriteLine("___________________________________________________________________________________");
                 Console.WriteLine(
                     sparqlStore.Run(
                         @"PREFIX dataFromVendor1: <http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromVendor1/>

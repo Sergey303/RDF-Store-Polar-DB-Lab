@@ -10,7 +10,7 @@ namespace RDFTripleStore.OVns
         public OV_typed(string value, string turi)
         {
             this.value = value;
-            this.turi = turi;
+            this.turi = turi.ToLower();
         }
 
         public override ObjectVariantEnum Variant
@@ -26,7 +26,7 @@ namespace RDFTripleStore.OVns
             }
         }
 
-        public override IComparable ToComparable()
+        public override Comparer ToComparable()
         {
             return new Comparer3(Variant,turi, value);
         }
@@ -44,7 +44,7 @@ namespace RDFTripleStore.OVns
 
         public override int GetHashCode()
         {
-            return value.GetHashCode()+37*turi.GetHashCode();
+            return unchecked((Variant.GetHashCode() << 4) + value.GetHashCode() << 2 + turi.GetHashCode());
         }
 
         public dynamic Content { get { return value; } }

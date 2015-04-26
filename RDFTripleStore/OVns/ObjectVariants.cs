@@ -117,14 +117,11 @@ namespace RDFTripleStore.OVns
 
         private static readonly Random random = new Random();
 
-        public virtual IComparable ToComparable()
+        public virtual Comparer ToComparable()
         {
-            if(this is IIriNode)
-                return new Comparer2(Variant, ((IIriNode)this).UriString);
+           
             return new Comparer2(Variant, ((ILiteralNode)this).Content);
+          
         }
-
-
-        
     }
 }
