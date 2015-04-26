@@ -39,6 +39,10 @@
     <Reference Include="PolarDB">
       <HintPath>..\dll\PolarDB.dll</HintPath>
     </Reference>
+    <Reference Include="SparqlParseRun, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\dll\SparqlParseRun.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -91,12 +95,8 @@
     <Folder Include="parsers\SPARQL\" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\SparqlWpf\SparqlParseRun\SparqlParseRun.csproj">
-      <Project>{ae8cbedb-a66e-4705-953e-c16793426e89}</Project>
-      <Name>SparqlParseRun</Name>
-    </ProjectReference>
     <ProjectReference Include="..\RDFCommon\RDFCommon.csproj">
-      <Project>{7EB60F80-87CA-4645-9E1F-051735195D92}</Project>
+      <Project>{7eb60f80-87ca-4645-9e1f-051735195d92}</Project>
       <Name>RDFCommon</Name>
     </ProjectReference>
     <ProjectReference Include="..\UniversalIndex\UniversalIndex.csproj">

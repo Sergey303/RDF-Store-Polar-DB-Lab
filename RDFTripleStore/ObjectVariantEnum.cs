@@ -85,6 +85,16 @@ namespace RDFTripleStore
         {
             return w2ov[(int)@object[0]](@object[1]);
         }
+        public static ObjectVariants ToOVariant(this object @object)
+        {
+            return Writeble2OVariant((object[]) @object);
+        }
+
+     //public IComparable ToComparable(this object @object)
+     //{
+     //    var o = (object[])@object;
+     //    if(o[0]==4 ||)
+     //}
     }
 
    }

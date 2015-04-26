@@ -48,9 +48,9 @@ namespace RDFTripleStore
 
      
 
-        public IEnumerable<Triple<ISubjectNode, IPredicateNode, IObjectNode>> GetTriplesWithObject(IObjectNode objectNode)
+        public IEnumerable<Triple<ISubjectNode, IPredicateNode, IObjectNode>> GetTriplesWithObject(IObjectNode o)
         {
-            return triples.Where(triple => triple.Object .Equals( objectNode));
+            return triples.Where(triple => triple.Object .Equals( o));
         }
 
         public IEnumerable<Triple<ISubjectNode, IPredicateNode, IObjectNode>> GetTriples()

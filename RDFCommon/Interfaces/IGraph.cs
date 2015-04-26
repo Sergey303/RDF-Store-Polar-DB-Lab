@@ -9,22 +9,20 @@ namespace RDFCommon
         INodeGenerator NodeGenerator { get; }   
       
         void Clear();
-      //  void Build(); // Это действие отсутствует в стандарте dotnetrdf!
-
-
+    
     /// <summary>
         /// Selects all Triples where the Object is a given Node
         /// </summary>
-        /// <param name="n">Node</param>
+        /// <param name="o">Node</param>
         /// <returns></returns>
-        IEnumerable<Triple<ISubjectNode, IPredicateNode, IObjectNode>> GetTriplesWithObject(IObjectNode n);
+        IEnumerable<Triple<ISubjectNode, IPredicateNode, IObjectNode>> GetTriplesWithObject(IObjectNode o);
 
         /// <summary>
         /// Selects all Triples where the Predicate is a given Node
         /// </summary>
         /// <param name="n">Node</param>
         /// <returns></returns>
-        IEnumerable<Triple<ISubjectNode, IPredicateNode, IObjectNode>> GetTriplesWithPredicate(IPredicateNode n);
+        IEnumerable<Triple<ISubjectNode, IPredicateNode, IObjectNode>> GetTriplesWithPredicate(IPredicateNode p);
 
         
         /// <summary>
@@ -32,7 +30,7 @@ namespace RDFCommon
         /// </summary>
         /// <param name="n">Node</param>
         /// <returns></returns>
-        IEnumerable<Triple<ISubjectNode, IPredicateNode, IObjectNode>> GetTriplesWithSubject(ISubjectNode n);
+        IEnumerable<Triple<ISubjectNode, IPredicateNode, IObjectNode>> GetTriplesWithSubject(ISubjectNode s);
 
         /// <summary>
         /// Selects all Triples with the given Subject and Predicate
@@ -67,7 +65,7 @@ namespace RDFCommon
         void Insert(IEnumerable<Triple<ISubjectNode, IPredicateNode, IObjectNode>> triples);
 
         void Add(Triple<ISubjectNode, IPredicateNode, IObjectNode> t);
-        bool Contains(ISubjectNode subject, IPredicateNode predicate, IObjectNode node);
+        bool Contains(ISubjectNode subject, IPredicateNode predicate, IObjectNode obj);
         void Delete(IEnumerable<Triple<ISubjectNode, IPredicateNode, IObjectNode>> triples);
       
         IEnumerable<ISubjectNode> GetAllSubjects();

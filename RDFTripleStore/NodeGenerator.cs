@@ -6,6 +6,10 @@ namespace RDFTripleStore
 {
     public class NodeGenerator:INodeGenerator
     {
+        public NodeGenerator()
+        {
+            SpecialTypes=new SpecialTypesClass(this);
+        }
         public IIriNode CreateUriNode(string uri)
         {
             return new OV_iri(uri.ToLowerInvariant()); 

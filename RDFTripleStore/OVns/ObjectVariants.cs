@@ -3,7 +3,7 @@ using RDFCommon;
 
 namespace RDFTripleStore.OVns
 {
-    public abstract class ObjectVariants 
+    public abstract class ObjectVariants   :IObjectNode
     {
         public  abstract ObjectVariantEnum Variant { get; }
         public abstract object WritableValue { get; }
@@ -123,5 +123,6 @@ namespace RDFTripleStore.OVns
         }
 
 
-        }
+        
+    }
 }

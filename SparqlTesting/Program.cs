@@ -20,7 +20,7 @@ namespace SparqlTesting
     }
    public class Graph :IGraph
    {
-       IGraph<Triple<string, string, ObjectVariants>> realGraph;
+       GoGraphStringBased realGraph;
 
        public Graph(string path)
        {
@@ -34,7 +34,7 @@ namespace SparqlTesting
            throw new NotImplementedException();
        }
 
-       public IEnumerable<Triple<ISubjectNode, IPredicateNode, IObjectNode>> GetTriplesWithObject(IObjectNode n)
+       public IEnumerable<Triple<ISubjectNode, IPredicateNode, IObjectNode>> GetTriplesWithObject(IObjectNode o)
        {
            throw new NotImplementedException();
        }

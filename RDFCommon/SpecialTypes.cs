@@ -37,7 +37,7 @@ namespace RDFCommon
         public IIriNode rest;
         public IIriNode type;
 
-        public void GenerateLiteralTypes(INodeGenerator nodeGenerator, bool simple_literal_equals_string_literal)
+        public SpecialTypesClass(INodeGenerator nodeGenerator)
         {
             date =nodeGenerator. CreateUriNode(Date);
             @string = nodeGenerator.CreateUriNode(String);

@@ -3,14 +3,41 @@ using System.Collections.Generic;
 
 namespace RDFTripleStore
 {
-    public class Comparer2 : IComparer<Comparer2>, IComparable<Comparer2>, IComparable
+    public class Comparer : IComparer<Comparer>, IComparable<Comparer>, IComparable
     {
         protected readonly IComparable k1;
-        protected readonly IComparable k2;
 
-        public Comparer2(IComparable k1, IComparable k2)
+        public Comparer(IComparable k1)
         {
             this.k1 = k1;
+        }
+
+        public int Compare(Comparer x, Comparer y)
+        {
+            return x.CompareTo(y);
+        }
+
+        public int CompareTo(Comparer other)
+        {
+            if (this is Comparer2 && other is Comparer2) return ((Comparer2) this).CompareTo((Comparer2)other);
+            var c1 = k1.CompareTo(other.k1);
+            return c1 == 0 ? 0 : c1 > 0 ? 1 : -1;
+        }
+
+        public int CompareTo(object obj)
+        {
+            if (obj is Comparer) return (this).CompareTo((Comparer)obj);
+            throw new ArgumentException();
+        }
+    }
+
+    public class Comparer2 : Comparer, IComparer<Comparer2>, IComparable<Comparer2>
+    {
+        protected readonly IComparable k2;
+
+        public Comparer2(IComparable k1, IComparable k2) : base(k1)
+        {
+         
             this.k2 = k2;
         }
 
@@ -21,6 +48,7 @@ namespace RDFTripleStore
 
         public int CompareTo(Comparer2 other)
         {
+            if (this is Comparer3 && other is Comparer3) return ((Comparer3)this).CompareTo((Comparer3)other);
             int compareK1 = k1.CompareTo(other.k1);
             if (compareK1 != 0) return compareK1 > 0 ? 1 : -1;
             else
@@ -30,15 +58,11 @@ namespace RDFTripleStore
             }
         }
 
-        public int CompareTo(object obj)
+        public new int CompareTo(object obj)
         {
-            //if (obj is Comparer3) return this.CompareTo((Comparer2) obj);
-            if (obj is Comparer2) return this.CompareTo((Comparer2)obj);
-            if (obj is IComparable)
-            {
-                int compareK1 = k1.CompareTo(((IComparable)obj));
-                return compareK1 == 0 ? 0 : compareK1 > 0 ? 1 : -1;
-            }
+           // if (obj is Comparer3) return this.CompareTo((Comparer3)obj);
+            if (obj is Comparer2) return ((Comparer2)this).CompareTo((Comparer2)obj);
+            if (obj is Comparer) return ((Comparer)this).CompareTo((Comparer)obj);
             throw new ArgumentException();
         }
     }
@@ -76,11 +100,7 @@ namespace RDFTripleStore
         {
             if (obj is Comparer3) return this.CompareTo((Comparer3) obj);
             if (obj is Comparer2) return ((Comparer2) this).CompareTo((Comparer2) obj);
-            if (obj is IComparable)
-            {
-                int compareK1 = k1.CompareTo(((IComparable) obj));
-                return compareK1 == 0 ? 0 : compareK1 > 0 ? 1 : -1;
-            }
+            if (obj is Comparer) return ((Comparer)this).CompareTo((Comparer)obj);
             throw new ArgumentException();
         }
     //________________________________Comparer____________________________________________________

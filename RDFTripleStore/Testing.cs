@@ -147,7 +147,7 @@ namespace RDFTripleStore
 
         public static void TestSparqlStore(int millions)
         {
-                         SparqlStore sparqlStore = new SparqlStore();
+            SparqlStore sparqlStore = new SparqlStore("../../../Databases/");
             Perfomance.ComputeTime(() =>
             {
                 sparqlStore.ReloadFrom(Config.Source_data_folder_path + millions + ".ttl");

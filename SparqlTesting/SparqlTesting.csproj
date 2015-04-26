@@ -59,7 +59,7 @@
       <Name>PolarDB</Name>
     </ProjectReference>
     <ProjectReference Include="..\RDFCommon\RDFCommon.csproj">
-      <Project>{7EB60F80-87CA-4645-9E1F-051735195D92}</Project>
+      <Project>{7eb60f80-87ca-4645-9e1f-051735195d92}</Project>
       <Name>RDFCommon</Name>
     </ProjectReference>
     <ProjectReference Include="..\RDFTripleStore\RDFTripleStore.csproj">
