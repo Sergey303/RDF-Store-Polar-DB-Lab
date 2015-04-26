@@ -59,6 +59,10 @@ namespace RDFTripleStore.OVns
         public string Lang { get { return lang; } }
         public dynamic Content { get { return value; } }
         public string DataType { get { return SpecialTypesClass.LangString.FullName; } }
+        public override string ToString()
+        {
+            return value.ToString();
+        }
     }
 
 }

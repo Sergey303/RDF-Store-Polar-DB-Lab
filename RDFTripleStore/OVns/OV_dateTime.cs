@@ -45,5 +45,11 @@ namespace RDFTripleStore.OVns
         {
             return value.GetHashCode();
         }
+
+        public override string ToString()
+        {
+            return value.ToString();
+        }
+
     }
 }

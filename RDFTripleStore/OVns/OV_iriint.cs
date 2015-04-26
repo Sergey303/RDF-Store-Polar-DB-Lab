@@ -1,12 +1,16 @@
+using Task15UniversalIndex;
+
 namespace RDFTripleStore.OVns
 {
     public class OV_iriint : ObjectVariants
     {
         public readonly int code;
+        private readonly NameTableUniversal nameTable;
 
-        public OV_iriint(int code)
+        public OV_iriint(int code, NameTableUniversal nameTable)
         {
             this.code = code;
+            this.nameTable = nameTable;
         }
 
         public override ObjectVariantEnum Variant
@@ -43,5 +47,7 @@ namespace RDFTripleStore.OVns
         {
             return code.GetHashCode();
         }
+        public override string  ToString(){ return nameTable.GetStringByCode(code); } 
+
     }
 }

@@ -1,6 +1,7 @@
 using System;
 using PolarDB;
 using RDFTripleStore.OVns;
+using Task15UniversalIndex;
 
 namespace RDFTripleStore
 {
@@ -61,33 +62,36 @@ namespace RDFTripleStore
         {
             return w2c[(int)@object[0]](@object[1]);
         }
-        public static readonly Func<object, ObjectVariants>[] w2ov = 
-            {
-                  s=>new OV_iri((string) s), 
-                  s=>new OV_iriint((int) s), 
-                  s=>new OV_bool((bool) s), 
-                  s=>new OV_string((string) s),
-                 strLang=> new OV_langstring((string) ((object[])strLang)[0], (string) ((object[])strLang)[1]),
-                  s=>new OV_double((double) s), 
-                  s=>new OV_decimal((decimal) s),   
-                  s=>new OV_float((float) s),   
-                  s=>new OV_int((int) s),   
-                  s=>new OV_dateTimeZone(DateTimeOffset.FromFileTime((long) s)),   
-                  s=>new OV_dateTime(DateTime.FromBinary((long) s)),   
-                  s=>new OV_date(DateTime.FromBinary((long) s)),   
-                  s=>new OV_time(TimeSpan.FromTicks((long) s)),   
-                  typed=>new OV_typed((string) ((object[])typed)[1], (string) ((object[])typed)[0]),   
-                  typed=>new OV_typedint((string) ((object[])typed)[1], (int) ((object[])typed)[0]),   
-            };
+
+     public delegate ObjectVariants Create(object writable, NameTableUniversal nt = null);
+
+     public static readonly Create[] w2ov =
+     {
+         (s, nt) => new OV_iri((string) s),
+         (s, nt) => new OV_iriint((int) s, nt),
+         (s, nt) => new OV_bool((bool) s),
+         (s, nt) => new OV_string((string) s),
+         (strLang, nt) => new OV_langstring((string) ((object[]) strLang)[0], (string) ((object[]) strLang)[1]),
+         (s, nt) => new OV_double((double) s),
+         (s, nt) => new OV_decimal((decimal) s),
+         (s, nt) => new OV_float((float) s),
+         (s, nt) => new OV_int((int) s),
+         (s, nt) => new OV_dateTimeZone(DateTimeOffset.FromFileTime((long) s)),
+         (s, nt) => new OV_dateTime(DateTime.FromBinary((long) s)),
+         (s, nt) => new OV_date(DateTime.FromBinary((long) s)),
+         (s, nt) => new OV_time(TimeSpan.FromTicks((long) s)),
+         (typed, nt) => new OV_typed((string) ((object[]) typed)[1], (string) ((object[]) typed)[0]),
+         (typed, nt) => new OV_typedint((string) ((object[]) typed)[1], (int) ((object[]) typed)[0], nt),
+     };
 
 
-        public static ObjectVariants Writeble2OVariant(this object[] @object)
+     public static ObjectVariants Writeble2OVariant(this object[] @object, NameTableUniversal nt = null)
         {
-            return w2ov[(int)@object[0]](@object[1]);
+            return w2ov[(int)@object[0]](@object[1], nt);
         }
-        public static ObjectVariants ToOVariant(this object @object)
+     public static ObjectVariants ToOVariant(this object @object, NameTableUniversal nt = null)
         {
-            return Writeble2OVariant((object[]) @object);
+            return Writeble2OVariant((object[]) @object,nt);
         }
 
      //public IComparable ToComparable(this object @object)

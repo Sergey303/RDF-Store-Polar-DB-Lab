@@ -53,5 +53,9 @@ namespace RDFTripleStore.OVns
         }
 
         public string Name { get { return uriString; } }
+        public override string ToString()
+        {
+            return uriString;
+        }
     }
 }

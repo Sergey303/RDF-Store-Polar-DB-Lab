@@ -49,6 +49,10 @@ namespace RDFTripleStore.OVns
 
         public dynamic Content { get { return value; } }
         public string DataType { get { return turi; } }
+        public override string ToString()
+        {
+            return "\"" + value + "\"^^<"+DataType+">";
+        }
 
     }
 }

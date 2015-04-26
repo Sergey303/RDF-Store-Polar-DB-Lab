@@ -47,6 +47,9 @@ namespace RDFTripleStore.OVns
         }
         public dynamic Content { get { return value; } }
         public string DataType { get { return SpecialTypesClass.Double.FullName; } }
-
+        public override string ToString()
+        {
+            return value.ToString();
+        }
     }
 }

@@ -1,15 +1,19 @@
 using System;
+using RDFCommon;
+using Task15UniversalIndex;
 
 namespace RDFTripleStore.OVns
 {
-    public class OV_typedint : ObjectVariants
+    public class OV_typedint : ObjectVariants, ILiteralNode
     {
         private readonly string value; public readonly int curi;
+        private readonly NameTableUniversal nameTable;
 
-        public OV_typedint(string value, int curi)
+        public OV_typedint(string value, int curi, NameTableUniversal nameTable)
         {
             this.value = value;
             this.curi = curi;
+            this.nameTable = nameTable;
         }
 
         public override ObjectVariantEnum Variant
@@ -41,5 +45,13 @@ namespace RDFTripleStore.OVns
         {
             return value.GetHashCode() + 37 * curi.GetHashCode();
         }
+
+        public override string ToString()
+        {
+            return "\"" + value + "\"^^<" + DataType + ">";
+        }
+
+        public dynamic Content { get { return value; }}
+        public string DataType { get { return nameTable.GetStringByCode(curi); } }
     }
 }

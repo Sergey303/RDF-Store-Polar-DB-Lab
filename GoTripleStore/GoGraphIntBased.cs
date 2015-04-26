@@ -99,7 +99,7 @@ namespace GoTripleStore
                     if (ov.Variant == ObjectVariantEnum.Iri)
                     {
                         int iobj = dictionary[((OV_iri)ov).UriString];
-                        ov = new OV_iriint(iobj);
+                        ov = new OV_iriint(iobj, coding_table);
                     }
                     table.TableCell.Root.AppendElement(new object[] { false, new object[] { isubj, ipred, ov.ToWritable() } });
                 }
@@ -151,7 +151,7 @@ namespace GoTripleStore
                     object[] three = (object[])((object[])ent.Get())[1];
                     int s = (int)three[0];
                     int p = (int)three[1];
-                    var o = ((object[])three[2]).Writeble2OVariant();
+                    var o = ((object[])three[2]).Writeble2OVariant(coding_table);
                     return new Triple<int, int, ObjectVariants>(s, p, o);
                 });
 
@@ -176,7 +176,7 @@ namespace GoTripleStore
                     object[] three = (object[])((object[])ent.Get())[1];
                     int s = (int)three[0];
                     int p = (int)three[1];
-                    var o = ((object[])three[2]).Writeble2OVariant();
+                    var o = ((object[])three[2]).Writeble2OVariant(coding_table);
                     return new Triple<int, int, ObjectVariants>(s, p, o);
                 });
                 return qu;
