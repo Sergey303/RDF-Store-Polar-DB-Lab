@@ -25,17 +25,17 @@ namespace RDFTripleStore
             Func<object, Comparer3> spokeyproducer = v =>
                 {
                     object[] va = (object[])((object[])v)[1];
-                    return new Comparer3((string) va[0], (string) va[1], va[2].ToOVariant().ToComparable());
+                    return new Comparer3((string) va[0], (string) va[1], new Comparer(va[2].ToOVariant().ToComparable()));
                 };
             Func<object, Comparer> pokeyproducer = v =>
             {
                 object[] va = (object[])((object[])v)[1];
-                return new Comparer2((string)va[1], va[2].ToOVariant().ToComparable());
+                return new Comparer2((string)va[1], new Comparer(va[2].ToOVariant().ToComparable()));
             };
             Func<object, Comparer2> oskeyproducer = v =>
             {
                 object[] va = (object[])((object[])v)[1];
-                return new Comparer2(va[2].ToOVariant().ToComparable(),(string)va[0]);
+                return new Comparer2(new Comparer(va[2].ToOVariant().ToComparable()),(string)va[0]);
             };     
             // Опорная таблица
             table = new TableView(path + "stable", tp_tabelement);

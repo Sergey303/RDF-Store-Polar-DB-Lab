@@ -119,7 +119,9 @@ namespace RDFTripleStore.OVns
 
         public virtual IComparable ToComparable()
         {
-            return new Comparer2(Variant, (IComparable)WritableValue);
+            if(this is IIriNode)
+                return new Comparer2(Variant, ((IIriNode)this).UriString);
+            return new Comparer2(Variant, ((ILiteralNode)this).Content);
         }
 
 
