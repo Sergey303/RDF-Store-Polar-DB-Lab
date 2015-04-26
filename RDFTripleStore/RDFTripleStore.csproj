@@ -80,7 +80,9 @@
     <Compile Include="RamListOftriplesStore.cs" />
     <Compile Include="RdfNamedGraphs.cs" />
     <Compile Include="ReadTripleStringsFromTurtle.cs" />
-    <Compile Include="SparqlStore.cs" />
+    <Compile Include="SparqlStore.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Testing.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TripleGeneratorBuffered.cs" />

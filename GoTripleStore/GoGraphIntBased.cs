@@ -15,6 +15,8 @@ namespace GoTripleStore
         private NameTableUniversal coding_table;
         private IndexKeyImmutable<int> index_s_arr;
         private IndexDynamic<int, IndexKeyImmutable<int>> index_s;
+        private IndexHalfkeyImmutable<SP_Pair> index_sp_arr;
+        private IndexDynamic<SP_Pair, IndexHalfkeyImmutable<SP_Pair>> index_sp;
         public GoGraphIntBased(string path)
         {
             PType tp_tabelement = new PTypeRecord(
@@ -46,7 +48,28 @@ namespace GoTripleStore
                 },
                 IndexArray = index_s_arr
             };
-
+            // Индекс sp
+            index_sp_arr = new IndexHalfkeyImmutable<SP_Pair>(path + "sp_")
+            {
+                Table = table, 
+                KeyProducer = v =>
+                {
+                    object[] va = (object[])((object[])v)[1];
+                    return new SP_Pair((int)va[0], (int)va[1]);
+                },
+                Scale = null,
+                HalfProducer = sp => sp.GetHashCode()
+            };
+            index_sp = new IndexDynamic<SP_Pair, IndexHalfkeyImmutable<SP_Pair>>(false)
+            {
+                Table = table,
+                IndexArray = index_sp_arr,
+                KeyProducer = v =>
+                {
+                    object[] va = (object[])((object[])v)[1];
+                    return new SP_Pair((int)va[0], (int)va[1]);
+                }
+            };
         }
         private int _portion = 500000;
         public int Portion { set { _portion = value; } }
@@ -114,10 +137,11 @@ namespace GoTripleStore
         private void BuildIndexes()
         {
             index_s_arr.Build();
+            index_sp_arr.Build();
         }
         public IEnumerable<Triple<int, int, ObjectVariants>> Search(object subject = null, object predicate = null, ObjectVariants obj = null)
         {
-            if (subject != null)
+            if (subject != null && predicate == null && obj == null)
             {
                 int isubj = subject is string ? coding_table.GetCodeByString((string)subject) : -1;
                 var query_by_subject = index_s.GetAllByKey(isubj);
@@ -141,6 +165,22 @@ namespace GoTripleStore
                 }
                 return query;
             }
+            else if (subject != null && predicate != null && obj == null)
+            {
+                int isubj = subject is string ? coding_table.GetCodeByString((string)subject) : -1;
+                int ipred = subject is string ? coding_table.GetCodeByString((string)predicate) : -1;
+                SP_Pair pair = new SP_Pair(isubj, ipred);
+                var query = index_sp.GetAllByKey(pair).ToArray();
+                var qu = query.Select(ent =>
+                {
+                    object[] three = (object[])((object[])ent.Get())[1];
+                    int s = (int)three[0];
+                    int p = (int)three[1];
+                    var o = ((object[])three[2]).Writeble2OVariant();
+                    return new Triple<int, int, ObjectVariants>(s, p, o);
+                });
+                return qu;
+            }
             throw new NotImplementedException();
         }
         public int Code(string s)
@@ -150,6 +190,27 @@ namespace GoTripleStore
         public string Decode(int cod)
         {
             return coding_table.GetStringByCode(cod);
+        }
+        public class SP_Pair : IComparable
+        {
+            int s, p;
+            public SP_Pair(int subject, int predicate) { this.s = subject; this.p = predicate; }
+            //int S { get; set; }
+            //int P { get; set; }
+            public int CompareTo(object another)
+            {
+                SP_Pair ano = (SP_Pair)another;
+                int cmp = this.GetHashCode().CompareTo(ano.GetHashCode());
+                if (cmp == 0)
+                {
+                    cmp = this.s.CompareTo(ano.s);
+                }
+                if (cmp == 0)
+                {
+                    cmp = this.p.CompareTo(ano.p);
+                }
+                return cmp;
+            }
         }
     }
 }
