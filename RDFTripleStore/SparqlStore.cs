@@ -10,7 +10,7 @@ using SparqlParseRun;
 
 namespace RDFTripleStore
 {
-    class SparqlStore :GoGraphStringBased, IStore
+    class SparqlStore :GoGraphIntBased, IStore
     {
         public SparqlStore(string path) : base(path)
         {

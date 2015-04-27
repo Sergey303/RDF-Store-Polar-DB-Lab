@@ -37,6 +37,15 @@ namespace RDFCommon
         public IIriNode rest;
         public IIriNode type;
 
+        public static string[] GetAll()
+        {
+            return new[]
+            {
+                Integer.FullName, Float.FullName, Double.FullName, Decimal.FullName, Bool.FullName, Date.FullName,
+                DateTime.FullName, LangString.FullName, String.FullName, DayTimeDuration.FullName, RdfFirst.FullName,
+                RdfRest.FullName,    RdfType.FullName, Nil.FullName
+            };
+        }
         public SpecialTypesClass(INodeGenerator nodeGenerator)
         {
             date =nodeGenerator. CreateUriNode(Date);

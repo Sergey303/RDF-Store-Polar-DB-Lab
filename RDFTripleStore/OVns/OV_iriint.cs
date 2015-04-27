@@ -1,9 +1,10 @@
 using System;
+using RDFCommon;
 using Task15UniversalIndex;
 
 namespace RDFTripleStore.OVns
 {
-    public class OV_iriint : ObjectVariants
+    public class OV_iriint : ObjectVariants, IIriNode
     {
         public readonly int code;
         private readonly NameTableUniversal nameTable;
@@ -48,10 +49,15 @@ namespace RDFTripleStore.OVns
         {
             return unchecked((Variant.GetHashCode() << 4) + code );
         }
-        public override string  ToString(){ return nameTable.GetStringByCode(code); }
+        public override string  ToString()
+        {
+            return UriString;
+        }
         public override Comparer ToComparable()
         {
             return new Comparer2(Variant, code);
         }
+
+        public string UriString { get { return nameTable.GetStringByCode(code); } }
     }
 }

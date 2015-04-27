@@ -19,8 +19,7 @@ namespace RDFTripleStore
 
         public int CompareTo(Comparer other)
         {
-            if (this is Comparer2 && other is Comparer2) return ((Comparer2) this).CompareTo((Comparer2)other);
-            var c1 = k1.CompareTo(other.k1);
+          var c1 = k1.CompareTo(other.k1);
             return c1 == 0 ? 0 : c1 > 0 ? 1 : -1;
         }
 

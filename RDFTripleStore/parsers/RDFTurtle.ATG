@@ -74,9 +74,9 @@ RDFTurtle
 /*____________________________________________*/
 	Directive	=	Prefixid | Base | Sparqlprefix | Sparqlbase.
 /*____________________________________________*/
-	Prefixid	=	"@prefix" pnamens (.string pn=t.val; .) iriref (. prologue.AddPrefix(pn, t.val); .) '.'.
+	Prefixid	=	"@prefix" pnamens (.string pn=t.val; .) iriref (. prologue.AddPrefix(pn, t.val.ToLower()); .) '.'.
 /*____________________________________________*/
-	Base	=	"@base" iriref (. prologue.SetBase(t.val); .) '.'.
+	Base	=	"@base" iriref (. prologue.SetBase(t.val.ToLower()); .) '.'.
 /*____________________________________________*/
 	Sparqlbase	=	"base" iriref (. prologue.SetBase(t.val); .) .
 /*____________________________________________*/
@@ -131,8 +131,8 @@ RDFTurtle
 	String	=	stringliteralquote | stringliteralsinglequote | stringliterallongsinglequote | stringliterallongquote.
 /*____________________________________________*/
 	Iri<out string value>	= (. value=null; .)
-	(iriref (. value=prologue.GetFromIri(t.val.Substring(1, t.val.Length-2)); .) 
-	| pnameln (. value=prologue.GetUriFromPrefixed(t.val); .) | pnamens (. value=prologue.GetUriFromPrefixedNamespace(t.val); .)).
+	(iriref (. value=prologue.GetFromIri(t.val.Substring(1, t.val.Length-2)).ToLower(); .) 
+	| pnameln (. value=prologue.GetUriFromPrefixed(t.val.ToLower()); .) | pnamens (. value=prologue.GetUriFromPrefixedNamespace(t.val.ToLower()); .)).
 /*____________________________________________		Prefixedname	=	pnameln | pnamens. ____________________________________________*/
 	Blanknode<out string value>	=  (. value=null; .)
   (blanknodelabel  (. value=ObjectVariants.CreateBlankNode(t.val,graphName); .)

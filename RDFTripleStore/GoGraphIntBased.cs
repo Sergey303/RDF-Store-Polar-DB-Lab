@@ -8,34 +8,35 @@ using Task15UniversalIndex;
 
 namespace RDFTripleStore
 {
-    public class GoGraphStringBased : IGraph
+    public class GoGraphIntBased : IGraph
     {
         private TableView table;
 
         private IndexDynamic<Comparer, IndexViewImmutable<Comparer>> spo_ind;
         private IndexDynamic<Comparer, IndexViewImmutable<Comparer>> po_ind;
         private IndexDynamic<Comparer, IndexViewImmutable<Comparer>> os_ind;
-        protected NodeGenerator ng = new NodeGenerator();
-        public GoGraphStringBased(string path)
+        protected NodeGeneratorInt ng;
+        public GoGraphIntBased(string path)
         {
             PType tp_tabelement = new PTypeRecord(
-                new NamedType("subject", new PType(PTypeEnumeration.sstring)),
-                new NamedType("predicate", new PType(PTypeEnumeration.sstring)),
-                new NamedType("obj", ObjectVariantsPolarType.ObjectVariantPolarType));
+             new NamedType("subject", new PType(PTypeEnumeration.integer)),
+             new NamedType("predicate", new PType(PTypeEnumeration.integer)),
+             new NamedType("obj", ObjectVariantsPolarType.ObjectVariantPolarType));
+            ng = new NodeGeneratorInt(path+"coding");
             Func<object, Comparer> spokeyproducer = v =>
-                {
+                {                   
                     object[] va = (object[])((object[])v)[1];
-                    return new Comparer3((string)va[0], (string)va[1], va[2].ToOVariant().ToComparable()); //.ToComparable()
+                    return new Comparer3((int)va[0], (int)va[1], va[2].ToOVariant().ToComparable()); //.ToComparable()
                 };
             Func<object, Comparer> pokeyproducer = v =>
             {
                 object[] va = (object[])((object[])v)[1];
-                return new Comparer2((string)va[1], va[2].ToOVariant().ToComparable());
+                return new Comparer2((int)va[1], va[2].ToOVariant().ToComparable());
             };
             Func<object, Comparer2> oskeyproducer = v =>
             {
                 object[] va = (object[])((object[])v)[1];
-                return new Comparer2(va[2].ToOVariant().ToComparable(),(string)va[0]);
+                return new Comparer2(va[2].ToOVariant().ToComparable(),(int)va[0]);
             };     
             // Опорная таблица
             table = new TableView(path + "stable", tp_tabelement);
@@ -78,15 +79,37 @@ namespace RDFTripleStore
         {
             table.Clear();
             table.Fill(new object[0]);
-            generator.Start(list => 
+        
+            ng.Build();
+            generator.Start(list =>
+            {
+                IEnumerable<string> ids = list.SelectMany(tri =>
                 {
-                    foreach (var tr in list)
-                        table.AppendValue(new object[] {tr.Subject, tr.Predicate, tr.Object.ToWritable()});
+                    IEnumerable<string> iris = new string[] { tri.Subject, tri.Predicate };
+                    if (tri.Object.Variant == ObjectVariantEnum.Iri)
+                        iris = iris.Concat(new string[] { ((OV_iri)tri.Object).UriString });
+                    return iris;
+                });
+                var dictionary = ng.coding_table.InsertPortion(ids);
+                foreach (var tri in list)
+                {
+                    int isubj = dictionary[tri.Subject];
+                    int ipred = dictionary[tri.Predicate];
+                    ObjectVariants ov = tri.Object;
+                    if (ov.Variant == ObjectVariantEnum.Iri)
+                    {
+                        int iobj = dictionary[((OV_iri)ov).UriString];
+                        ov = new OV_iriint(iobj, ng.coding_table);
+                    }
+                    table.TableCell.Root.AppendElement(new object[] { false, new object[] { isubj, ipred, ov.ToWritable() } });
+                }
                 });
 
             spo_ind.IndexArray.Build();
             po_ind.IndexArray.Build();
-            os_ind.IndexArray.Build();
+            os_ind.IndexArray.Build(); spo_ind.Build();
+            po_ind.Build();
+            os_ind.Build();
         }
 
     
@@ -95,8 +118,7 @@ namespace RDFTripleStore
 
         public void Clear()
         {
-            table.Clear();
-            
+            table.Clear();       
         }
 
         public IEnumerable<Triple<ISubjectNode, IPredicateNode, IObjectNode>> GetTriplesWithObject(IObjectNode o)
@@ -107,41 +129,36 @@ namespace RDFTripleStore
             return entities.Select(ent =>
             {
                 object[] three1 = (object[])(((object[])ent.Get())[1]);
-                return new Triple<ISubjectNode, IPredicateNode, IObjectNode>(ng.CreateUriNode((string)three1[0]), ng.CreateUriNode((string)three1[1]), o); 
+                return new Triple<ISubjectNode, IPredicateNode, IObjectNode>(ng.GetCoded((int)three1[0]), ng.GetCoded((int)three1[1]), o); 
 
             });
         }
 
         public IEnumerable<Triple<ISubjectNode, IPredicateNode, IObjectNode>> GetTriplesWithPredicate(IPredicateNode p)
         {
-            string pred = (((IIriNode)p)).UriString;
-           
-          
-            IEnumerable<PaEntry> entities = po_ind.GetAllByKey(new Comparer(pred));
+            IEnumerable<PaEntry> entities = po_ind.GetAllByKey(new Comparer(((OV_iriint)p).code));
             return entities.Select(ent =>
             {
                 object[] three1 = (object[])(((object[])ent.Get())[1]);
-                return new Triple<ISubjectNode, IPredicateNode, IObjectNode>(ng.CreateUriNode((string)three1[0]),p, three1[2].ToOVariant()); 
+                return new Triple<ISubjectNode, IPredicateNode, IObjectNode>(ng.GetCoded((int)three1[0]), p, three1[2].ToOVariant()); 
             });
         }
 
         public IEnumerable<Triple<ISubjectNode, IPredicateNode, IObjectNode>> GetTriplesWithSubject(ISubjectNode s)
         {
-            string ssubj = (((IIriNode)s)).UriString;
-
-            IEnumerable<PaEntry> entities = spo_ind.GetAllByKey(new Comparer(ssubj));
+            IEnumerable<PaEntry> entities = spo_ind.GetAllByKey(new Comparer(((OV_iriint)s).code));
             return entities.Select(ent =>
             {
                 object[] three1 = (object[])(((object[])ent.Get())[1]);
-                return new Triple<ISubjectNode, IPredicateNode, IObjectNode>(s, ng.CreateUriNode((string)three1[1]), three1[2].ToOVariant());
+                return new Triple<ISubjectNode, IPredicateNode, IObjectNode>(s, ng.GetCoded((int)three1[1]), three1[2].ToOVariant());
             });
         }
 
         public IEnumerable<IObjectNode> GetTriplesWithSubjectPredicate(ISubjectNode subject, IPredicateNode predicate)
         {
-            string ssubj = (((IIriNode)subject)).UriString;
-            string spred = (((IIriNode) predicate)).UriString;
-            Comparer2 key_triple = new Comparer2(ssubj, spred);
+            int ssubj = ((OV_iriint)subject).code;
+            int spred = ((OV_iriint)predicate).code;
+          
             IEnumerable<PaEntry> entities = spo_ind.GetAllByKey(new Comparer2(ssubj, spred));
             return entities.Select(ent =>
             {
@@ -152,27 +169,27 @@ namespace RDFTripleStore
 
         public IEnumerable<IPredicateNode> GetTriplesWithSubjectObject(ISubjectNode subject, IObjectNode obj)
         {
-            string ssubj = (((IIriNode)subject)).UriString;
+            int ssubj = (((OV_iriint)subject)).code;
             var objVar = (((ObjectVariants)obj));
             Comparer2 key_triple = new Comparer2(objVar.ToComparable(), ssubj);
             IEnumerable<PaEntry> entities = os_ind.GetAllByKey(key_triple);
             return entities.Select(ent =>
             {
                 object[] three1 = (object[])(((object[])ent.Get())[1]);
-                return (IPredicateNode) ng.CreateUriNode((string)three1[1]);
+                return (IPredicateNode)ng.GetCoded((int)three1[1]);
             });
         }
 
         public IEnumerable<ISubjectNode> GetTriplesWithPredicateObject(IPredicateNode predicate, IObjectNode obj)
         {
-            string pred = (((IIriNode)predicate)).UriString;
+            int pred = (((OV_iriint)predicate)).code;
             var objVar = (((ObjectVariants)obj));
             Comparer2 key_triple = new Comparer2(pred, objVar.ToComparable());
             IEnumerable<PaEntry> entities = po_ind.GetAllByKey(key_triple);
             return entities.Select(ent =>
             {
                 object[] three1 = (object[])(((object[])ent.Get())[1]);
-                return (ISubjectNode)ng.CreateUriNode((string)three1[0]);
+                return (ISubjectNode)ng.GetCoded((int)three1[0]);
             });
         }
 
@@ -222,13 +239,11 @@ namespace RDFTripleStore
         }
 
         public void FromTurtle(string path)
-        {
-            Build(new TripleGeneratorBufferedParallel(path, "g"));
+        {         
             table.Clear();
+            Build(new TripleGeneratorBufferedParallel(path, "g"));
+            
         //    table.Fill(ReadTripleStringsFromTurtle.LoadGraph(path).Select(tr => new object[] { tr.Subject.ToLower(), tr.Predicate.ToLower(), tr.Object.ToWritable() }));
-            spo_ind.Build();
-            po_ind.Build();
-            os_ind.Build();
         }
 
         // Структуры, играющие роль ключа

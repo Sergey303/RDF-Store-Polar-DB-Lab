@@ -14,5 +14,7 @@ namespace RDFCommon
         IBlankNode CreateBlankNode(IGraphNode graphName, string blankNodeString = null);
         IIriNode GetUri(string uri);      
         SpecialTypesClass SpecialTypes { get; }
+
+        IIriNode GetUriNode(UriPrefixed uriPrefixed);
     }
 }

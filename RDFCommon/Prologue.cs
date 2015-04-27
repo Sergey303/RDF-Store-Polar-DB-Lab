@@ -35,14 +35,15 @@ namespace RDFCommon
             return SplitPrefixed(p);
         }
         public static UriPrefixed SplitPrefixed(string p)
-        {
+        {  
             var match = PrefixNSSlpit.Match(p);
             var prefix = match.Groups[1].Value;
-            var shortName = match.Groups[2].Value;
+            var shortName = match.Groups[2].Value.ToLowerInvariant();
             return new UriPrefixed(prefix, shortName, null);
         }
                 public static UriPrefixed SplitUri(string p)
-        {
+                {
+                    p = p.ToLowerInvariant();
             var rsi = p.LastIndexOf('\\');
             var lsi = p.LastIndexOf('/');
             var ssi = p.LastIndexOf('#');
@@ -78,7 +79,7 @@ namespace RDFCommon
         {      
             if(p.StartsWith("<") && p.EndsWith(">"))           
             p = p.Substring(1, p.Length - 2);
-            return baseUri == null ? SplitUri(p) : new UriPrefixed(":", p, baseUri);
+            return baseUri == null ? SplitUri(p) : new UriPrefixed(":", p.ToLowerInvariant(), baseUri);
         }
 
 
@@ -86,12 +87,12 @@ namespace RDFCommon
 
         public void SetBase(string p)
         {
-            baseUri = p;
+            baseUri = p.ToLowerInvariant();
         }
 
         public void AddPrefix(string prefix, string ns)
         {
-            ns = ns.Substring(1, ns.Length - 2);
+            ns = ns.Substring(1, ns.Length - 2).ToLowerInvariant();
             prefix2Namspace.Add(prefix, ns);
             namspace2Prefix.Add(ns, prefix);
         }

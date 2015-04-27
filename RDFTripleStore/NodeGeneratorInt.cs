@@ -1,23 +1,27 @@
 using System;
+using System.Collections.Generic;
 using RDFCommon;
 using RDFTripleStore.OVns;
+using Task15UniversalIndex;
 
 namespace RDFTripleStore
 {
-    public class NodeGenerator:INodeGenerator
+    public class NodeGeneratorInt:INodeGenerator
     {
-        public NodeGenerator()
-        {
-            SpecialTypes=new SpecialTypesClass(this);
+        internal NameTableUniversal coding_table;
+        public NodeGeneratorInt(string path)
+        {     
+            coding_table=new NameTableUniversal(path);
+         
         }
         public IIriNode CreateUriNode(string uri)
         {
-            return new OV_iri(uri.ToLowerInvariant()); 
+            return new OV_iriint(coding_table.Add(uri.ToLowerInvariant()),coding_table);;
         }
 
         public IIriNode CreateUriNode(UriPrefixed uri)
         {
-            return new OV_iri(uri.FullName.ToLowerInvariant());
+            return CreateUriNode(uri.FullName);
         }
 
         public ILiteralNode CreateLiteralNode(string p)
@@ -57,15 +61,16 @@ namespace RDFTripleStore
 
         public IBlankNode CreateBlankNode(IGraphNode graphName, string blankNodeString = null)
         {
-            return new OV_iri(CreateBlankNode(((IIriNode) graphName).UriString, blankNodeString));
+            return (IBlankNode) CreateUriNode(CreateBlankNode(((IIriNode) graphName).UriString, blankNodeString));
         }
 
         public IIriNode GetUri(string uri)
         {
-          return new OV_iri(uri);
+            int code=coding_table.GetCodeByString(uri);
+            return new OV_iriint(code, coding_table);
         }
 
-        public SpecialTypesClass SpecialTypes { get; private set; }
+        public SpecialTypesClass SpecialTypes { get; protected internal set; }
         public IIriNode GetUriNode(UriPrefixed uriPrefixed)
         {
             return GetUri(uriPrefixed.FullName);
@@ -75,7 +80,7 @@ namespace RDFTripleStore
         {
             p = p.Trim('"','\'');
             
-            if (typeUriNode == this.SpecialTypes.@string)
+            if (Equals(typeUriNode, this.SpecialTypes.@string))
                 return new OV_string(p);
             else if (typeUriNode.Equals(this.SpecialTypes.date))
             {
@@ -126,23 +131,43 @@ namespace RDFTripleStore
             //    return new ObjectVariant(11,i);
             //}
             else 
-            return new OV_typed(p, typeUriNode.UriString );   
+            return CreateLiteralOtherType(p, typeUriNode.UriString);   
+        }
+
+        public OV_typedint CreateLiteralOtherType(string p, string typeUriNode)
+        {
+            return new OV_typedint(p, coding_table.Add(typeUriNode), coding_table);
         }
 
         public string CreateBlankNode(string graph, string blankNodeString = null)
         {
             if (graph != null) blankNodeString = graph + "/" + blankNodeString;
             if(blankNodeString==null)
-                blankNodeString = "blank" + (long)(random.NextDouble() * 1000 * 1000 * 1000 * 1000);
-
-          
+                blankNodeString = "blank" + (long)(random.NextDouble() * 1000 * 1000 * 1000 * 1000);   
             return blankNodeString;
         }
 
         private Random random = new Random();
+           public IIriNode GetCoded(int code)
+        {
+            return new OV_iriint(code, coding_table);
+        }
 
+        public int CreateCode(string iri)
+        {
+            return coding_table.Add(iri);
+        }
 
-    
+        public void Build()
+        {
+            coding_table.Clear();
+            coding_table.Fill(new string[0]);
+            coding_table.BuildIndexes();
+            coding_table.InsertPortion(SpecialTypesClass.GetAll());
+            coding_table.BuildScale();
+            SpecialTypes = new SpecialTypesClass(this);
+
+        }
     }
     
 }
