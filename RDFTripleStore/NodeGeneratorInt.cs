@@ -67,6 +67,7 @@ namespace RDFTripleStore
         public IIriNode GetUri(string uri)
         {
             int code=coding_table.GetCodeByString(uri);
+            
             return new OV_iriint(code, coding_table);
         }
 

@@ -2,13 +2,14 @@ using System;
 using RDFCommon;
 using System.Collections.Generic;
 using System.Linq;
+using RDFTripleStore.OVns;
 
 COMPILER RDFTurtle
  
  public string graphName;
 
 public Action<string, string, ObjectVariants> ft;
-private readonly PrologueFullString prologue = new PrologueFullString();
+private readonly Prologue prologue = new Prologue();
 
 /*______________________________________________*/
 CHARACTERS
@@ -131,8 +132,8 @@ RDFTurtle
 	String	=	stringliteralquote | stringliteralsinglequote | stringliterallongsinglequote | stringliterallongquote.
 /*____________________________________________*/
 	Iri<out string value>	= (. value=null; .)
-	(iriref (. value=prologue.GetFromIri(t.val.Substring(1, t.val.Length-2)).ToLower(); .) 
-	| pnameln (. value=prologue.GetUriFromPrefixed(t.val.ToLower()); .) | pnamens (. value=prologue.GetUriFromPrefixedNamespace(t.val.ToLower()); .)).
+	(iriref (. value=prologue.GetFromIri(t.val.Substring(1, t.val.Length-2)).FullName; .) 
+	| pnameln (. value=prologue.GetUriFromPrefixed(t.val).FullName; .) | pnamens (. value=prologue.GetUriFromPrefixedNamespace(t.val).FullName; .)).
 /*____________________________________________		Prefixedname	=	pnameln | pnamens. ____________________________________________*/
 	Blanknode<out string value>	=  (. value=null; .)
   (blanknodelabel  (. value=ObjectVariants.CreateBlankNode(t.val,graphName); .)

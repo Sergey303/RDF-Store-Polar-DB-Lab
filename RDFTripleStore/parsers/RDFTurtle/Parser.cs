@@ -2,11 +2,11 @@ using System;
 using RDFCommon;
 using System.Collections.Generic;
 using System.Linq;
+using RDFTripleStore.OVns;
 
 
 
 using System;
-using RDFTripleStore.OVns;
 
 namespace RDFTripleStore.parsers.RDFTurtle {
 
@@ -43,7 +43,7 @@ public class Parser {
 public string graphName;
 
 public Action<string, string, ObjectVariants> ft;
-private readonly PrologueFullString prologue = new PrologueFullString();
+private readonly Prologue prologue = new Prologue();
 
 /*______________________________________________*/
 
@@ -154,14 +154,14 @@ private readonly PrologueFullString prologue = new PrologueFullString();
 		Expect(2);
 		string pn=t.val; 
 		Expect(1);
-		prologue.AddPrefix(pn, t.val); 
+		prologue.AddPrefix(pn, t.val.ToLower()); 
 		Expect(14);
 	}
 
 	void Base() {
 		Expect(16);
 		Expect(1);
-		prologue.SetBase(t.val); 
+		prologue.SetBase(t.val.ToLower()); 
 		Expect(14);
 	}
 
@@ -257,13 +257,13 @@ private readonly PrologueFullString prologue = new PrologueFullString();
 		value=null; 
 		if (la.kind == 1) {
 			Get();
-			value=prologue.GetFromIri(t.val.Substring(1, t.val.Length-2)); 
+			value=prologue.GetFromIri(t.val.Substring(1, t.val.Length-2)).FullName; 
 		} else if (la.kind == 3) {
 			Get();
-			value=prologue.GetUriFromPrefixed(t.val); 
+			value=prologue.GetUriFromPrefixed(t.val).FullName; 
 		} else if (la.kind == 2) {
 			Get();
-			value=prologue.GetUriFromPrefixedNamespace(t.val); 
+			value=prologue.GetUriFromPrefixedNamespace(t.val).FullName; 
 		} else SynErr(36);
 	}
 
