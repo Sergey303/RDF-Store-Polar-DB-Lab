@@ -22,7 +22,7 @@ namespace RDFTripleStore.OVns
         {
             get { return new object[] { value, lang }; }
         }
-        public override IComparable ToComparable()
+        public override Comparer ToComparable()
         {
             return new Comparer3(Variant, value, lang);
         }
@@ -52,7 +52,7 @@ namespace RDFTripleStore.OVns
 
         public override int GetHashCode()
         {
-            return value.GetHashCode() + 373*lang.GetHashCode();
+            return unchecked((Variant.GetHashCode() << 4) + value.GetHashCode()  << 2 +lang.GetHashCode());
         }
 
 

@@ -1,3 +1,4 @@
+using System;
 using Task15UniversalIndex;
 
 namespace RDFTripleStore.OVns
@@ -45,9 +46,12 @@ namespace RDFTripleStore.OVns
         // override object.GetHashCode
         public override int GetHashCode()
         {
-            return code.GetHashCode();
+            return unchecked((Variant.GetHashCode() << 4) + code );
         }
-        public override string  ToString(){ return nameTable.GetStringByCode(code); } 
-
+        public override string  ToString(){ return nameTable.GetStringByCode(code); }
+        public override Comparer ToComparable()
+        {
+            return new Comparer2(Variant, code);
+        }
     }
 }

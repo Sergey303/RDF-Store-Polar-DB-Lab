@@ -1,3 +1,4 @@
+using System;
 using RDFCommon;
 
 namespace RDFTripleStore.OVns
@@ -8,7 +9,7 @@ namespace RDFTripleStore.OVns
 
         public OV_iri(string fullId)
         {
-            uriString = fullId;
+            uriString = fullId.ToLower();
         }
 
         public override ObjectVariantEnum Variant
@@ -44,7 +45,7 @@ namespace RDFTripleStore.OVns
         // override object.GetHashCode
         public override int GetHashCode()
         {
-            return uriString.GetHashCode();
+            return unchecked((Variant.GetHashCode() << 4) + uriString.GetHashCode());
         }
 
         public string UriString
@@ -56,6 +57,11 @@ namespace RDFTripleStore.OVns
         public override string ToString()
         {
             return uriString;
+        }
+
+        public override Comparer ToComparable()
+        {
+            return new Comparer2(Variant, uriString);
         }
     }
 }
