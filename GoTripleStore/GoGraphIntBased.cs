@@ -60,6 +60,30 @@ namespace GoTripleStore
                 Scale = null,
                 HalfProducer = sp => sp.GetHashCode()
             };
+            index_sp_arr.Scale = new ScaleCell(path + "sp_index") { IndexCell = index_sp_arr.IndexCell };
+            index_sp = new IndexDynamic<SP_Pair, IndexHalfkeyImmutable<SP_Pair>>(false)
+            {
+                Table = table,
+                IndexArray = index_sp_arr,
+                KeyProducer = v =>
+                {
+                    object[] va = (object[])((object[])v)[1];
+                    return new SP_Pair((int)va[0], (int)va[1]);
+                }
+            };
+            // Индекс spo
+            index_spo_arr = new IndexHalfkeyImmutable<SPO_Troyka>(path + "sp_")
+            {
+                Table = table,
+                KeyProducer = v =>
+                {
+                    object[] va = (object[])((object[])v)[1];
+                    return new SP_Pair((int)va[0], (int)va[1]);
+                },
+                Scale = null,
+                HalfProducer = sp => sp.GetHashCode()
+            };
+            index_sp_arr.Scale = new ScaleCell(path + "sp_index") { IndexCell = index_sp_arr.IndexCell };
             index_sp = new IndexDynamic<SP_Pair, IndexHalfkeyImmutable<SP_Pair>>(false)
             {
                 Table = table,
@@ -170,7 +194,7 @@ namespace GoTripleStore
                 int isubj = subject is string ? coding_table.GetCodeByString((string)subject) : -1;
                 int ipred = subject is string ? coding_table.GetCodeByString((string)predicate) : -1;
                 SP_Pair pair = new SP_Pair(isubj, ipred);
-                var query = index_sp.GetAllByKey(pair).ToArray();
+                var query = index_sp.GetAllByKey(pair);
                 var qu = query.Select(ent =>
                 {
                     object[] three = (object[])((object[])ent.Get())[1];
@@ -215,6 +239,33 @@ namespace GoTripleStore
             {
                 //return s.GetHashCode() ^ p.GetHashCode();
                 return s.GetHashCode() + 7777 * p.GetHashCode();
+            }
+        }
+        public class SPO_Troyka : IComparable
+        {
+            int s, p; ObjectVariants ov;
+            public SPO_Troyka(int subject, int predicate, ObjectVariants ov) { this.s = subject; this.p = predicate; this.ov = ov; }
+            public int CompareTo(object another)
+            {
+                SPO_Troyka ano = (SPO_Troyka)another;
+                int cmp = this.GetHashCode().CompareTo(ano.GetHashCode());
+                if (cmp == 0)
+                {
+                    cmp = this.s.CompareTo(ano.s);
+                }
+                if (cmp == 0)
+                {
+                    cmp = this.p.CompareTo(ano.p);
+                }
+                if (cmp == 0)
+                {
+                    //cmp = this.ov.CompareTo(ano.ov);
+                }
+                return cmp;
+            }
+            public override int GetHashCode()
+            {
+                return s.GetHashCode() + 7777 * p.GetHashCode() + 67 * ov.GetHashCode();
             }
         }
     }

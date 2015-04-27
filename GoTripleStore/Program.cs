@@ -18,7 +18,7 @@ namespace GoTripleStore
             var query = ReadTripleStringsFromTurtle.LoadGraph(Config.Source_data_folder_path + "1.ttl");
             
             GoGraphIntBased cgraph = new GoGraphIntBased(path);
-            bool toload = true;
+            bool toload = false;
             if (toload)
             {
                 sw.Restart();
@@ -26,6 +26,8 @@ namespace GoTripleStore
                 sw.Stop();
                 Console.WriteLine("Load ok. duration={0}", sw.ElapsedMilliseconds);
             }
+            else {  } // Здесь можно было бы разогревать базу данных.
+
             var search_query = cgraph.Search("http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromProducer10/Product468",
                 "http://www.w3.org/2000/01/rdf-schema#label", null);
             Console.WriteLine(search_query.Count());
@@ -34,7 +36,7 @@ namespace GoTripleStore
                 Console.WriteLine("Triple: {0} {1} {2}", cgraph.Decode(t.Subject), cgraph.Decode(t.Predicate), t.Object);
             }
 
-            //ProcessTrace(cgraph);
+            ProcessTrace(cgraph);
         }
         // Выполнение операций по "следу" tracing
         private static void ProcessTrace(IGraph<Triple<int, int, ObjectVariants>> graph)
@@ -85,12 +87,7 @@ namespace GoTripleStore
                     //if (query.Count() == 0 && res == "") continue;
                     //ecnt++;
                     var query = graph.Search(s, p, null);
-                    if (query.Count() == 0 && res == "") continue;
-                    if (ecnt < 10) 
-                    {
-                        var tr_res = query.Select(t => t.Object).FirstOrDefault();
-                        Console.WriteLine("res={0}, obj={1}", res, tr_res);
-                    }
+                    if (query.Count() == 0 && res == "") { }//continue;
                     ecnt++;
                 }
                 else if (spo.Name == "Spo_")
