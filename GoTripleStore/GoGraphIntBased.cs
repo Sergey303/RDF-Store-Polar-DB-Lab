@@ -60,6 +60,7 @@ namespace GoTripleStore
                 Scale = null,
                 HalfProducer = sp => sp.GetHashCode()
             };
+            index_sp_arr.Scale = new ScaleCell(path + "sp_index") { IndexCell = index_sp_arr.IndexCell };
             index_sp = new IndexDynamic<SP_Pair, IndexHalfkeyImmutable<SP_Pair>>(false)
             {
                 Table = table,
@@ -170,7 +171,7 @@ namespace GoTripleStore
                 int isubj = subject is string ? coding_table.GetCodeByString((string)subject) : -1;
                 int ipred = subject is string ? coding_table.GetCodeByString((string)predicate) : -1;
                 SP_Pair pair = new SP_Pair(isubj, ipred);
-                var query = index_sp.GetAllByKey(pair).ToArray();
+                var query = index_sp.GetAllByKey(pair);
                 var qu = query.Select(ent =>
                 {
                     object[] three = (object[])((object[])ent.Get())[1];

@@ -39,7 +39,7 @@ namespace Task15UniversalIndex
         private Func<int, int> ToPosition { get; set; }
         public void Build()
         {
-            if (n == 0) Build(index_cell.Root.Count() / 64 > 0 ? index_cell.Root.Count() / 64 : 1);
+            if (n == 0) Build(index_cell.Root.Count() / 64 > 0 ? index_cell.Root.Count() / 32 : 1);
             else Build(n);
         }
         public void Build(long n)
