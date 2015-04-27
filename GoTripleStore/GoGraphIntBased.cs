@@ -259,7 +259,7 @@ namespace GoTripleStore
                 }
                 if (cmp == 0)
                 {
-                    //cmp = this.ov.CompareTo(ano.ov);
+                   cmp = this.ov.ToComparable().CompareTo(ano.ov.ToComparable());
                 }
                 return cmp;
             }
