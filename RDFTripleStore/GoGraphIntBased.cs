@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using PolarDB;
 using RDFCommon;
+using RDFTripleStore.Comparer;
 using RDFTripleStore.OVns;
 using Task15UniversalIndex;
 
@@ -12,9 +13,9 @@ namespace RDFTripleStore
     {
         private TableView table;
 
-        private IndexDynamic<Comparer, IndexViewImmutable<Comparer>> spo_ind;
-        private IndexDynamic<Comparer, IndexViewImmutable<Comparer>> po_ind;
-        private IndexDynamic<Comparer, IndexViewImmutable<Comparer>> os_ind;
+        private IndexDynamic<Comparer.Comparer, IndexViewImmutable<Comparer.Comparer>> spo_ind;
+        private IndexDynamic<Comparer.Comparer, IndexViewImmutable<Comparer.Comparer>> po_ind;
+        private IndexDynamic<Comparer.Comparer, IndexViewImmutable<Comparer.Comparer>> os_ind;
         protected NodeGeneratorInt ng;
         public GoGraphIntBased(string path)
         {
@@ -23,12 +24,12 @@ namespace RDFTripleStore
              new NamedType("predicate", new PType(PTypeEnumeration.integer)),
              new NamedType("obj", ObjectVariantsPolarType.ObjectVariantPolarType));
             ng = new NodeGeneratorInt(path+"coding");
-            Func<object, Comparer> spokeyproducer = v =>
+            Func<object, Comparer.Comparer> spokeyproducer = v =>
                 {                   
                     object[] va = (object[])((object[])v)[1];
                     return new Comparer3((int)va[0], (int)va[1], va[2].ToOVariant().ToComparable()); //.ToComparable()
                 };
-            Func<object, Comparer> pokeyproducer = v =>
+            Func<object, Comparer.Comparer> pokeyproducer = v =>
             {
                 object[] va = (object[])((object[])v)[1];
                 return new Comparer2((int)va[1], va[2].ToOVariant().ToComparable());
@@ -42,30 +43,30 @@ namespace RDFTripleStore
             table = new TableView(path + "stable", tp_tabelement);
             // Индекс spo
 
-            spo_ind = new IndexDynamic<Comparer, IndexViewImmutable<Comparer>>(false)
+            spo_ind = new IndexDynamic<Comparer.Comparer, IndexViewImmutable<Comparer.Comparer>>(false)
             {
                 Table = table,
-                IndexArray = new IndexViewImmutable<Comparer>(path + "spo_ind")
+                IndexArray = new IndexViewImmutable<Comparer.Comparer>(path + "spo_ind")
                 {
                     Table = table,
                     KeyProducer = spokeyproducer
                 },
                 KeyProducer = spokeyproducer
             };
-            po_ind = new IndexDynamic<Comparer, IndexViewImmutable<Comparer>>(false)
+            po_ind = new IndexDynamic<Comparer.Comparer, IndexViewImmutable<Comparer.Comparer>>(false)
             {
                 Table = table,
-                IndexArray = new IndexViewImmutable<Comparer>(path + "po_ind")
+                IndexArray = new IndexViewImmutable<Comparer.Comparer>(path + "po_ind")
                 {
                     Table = table,
                     KeyProducer = pokeyproducer
                 },
                 KeyProducer = pokeyproducer
             };
-            os_ind = new IndexDynamic<Comparer, IndexViewImmutable<Comparer>>(false)
+            os_ind = new IndexDynamic<Comparer.Comparer, IndexViewImmutable<Comparer.Comparer>>(false)
             {
                 Table = table,
-                IndexArray = new IndexViewImmutable<Comparer>(path + "os_ind")
+                IndexArray = new IndexViewImmutable<Comparer.Comparer>(path + "os_ind")
                 {
                     Table = table,
                     KeyProducer = oskeyproducer
@@ -125,7 +126,7 @@ namespace RDFTripleStore
         {
             var objVar = (((ObjectVariants)o));
       
-            IEnumerable<PaEntry> entities = os_ind.GetAllByKey(new Comparer(objVar.ToComparable()));
+            IEnumerable<PaEntry> entities = os_ind.GetAllByKey(new Comparer.Comparer(objVar.ToComparable()));
             return entities.Select(ent =>
             {
                 object[] three1 = (object[])(((object[])ent.Get())[1]);
@@ -136,7 +137,7 @@ namespace RDFTripleStore
 
         public IEnumerable<Triple<ISubjectNode, IPredicateNode, IObjectNode>> GetTriplesWithPredicate(IPredicateNode p)
         {
-            IEnumerable<PaEntry> entities = po_ind.GetAllByKey(new Comparer(((OV_iriint)p).code));
+            IEnumerable<PaEntry> entities = po_ind.GetAllByKey(new Comparer.Comparer(((OV_iriint)p).code));
             return entities.Select(ent =>
             {
                 object[] three1 = (object[])(((object[])ent.Get())[1]);
@@ -146,7 +147,7 @@ namespace RDFTripleStore
 
         public IEnumerable<Triple<ISubjectNode, IPredicateNode, IObjectNode>> GetTriplesWithSubject(ISubjectNode s)
         {
-            IEnumerable<PaEntry> entities = spo_ind.GetAllByKey(new Comparer(((OV_iriint)s).code));
+            IEnumerable<PaEntry> entities = spo_ind.GetAllByKey(new Comparer.Comparer(((OV_iriint)s).code));
             return entities.Select(ent =>
             {
                 object[] three1 = (object[])(((object[])ent.Get())[1]);

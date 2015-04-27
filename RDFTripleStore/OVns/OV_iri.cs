@@ -1,5 +1,6 @@
 using System;
 using RDFCommon;
+using RDFTripleStore.Comparer;
 
 namespace RDFTripleStore.OVns
 {
@@ -59,7 +60,7 @@ namespace RDFTripleStore.OVns
             return uriString;
         }
 
-        public override Comparer ToComparable()
+        public override Comparer.Comparer ToComparable()
         {
             return new Comparer2(Variant, uriString);
         }

@@ -52,7 +52,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Compare2-3.cs" />
+    <Compile Include="Comparer\Comparer.cs" />
+    <Compile Include="Comparer\Comparer2.cs" />
+    <Compile Include="Comparer\Comparer3.cs" />
     <Compile Include="GoGraphIntBased.cs" />
     <Compile Include="GoGraphStringBased.cs" />
     <Compile Include="Config.cs" />
@@ -118,6 +120,7 @@
     <None Include="parsers\SPARQL.ATG" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Comparer\description.txt" />
     <Content Include="parsers\Coco.exe" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

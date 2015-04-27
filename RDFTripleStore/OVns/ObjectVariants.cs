@@ -1,5 +1,6 @@
 using System;
 using RDFCommon;
+using RDFTripleStore.Comparer;
 
 namespace RDFTripleStore.OVns
 {
@@ -117,7 +118,7 @@ namespace RDFTripleStore.OVns
 
         private static readonly Random random = new Random();
 
-        public virtual Comparer ToComparable()
+        public virtual Comparer.Comparer ToComparable()
         {
            
             return new Comparer2(Variant, ((ILiteralNode)this).Content);

@@ -1,5 +1,6 @@
 using System;
 using RDFCommon;
+using RDFTripleStore.Comparer;
 using Task15UniversalIndex;
 
 namespace RDFTripleStore.OVns
@@ -25,7 +26,7 @@ namespace RDFTripleStore.OVns
         {
             get { return new object[] { value, curi }; }
         }
-        public override Comparer ToComparable()
+        public override Comparer.Comparer ToComparable()
         {
             return new Comparer3(Variant, curi, value);
         }
