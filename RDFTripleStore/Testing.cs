@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -8,6 +9,7 @@ using System.Threading.Tasks;
 using RDFCommon;
 using RDFTripleStore.OVns;
 using RDFTripleStore.parsers.RDFTurtle;
+using SparqlParseRun.SparqlClasses;
 
 namespace RDFTripleStore
 {
@@ -150,21 +152,21 @@ namespace RDFTripleStore
             SparqlStore sparqlStore = new SparqlStore("../../../Databases/");
             Perfomance.ComputeTime(() =>
             {
-                sparqlStore.ReloadFrom(Config.Source_data_folder_path + millions + ".ttl");
+               // sparqlStore.ReloadFrom(Config.Source_data_folder_path + millions + ".ttl");
             }, "build " + millions + ".ttl ");
          //   Console.WriteLine(sparqlStore.GetTriplesWithSubject(sparqlStore.NodeGenerator.CreateUriNode("http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromVendor1/")));
             Perfomance.ComputeTime(() =>
             {
                 Console.WriteLine(
-                   sparqlStore.Run(
+                   sparqlStore.ParseAndRun(
                        @"PREFIX dataFromVendor1: <http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromVendor1/>
 SELECT ?property ?hasValue 
 WHERE {
   { dataFromVendor1:Offer1 ?property ?hasValue }
-"));
+").ToJson());
                 Console.WriteLine("___________________________________________________________________________________");
                 Console.WriteLine(
-                    sparqlStore.Run(
+                    sparqlStore.ParseAndRun(
                         @"PREFIX dataFromVendor1: <http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromVendor1/>
 SELECT ?property ?hasValue ?isValueOf
 WHERE {
@@ -172,8 +174,205 @@ WHERE {
   UNION
   { ?isValueOf ?property dataFromVendor1:Offer1 }
 }
-"));
+").ToJson());
             }, "run simple" + millions + ".ttl ");
         }
+
+        public static void BSBm(int millions, bool load)
+        {
+            SparqlStore sparqlStore = new SparqlStore("../../../Databases/");
+                     if(load)
+                         sparqlStore.ReloadFrom(Config.Source_data_folder_path + millions + ".ttl");
+            RunBerlinsWithConstants(sparqlStore, millions);
+        }
+        public static void RunBerlinsParameters(SparqlStore ts, int millions)
+        {
+
+            Console.WriteLine("antrl parametered");
+            var fileInfos = new[]
+                {
+                    @"..\..\examples\bsbm\queries\parameters\1.rq"     ,  
+                    @"..\..\examples\bsbm\queries\parameters\2.rq"   ,
+                    @"..\..\examples\bsbm\queries\parameters\3.rq"    , 
+                    @"..\..\examples\bsbm\queries\parameters\4.rq",
+                    @"..\..\examples\bsbm\queries\parameters\5.rq" ,     
+                    @"..\..\examples\bsbm\queries\parameters\6.rq" ,
+                    @"..\..\examples\bsbm\queries\parameters\7.rq"  ,
+                    @"..\..\examples\bsbm\queries\parameters\8.rq"  ,
+                    @"..\..\examples\bsbm\queries\parameters\9.rq",
+                    @"..\..\examples\bsbm\queries\parameters\10.rq"  ,
+                    @"..\..\examples\bsbm\queries\parameters\11.rq",
+                    @"..\..\examples\bsbm\queries\parameters\12.rq"  ,
+                }
+                .Select(s => new FileInfo(s))
+                .ToArray();
+            var paramvaluesFilePath = string.Format(@"..\..\examples\bsbm\queries\parameters\param values for{0} m.txt", millions);
+            //            using (StreamWriter streamQueryParameters = new StreamWriter(paramvaluesFilePath))
+            //                for (int j = 0; j < 1000; j++)
+            //                    foreach (var file in fileInfos.Select(info => File.ReadAllText(info.FullName)))
+            //                        QueryWriteParameters(file, streamQueryParameters, ts);
+            //return;
+
+            using (StreamReader streamQueryParameters = new StreamReader(paramvaluesFilePath))
+            {
+                for (int j = 0; j < 500; j++)
+                    fileInfos.Select(file => QueryReadParameters(File.ReadAllText(file.FullName),
+                        streamQueryParameters))
+                        // .Select(ts.ParseRunSparql)
+                        .ToArray();
+
+                SubTestRun(ts, fileInfos, streamQueryParameters, 500, millions);
+            }
+        }
+
+        private static void SubTestRun(SparqlStore ts, FileInfo[] fileInfos, StreamReader streamQueryParameters, int i1, int millions)
+        {
+            int i;
+            long[] results = new long[12];
+            double[] minimums = Enumerable.Repeat(double.MaxValue, 12).ToArray();
+            double[] maximums = new double[12];
+            double maxMemoryUsage = 0;
+            long[] totalparseMS = new long[12];
+            long[] totalrun = new long[12];
+            for (int j = 0; j < i1; j++)
+            {
+                i = 0;
+
+                foreach (var file in fileInfos)
+                {
+                    var readAllText = File.ReadAllText(file.FullName);
+                    readAllText = QueryReadParameters(readAllText, streamQueryParameters);
+
+                    var st = DateTime.Now;
+                    var sparqlQuery = ts.Parse(readAllText);
+
+                    totalparseMS[i] += (DateTime.Now - st).Ticks / 10000L;
+                    var st1 = DateTime.Now;
+                    var sparqlResultSet = sparqlQuery.Run(ts);
+                    totalrun[i] += (DateTime.Now - st1).Ticks / 10000L;
+                    var totalMilliseconds = (DateTime.Now - st).Ticks / 10000L;
+
+                    var memoryUsage = GC.GetTotalMemory(false);
+                    if (memoryUsage > maxMemoryUsage)
+                        maxMemoryUsage = memoryUsage;
+                    if (minimums[i] > totalMilliseconds)
+                        minimums[i] = totalMilliseconds;
+                    if (maximums[i] < totalMilliseconds)
+                        maximums[i] = totalMilliseconds;
+                    results[i++] += totalMilliseconds;
+                    //  File.WriteAllText(Path.ChangeExtension(file.FullName, ".txt"), resultString);
+                    //.Save(Path.ChangeExtension(file.FullName,".xml"));
+                }
+            }
+
+            using (StreamWriter r = new StreamWriter(@"..\..\output.txt", true))
+            {
+                r.WriteLine("milions " + millions);
+                r.WriteLine("max memory usage " + maxMemoryUsage);
+                r.WriteLine("average " + string.Join(", ", results.Select(l => l == 0 ? "inf" : (500 * 1000 / l).ToString())));
+                r.WriteLine("minimums " + string.Join(", ", minimums));
+                r.WriteLine("maximums " + string.Join(", ", maximums));
+                r.WriteLine("total parse " + string.Join(", ", totalparseMS));
+                r.WriteLine("total run " + string.Join(", ", totalrun));
+                //    r.WriteLine("countCodingUsages {0} totalMillisecondsCodingUsages {1}", TripleInt.EntitiesCodeCache.Count, TripleInt.totalMilisecondsCodingUsages);
+
+                //r.WriteLine("EWT average search" + EntitiesMemoryHashTable.total / EntitiesMemoryHashTable.count);
+                //r.WriteLine("EWT average range" + EntitiesMemoryHashTable.totalRange / EntitiesMemoryHashTable.count);  
+            }
+        }
+
+        private static void RunBerlinsWithConstants(SparqlStore ts, int millions)
+        {
+            long[] results = new long[12];
+            Console.WriteLine("antrl with constants");
+            int i = 0;
+            var fileInfos = new[]
+                {
+                    @"..\..\examples\bsbm\queries\with constants\1.rq"     ,  
+                    @"..\..\examples\bsbm\queries\with constants\2.rq"   ,
+                    @"..\..\examples\bsbm\queries\with constants\3.rq"    , 
+                    @"..\..\examples\bsbm\queries\with constants\4.rq",
+                    @"..\..\examples\bsbm\queries\with constants\5.rq" ,     
+                    @"..\..\examples\bsbm\queries\with constants\6.rq" ,
+                    @"..\..\examples\bsbm\queries\with constants\7.rq"  ,
+                    @"..\..\examples\bsbm\queries\with constants\8.rq"  ,
+                    @"..\..\examples\bsbm\queries\with constants\9.rq",
+                    @"..\..\examples\bsbm\queries\with constants\10.rq"  ,
+                    @"..\..\examples\bsbm\queries\with constants\11.rq",
+                    @"..\..\examples\bsbm\queries\with constants\12.rq"  ,
+                }
+                .Select(s => new FileInfo(s))
+                .ToArray();
+            for (int j = 0; j < 0; j++)
+            {
+
+                foreach (var file in fileInfos)
+                {
+                    var readAllText = File.ReadAllText(file.FullName);
+
+                    //   var st = DateTime.Now;
+                    //  var q = new Query(ts);
+                    //  q.Parse(readAllText, ts);
+                    //     var resultString = q.Run();
+                    //var totalMilliseconds = (long)(DateTime.Now - st).TotalMilliseconds;
+                    // results[i++] += totalMilliseconds;
+                    //   File.WriteAllText(Path.ChangeExtension(file.FullName, ".txt"), resultString);
+                    //.Save(Path.ChangeExtension(file.FullName,".xml"));
+                }
+            }
+            for (int j = 0; j < 1; j++)
+            {
+                i = 0;
+                foreach (var file in fileInfos)
+                {
+                    var readAllText = File.ReadAllText(file.FullName);
+                    var st = DateTime.Now;
+
+                    Console.WriteLine(file.Name);
+                 var sparqlResultSet =   ts.ParseAndRun(readAllText);
+                    
+
+                    var totalMilliseconds = (DateTime.Now - st).Ticks / 10000L;
+                    results[i++] += totalMilliseconds;
+                    File.WriteAllText(Path.ChangeExtension(file.FullName, ".txt"), sparqlResultSet.ToJson());
+                    //  .Save(Path.ChangeExtension(file.FullName,".xml"));
+                }
+            }
+            Console.WriteLine(string.Join(", ", results));
+            using (StreamWriter r = new StreamWriter(@"..\..\output.txt", true))
+            {
+                r.WriteLine("milions " + millions);
+                //   r.WriteLine("countCodingUsages {0} totalMillisecondsCodingUsages {1}", TripleInt.EntitiesCodeCache.Count, TripleInt.totalMilisecondsCodingUsages);
+            }
+
+        }
+     
+        private static string QueryReadParameters(string parameteredQuery, StreamReader input)
+        {
+            if (parameteredQuery.Contains("%ProductType%"))
+                parameteredQuery = parameteredQuery.Replace("%ProductType%", input.ReadLine());
+            if (parameteredQuery.Contains("%ProductFeature1%"))
+                parameteredQuery = parameteredQuery.Replace("%ProductFeature1%", input.ReadLine());
+            if (parameteredQuery.Contains("%ProductFeature2%"))
+                parameteredQuery = parameteredQuery.Replace("%ProductFeature2%", input.ReadLine());
+            if (parameteredQuery.Contains("%ProductFeature3%"))
+                parameteredQuery = parameteredQuery.Replace("%ProductFeature3%", input.ReadLine());
+            if (parameteredQuery.Contains("%x%"))
+                parameteredQuery = parameteredQuery.Replace("%x%", input.ReadLine());
+            if (parameteredQuery.Contains("%y%"))
+                parameteredQuery = parameteredQuery.Replace("%y%", input.ReadLine());
+            if (parameteredQuery.Contains("%ProductXYZ%"))
+                parameteredQuery = parameteredQuery.Replace("%ProductXYZ%", "<" + input.ReadLine() + ">");
+            if (parameteredQuery.Contains("%word1%"))
+                parameteredQuery = parameteredQuery.Replace("%word1%", input.ReadLine());
+            if (parameteredQuery.Contains("%currentDate%"))
+                parameteredQuery = parameteredQuery.Replace("%currentDate%", input.ReadLine());
+            if (parameteredQuery.Contains("%ReviewXYZ%"))
+                parameteredQuery = parameteredQuery.Replace("%ReviewXYZ%", "<" + input.ReadLine() + ">");
+            if (parameteredQuery.Contains("%OfferXYZ%"))
+                parameteredQuery = parameteredQuery.Replace("%OfferXYZ%", "<" + input.ReadLine() + ">");
+            return parameteredQuery;
+        }
+    
     }
 }

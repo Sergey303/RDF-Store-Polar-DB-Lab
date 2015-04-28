@@ -10,7 +10,7 @@ namespace RDFTripleStore.OVns
 
         public OV_iri(string fullId)
         {
-            uriString = fullId.ToLower();
+            uriString = fullId.ToLowerInvariant();
         }
 
         public override ObjectVariantEnum Variant

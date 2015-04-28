@@ -8,7 +8,8 @@ namespace RDFTripleStore
             //RamGraph graph=new RamGraph();
             //graph.TestReadTtl_Cocor(1);
             //graph.TestSearch();
-           Testing.TestSparqlStore(1);
+       //      Testing.TestSparqlStore(1);
+           Testing.BSBm(1, false);
         }
     }
 }

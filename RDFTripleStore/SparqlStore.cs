@@ -7,10 +7,11 @@ using Antlr4.Runtime;
 using RDFCommon;
 using RDFTripleStore.OVns;
 using SparqlParseRun;
+using SparqlParseRun.SparqlClasses.Query.Result;
 
 namespace RDFTripleStore
 {
-    class SparqlStore :GoGraphIntBased, IStore
+    public class SparqlStore :GoGraphStringBased, IStore
     {
         public SparqlStore(string path) : base(path)
         {
@@ -22,15 +23,26 @@ namespace RDFTripleStore
             FromTurtle(fileName);    
         }
 
-        public string Run(string query)
+        public SparqlResultSet ParseAndRun(string query)
         {
-            var parser = new sparq11lTranslatorParser(new CommonTokenStream(new sparq11lTranslatorLexer(new AntlrInputStream(query))))
-            {
-                q=new RdfQuery11Translator(this)
-            };
-            var queryContext = parser.query();
-            var sparqlResultSet = queryContext.value.Run(this);
-            return sparqlResultSet.ToJson();
+            var queryContext = Parse(query);
+            return Run(queryContext);
+        }
+
+        private SparqlResultSet Run(SparqlQuery queryContext)
+        {
+            return queryContext.Run(this);
+        }
+
+        public SparqlQuery Parse(string query)
+        {
+            var parser =
+                new sparq11lTranslatorParser(new CommonTokenStream(new sparq11lTranslatorLexer(new AntlrInputStream(query))))
+                {
+                    q = new RdfQuery11Translator(this)
+                };
+            var queryContext = parser.query().value;
+            return queryContext;
         }
 
         public IStoreNamedGraphs NamedGraphs { get; private set; }

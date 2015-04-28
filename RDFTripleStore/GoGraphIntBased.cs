@@ -115,57 +115,58 @@ namespace RDFTripleStore
 
     
         public IGraphNode Name { get { return ng.CreateUriNode("g"); } }
-        public INodeGenerator NodeGenerator { get { return ng; }}
+        public INodeGenerator NodeGenerator { get { return ng; }} 
 
-        public void Clear()
+        /// <summary>
+        /// Create Triple
+        /// </summary>
+        /// <param name="ent">массив с объектным представлением триплета</param>
+        /// <param name="subject">если null или не указан, то будет вычислен из объекта ent</param>
+        /// <param name="predicate">если null или не указан, то будет вычислен из объекта ent</param>
+        /// <param name="objectNode">если null или не указан, то будет вычислен из объекта ent</param>
+        private Triple<ISubjectNode, IPredicateNode, IObjectNode> CTle(object[] row, ISubjectNode subject = null,
+            IPredicateNode predicate = null, IObjectNode objectNode = null)
         {
-            table.Clear();       
+            return new Triple<ISubjectNode, IPredicateNode, IObjectNode>(subject ?? ng.GetCoded((int)row[0])
+                , predicate ?? ng.GetCoded((int)row[1])
+                , objectNode ?? row[2].ToOVariant());
         }
+
+
 
         public IEnumerable<Triple<ISubjectNode, IPredicateNode, IObjectNode>> GetTriplesWithObject(IObjectNode o)
         {
-            var objVar = (((ObjectVariants)o));
-      
-            IEnumerable<PaEntry> entities = os_ind.GetAllByKey(new Comparer.Comparer(objVar.ToComparable()));
-            return entities.Select(ent =>
-            {
-                object[] three1 = (object[])(((object[])ent.Get())[1]);
-                return new Triple<ISubjectNode, IPredicateNode, IObjectNode>(ng.GetCoded((int)three1[0]), ng.GetCoded((int)three1[1]), o); 
-
-            });
+            return os_ind.GetAllByKey(new Comparer.Comparer(((ObjectVariants)o).ToComparable()))
+                .Select(entry => entry.Get())
+                .ReadWritableTriples()
+                .Select(ent => CTle(ent, objectNode: o));
         }
+
+
 
         public IEnumerable<Triple<ISubjectNode, IPredicateNode, IObjectNode>> GetTriplesWithPredicate(IPredicateNode p)
         {
-            IEnumerable<PaEntry> entities = po_ind.GetAllByKey(new Comparer.Comparer(((OV_iriint)p).code));
-            return entities.Select(ent =>
-            {
-                object[] three1 = (object[])(((object[])ent.Get())[1]);
-                return new Triple<ISubjectNode, IPredicateNode, IObjectNode>(ng.GetCoded((int)three1[0]), p, three1[2].ToOVariant(ng.coding_table)); 
-            });
+            return po_ind.GetAllByKey(new Comparer.Comparer((((OV_iriint)p)).code))
+                   .Select(entry => entry.Get())
+                .ReadWritableTriples()
+                .Select(ent => CTle(ent, predicate: p));
         }
 
         public IEnumerable<Triple<ISubjectNode, IPredicateNode, IObjectNode>> GetTriplesWithSubject(ISubjectNode s)
         {
-            IEnumerable<PaEntry> entities = spo_ind.GetAllByKey(new Comparer.Comparer(((OV_iriint)s).code));
-            return entities.Select(ent =>
-            {
-                object[] three1 = (object[])(((object[])ent.Get())[1]);
-                return new Triple<ISubjectNode, IPredicateNode, IObjectNode>(s, ng.GetCoded((int)three1[1]), three1[2].ToOVariant(ng.coding_table));
-            });
+            return spo_ind.GetAllByKey(new Comparer.Comparer((((OV_iriint)s)).code))
+                 .Select(entry => entry.Get())
+                .ReadWritableTriples()
+                                .Select(ent => CTle(ent, subject: s));
         }
 
         public IEnumerable<IObjectNode> GetTriplesWithSubjectPredicate(ISubjectNode subject, IPredicateNode predicate)
         {
-            int ssubj = ((OV_iriint)subject).code;
-            int spred = ((OV_iriint)predicate).code;
-          
-            IEnumerable<PaEntry> entities = spo_ind.GetAllByKey(new Comparer2(ssubj, spred));
-            return entities.Select(ent =>
-            {
-                object[] three1 = (object[])(((object[])ent.Get())[1]);
-                return (IObjectNode)((object[])three1[2]).Writeble2OVariant();
-            });
+            IEnumerable<PaEntry> entities = spo_ind.GetAllByKey(new Comparer2((((OV_iriint)subject)).code, (((OV_iriint)predicate)).code));
+            return entities
+                 .Select(entry => entry.Get())
+                .ReadWritableTriples()
+                .Select(row => row[2].ToOVariant());
         }
 
         public IEnumerable<IPredicateNode> GetTriplesWithSubjectObject(ISubjectNode subject, IObjectNode obj)
@@ -174,11 +175,10 @@ namespace RDFTripleStore
             var objVar = (((ObjectVariants)obj));
             Comparer2 key_triple = new Comparer2(objVar.ToComparable(), ssubj);
             IEnumerable<PaEntry> entities = os_ind.GetAllByKey(key_triple);
-            return entities.Select(ent =>
-            {
-                object[] three1 = (object[])(((object[])ent.Get())[1]);
-                return (IPredicateNode)ng.GetCoded((int)three1[1]);
-            });
+            return entities
+                .Select(entry => entry.Get())
+                .ReadWritableTriples()
+                .Select(row => ng.GetCoded((int)row[1]));
         }
 
         public IEnumerable<ISubjectNode> GetTriplesWithPredicateObject(IPredicateNode predicate, IObjectNode obj)
@@ -187,87 +187,95 @@ namespace RDFTripleStore
             var objVar = (((ObjectVariants)obj));
             Comparer2 key_triple = new Comparer2(pred, objVar.ToComparable());
             IEnumerable<PaEntry> entities = po_ind.GetAllByKey(key_triple);
-            return entities.Select(ent =>
-            {
-                object[] three1 = (object[])(((object[])ent.Get())[1]);
-                return (ISubjectNode)ng.GetCoded((int)three1[0]);
-            });
+            return entities
+                  .Select(entry => entry.Get())
+                  .ReadWritableTriples()
+                  .Select(row => ng.GetCoded((int)row[0]));
         }
 
+
+        public bool Contains(ISubjectNode subject, IPredicateNode predicate, IObjectNode obj)
+        {
+            int ssubj = (((OV_iriint)subject)).code;
+            int pred = (((OV_iriint)predicate)).code;
+            var objVar = (((ObjectVariants)obj));
+            Comparer3 key_triple = new Comparer3(ssubj, pred, objVar.ToComparable());
+            IEnumerable<PaEntry> entities = spo_ind.GetAllByKey(key_triple);
+            return entities
+                  .Select(entry => entry.Get())
+                  .ReadWritableTriples()
+                  .Any();
+        }
         public IEnumerable<Triple<ISubjectNode, IPredicateNode, IObjectNode>> GetTriples()
         {
-            throw new NotImplementedException();
+            return table.TableCell.Root.ElementValues()
+                .ReadWritableTriples()
+                .Select(ent => CTle(ent));
         }
 
         public void Add(ISubjectNode s, IPredicateNode p, IObjectNode o)
         {
-            throw new NotImplementedException();
+            table.AppendValue(new object[] { ((OV_iriint)s).code, ((OV_iriint)p).code, ((ObjectVariants)o).WritableValue });
         }
-
+        public void Clear()
+        {
+            table.Clear();
+        }
         public void Insert(IEnumerable<Triple<ISubjectNode, IPredicateNode, IObjectNode>> triples)
         {
-            throw new NotImplementedException();
+            foreach (var triple in triples)
+                Add(triple);
         }
 
         public void Add(Triple<ISubjectNode, IPredicateNode, IObjectNode> t)
         {
-            throw new NotImplementedException();
+            Add(t.Subject, t.Predicate, t.Object);
         }
 
-        public bool Contains(ISubjectNode subject, IPredicateNode predicate, IObjectNode obj)
-        {
-            throw new NotImplementedException();
-        }
+
 
         public void Delete(IEnumerable<Triple<ISubjectNode, IPredicateNode, IObjectNode>> triples)
         {
-            throw new NotImplementedException();
+            foreach (var triple in triples)
+            {
+                int ssubj = (((OV_iriint)triple.Subject)).code;
+                int pred = (((OV_iriint)triple.Predicate)).code;
+                var objVar = (((ObjectVariants)triple.Object));
+                Comparer3 key_triple = new Comparer3(ssubj, pred, objVar.ToComparable());
+                IEnumerable<PaEntry> entities = spo_ind.GetAllByKey(key_triple);
+                foreach (var ent in entities)
+                    table.DeleteEntry(ent);
+            }
         }
 
         public IEnumerable<ISubjectNode> GetAllSubjects()
         {
-            throw new NotImplementedException();
+            return new HashSet<int>(table.TableCell.Root.ElementValues()
+                .ReadWritableTriples()
+                .Select(t => t[0])
+                .Cast<int>())
+                .Select(s => ng.GetCoded(s)); 
         }
 
         public long GetTriplesCount()
         {
-            throw new NotImplementedException();
+            return table.Count();
         }
 
         public bool Any()
         {
-            throw new NotImplementedException();
+            return table.Count() > 0;
         }
 
         public void FromTurtle(string path)
-        {         
+        {
             table.Clear();
             Build(new TripleGeneratorBufferedParallel(path, "g"));
-            
-        //    table.Fill(ReadTripleStringsFromTurtle.LoadGraph(path).Select(tr => new object[] { tr.Subject.ToLower(), tr.Predicate.ToLower(), tr.Object.ToWritable() }));
+            //    table.Fill(ReadTripleStringsFromTurtle.LoadGraph(path).Select(tr => new object[] { tr.Subject.ToLower(), tr.Predicate.ToLower(), tr.Object.ToWritable() }));
+            spo_ind.Build();
+            po_ind.Build();
+            os_ind.Build();
         }
 
-        // Структуры, играющие роль ключа
-        public class TripleSPO : IComparable
-        {
-            public TripleSPO(string s, string p, ObjectVariants toComparable)
-            {
-             triple=new Triple<string, string, ObjectVariants>(s,p,toComparable);
-            }
-
-            public Triple<string, string, ObjectVariants> triple { get; set; }
-            public int CompareTo(object another)
-            {
-                if (!(another is TripleSPO)) throw new Exception("kdjfk");
-                TripleSPO ano = (TripleSPO)another;
-                int cmp = triple.Subject.CompareTo(ano.triple.Subject);
-                if (cmp == 0 && ano.triple.Predicate != null)
-                {
-                    cmp = triple.Predicate.CompareTo(ano.triple.Predicate);
-                    //if (cmp == 0) cmp = triple.Object.CompareTo(ano.triple.Object);
-                }
-                return cmp;
-            }
-        }
     }
 }
