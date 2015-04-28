@@ -2,6 +2,7 @@ using System;
 using RDFCommon;
 using System.Collections.Generic;
 using System.Linq;
+using RDFTripleStore.OVns;
 
 
 
@@ -153,14 +154,14 @@ private readonly PrologueFullString prologue = new PrologueFullString();
 		Expect(2);
 		string pn=t.val; 
 		Expect(1);
-		prologue.AddPrefix(pn, t.val); 
+		prologue.AddPrefix(pn, t.val.ToLower()); 
 		Expect(14);
 	}
 
 	void Base() {
 		Expect(16);
 		Expect(1);
-		prologue.SetBase(t.val); 
+		prologue.SetBase(t.val.ToLower()); 
 		Expect(14);
 	}
 
@@ -215,7 +216,7 @@ private readonly PrologueFullString prologue = new PrologueFullString();
 			Iri(out p);
 		} else if (la.kind == 21) {
 			Get();
-			p = SpecialTypes.RdfType.FullName; 
+			p = SpecialTypesClass.RdfType.FullName; 
 		} else SynErr(34);
 	}
 
@@ -256,13 +257,13 @@ private readonly PrologueFullString prologue = new PrologueFullString();
 		value=null; 
 		if (la.kind == 1) {
 			Get();
-			value=prologue.GetFromIri(t.val.Substring(1, t.val.Length-2)); 
+			value=prologue.GetFromIri(t.val.Substring(1, t.val.Length-2).ToLowerInvariant()); 
 		} else if (la.kind == 3) {
 			Get();
-			value=prologue.GetUriFromPrefixed(t.val); 
+			value=prologue.GetUriFromPrefixed(t.val.ToLowerInvariant()); 
 		} else if (la.kind == 2) {
 			Get();
-			value=prologue.GetUriFromPrefixedNamespace(t.val); 
+			value=prologue.GetUriFromPrefixedNamespace(t.val.ToLowerInvariant()); 
 		} else SynErr(36);
 	}
 
@@ -285,8 +286,8 @@ private readonly PrologueFullString prologue = new PrologueFullString();
 			nodes.Add(ov); 
 		}
 		Expect(25);
-		var rdfFirst = SpecialTypes.RdfFirst.FullName;
-		       var rdfRest = SpecialTypes.RdfRest.FullName;
+		var rdfFirst = SpecialTypesClass.RdfFirst.FullName;
+		       var rdfRest = SpecialTypesClass.RdfRest.FullName;
 		           string sparqlBlankNodeFirst = ObjectVariants.CreateBlankNode(graphName);
 		           string sparqlBlankNodeNext = ObjectVariants.CreateBlankNode(graphName);
 		       foreach (var node in nodes.Take(nodes.Count - 1))
@@ -295,7 +296,7 @@ private readonly PrologueFullString prologue = new PrologueFullString();
 		           ft(sparqlBlankNodeNext, rdfRest, new OV_iri(sparqlBlankNodeNext = ObjectVariants.CreateBlankNode(graphName)));
 		       }
 		       ft(sparqlBlankNodeNext, rdfFirst, nodes[nodes.Count - 1]);
-		       ft(sparqlBlankNodeNext, rdfRest, new OV_iri(SpecialTypes.Nil.FullName));
+		       ft(sparqlBlankNodeNext, rdfRest, new OV_iri(SpecialTypesClass.Nil.FullName));
 		       value = sparqlBlankNodeFirst;
 		
 	}

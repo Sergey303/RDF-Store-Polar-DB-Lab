@@ -141,7 +141,7 @@ namespace RDFTripleStore
             return entities.Select(ent =>
             {
                 object[] three1 = (object[])(((object[])ent.Get())[1]);
-                return new Triple<ISubjectNode, IPredicateNode, IObjectNode>(ng.GetCoded((int)three1[0]), p, three1[2].ToOVariant()); 
+                return new Triple<ISubjectNode, IPredicateNode, IObjectNode>(ng.GetCoded((int)three1[0]), p, three1[2].ToOVariant(ng.coding_table)); 
             });
         }
 
@@ -151,7 +151,7 @@ namespace RDFTripleStore
             return entities.Select(ent =>
             {
                 object[] three1 = (object[])(((object[])ent.Get())[1]);
-                return new Triple<ISubjectNode, IPredicateNode, IObjectNode>(s, ng.GetCoded((int)three1[1]), three1[2].ToOVariant());
+                return new Triple<ISubjectNode, IPredicateNode, IObjectNode>(s, ng.GetCoded((int)three1[1]), three1[2].ToOVariant(ng.coding_table));
             });
         }
 

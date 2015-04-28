@@ -147,7 +147,7 @@ namespace RDFTripleStore
             return entities.Select(ent =>
             {
                 object[] three1 = (object[])(((object[])ent.Get())[1]);
-                return (IObjectNode)((object[])three1[2]).Writeble2OVariant();
+                return (IObjectNode)three1[2].ToOVariant();
             });
         }
 
