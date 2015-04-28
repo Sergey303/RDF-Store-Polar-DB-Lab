@@ -78,6 +78,21 @@ namespace Task15UniversalIndex
             if (Scale != null) Scale.Build();
         }
         public void BuildScale() { Scale.Build(); }
+        public void Statistics()
+        {
+            long total = index_cell.Root.Count(); 
+            long different = 0;
+            int current = Int32.MinValue;
+            foreach (object[] pair in index_cell.Root.ElementValues())
+            {
+                int hkey = (int)pair[0];
+                if (hkey > current) { different++; }
+                else if (hkey == current) { }
+                else throw new Exception("Error in sort order");
+                current = hkey;
+            }
+            Console.WriteLine("Statistics: total={0} different={1}", total, different); 
+        }
 
         public void Warmup() { foreach (var v in index_cell.Root.ElementValues()); if (Scale != null) Scale.Warmup(); }
 

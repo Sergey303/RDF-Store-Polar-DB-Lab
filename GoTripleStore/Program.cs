@@ -18,7 +18,7 @@ namespace GoTripleStore
             var query = ReadTripleStringsFromTurtle.LoadGraph(Config.Source_data_folder_path + "1.ttl");
             
             GoGraphIntBased cgraph = new GoGraphIntBased(path);
-            bool toload = false;
+            bool toload = true;
             if (toload)
             {
                 sw.Restart();
@@ -57,12 +57,10 @@ namespace GoTripleStore
                 string res = r_att == null ? null : r_att.Value;
                 if (spo.Name == "spo_")
                 {
-                    //bool r = ts.ChkOSubjPredObj(
-                    //    s.GetHashCode(),
-                    //    p.GetHashCode(),
-                    //    o.GetHashCode());
-                    //if ((res == "true" && r) || (res == "false" && !r)) { ecnt++; }
-                    //else ncnt++;
+                    var query = graph.Search(s, p, new OV_iri(o));
+                    bool r = query.Any();
+                    if ((res == "true" && r) || (res == "false" && !r)) { ecnt++; }
+                    else ncnt++;
                 }
                 else if (spo.Name == "spD_")
                 {
@@ -79,7 +77,7 @@ namespace GoTripleStore
                     //    if (isEq) ecnt++; else ncnt++;
                     //}
                 }
-                else if (spo.Name == "spO")
+                else if (spo.Name == "spO_")
                 {
                     //var query = ts.GetObjBySubjPred(
                     //    s.GetHashCode(),
@@ -90,13 +88,14 @@ namespace GoTripleStore
                     if (query.Count() == 0 && res == "") { }//continue;
                     ecnt++;
                 }
-                else if (spo.Name == "Spo_")
+                else if (spo.Name == "Spo")
                 {
                     //var query = ts.GetSubjectByObjPred(
                     //    o.GetHashCode(),
                     //    p.GetHashCode()).OrderBy(v => v).ToArray();
-                    //if (query.Count() == 0 && res == "") continue;
-                    //ecnt++;
+                    var query = graph.Search(null, p, new OV_iri(o));
+                    if (query.Count() == 0 && res == "") continue;
+                    ecnt++;
                 }
             }
             Console.WriteLine("tracing duration=" + (DateTime.Now - tt0).Ticks / 10000L); tt0 = DateTime.Now;
