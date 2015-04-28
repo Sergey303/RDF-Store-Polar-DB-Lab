@@ -21,7 +21,7 @@ namespace Task15UniversalIndex
                 new NamedType("code", new PType(PTypeEnumeration.integer)),
                 new NamedType("str", new PType(PTypeEnumeration.sstring)));
             this.table = new TableView(path + "cstable", tp_tabelement);
-            next_code = (int)table.Count();
+            //next_code = (int)table.Count();
             offset_array = new IndexViewImmutable<int>(path + "offsets")
             {
                 Table = this.table,
@@ -54,11 +54,15 @@ namespace Task15UniversalIndex
             table.RegisterIndex(s_index);
         }
         public void Warmup() { table.Warmup(); offset_array.Warmup(); s_index_array.Warmup(); }
-        public void Clear() { table.Clear(); next_code = 0; }
+        public void Clear() 
+        { 
+            table.Clear(); 
+            //next_code = 0; 
+        }
         public void Fill(IEnumerable<string> different_strings) 
         {
             table.Fill(different_strings.Select((s, i) => new object[] { i, s }));
-            next_code = (int)table.Count();
+            //next_code = (int)table.Count();
         }
         public void BuildIndexes()
         {
@@ -71,7 +75,7 @@ namespace Task15UniversalIndex
             s_index_array.Scale.Build();
         }
         // Проверяет и, если надо, добавляет. Выдает код.
-        private int next_code;
+        //private int next_code;
         public int Add(string s)
         {
             var q = s_index.GetAllByKey(s)
@@ -81,9 +85,11 @@ namespace Task15UniversalIndex
             int code;
             if (q == null)
             {
-                code = next_code;
-                table.AppendValue(new object[] { next_code, s });
-                next_code++;
+                //code = next_code;
+                //table.AppendValue(new object[] { next_code, s });
+                //next_code++;
+                code = (int)table.Count();
+                table.AppendValue(new object[] { code, s });
             }
             else
             {
@@ -102,6 +108,7 @@ namespace Task15UniversalIndex
         }
         public string GetStringByCode(int cod)
         {
+            //TODO: Здесь надо бы индексировать массив offsets
             var qu = offsets.GetAllByKey(cod)
                 //.Where() // какие-то проверки?
                 .Select(ent => ent.Get())
