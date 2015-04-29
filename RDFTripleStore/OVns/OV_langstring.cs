@@ -31,7 +31,7 @@ namespace RDFTripleStore.OVns
         // override object.Equals
         public bool Equals(OV_langstring other)
         {
-            throw new NotImplementedException();
+            return lang == other.lang && value == other.value;  
         }
 
         public override bool Equals(object obj)
@@ -53,7 +53,7 @@ namespace RDFTripleStore.OVns
 
         public override int GetHashCode()
         {
-            return unchecked((Variant.GetHashCode() << 4) + value.GetHashCode()  << 2 +lang.GetHashCode());
+            return unchecked((353 ^ value.GetHashCode()) * (883 ^lang.GetHashCode()) * (127 ^ Variant.GetHashCode()));
         }
 
 

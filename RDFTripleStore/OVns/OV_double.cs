@@ -40,11 +40,12 @@ namespace RDFTripleStore.OVns
 
         }
 
-        // override object.GetHashCode
         public override int GetHashCode()
         {
-           return unchecked((Variant.GetHashCode() << 4) + value.GetHashCode());
+            int hashCode=value.GetHashCode();
+            return unchecked((67 ^ hashCode) * (127 ^ Variant.GetHashCode()));
         }
+
         public dynamic Content { get { return value; } }
         public string DataType { get { return SpecialTypesClass.Double.FullName; } }
         public override string ToString()

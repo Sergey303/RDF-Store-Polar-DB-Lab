@@ -45,7 +45,7 @@ namespace RDFTripleStore.OVns
 
         public override int GetHashCode()
         {
-            return unchecked((Variant.GetHashCode() << 4) + value.GetHashCode() << 2 + turi.GetHashCode());
+            return unchecked((1277 ^ value.GetHashCode()) * (31 ^ turi.GetHashCode()) *(127*Variant.GetHashCode()));
         }
 
         public dynamic Content { get { return value; } }

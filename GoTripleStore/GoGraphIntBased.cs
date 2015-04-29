@@ -11,7 +11,7 @@ namespace GoTripleStore
 {
     public class GoGraphIntBased : IGraph<Triple<int, int, ObjectVariants>>
     {
-        private TableView table;
+        internal TableView table;
         private NameTableUniversal coding_table;
         private IndexKeyImmutable<int> index_s_arr;
         private IndexDynamic<int, IndexKeyImmutable<int>> index_s;
@@ -292,7 +292,7 @@ namespace GoTripleStore
             public override int GetHashCode()
             {
                 //return s.GetHashCode() ^ p.GetHashCode();
-                return s.GetHashCode() + 7777 * p.GetHashCode();
+                return ( 3001^ s.GetHashCode() ) * (1409 ^ p.GetHashCode());
             }
         }
         public class SPO_Troyka : IComparable
@@ -319,7 +319,7 @@ namespace GoTripleStore
             }
             public override int GetHashCode()
             {
-                return s.GetHashCode() + 7777 * p.GetHashCode() + 67 * ov.GetHashCode();
+                return (7771 ^ s.GetHashCode() ) * (2789 ^ p.GetHashCode()) * (67 ^ ov.GetHashCode());
             }
         }
         public class PO_Pair : IComparable
@@ -343,7 +343,7 @@ namespace GoTripleStore
             public override int GetHashCode()
             {
                 //return p.GetHashCode() + 7777 * ov.GetHashCode();
-                return (((p.GetHashCode() * 37) ^ ov.GetHashCode()) * 397) ^ 887878767;
+                return unchecked((3001 ^p.GetHashCode()) * (1103 ^ov.GetHashCode()));
             }
         }
     }

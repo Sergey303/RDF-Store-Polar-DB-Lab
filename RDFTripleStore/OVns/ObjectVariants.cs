@@ -122,10 +122,8 @@ namespace RDFTripleStore.OVns
         {
             return new Comparer2(Variant, ((ILiteralNode)this).Content);
         }
-        public override int GetHashCode()
-        {
-            int value = unchecked(Variant.GetHashCode());
-            return value;
-        }
+
+        public abstract int GetHashCode();
+   
     }
 }

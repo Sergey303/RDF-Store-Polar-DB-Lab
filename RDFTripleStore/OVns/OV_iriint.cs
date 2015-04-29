@@ -48,8 +48,7 @@ namespace RDFTripleStore.OVns
         // override object.GetHashCode
         public override int GetHashCode()
         {
-            int value = unchecked((Variant.GetHashCode() << 29) + code);
-            return value;
+            return unchecked((89 ^ code) * (127 ^ Variant.GetHashCode()));
         }
         public override string  ToString()
         {
