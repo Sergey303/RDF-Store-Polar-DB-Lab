@@ -23,7 +23,7 @@ namespace RDFTripleStore.OVns
         {
             get { return new object[] { value, lang }; }
         }
-        public override Comparer.Comparer ToComparable()
+        public Comparer.Comparer ToComparable()
         {
             return new Comparer3(Variant, value, lang);
         }
@@ -58,11 +58,25 @@ namespace RDFTripleStore.OVns
 
 
         public string Lang { get { return lang; } }
-        public dynamic Content { get { return value; } }
+        public override dynamic Content { get { return value; } }
         public string DataType { get { return SpecialTypesClass.LangString.FullName; } }
         public override string ToString()
         {
             return value.ToString();
+        }
+
+        public override int CompareTo(object obj)
+        {
+            if (obj is ObjectVariants)
+            {
+                var cmpBase=base.CompareTo(obj);
+                                //if (obj is OV_langstring) //если совпали варианты, то и типы идентичны.
+                if (cmpBase != 0)
+                    return cmpBase;
+                var otherLang = (OV_langstring) obj;
+                return lang.CompareTo(otherLang.Lang);
+            }
+            throw new ArgumentException();
         }
     }
 

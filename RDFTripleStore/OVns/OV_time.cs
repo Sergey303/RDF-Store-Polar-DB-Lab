@@ -21,6 +21,11 @@ namespace RDFTripleStore.OVns
             get { return value.Ticks; }
         }
 
+        public override dynamic Content
+        {
+            get { return value; }
+        }
+
         // override object.Equals
         public override bool Equals(object obj)
         {

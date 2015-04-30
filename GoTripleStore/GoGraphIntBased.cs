@@ -313,7 +313,7 @@ namespace GoTripleStore
                 }
                 if (cmp == 0)
                 {
-                   cmp = this.ov.ToComparable().CompareTo(ano.ov.ToComparable());
+                   cmp = this.ov.CompareTo(ano.ov);
                 }
                 return cmp;
             }
@@ -336,7 +336,7 @@ namespace GoTripleStore
                 }
                 if (cmp == 0)
                 {
-                    cmp = this.ov.ToComparable().CompareTo(ano.ov.ToComparable());
+                    cmp = this.ov.CompareTo(ano.ov);
                 }
                 return cmp;
             }

@@ -26,17 +26,17 @@ namespace RDFTripleStore
             Func<object, Comparer.Comparer> spokeyproducer = v =>
             {
                 object[] va = (object[])((object[])v)[1];
-                return new Comparer3((string)va[0], (string)va[1], va[2].ToOVariant().ToComparable()); //.ToComparable()
+                return new Comparer3((string)va[0], (string)va[1], va[2].ToOVariant()); //.ToComparable()
             };
             Func<object, Comparer.Comparer> pokeyproducer = v =>
             {
                 object[] va = (object[])((object[])v)[1];
-                return new Comparer2((string)va[1], va[2].ToOVariant().ToComparable());
+                return new Comparer2((string)va[1], va[2].ToOVariant());
             };
             Func<object, Comparer2> oskeyproducer = v =>
             {
                 object[] va = (object[])((object[])v)[1];
-                return new Comparer2(va[2].ToOVariant().ToComparable(), (string)va[0]);
+                return new Comparer2(va[2].ToOVariant(), (string)va[0]);
             };
             // Опорная таблица
             table = new TableView(path + "stable", tp_tabelement);
@@ -113,7 +113,7 @@ namespace RDFTripleStore
 
         public IEnumerable<Triple<ISubjectNode, IPredicateNode, IObjectNode>> GetTriplesWithObject(IObjectNode o)
         {
-            return os_ind.GetAllByKey(new Comparer.Comparer(((ObjectVariants)o).ToComparable()))
+            return os_ind.GetAllByKey(new Comparer.Comparer(((ObjectVariants)o)))
                 .Select(entry => entry.Get())
                 .ReadWritableTriples()
                 .Select(ent => CTle(ent, objectNode: o));
@@ -152,7 +152,7 @@ namespace RDFTripleStore
         {
             string ssubj = (((IIriNode)subject)).UriString;
             var objVar = (((ObjectVariants)obj));
-            Comparer2 key_triple = new Comparer2(objVar.ToComparable(), ssubj);
+            Comparer2 key_triple = new Comparer2(objVar, ssubj);
             IEnumerable<PaEntry> entities = os_ind.GetAllByKey(key_triple);
             return entities
                 .Select(entry => entry.Get())
@@ -164,7 +164,7 @@ namespace RDFTripleStore
         {
             string pred = (((IIriNode)predicate)).UriString;
             var objVar = (((ObjectVariants)obj));
-            Comparer2 key_triple = new Comparer2(pred, objVar.ToComparable());
+            Comparer2 key_triple = new Comparer2(pred, objVar);
             IEnumerable<PaEntry> entities = po_ind.GetAllByKey(key_triple);
             return entities
                   .Select(entry => entry.Get())
@@ -178,7 +178,7 @@ namespace RDFTripleStore
             string ssubj = (((IIriNode)subject)).UriString;
             string pred = (((IIriNode)predicate)).UriString;
             var objVar = (((ObjectVariants)obj));
-            Comparer3 key_triple = new Comparer3(ssubj, pred, objVar.ToComparable());
+            Comparer3 key_triple = new Comparer3(ssubj, pred, objVar);
             IEnumerable<PaEntry> entities = spo_ind.GetAllByKey(key_triple);
             return entities
                   .Select(entry => entry.Get())
@@ -220,7 +220,7 @@ namespace RDFTripleStore
                 string ssubj = (((IIriNode)triple.Subject)).UriString;
                 string pred = (((IIriNode)triple.Predicate)).UriString;
                 var objVar = (((ObjectVariants)triple.Object));
-                Comparer3 key_triple = new Comparer3(ssubj, pred, objVar.ToComparable());
+                Comparer3 key_triple = new Comparer3(ssubj, pred, objVar);
                 IEnumerable<PaEntry> entities = spo_ind.GetAllByKey(key_triple);
                 foreach (var ent in entities)
                     table.DeleteEntry(ent);

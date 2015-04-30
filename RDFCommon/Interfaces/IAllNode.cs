@@ -1,4 +1,7 @@
 namespace RDFCommon
 {
-    public interface IAllNode{}
+    public interface IAllNode
+    {
+        dynamic Content { get; }
+    }
 }

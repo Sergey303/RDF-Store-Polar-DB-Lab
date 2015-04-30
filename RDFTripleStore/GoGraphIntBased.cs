@@ -19,7 +19,7 @@ namespace RDFTripleStore
         private IndexDynamic<SP_Pair, IndexHalfkeyImmutable<SP_Pair>> sp_ind;
         private IndexDynamic<int, IndexKeyImmutable<int>> s_ind;
         private IndexDynamic<int, IndexKeyImmutable<int>> p_ind;
-        private IndexDynamic<Comparer.Comparer, IndexViewImmutable<Comparer.Comparer>> o_ind;
+        private IndexDynamic<ObjectVariants, IndexHalfkeyImmutable<ObjectVariants>> o_ind;
         protected NodeGeneratorInt ng;
         public GoGraphIntBased(string path)
         {
@@ -59,10 +59,10 @@ namespace RDFTripleStore
                 object[] va = (object[])((object[])v)[1];
                 return (int)va[1];
             };
-            Func<object, Comparer.Comparer> okeyproducer = v =>
+            Func<object, ObjectVariants> okeyproducer = v =>
             {
                 object[] va = (object[])((object[])v)[1];
-                return va[2].ToOVariant(ng.coding_table).ToComparable();
+                return va[2].ToOVariant(ng.coding_table);
             };     
             // Опорная таблица
             table = new TableView(path + "stable", tp_tabelement);
@@ -132,13 +132,14 @@ namespace RDFTripleStore
                 },
                 KeyProducer = pkeyproducer
             };
-            o_ind = new IndexDynamic<Comparer.Comparer, IndexViewImmutable<Comparer.Comparer>>(false)
+            o_ind = new IndexDynamic<ObjectVariants, IndexHalfkeyImmutable<ObjectVariants>>(false)
             {
                 Table = table,
-                IndexArray = new IndexViewImmutable<Comparer.Comparer>(path + "o_ind")
+                IndexArray = new IndexHalfkeyImmutable<ObjectVariants>(path + "o_ind")
                 {
                     Table = table,                                             
                     KeyProducer = okeyproducer,
+                    HalfProducer = sp => sp.GetHashCode()
                 },
                 KeyProducer = okeyproducer
             };
@@ -216,13 +217,14 @@ namespace RDFTripleStore
 
 
         public IEnumerable<Triple<ISubjectNode, IPredicateNode, IObjectNode>> GetTriplesWithObject(IObjectNode o)
-        {                                                
-            return o_ind.GetAllByKey(((ObjectVariants)o).ToComparable())
+        {
+            var triplesWithObject = o_ind.GetAllByKey(((ObjectVariants)o))
                 .Select(entry => entry.Get())
                 .ReadWritableTriples()
-                .Select(ent => CTle(ent, objectNode: o));
+                .Select(ent => CTle(ent, objectNode: o))
+                .ToArray();
+            return triplesWithObject;
         }
-
 
 
         public IEnumerable<Triple<ISubjectNode, IPredicateNode, IObjectNode>> GetTriplesWithPredicate(IPredicateNode p)
@@ -400,7 +402,7 @@ namespace RDFTripleStore
             }
             if (cmp == 0 )
             {
-                cmp = this.ov.ToComparable().CompareTo(ano.ov.ToComparable());
+                cmp = this.ov.CompareTo(ano.ov);
             }
             return cmp;
         }
@@ -423,7 +425,7 @@ namespace RDFTripleStore
             }
             if (cmp == 0 )
             {
-                cmp = this.ov.ToComparable().CompareTo(ano.ov.ToComparable());
+                cmp = this.ov.CompareTo(ano.ov);
             }
             return cmp;
         }
@@ -433,4 +435,5 @@ namespace RDFTripleStore
             return unchecked((2 ^ p.GetHashCode()) * (3 ^ ov.GetHashCode()));
         }
     }
+    
 }

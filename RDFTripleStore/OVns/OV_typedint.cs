@@ -1,6 +1,5 @@
 using System;
 using RDFCommon;
-using RDFTripleStore.Comparer;
 using Task15UniversalIndex;
 
 namespace RDFTripleStore.OVns
@@ -26,10 +25,7 @@ namespace RDFTripleStore.OVns
         {
             get { return new object[] { value, curi }; }
         }
-        public override Comparer.Comparer ToComparable()
-        {
-            return new Comparer3(Variant, curi, value);
-        }
+
         public override bool Equals(object obj)
         {
             if (obj == null || GetType() != obj.GetType())
@@ -52,7 +48,20 @@ namespace RDFTripleStore.OVns
             return "\"" + value + "\"^^<" + DataType + ">";
         }
 
-        public dynamic Content { get { return value; }}
+        public override dynamic Content { get { return value; } }
         public string DataType { get { return nameTable.GetStringByCode(curi); } }
+        public override int CompareTo(object obj)
+        {
+            if (obj is ObjectVariants)
+            {
+                var cmpBase = base.CompareTo(obj);
+                //if (obj is OV_langstring) //если совпали варианты, то и типы идентичны.
+                if (cmpBase != 0)
+                    return cmpBase;
+                var otherTyped = (OV_typedint)obj;
+                return DataType.CompareTo(otherTyped.DataType);
+            }
+            throw new ArgumentException();
+        }
     }
 }

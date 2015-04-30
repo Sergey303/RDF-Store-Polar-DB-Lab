@@ -61,9 +61,14 @@ namespace RDFTripleStore.OVns
         {
             return UriString;
         }
-        public override Comparer.Comparer ToComparable()
+        public Comparer.Comparer ToComparable()
         {
             return new Comparer2(Variant, code);
+        }
+
+        public override dynamic Content
+        {
+            get { return code; }
         }
 
         public string UriString { get { return code==-1 ? originalString : nameTable.GetStringByCode(code); } }

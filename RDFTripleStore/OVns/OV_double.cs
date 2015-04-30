@@ -46,7 +46,7 @@ namespace RDFTripleStore.OVns
             return unchecked((23 ^ hashCode) * (29 ^ Variant.GetHashCode()));
         }
 
-        public dynamic Content { get { return value; } }
+        public override dynamic Content { get { return value; } }
         public string DataType { get { return SpecialTypesClass.Double.FullName; } }
         public override string ToString()
         {

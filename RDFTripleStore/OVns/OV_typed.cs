@@ -27,7 +27,7 @@ namespace RDFTripleStore.OVns
             }
         }
 
-        public override Comparer.Comparer ToComparable()
+        public Comparer.Comparer ToComparable()
         {
             return new Comparer3(Variant,turi, value);
         }
@@ -48,12 +48,24 @@ namespace RDFTripleStore.OVns
             return unchecked((1277 ^ value.GetHashCode()) * (31 ^ turi.GetHashCode()) *(127*Variant.GetHashCode()));
         }
 
-        public dynamic Content { get { return value; } }
+        public override dynamic Content { get { return value; } }
         public string DataType { get { return turi; } }
         public override string ToString()
         {
             return "\"" + value + "\"^^<"+DataType+">";
         }
-
+        public override int CompareTo(object obj)
+        {
+            if (obj is ObjectVariants)
+            {
+                var cmpBase = base.CompareTo(obj);
+                //if (obj is OV_langstring) //если совпали варианты, то и типы идентичны.
+                if (cmpBase != 0)
+                    return cmpBase;
+                var otherTyped = (OV_typed)obj;
+                return DataType.CompareTo(otherTyped.DataType);
+            }
+            throw new ArgumentException();
+        }
     }
 }

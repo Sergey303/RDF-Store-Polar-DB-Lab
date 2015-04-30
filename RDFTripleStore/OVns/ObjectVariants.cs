@@ -4,7 +4,7 @@ using RDFTripleStore.Comparer;
 
 namespace RDFTripleStore.OVns
 {
-    public abstract class ObjectVariants   :IObjectNode
+    public abstract class ObjectVariants   :IObjectNode       , IComparable
     {
         public  abstract ObjectVariantEnum Variant { get; }
         public abstract object WritableValue { get; }
@@ -118,12 +118,22 @@ namespace RDFTripleStore.OVns
 
         private static readonly Random random = new Random();
 
-        public virtual Comparer.Comparer ToComparable()
+
+
+        public virtual int CompareTo(object obj)
         {
-            return new Comparer2(Variant, ((ILiteralNode)this).Content);
+            if (obj is ObjectVariants)
+            {
+                var other = (ObjectVariants)obj;
+                int vc= Variant.CompareTo(other.Variant);
+                if (vc != 0) return vc;
+                    return ((IComparable)WritableValue).CompareTo(other.Content);
+            }
+            throw new ArgumentException();
         }
 
-        
-   
+       
+
+        public abstract dynamic Content { get; }
     }
 }
