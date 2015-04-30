@@ -47,7 +47,7 @@ namespace RDFTripleStore.OVns
         public override int GetHashCode()
         {
             var hashCode = uriString.GetHashCode();
-            return unchecked((83 ^ hashCode) * (127 ^ Variant.GetHashCode()));
+            return unchecked((11 ^ hashCode) * (13 ^ Variant.GetHashCode()));
         }
 
         public string UriString

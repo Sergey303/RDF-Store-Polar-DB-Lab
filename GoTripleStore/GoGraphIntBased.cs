@@ -319,7 +319,7 @@ namespace GoTripleStore
             }
             public override int GetHashCode()
             {
-                return (7771 ^ s.GetHashCode() ) * (2789 ^ p.GetHashCode()) * (67 ^ ov.GetHashCode());
+                return (2 ^ s.GetHashCode() ) * (3 ^ p.GetHashCode()) * (7 ^ ov.GetHashCode());
             }
         }
         public class PO_Pair : IComparable
@@ -343,7 +343,7 @@ namespace GoTripleStore
             public override int GetHashCode()
             {
                 //return p.GetHashCode() + 7777 * ov.GetHashCode();
-                return unchecked((3001 ^p.GetHashCode()) * (1103 ^ov.GetHashCode()));
+                return unchecked((2 ^p.GetHashCode()) * (3 ^ov.GetHashCode()));
             }
         }
     }

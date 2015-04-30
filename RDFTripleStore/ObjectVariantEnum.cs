@@ -81,8 +81,8 @@ namespace RDFTripleStore
          (s, nt) => new OV_dateTime(DateTime.FromBinary((long) s)),
          (s, nt) => new OV_date(DateTime.FromBinary((long) s)),
          (s, nt) => new OV_time(TimeSpan.FromTicks((long) s)),
-         (typed, nt) => new OV_typed((string) ((object[]) typed)[1], (string) ((object[]) typed)[0]),
-         (typed, nt) => new OV_typedint((string) ((object[]) typed)[1], (int) ((object[]) typed)[0], nt),
+         (typed, nt) => new OV_typed((string) ((object[]) typed)[0], (string) ((object[]) typed)[1]),
+         (typed, nt) => new OV_typedint((string) ((object[]) typed)[0], (int) ((object[]) typed)[1], nt),
      };
 
 

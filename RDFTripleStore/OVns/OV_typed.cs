@@ -11,7 +11,7 @@ namespace RDFTripleStore.OVns
         public OV_typed(string value, string turi)
         {
             this.value = value;
-            this.turi = turi.ToLower();
+            this.turi = turi;
         }
 
         public override ObjectVariantEnum Variant

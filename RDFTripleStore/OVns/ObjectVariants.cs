@@ -123,7 +123,7 @@ namespace RDFTripleStore.OVns
             return new Comparer2(Variant, ((ILiteralNode)this).Content);
         }
 
-        public abstract int GetHashCode();
+        
    
     }
 }

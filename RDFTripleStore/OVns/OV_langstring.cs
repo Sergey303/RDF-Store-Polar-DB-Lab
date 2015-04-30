@@ -53,7 +53,7 @@ namespace RDFTripleStore.OVns
 
         public override int GetHashCode()
         {
-            return unchecked((353 ^ value.GetHashCode()) * (883 ^lang.GetHashCode()) * (127 ^ Variant.GetHashCode()));
+            return unchecked((71 ^ value.GetHashCode()) * (73 ^lang.GetHashCode()) * (79 ^ Variant.GetHashCode()));
         }
 
 

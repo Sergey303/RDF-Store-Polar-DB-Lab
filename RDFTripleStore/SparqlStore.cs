@@ -11,7 +11,7 @@ using SparqlParseRun.SparqlClasses.Query.Result;
 
 namespace RDFTripleStore
 {
-    public class SparqlStore :GoGraphStringBased, IStore
+    public class SparqlStore :GoGraphIntBased, IStore
     {
         public SparqlStore(string path) : base(path)
         {

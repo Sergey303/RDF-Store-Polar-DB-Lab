@@ -12,7 +12,7 @@ namespace RDFTripleStore
         public NodeGeneratorInt(string path)
         {     
             coding_table=new NameTableUniversal(path);
-         
+            SpecialTypes = new SpecialTypesClass(this);          
         }
         public IIriNode CreateUriNode(string uri)
         {
@@ -66,9 +66,11 @@ namespace RDFTripleStore
 
         public IIriNode GetUri(string uri)
         {
+            uri = uri.ToLowerInvariant();
             int code=coding_table.GetCodeByString(uri);
-            
-            return new OV_iriint(code, coding_table);
+            if (code == -1)
+                return new OV_iriint(code, uri);
+            else return new OV_iriint(code, coding_table);
         }
 
         public SpecialTypesClass SpecialTypes { get; protected internal set; }
@@ -137,7 +139,7 @@ namespace RDFTripleStore
 
         public OV_typedint CreateLiteralOtherType(string p, string typeUriNode)
         {
-            return new OV_typedint(p, coding_table.Add(typeUriNode), coding_table);
+            return new OV_typedint(p, coding_table.Add(typeUriNode.ToLowerInvariant()), coding_table);
         }
 
         public string CreateBlankNode(string graph, string blankNodeString = null)
@@ -166,8 +168,7 @@ namespace RDFTripleStore
             coding_table.BuildIndexes();
             coding_table.InsertPortion(SpecialTypesClass.GetAll());
             coding_table.BuildScale();
-            SpecialTypes = new SpecialTypesClass(this);
-
+            SpecialTypes = new SpecialTypesClass(this); 
         }
     }
     

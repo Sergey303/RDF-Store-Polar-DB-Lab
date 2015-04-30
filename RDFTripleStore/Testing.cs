@@ -152,17 +152,22 @@ namespace RDFTripleStore
             SparqlStore sparqlStore = new SparqlStore("../../../Databases/");
             Perfomance.ComputeTime(() =>
             {
-               // sparqlStore.ReloadFrom(Config.Source_data_folder_path + millions + ".ttl");
+              //  sparqlStore.ReloadFrom(Config.Source_data_folder_path + millions + ".ttl");
             }, "build " + millions + ".ttl ");
          //   Console.WriteLine(sparqlStore.GetTriplesWithSubject(sparqlStore.NodeGenerator.CreateUriNode("http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromVendor1/")));
             Perfomance.ComputeTime(() =>
             {
                 Console.WriteLine(
                    sparqlStore.ParseAndRun(
-                       @"PREFIX dataFromVendor1: <http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromVendor1/>
-SELECT ?property ?hasValue 
-WHERE {
-  { dataFromVendor1:Offer1 ?property ?hasValue }
+                       @"PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX bsbm: <http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/vocabulary/>
+PREFIX dataFromProducer1: <http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromProducer1/> 
+
+SELECT DISTINCT ?prodFeature
+WHERE { 
+	?prodFeature ?pp <http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromRatingSite1/Reviewer1> .	
+     }
 ").ToJson());
                 Console.WriteLine("___________________________________________________________________________________");
                 Console.WriteLine(
@@ -264,7 +269,6 @@ WHERE {
                     //.Save(Path.ChangeExtension(file.FullName,".xml"));
                 }
             }
-
             using (StreamWriter r = new StreamWriter(@"..\..\output.txt", true))
             {
                 r.WriteLine("milions " + millions);
@@ -304,8 +308,7 @@ WHERE {
                 .Select(s => new FileInfo(s))
                 .ToArray();
             for (int j = 0; j < 0; j++)
-            {
-
+            {                    
                 foreach (var file in fileInfos)
                 {
                     var readAllText = File.ReadAllText(file.FullName);
@@ -334,8 +337,8 @@ WHERE {
 
                     var totalMilliseconds = (DateTime.Now - st).Ticks / 10000L;
                     results[i++] += totalMilliseconds;
-                    File.WriteAllText(Path.ChangeExtension(file.FullName, ".txt"), sparqlResultSet.ToJson());
-                    //  .Save(Path.ChangeExtension(file.FullName,".xml"));
+                    File.WriteAllText(Path.ChangeExtension(file.FullName, ".json"), sparqlResultSet.ToJson());
+                    //.Save(Path.ChangeExtension(file.FullName,".json"));
                 }
             }
             Console.WriteLine(string.Join(", ", results));

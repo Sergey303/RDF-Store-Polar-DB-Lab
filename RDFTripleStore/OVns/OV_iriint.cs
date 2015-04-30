@@ -9,11 +9,18 @@ namespace RDFTripleStore.OVns
     {
         public readonly int code;
         private readonly NameTableUniversal nameTable;
+        private string originalString;
 
         public OV_iriint(int code, NameTableUniversal nameTable)
         {
             this.code = code;
             this.nameTable = nameTable;
+        }
+
+        public OV_iriint(int code, string uri)
+        {
+            this.code = code;
+            originalString = uri;
         }
 
         public override ObjectVariantEnum Variant
@@ -48,7 +55,7 @@ namespace RDFTripleStore.OVns
         // override object.GetHashCode
         public override int GetHashCode()
         {
-            return unchecked((89 ^ code) * (127 ^ Variant.GetHashCode()));
+            return unchecked((11 ^ code) * (13 ^ Variant.GetHashCode()));
         }
         public override string  ToString()
         {
@@ -59,6 +66,6 @@ namespace RDFTripleStore.OVns
             return new Comparer2(Variant, code);
         }
 
-        public string UriString { get { return nameTable.GetStringByCode(code); } }
+        public string UriString { get { return code==-1 ? originalString : nameTable.GetStringByCode(code); } }
     }
 }

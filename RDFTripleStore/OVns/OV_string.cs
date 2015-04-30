@@ -2,7 +2,7 @@ using RDFCommon;
 
 namespace RDFTripleStore.OVns
 {
-    public class OV_string : ObjectVariants, ILiteralNode
+    public class OV_string : ObjectVariants, ILiteralNode, IStringLiteralNode
     {
         public readonly string value;
 
@@ -44,7 +44,7 @@ namespace RDFTripleStore.OVns
         public override int GetHashCode()
         {
             var hashCode = value.GetHashCode();
-            return unchecked((101 ^ hashCode) * (127 ^ Variant.GetHashCode()));
+            return unchecked((101 ^ hashCode) * (727 ^ Variant.GetHashCode()));
         }
 
 
