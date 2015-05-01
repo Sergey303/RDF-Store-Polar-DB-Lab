@@ -1,0 +1,2 @@
+{ "head": { "vars": [ "?x",
+"?total" ] }, "results": { "bindings" : [] } }

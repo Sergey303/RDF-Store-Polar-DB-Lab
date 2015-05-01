@@ -1,0 +1,3 @@
+{ "head": { "vars": [ "?title",
+"?author",
+"?book" ] }, "results": { "bindings" : [] } }

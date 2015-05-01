@@ -1,0 +1,4 @@
+{ "head": { "vars": [ "?name",
+"?mbox",
+"?hpage",
+"?x" ] }, "results": { "bindings" : [] } }

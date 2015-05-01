@@ -1,0 +1,5 @@
+{ "head": { "vars": [ "?title",
+"?price",
+"?x",
+"?p",
+"?discount" ] }, "results": { "bindings" : [] } }

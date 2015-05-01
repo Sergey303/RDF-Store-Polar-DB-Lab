@@ -1,0 +1,3 @@
+{ "head": { "vars": [ "?name",
+"?mbox",
+"?x" ] }, "results": { "bindings" : [] } }
