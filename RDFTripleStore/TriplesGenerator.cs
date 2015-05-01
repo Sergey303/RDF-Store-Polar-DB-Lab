@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using RDFCommon;
 using RDFTripleStore.OVns;
 using RDFTripleStore.parsers.RDFTurtle;
@@ -17,6 +18,15 @@ namespace RDFTripleStore
                 graphName = graphName
             };
             
+        }
+
+        public TriplesGenerator(Stream baseStream, string graphName)
+        {
+            parser = new Parser(
+                 new Scanner(baseStream))
+            {
+                graphName = graphName
+            };
         }
 
 

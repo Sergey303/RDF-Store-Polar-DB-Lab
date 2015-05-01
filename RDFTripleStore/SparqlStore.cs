@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -22,7 +23,11 @@ namespace RDFTripleStore
             ClearAll();
             FromTurtle(fileName);    
         }
-
+        public void ReloadFrom(Stream baseStream)
+        {
+            ClearAll();
+          base.FromTurtle(baseStream);    
+        }
         public SparqlResultSet ParseAndRun(string query)
         {
             var queryContext = Parse(query);
@@ -55,5 +60,7 @@ namespace RDFTripleStore
         {
            return new RamListOfTriplesGraph(ng.CreateUriNode("temp"));
         }
+
+       
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Threading;
 using RDFCommon;
 using RDFTripleStore.OVns;
@@ -20,7 +21,14 @@ namespace RDFTripleStore
         {
             tg = new TripleGeneratorBuffered(path, graphName, maxBuffer);
         }
-       /// <summary>
+
+        public TripleGeneratorBufferedParallel(Stream baseStream, string graphName, int maxBuffer = 1000)
+        {
+            tg = new TripleGeneratorBuffered(baseStream, graphName, maxBuffer);
+
+        }
+
+        /// <summary>
         ///  запускаеи чтение с помощью TripleGeneratorBuffered в отдельном потоке.
         /// синхронизация буферов с помощью очереди.  
        /// </summary>

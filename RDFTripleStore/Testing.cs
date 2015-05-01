@@ -9,7 +9,9 @@ using System.Threading.Tasks;
 using RDFCommon;
 using RDFTripleStore.OVns;
 using RDFTripleStore.parsers.RDFTurtle;
+using SparqlParseRun;
 using SparqlParseRun.SparqlClasses;
+using SparqlParseRun.SparqlClasses.Query.Result;
 
 namespace RDFTripleStore
 {
@@ -193,24 +195,7 @@ WHERE {
         public static void RunBerlinsParameters(SparqlStore ts, int millions)
         {
 
-            Console.WriteLine("antrl parametered");
-            var fileInfos = new[]
-                {
-                    @"..\..\examples\bsbm\queries\parameters\1.rq"     ,  
-                    @"..\..\examples\bsbm\queries\parameters\2.rq"   ,
-                    @"..\..\examples\bsbm\queries\parameters\3.rq"    , 
-                    @"..\..\examples\bsbm\queries\parameters\4.rq",
-                    @"..\..\examples\bsbm\queries\parameters\5.rq" ,     
-                    @"..\..\examples\bsbm\queries\parameters\6.rq" ,
-                    @"..\..\examples\bsbm\queries\parameters\7.rq"  ,
-                    @"..\..\examples\bsbm\queries\parameters\8.rq"  ,
-                    @"..\..\examples\bsbm\queries\parameters\9.rq",
-                    @"..\..\examples\bsbm\queries\parameters\10.rq"  ,
-                    @"..\..\examples\bsbm\queries\parameters\11.rq",
-                    @"..\..\examples\bsbm\queries\parameters\12.rq"  ,
-                }
-                .Select(s => new FileInfo(s))
-                .ToArray();
+            Console.WriteLine("bsbm parametered");
             var paramvaluesFilePath = string.Format(@"..\..\examples\bsbm\queries\parameters\param values for{0} m.txt", millions);
             //            using (StreamWriter streamQueryParameters = new StreamWriter(paramvaluesFilePath))
             //                for (int j = 0; j < 1000; j++)
@@ -221,18 +206,16 @@ WHERE {
             using (StreamReader streamQueryParameters = new StreamReader(paramvaluesFilePath))
             {
                 for (int j = 0; j < 500; j++)
-                    fileInfos.Select(file => QueryReadParameters(File.ReadAllText(file.FullName),
-                        streamQueryParameters))
-                        // .Select(ts.ParseRunSparql)
-                        .ToArray();
+                    for (int i = 1; i < 13; i++)
+                        QueryReadParameters(File.ReadAllText(string.Format(@"..\..\examples\bsbm\queries\parameters\{0}.rq", i)),
+                            streamQueryParameters);
 
-                SubTestRun(ts, fileInfos, streamQueryParameters, 500, millions);
+                SubTestRun(ts, streamQueryParameters, 500, millions);
             }
         }
 
-        private static void SubTestRun(SparqlStore ts, FileInfo[] fileInfos, StreamReader streamQueryParameters, int i1, int millions)
+        private static void SubTestRun(SparqlStore ts,  StreamReader streamQueryParameters, int i1, int millions)
         {
-            int i;
             long[] results = new long[12];
             double[] minimums = Enumerable.Repeat(double.MaxValue, 12).ToArray();
             double[] maximums = new double[12];
@@ -240,12 +223,11 @@ WHERE {
             long[] totalparseMS = new long[12];
             long[] totalrun = new long[12];
             for (int j = 0; j < i1; j++)
-            {
-                i = 0;
-
-                foreach (var file in fileInfos)
+            {                
+                for (int i = 1; i < 13; i++)
                 {
-                    var readAllText = File.ReadAllText(file.FullName);
+                    string file = string.Format(@"..\..\examples\bsbm\queries\parameters\{0}.rq", i);
+                    var readAllText = File.ReadAllText(file);
                     readAllText = QueryReadParameters(readAllText, streamQueryParameters);
 
                     var st = DateTime.Now;
@@ -288,58 +270,20 @@ WHERE {
         private static void RunBerlinsWithConstants(SparqlStore ts, int millions)
         {
             long[] results = new long[12];
-            Console.WriteLine("antrl with constants");
-            int i = 0;
-            var fileInfos = new[]
-                {
-                    @"..\..\examples\bsbm\queries\with constants\1.rq"     ,  
-                    @"..\..\examples\bsbm\queries\with constants\2.rq"   ,
-                    @"..\..\examples\bsbm\queries\with constants\3.rq"    , 
-                    @"..\..\examples\bsbm\queries\with constants\4.rq",
-                    @"..\..\examples\bsbm\queries\with constants\5.rq" ,     
-                    @"..\..\examples\bsbm\queries\with constants\6.rq" ,
-                    @"..\..\examples\bsbm\queries\with constants\7.rq"  ,
-                    @"..\..\examples\bsbm\queries\with constants\8.rq"  ,
-                    @"..\..\examples\bsbm\queries\with constants\9.rq",
-                    @"..\..\examples\bsbm\queries\with constants\10.rq"  ,
-                    @"..\..\examples\bsbm\queries\with constants\11.rq",
-                    @"..\..\examples\bsbm\queries\with constants\12.rq"  ,
-                }
-                .Select(s => new FileInfo(s))
-                .ToArray();
-            for (int j = 0; j < 0; j++)
-            {                    
-                foreach (var file in fileInfos)
-                {
-                    var readAllText = File.ReadAllText(file.FullName);
-
-                    //   var st = DateTime.Now;
-                    //  var q = new Query(ts);
-                    //  q.Parse(readAllText, ts);
-                    //     var resultString = q.Run();
-                    //var totalMilliseconds = (long)(DateTime.Now - st).TotalMilliseconds;
-                    // results[i++] += totalMilliseconds;
-                    //   File.WriteAllText(Path.ChangeExtension(file.FullName, ".txt"), resultString);
-                    //.Save(Path.ChangeExtension(file.FullName,".xml"));
-                }
-            }
-            for (int j = 0; j < 1; j++)
+            Console.WriteLine("antrl with constants");    
+            for (int i = 1; i < 13; i++)
             {
-                i = 0;
-                foreach (var file in fileInfos)
-                {
-                    var readAllText = File.ReadAllText(file.FullName);
-                    var st = DateTime.Now;
+                string file = string.Format(@"..\..\examples\bsbm\queries\with constants\{0}.rq", i);
+                var readAllText = File.ReadAllText(file);
+                var st = DateTime.Now;
 
-                    Console.WriteLine(file.Name);
-                 var sparqlResultSet =   ts.ParseAndRun(readAllText);
-                    
+                Console.WriteLine(i);
+                var sparqlResultSet = ts.ParseAndRun(readAllText);         
 
-                    var totalMilliseconds = (DateTime.Now - st).Ticks / 10000L;
-                    results[i++] += totalMilliseconds;
-                    File.WriteAllText(Path.ChangeExtension(file.FullName, ".json"), sparqlResultSet.ToJson());
-                    //.Save(Path.ChangeExtension(file.FullName,".json"));
-                }
+                var totalMilliseconds = (DateTime.Now - st).Ticks/10000L;
+                results[i++] += totalMilliseconds;
+                File.WriteAllText(Path.ChangeExtension(file, ".json"), sparqlResultSet.ToJson());
+                //.Save(Path.ChangeExtension(file.FullName,".json"));
             }
             Console.WriteLine(string.Join(", ", results));
             using (StreamWriter r = new StreamWriter(@"..\..\output.txt", true))
@@ -376,6 +320,76 @@ WHERE {
                 parameteredQuery = parameteredQuery.Replace("%OfferXYZ%", "<" + input.ReadLine() + ">");
             return parameteredQuery;
         }
-    
+
+        public static void TestExamples()
+        {
+            DirectoryInfo examplesRoot = new DirectoryInfo(@"..\..\examples");
+            var store = new SparqlStore("../../../Databases/");
+            foreach (var exampleDir in examplesRoot.GetDirectories())
+            //  var exampleDir = new DirectoryInfo(@"..\..\examples\bsbm");
+            {
+                Console.WriteLine("example: " + exampleDir.Name);
+
+                var ttlDatabase = exampleDir.GetFiles("*.ttl").FirstOrDefault();
+                if (ttlDatabase == null) continue;
+                using (StreamReader reader = new StreamReader(ttlDatabase.FullName))
+                    store.ReloadFrom(reader.BaseStream);
+
+                var nameGraphsDir = new DirectoryInfo(Path.Combine(exampleDir.FullName, "named graphs"));
+                if (nameGraphsDir.Exists)
+                {
+                    if (store.NamedGraphs == null) Console.WriteLine("named graphs disabled");
+                    else
+                    {
+                        foreach (var namedGraphFile in nameGraphsDir.GetFiles())
+                            using (StreamReader reader = new StreamReader(namedGraphFile.FullName))
+                            {
+                                var readLine = reader.ReadLine();
+                                if (readLine == null) continue;
+                                var headComment = readLine.Trim();
+                                if (!headComment.StartsWith("#")) continue;
+                                headComment = headComment.Substring(1);
+                                Uri uri;
+                                if (!Uri.TryCreate(headComment, UriKind.Absolute, out uri)) continue;
+                                var graph =
+                                    store.NamedGraphs.CreateGraph(
+                                        store.NodeGenerator.CreateUriNode(Prologue.SplitUri(uri.AbsoluteUri)));
+                                graph.FromTurtle(reader.ReadToEnd());
+                            }
+                        RunOneExample(exampleDir, store);
+                    }
+                }
+                else RunOneExample(exampleDir, store);
+              //  store.ClearAll();
+            }
+        }
+
+        private static void RunOneExample(DirectoryInfo exampleDir, SparqlStore store)
+        {
+            foreach (var rqQueryFile in exampleDir.GetFiles("*.rq"))
+            {
+                Console.WriteLine("query file: " + rqQueryFile);
+                SparqlResultSet sparqlResultSet = null;
+                //  try
+                var query = rqQueryFile.OpenText().ReadToEnd();
+
+                SparqlQuery sparqlQuery = null;
+                {
+                    Perfomance.ComputeTime(() => { sparqlQuery = store.Parse(query); },
+                        exampleDir.Name + " " + rqQueryFile.Name + " parse ", true);
+
+                    if (sparqlQuery != null)
+                        Perfomance.ComputeTime(() => { sparqlResultSet = sparqlQuery.Run(store); },
+                            exampleDir.Name + " " + rqQueryFile.Name + " run ", true);
+                    File.WriteAllText(rqQueryFile.FullName + " results of run.txt", sparqlResultSet.ToJson());
+                    //    Assert.AreEqual(File.ReadAllText(rqQueryFile.FullName + " expected results.txt"),
+                    //      File.ReadAllText(outputFile));
+                }
+                //  catch (Exception e)
+                {
+                    // Assert.(e.Message);
+                }
+            }
+        }
     }
 }

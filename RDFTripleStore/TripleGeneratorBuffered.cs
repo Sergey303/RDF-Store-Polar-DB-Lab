@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using RDFCommon;
 using RDFTripleStore.OVns;
 
@@ -16,6 +17,13 @@ namespace RDFTripleStore
             this.maxBuffer = maxBuffer;
             buffer = new List<Triple<string, string, ObjectVariants>>();
             tg = new TriplesGenerator(path, graphName);
+        }
+
+        public TripleGeneratorBuffered(Stream baseStream, string graphName, int maxBuffer=1000)
+        {
+            this.maxBuffer = maxBuffer;
+            buffer = new List<Triple<string, string, ObjectVariants>>();
+            tg = new TriplesGenerator(baseStream, graphName);
         }
 
         public void Start(Action<List<Triple<string, string, ObjectVariants>>> onGenerate)

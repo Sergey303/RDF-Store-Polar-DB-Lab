@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using PolarDB;
 using RDFCommon;
@@ -357,6 +358,11 @@ namespace RDFTripleStore
             //    table.Fill(ReadTripleStringsFromTurtle.LoadGraph(path).Select(tr => new object[] { tr.Subject.ToLower(), tr.Predicate.ToLower(), tr.Object.ToWritable() }));
         }
 
+        protected void FromTurtle(Stream baseStream)
+        {
+            table.Clear();
+            Build(new TripleGeneratorBufferedParallel(baseStream, "g"));
+        }
     }
     public class SP_Pair : IComparable
     {
