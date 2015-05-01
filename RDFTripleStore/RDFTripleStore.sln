@@ -16,8 +16,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GoTripleStore", "..\GoTripl
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PolarDB", "..\..\PolarDB\PolarDB.csproj", "{907BB4AF-FBC9-4A1E-8F80-194AF9337AA4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SparqlTesting", "..\SparqlTesting\SparqlTesting.csproj", "{B5678910-BFE5-45DD-9BFA-F234FC1C2699}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RDFCommon", "..\RDFCommon\RDFCommon.csproj", "{7EB60F80-87CA-4645-9E1F-051735195D92}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Testing", "..\Testing\Testing.csproj", "{17DDD8B8-D2BA-48BE-B53F-C366D3467EA3}"
@@ -72,16 +70,6 @@ Global
 		{907BB4AF-FBC9-4A1E-8F80-194AF9337AA4}.Release|Mixed Platforms.Build.0 = Release|x86
 		{907BB4AF-FBC9-4A1E-8F80-194AF9337AA4}.Release|x86.ActiveCfg = Release|x86
 		{907BB4AF-FBC9-4A1E-8F80-194AF9337AA4}.Release|x86.Build.0 = Release|x86
-		{B5678910-BFE5-45DD-9BFA-F234FC1C2699}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{B5678910-BFE5-45DD-9BFA-F234FC1C2699}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{B5678910-BFE5-45DD-9BFA-F234FC1C2699}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
-		{B5678910-BFE5-45DD-9BFA-F234FC1C2699}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
-		{B5678910-BFE5-45DD-9BFA-F234FC1C2699}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{B5678910-BFE5-45DD-9BFA-F234FC1C2699}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{B5678910-BFE5-45DD-9BFA-F234FC1C2699}.Release|Any CPU.Build.0 = Release|Any CPU
-		{B5678910-BFE5-45DD-9BFA-F234FC1C2699}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
-		{B5678910-BFE5-45DD-9BFA-F234FC1C2699}.Release|Mixed Platforms.Build.0 = Release|Any CPU
-		{B5678910-BFE5-45DD-9BFA-F234FC1C2699}.Release|x86.ActiveCfg = Release|Any CPU
 		{7EB60F80-87CA-4645-9E1F-051735195D92}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{7EB60F80-87CA-4645-9E1F-051735195D92}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7EB60F80-87CA-4645-9E1F-051735195D92}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU

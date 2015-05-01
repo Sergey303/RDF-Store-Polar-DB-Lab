@@ -55,9 +55,12 @@
     <Compile Include="Comparer\Comparer.cs" />
     <Compile Include="Comparer\Comparer2.cs" />
     <Compile Include="Comparer\Comparer3.cs" />
+    <Compile Include="Comparer\PO_Pair.cs" />
+    <Compile Include="Comparer\SPO_Troyka.cs" />
+    <Compile Include="Comparer\SP_Pair.cs" />
     <Compile Include="Config.cs" />
     <Compile Include="GraphInt.cs" />
-    <Compile Include="GoGraphStringBased.cs" />
+    <Compile Include="GraphString.cs" />
     <Compile Include="NodeGeneratorInt.cs" />
     <Compile Include="NodeGenerator.cs" />
     <Compile Include="ObjectVariantsPolarType.cs" />

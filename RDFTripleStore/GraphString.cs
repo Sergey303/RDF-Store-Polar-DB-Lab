@@ -13,7 +13,7 @@ using Task15UniversalIndex;
 
 namespace RDFTripleStore
 {
-    public class GoGraphStringBased : IGraph
+    public class GraphString : IGraph
     {
         private TableView table;
 
@@ -21,7 +21,7 @@ namespace RDFTripleStore
         private IndexDynamic<Comparer.Comparer, IndexViewImmutable<Comparer.Comparer>> po_ind;
         private IndexDynamic<Comparer.Comparer, IndexViewImmutable<Comparer.Comparer>> os_ind;
         protected NodeGenerator ng = new NodeGenerator();
-        public GoGraphStringBased(string path)
+        public GraphString(string path)
         {
             PType tp_tabelement = new PTypeRecord(
                 new NamedType("subject", new PType(PTypeEnumeration.sstring)),
