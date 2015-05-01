@@ -19,8 +19,10 @@ namespace GoTripleStore
         private IndexDynamic<SP_Pair, IndexHalfkeyImmutable<SP_Pair>> index_sp;
         private IndexHalfkeyImmutable<SPO_Troyka> index_spo_arr;
         private IndexDynamic<SPO_Troyka, IndexHalfkeyImmutable<SPO_Troyka>> index_spo;
-        private IndexHalfkeyImmutable<PO_Pair> index_po_arr;
-        private IndexDynamic<PO_Pair, IndexHalfkeyImmutable<PO_Pair>> index_po;
+        //private IndexHalfkeyImmutable<PO_Pair> index_po_arr;
+        //private IndexDynamic<PO_Pair, IndexHalfkeyImmutable<PO_Pair>> index_po;
+        private IndexViewImmutable<PO_Pair> index_po_arr_base;
+        private IndexDynamic<PO_Pair, IndexViewImmutable<PO_Pair>> index_po_base;
         public GoGraphIntBased(string path)
         {
             PType tp_tabelement = new PTypeRecord(
@@ -98,23 +100,42 @@ namespace GoTripleStore
                     return new SPO_Troyka((int)va[0], (int)va[1], ((object[])va[2]).Writeble2OVariant());
                 }
             };
-            // Индекс po
-            index_po_arr = new IndexHalfkeyImmutable<PO_Pair>(path + "po_")
+            //// Индекс po
+            //index_po_arr = new IndexHalfkeyImmutable<PO_Pair>(path + "po_")
+            //{
+            //    Table = table,
+            //    KeyProducer = v =>
+            //    {
+            //        object[] va = (object[])((object[])v)[1];
+            //        return new PO_Pair((int)va[1], ((object[])va[2]).Writeble2OVariant());
+            //    },
+            //    Scale = null,
+            //    HalfProducer = po => po.GetHashCode()
+            //};
+            //index_po_arr.Scale = new ScaleCell(path + "po_index") { IndexCell = index_po_arr.IndexCell };
+            //index_po = new IndexDynamic<PO_Pair, IndexHalfkeyImmutable<PO_Pair>>(false)
+            //{
+            //    Table = table,
+            //    IndexArray = index_po_arr,
+            //    KeyProducer = v =>
+            //    {
+            //        object[] va = (object[])((object[])v)[1];
+            //        return new PO_Pair((int)va[1], ((object[])va[2]).Writeble2OVariant());
+            //    }
+            //};
+            index_po_arr_base = new IndexViewImmutable<PO_Pair>(path + "po_base_")
             {
                 Table = table,
                 KeyProducer = v =>
                 {
                     object[] va = (object[])((object[])v)[1];
                     return new PO_Pair((int)va[1], ((object[])va[2]).Writeble2OVariant());
-                },
-                Scale = null,
-                HalfProducer = po => po.GetHashCode()
+                }
             };
-            index_po_arr.Scale = new ScaleCell(path + "po_index") { IndexCell = index_po_arr.IndexCell };
-            index_po = new IndexDynamic<PO_Pair, IndexHalfkeyImmutable<PO_Pair>>(false)
+            index_po_base = new IndexDynamic<PO_Pair, IndexViewImmutable<PO_Pair>>(false)
             {
                 Table = table,
-                IndexArray = index_po_arr,
+                IndexArray = index_po_arr_base,
                 KeyProducer = v =>
                 {
                     object[] va = (object[])((object[])v)[1];
@@ -185,11 +206,11 @@ namespace GoTripleStore
         {
             throw new NotImplementedException();
         }
-        private void BuildIndexes()
+        public void BuildIndexes()
         {
             index_s_arr.Build();
             Console.WriteLine("index_s_arr ok.");
-            
+
             index_sp_arr.Build();
             Console.WriteLine("index_sp_arr ok.");
             index_sp_arr.Statistics();
@@ -198,9 +219,13 @@ namespace GoTripleStore
             Console.WriteLine("index_spo_arr ok.");
             index_spo_arr.Statistics();
 
-            index_po_arr.Build();
-            Console.WriteLine("index_po_arr ok.");
-            index_po_arr.Statistics();
+            //index_po_arr.Build();
+            //Console.WriteLine("index_po_arr ok.");
+            //index_po_arr.Statistics();
+
+            index_po_arr_base.Build();
+            Console.WriteLine("index_po_arr_base ok.");
+
         }
         public IEnumerable<Triple<int, int, ObjectVariants>> Search(object subject = null, object predicate = null, ObjectVariants obj = null)
         {
@@ -237,8 +262,8 @@ namespace GoTripleStore
             }
             else if (subject == null && predicate != null && obj != null)
             {
-                int isubj = subject is string ? coding_table.GetCodeByString((string)subject) : -1;
-                int ipred = subject is string ? coding_table.GetCodeByString((string)predicate) : -1;
+                //int isubj = subject is string ? coding_table.GetCodeByString((string)subject) : -1;
+                int ipred = predicate is string ? coding_table.GetCodeByString((string)predicate) : -1;
                 ObjectVariants ov = (ObjectVariants)obj;
                 if (ov is OV_iri) 
                 {
@@ -247,8 +272,9 @@ namespace GoTripleStore
                     //if (code < 0) throw new Exception("RRRRRR No code for iri");
                     ov = new OV_iriint(code, coding_table);
                 }
-                SPO_Troyka tri = new SPO_Troyka(isubj, ipred, ov);
-                var query = index_spo.GetAllByKey(tri);
+                PO_Pair pop = new PO_Pair(ipred, ov);
+                //var query = index_po.GetAllByKey(pop);
+                var query = index_po_base.GetAllByKey(pop);
                 var qu = query.Select(ent =>
                 {
                     object[] three = (object[])((object[])ent.Get())[1];
@@ -344,6 +370,9 @@ namespace GoTripleStore
             {
                 //return p.GetHashCode() + 7777 * ov.GetHashCode();
                 return unchecked((2 ^p.GetHashCode()) * (3 ^ov.GetHashCode()));
+                //return unchecked(ov.GetHashCode() + 77777 * p.GetHashCode()); 
+                //int v = ov.Variant.GetHashCode();
+                //return unchecked(ov.GetHashCode() + p.GetHashCode() * 77777); 
             }
         }
     }
