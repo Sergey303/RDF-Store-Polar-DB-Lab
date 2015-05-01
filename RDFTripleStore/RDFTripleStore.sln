@@ -20,6 +20,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SparqlTesting", "..\SparqlT
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RDFCommon", "..\RDFCommon\RDFCommon.csproj", "{7EB60F80-87CA-4645-9E1F-051735195D92}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Testing", "..\Testing\Testing.csproj", "{17DDD8B8-D2BA-48BE-B53F-C366D3467EA3}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -90,6 +92,16 @@ Global
 		{7EB60F80-87CA-4645-9E1F-051735195D92}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{7EB60F80-87CA-4645-9E1F-051735195D92}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{7EB60F80-87CA-4645-9E1F-051735195D92}.Release|x86.ActiveCfg = Release|Any CPU
+		{17DDD8B8-D2BA-48BE-B53F-C366D3467EA3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{17DDD8B8-D2BA-48BE-B53F-C366D3467EA3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{17DDD8B8-D2BA-48BE-B53F-C366D3467EA3}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{17DDD8B8-D2BA-48BE-B53F-C366D3467EA3}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{17DDD8B8-D2BA-48BE-B53F-C366D3467EA3}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{17DDD8B8-D2BA-48BE-B53F-C366D3467EA3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{17DDD8B8-D2BA-48BE-B53F-C366D3467EA3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{17DDD8B8-D2BA-48BE-B53F-C366D3467EA3}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{17DDD8B8-D2BA-48BE-B53F-C366D3467EA3}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{17DDD8B8-D2BA-48BE-B53F-C366D3467EA3}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

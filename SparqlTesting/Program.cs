@@ -8,7 +8,6 @@ using System.Threading.Tasks;
 using RDFCommon;
 
 using RDFTripleStore;
-using RDFTripleStore.OVns;
 
 
 namespace SparqlTesting

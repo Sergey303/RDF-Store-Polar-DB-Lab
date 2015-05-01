@@ -2,8 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using RDFCommon;
+using RDFCommon.Interfaces;
+using RDFCommon.OVns;
 using RDFTripleStore;
-using RDFTripleStore.OVns;
+using RDFTripleStore.parsers;
 using Task15UniversalIndex;
 using PolarDB;
 
@@ -171,7 +173,7 @@ namespace GoTripleStore
                     if (ov.Variant == ObjectVariantEnum.Iri)
                     {
                         int iobj = dictionary[((OV_iri)ov).UriString];
-                        ov = new OV_iriint(iobj, coding_table);
+                        ov = new OV_iriint(iobj, coding_table.GetStringByCode);
                     }
                     table.TableCell.Root.AppendElement(new object[] { false, new object[] { isubj, ipred, ov.ToWritable() } });
                 }
@@ -239,7 +241,7 @@ namespace GoTripleStore
                     object[] three = (object[])((object[])ent.Get())[1];
                     int s = (int)three[0];
                     int p = (int)three[1];
-                    var o = ((object[])three[2]).Writeble2OVariant(coding_table);
+                    var o = ((object[])three[2]).Writeble2OVariant(coding_table.GetStringByCode);
                     return new Triple<int, int, ObjectVariants>(s, p, o);
                 });
                 return query;
@@ -255,7 +257,7 @@ namespace GoTripleStore
                     object[] three = (object[])((object[])ent.Get())[1];
                     int s = (int)three[0];
                     int p = (int)three[1];
-                    var o = ((object[])three[2]).Writeble2OVariant(coding_table);
+                    var o = ((object[])three[2]).Writeble2OVariant(coding_table.GetStringByCode);
                     return new Triple<int, int, ObjectVariants>(s, p, o);
                 });
                 return qu;
@@ -270,7 +272,7 @@ namespace GoTripleStore
                     string iri = ((OV_iri)ov).Name;
                     int code = coding_table.GetCodeByString(iri);
                     //if (code < 0) throw new Exception("RRRRRR No code for iri");
-                    ov = new OV_iriint(code, coding_table);
+                    ov = new OV_iriint(code, coding_table.GetStringByCode);
                 }
                 PO_Pair pop = new PO_Pair(ipred, ov);
                 //var query = index_po.GetAllByKey(pop);
@@ -280,7 +282,7 @@ namespace GoTripleStore
                     object[] three = (object[])((object[])ent.Get())[1];
                     int s = (int)three[0];
                     int p = (int)three[1];
-                    var o = ((object[])three[2]).Writeble2OVariant(coding_table);
+                    var o = ((object[])three[2]).Writeble2OVariant(coding_table.GetStringByCode);
                     return new Triple<int, int, ObjectVariants>(s, p, o);
                 });
                 return qu;

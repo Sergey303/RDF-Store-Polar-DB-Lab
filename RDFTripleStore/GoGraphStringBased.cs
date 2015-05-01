@@ -4,8 +4,11 @@ using System.IO;
 using System.Linq;
 using PolarDB;
 using RDFCommon;
+using RDFCommon.Interfaces;
+using RDFCommon.OVns;
 using RDFTripleStore.Comparer;
-using RDFTripleStore.OVns;
+using RDFTripleStore.parsers;
+using RDFTripleStore.parsers.RDFTurtle;
 using Task15UniversalIndex;
 
 namespace RDFTripleStore

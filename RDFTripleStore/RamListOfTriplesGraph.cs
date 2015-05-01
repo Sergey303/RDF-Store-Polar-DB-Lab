@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using RDFCommon;
+using RDFTripleStore.parsers.RDFTurtle;
 
 namespace RDFTripleStore
 {

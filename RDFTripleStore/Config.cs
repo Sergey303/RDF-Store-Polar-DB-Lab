@@ -1,15 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace RDFTripleStore
 {
   public static class Config
     {
-      public static string Source_data_folder_path;
+      public static readonly string Source_data_folder_path;
 
       static Config()
       {

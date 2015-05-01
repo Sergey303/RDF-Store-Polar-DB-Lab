@@ -1,6 +1,6 @@
 using System;
 using RDFCommon;
-using RDFTripleStore.OVns;
+using RDFCommon.OVns;
 
 namespace RDFTripleStore
 {

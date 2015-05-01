@@ -2,11 +2,8 @@ using System;
 using RDFCommon;
 using System.Collections.Generic;
 using System.Linq;
-using RDFTripleStore.OVns;
-
-
-
 using System;
+using RDFCommon.OVns;
 
 namespace RDFTripleStore.parsers.RDFTurtle {
 

@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using RDFCommon;
-using RDFTripleStore.OVns;
+using RDFCommon.OVns;
 using Task15UniversalIndex;
 
 namespace RDFTripleStore
@@ -16,7 +16,7 @@ namespace RDFTripleStore
         }
         public IIriNode CreateUriNode(string uri)
         {
-            return new OV_iriint(coding_table.Add(uri.ToLowerInvariant()),coding_table);;
+            return new OV_iriint(coding_table.Add(uri.ToLowerInvariant()), coding_table.GetStringByCode); ;
         }
 
         public IIriNode CreateUriNode(UriPrefixed uri)
@@ -70,7 +70,7 @@ namespace RDFTripleStore
             int code=coding_table.GetCodeByString(uri);
             if (code == -1)
                 return new OV_iriint(code, uri);
-            else return new OV_iriint(code, coding_table);
+            else return new OV_iriint(code, coding_table.GetStringByCode);
         }
 
         public SpecialTypesClass SpecialTypes { get; protected internal set; }
@@ -139,7 +139,7 @@ namespace RDFTripleStore
 
         public OV_typedint CreateLiteralOtherType(string p, string typeUriNode)
         {
-            return new OV_typedint(p, coding_table.Add(typeUriNode.ToLowerInvariant()), coding_table);
+            return new OV_typedint(p, coding_table.Add(typeUriNode.ToLowerInvariant()), coding_table.GetStringByCode);
         }
 
         public string CreateBlankNode(string graph, string blankNodeString = null)
@@ -153,7 +153,7 @@ namespace RDFTripleStore
         private Random random = new Random();
            public IIriNode GetCoded(int code)
         {
-            return new OV_iriint(code, coding_table);
+            return new OV_iriint(code, coding_table.GetStringByCode);
         }
 
         public int CreateCode(string iri)

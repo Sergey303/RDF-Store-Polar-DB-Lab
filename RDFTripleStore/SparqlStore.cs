@@ -6,13 +6,12 @@ using System.Text;
 using System.Threading.Tasks;
 using Antlr4.Runtime;
 using RDFCommon;
-using RDFTripleStore.OVns;
 using SparqlParseRun;
 using SparqlParseRun.SparqlClasses.Query.Result;
 
 namespace RDFTripleStore
 {
-    public class SparqlStore :GoGraphIntBased, IStore
+    public class SparqlStore : GraphInt, IStore
     {
         public SparqlStore(string path) : base(path)
         {

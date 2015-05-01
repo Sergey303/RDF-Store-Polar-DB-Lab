@@ -1,11 +1,13 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using RDFCommon;
-using RDFTripleStore.OVns;
+using RDFCommon.Interfaces;
+using RDFCommon.OVns;
+using RDFTripleStore.parsers;
 
 namespace RDFTripleStore
 {
-   public class RamGraph   :IGraph<Triple<string, string, ObjectVariants>>
+   public class RamGraph   : IGraph<Triple<string, string, ObjectVariants>>
     {
         private List<Triple<string, string, ObjectVariants>> triples;              
 

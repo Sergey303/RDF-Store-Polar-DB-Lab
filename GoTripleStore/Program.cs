@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Xml.Linq;
 using RDFCommon;
+using RDFCommon.Interfaces;
+using RDFCommon.OVns;
 using RDFTripleStore;
-using RDFTripleStore.OVns;
+using RDFTripleStore.parsers.RDFTurtle;
 
 namespace GoTripleStore
 {
