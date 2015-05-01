@@ -25,8 +25,11 @@ namespace GoTripleStore
                 cgraph.Build(query);
                 sw.Stop();
                 Console.WriteLine("Load ok. duration={0}", sw.ElapsedMilliseconds);
+
             }
-            else {  } // Здесь можно было бы разогревать базу данных.
+            else // Здесь можно было бы разогревать базу данных.
+            {
+            }
 
             var search_query = cgraph.Search("http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromProducer10/Product468",
                 "http://www.w3.org/2000/01/rdf-schema#label", null);

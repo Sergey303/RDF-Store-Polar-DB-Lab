@@ -78,7 +78,7 @@ namespace Task15UniversalIndex
             if (Scale != null) Scale.Build();
         }
         public void BuildScale() { Scale.Build(); }
-        public void Statistics()
+        public void StatisticsAfterSorting()
         {
             long total = index_cell.Root.Count(); 
             long different = 0;
@@ -92,6 +92,25 @@ namespace Task15UniversalIndex
                 current = hkey;
             }
             Console.WriteLine("Statistics: total={0} different={1}", total, different); 
+        }
+        public void Statistics()
+        {
+            long total = index_cell.Root.Count();
+            long conflicts = 0;
+            Dictionary<int, int> hkeyUsed = new Dictionary<int, int>();
+            foreach (object[] pair in index_cell.Root.ElementValues())
+            {
+                int hkey = (int)pair[0];
+                if (hkeyUsed.ContainsKey(hkey))
+                {
+                    conflicts++;
+                }
+                else
+                {
+                    hkeyUsed.Add(hkey, 1);
+                }
+            }
+            Console.WriteLine("Statistics: total={0} different={1}", total, hkeyUsed.Count);
         }
 
         public void Warmup() { foreach (var v in index_cell.Root.ElementValues()); if (Scale != null) Scale.Warmup(); }

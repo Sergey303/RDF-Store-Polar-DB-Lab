@@ -45,6 +45,7 @@ namespace RDFTripleStore.OVns
         {
             var hashCode = value.GetHashCode();
             return unchecked((101 ^ hashCode) * (727 ^ Variant.GetHashCode()));
+            //return Variant.GetHashCode() << 17 | (hashCode & (1 << 17 - 1));
         }
 
 
