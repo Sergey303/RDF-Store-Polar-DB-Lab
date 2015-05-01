@@ -1,0 +1,88 @@
+<ns:sparql xmlns:ns="http://www.w3.org/2005/sparql-results#">
+  <ns:head>
+    <ns:variable ns:name="?product" />
+    <ns:variable ns:name="?label" />
+  </ns:head>
+  <ns:results>
+    <ns:result>
+      <ns:binding ns:name="?product">
+        <ns:uri>http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromProducer41/Product1920</ns:uri>
+      </ns:binding>
+      <ns:binding ns:name="?label">
+        <ns:literal>audiologist gonfalon</ns:literal>
+      </ns:binding>
+    </ns:result>
+    <ns:result>
+      <ns:binding ns:name="?product">
+        <ns:uri>http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromProducer6/Product236</ns:uri>
+      </ns:binding>
+      <ns:binding ns:name="?label">
+        <ns:literal>bewitches marketeers</ns:literal>
+      </ns:binding>
+    </ns:result>
+    <ns:result>
+      <ns:binding ns:name="?product">
+        <ns:uri>http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromProducer57/Product2642</ns:uri>
+      </ns:binding>
+      <ns:binding ns:name="?label">
+        <ns:literal>blackhead</ns:literal>
+      </ns:binding>
+    </ns:result>
+    <ns:result>
+      <ns:binding ns:name="?product">
+        <ns:uri>http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromProducer22/Product1029</ns:uri>
+      </ns:binding>
+      <ns:binding ns:name="?label">
+        <ns:literal>brevets</ns:literal>
+      </ns:binding>
+    </ns:result>
+    <ns:result>
+      <ns:binding ns:name="?product">
+        <ns:uri>http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromProducer5/Product191</ns:uri>
+      </ns:binding>
+      <ns:binding ns:name="?label">
+        <ns:literal>bronzier</ns:literal>
+      </ns:binding>
+    </ns:result>
+    <ns:result>
+      <ns:binding ns:name="?product">
+        <ns:uri>http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromProducer22/Product1034</ns:uri>
+      </ns:binding>
+      <ns:binding ns:name="?label">
+        <ns:literal>catatony megalomaniacal reendowing</ns:literal>
+      </ns:binding>
+    </ns:result>
+    <ns:result>
+      <ns:binding ns:name="?product">
+        <ns:uri>http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromProducer16/Product751</ns:uri>
+      </ns:binding>
+      <ns:binding ns:name="?label">
+        <ns:literal>cavernously burdeners</ns:literal>
+      </ns:binding>
+    </ns:result>
+    <ns:result>
+      <ns:binding ns:name="?product">
+        <ns:uri>http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromProducer42/Product2019</ns:uri>
+      </ns:binding>
+      <ns:binding ns:name="?label">
+        <ns:literal>citrous</ns:literal>
+      </ns:binding>
+    </ns:result>
+    <ns:result>
+      <ns:binding ns:name="?product">
+        <ns:uri>http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromProducer24/Product1104</ns:uri>
+      </ns:binding>
+      <ns:binding ns:name="?label">
+        <ns:literal>coagulometer darksome platier</ns:literal>
+      </ns:binding>
+    </ns:result>
+    <ns:result>
+      <ns:binding ns:name="?product">
+        <ns:uri>http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromProducer7/Product312</ns:uri>
+      </ns:binding>
+      <ns:binding ns:name="?label">
+        <ns:literal>commandeers aspiration zwiebacks</ns:literal>
+      </ns:binding>
+    </ns:result>
+  </ns:results>
+</ns:sparql>

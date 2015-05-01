@@ -1,0 +1,5 @@
+<RDF xmlns:vcard="SparqlParseRun.RdfCommon.UriPrefixed" xmlns="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+  <Description p3:about="http://example.org/person#Alice" xmlns:p3="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+    <FN xmlns="vcard:">Alice</FN>
+  </Description>
+</RDF>

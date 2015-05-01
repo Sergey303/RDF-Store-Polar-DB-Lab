@@ -152,7 +152,7 @@ namespace RDFTripleStore
             SparqlStore sparqlStore = new SparqlStore("../../../Databases/");
             Perfomance.ComputeTime(() =>
             {
-                sparqlStore.ReloadFrom(Config.Source_data_folder_path + millions + ".ttl");
+               // sparqlStore.ReloadFrom(Config.Source_data_folder_path + millions + ".ttl");
             }, "build " + millions + ".ttl ");
          //   Console.WriteLine(sparqlStore.GetTriplesWithSubject(sparqlStore.NodeGenerator.CreateUriNode("http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromVendor1/")));
             Perfomance.ComputeTime(() =>

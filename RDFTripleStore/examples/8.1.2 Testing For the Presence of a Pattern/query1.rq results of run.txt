@@ -1,0 +1,12 @@
+<ns:sparql xmlns:ns="http://www.w3.org/2005/sparql-results#">
+  <ns:head>
+    <ns:variable ns:name="?person" />
+  </ns:head>
+  <ns:results>
+    <ns:result>
+      <ns:binding ns:name="?person">
+        <ns:uri>http://example/alice</ns:uri>
+      </ns:binding>
+    </ns:result>
+  </ns:results>
+</ns:sparql>

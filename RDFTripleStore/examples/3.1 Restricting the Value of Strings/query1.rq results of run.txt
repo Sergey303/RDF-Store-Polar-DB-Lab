@@ -1,0 +1,12 @@
+<ns:sparql xmlns:ns="http://www.w3.org/2005/sparql-results#">
+  <ns:head>
+    <ns:variable ns:name="?title" />
+  </ns:head>
+  <ns:results>
+    <ns:result>
+      <ns:binding ns:name="?title">
+        <ns:literal>SPARQL Tutorial</ns:literal>
+      </ns:binding>
+    </ns:result>
+  </ns:results>
+</ns:sparql>

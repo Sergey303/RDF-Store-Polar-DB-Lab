@@ -1,0 +1,17 @@
+<ns:sparql xmlns:ns="http://www.w3.org/2005/sparql-results#">
+  <ns:head>
+    <ns:variable ns:name="?name" />
+  </ns:head>
+  <ns:results>
+    <ns:result>
+      <ns:binding ns:name="?name">
+        <ns:literal>Alice</ns:literal>
+      </ns:binding>
+    </ns:result>
+    <ns:result>
+      <ns:binding ns:name="?name">
+        <ns:literal>Bob</ns:literal>
+      </ns:binding>
+    </ns:result>
+  </ns:results>
+</ns:sparql>

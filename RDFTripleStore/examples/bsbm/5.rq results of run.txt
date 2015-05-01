@@ -1,0 +1,48 @@
+<ns:sparql xmlns:ns="http://www.w3.org/2005/sparql-results#">
+  <ns:head>
+    <ns:variable ns:name="?product" />
+    <ns:variable ns:name="?productLabel" />
+  </ns:head>
+  <ns:results>
+    <ns:result>
+      <ns:binding ns:name="?product">
+        <ns:uri>http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromProducer15/Product709</ns:uri>
+      </ns:binding>
+      <ns:binding ns:name="?productLabel">
+        <ns:literal>jacinth medusoids</ns:literal>
+      </ns:binding>
+    </ns:result>
+    <ns:result>
+      <ns:binding ns:name="?product">
+        <ns:uri>http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromProducer24/Product1106</ns:uri>
+      </ns:binding>
+      <ns:binding ns:name="?productLabel">
+        <ns:literal>policewoman</ns:literal>
+      </ns:binding>
+    </ns:result>
+    <ns:result>
+      <ns:binding ns:name="?product">
+        <ns:uri>http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromProducer40/Product1847</ns:uri>
+      </ns:binding>
+      <ns:binding ns:name="?productLabel">
+        <ns:literal>recessively garments hotelkeeper</ns:literal>
+      </ns:binding>
+    </ns:result>
+    <ns:result>
+      <ns:binding ns:name="?product">
+        <ns:uri>http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromProducer23/Product1072</ns:uri>
+      </ns:binding>
+      <ns:binding ns:name="?productLabel">
+        <ns:literal>supermolecular</ns:literal>
+      </ns:binding>
+    </ns:result>
+    <ns:result>
+      <ns:binding ns:name="?product">
+        <ns:uri>http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromProducer54/Product2512</ns:uri>
+      </ns:binding>
+      <ns:binding ns:name="?productLabel">
+        <ns:literal>wheelers womby jailor</ns:literal>
+      </ns:binding>
+    </ns:result>
+  </ns:results>
+</ns:sparql>

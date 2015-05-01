@@ -70,5 +70,12 @@ namespace RDFTripleStore.OVns
         {
             get { return uriString; }
         }
+        public override int CompareTo(object obj)
+        {
+            int baseComp = base.CompareTo(obj);
+            if (baseComp != 0) return baseComp;
+            var otherTyped = (OV_iri)obj;
+            return System.String.Compare(uriString, otherTyped.uriString, System.StringComparison.InvariantCulture);
+        }
     }
 }

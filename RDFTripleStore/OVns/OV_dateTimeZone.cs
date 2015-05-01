@@ -54,5 +54,12 @@ namespace RDFTripleStore.OVns
         {
             return value.ToString();
         }
+        public override int CompareTo(object obj)
+        {
+            int baseComp = base.CompareTo(obj);
+            if (baseComp != 0) return baseComp;
+            var otherTyped = (OV_dateTimeZone)obj;
+            return value.CompareTo(otherTyped.value);
+        }
     }
 }

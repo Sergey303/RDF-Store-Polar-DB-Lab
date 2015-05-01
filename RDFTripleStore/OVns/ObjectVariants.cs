@@ -125,9 +125,7 @@ namespace RDFTripleStore.OVns
             if (obj is ObjectVariants)
             {
                 var other = (ObjectVariants)obj;
-                int vc= Variant.CompareTo(other.Variant);
-                if (vc != 0) return vc;
-                    return ((IComparable)WritableValue).CompareTo(other.Content);
+                return Variant.CompareTo(other.Variant);  
             }
             throw new ArgumentException();
         }

@@ -1,3 +1,4 @@
+using System;
 using RDFCommon;
 
 namespace RDFTripleStore.OVns
@@ -51,6 +52,13 @@ namespace RDFTripleStore.OVns
         public override string ToString()
         {
             return value.ToString();
+        }
+        public override int CompareTo(object obj)
+        {
+            int baseComp = base.CompareTo(obj);
+            if (baseComp != 0) return baseComp;
+            var otherTyped = (OV_bool)obj;           
+            return value.CompareTo(otherTyped.value);
         }
     }
 }

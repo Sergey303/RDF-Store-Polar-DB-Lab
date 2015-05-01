@@ -1,0 +1,89 @@
+<ns:sparql xmlns:ns="http://www.w3.org/2005/sparql-results#">
+  <ns:head>
+    <ns:variable ns:name="?property" />
+    <ns:variable ns:name="?hasValue" />
+    <ns:variable ns:name="?isValueOf" />
+  </ns:head>
+  <ns:results>
+    <ns:result>
+      <ns:binding ns:name="?property">
+        <ns:uri>http://www.w3.org/1999/02/22-rdf-syntax-ns#type</ns:uri>
+      </ns:binding>
+      <ns:binding ns:name="?hasValue">
+        <ns:uri>http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/vocabulary/Offer</ns:uri>
+      </ns:binding>
+    </ns:result>
+    <ns:result>
+      <ns:binding ns:name="?property">
+        <ns:uri>http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/vocabulary/product</ns:uri>
+      </ns:binding>
+      <ns:binding ns:name="?hasValue">
+        <ns:uri>http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromProducer46/Product2161</ns:uri>
+      </ns:binding>
+    </ns:result>
+    <ns:result>
+      <ns:binding ns:name="?property">
+        <ns:uri>http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/vocabulary/vendor</ns:uri>
+      </ns:binding>
+      <ns:binding ns:name="?hasValue">
+        <ns:uri>http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromVendor1/Vendor1</ns:uri>
+      </ns:binding>
+    </ns:result>
+    <ns:result>
+      <ns:binding ns:name="?property">
+        <ns:uri>http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/vocabulary/price</ns:uri>
+      </ns:binding>
+      <ns:binding ns:name="?hasValue">
+        <ns:literal ns:type="http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/vocabulary/USD">7683.53</ns:literal>
+      </ns:binding>
+    </ns:result>
+    <ns:result>
+      <ns:binding ns:name="?property">
+        <ns:uri>http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/vocabulary/validFrom</ns:uri>
+      </ns:binding>
+      <ns:binding ns:name="?hasValue">
+        <ns:literal ns:type="http://www.w3.org/2001/XMLSchema#dateTime">2008-03-20T00:00:00+06:00</ns:literal>
+      </ns:binding>
+    </ns:result>
+    <ns:result>
+      <ns:binding ns:name="?property">
+        <ns:uri>http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/vocabulary/validTo</ns:uri>
+      </ns:binding>
+      <ns:binding ns:name="?hasValue">
+        <ns:literal ns:type="http://www.w3.org/2001/XMLSchema#dateTime">2008-09-11T00:00:00+07:00</ns:literal>
+      </ns:binding>
+    </ns:result>
+    <ns:result>
+      <ns:binding ns:name="?property">
+        <ns:uri>http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/vocabulary/deliveryDays</ns:uri>
+      </ns:binding>
+      <ns:binding ns:name="?hasValue">
+        <ns:literal ns:type="http://www.w3.org/2001/XMLSchema#integer">5</ns:literal>
+      </ns:binding>
+    </ns:result>
+    <ns:result>
+      <ns:binding ns:name="?property">
+        <ns:uri>http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/vocabulary/offerWebpage</ns:uri>
+      </ns:binding>
+      <ns:binding ns:name="?hasValue">
+        <ns:uri>ttp://wOffer1</ns:uri>
+      </ns:binding>
+    </ns:result>
+    <ns:result>
+      <ns:binding ns:name="?property">
+        <ns:uri>http://purl.org/dc/elements/1.1/publisher</ns:uri>
+      </ns:binding>
+      <ns:binding ns:name="?hasValue">
+        <ns:uri>http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromVendor1/Vendor1</ns:uri>
+      </ns:binding>
+    </ns:result>
+    <ns:result>
+      <ns:binding ns:name="?property">
+        <ns:uri>http://purl.org/dc/elements/1.1/date</ns:uri>
+      </ns:binding>
+      <ns:binding ns:name="?hasValue">
+        <ns:literal ns:type="http://www.w3.org/2001/XMLSchema#date">2008-06-17T00:00:00</ns:literal>
+      </ns:binding>
+    </ns:result>
+  </ns:results>
+</ns:sparql>

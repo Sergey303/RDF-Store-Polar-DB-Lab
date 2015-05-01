@@ -1,0 +1,32 @@
+<ns:sparql xmlns:ns="http://www.w3.org/2005/sparql-results#">
+  <ns:head>
+    <ns:variable ns:name="?x" />
+    <ns:variable ns:name="?type" />
+  </ns:head>
+  <ns:results>
+    <ns:result>
+      <ns:binding ns:name="?x">
+        <ns:uri>http://example/x</ns:uri>
+      </ns:binding>
+      <ns:binding ns:name="?type">
+        <ns:uri>http://example/type1</ns:uri>
+      </ns:binding>
+    </ns:result>
+    <ns:result>
+      <ns:binding ns:name="?x">
+        <ns:uri>http://example/x</ns:uri>
+      </ns:binding>
+      <ns:binding ns:name="?type">
+        <ns:uri>http://example/type2</ns:uri>
+      </ns:binding>
+    </ns:result>
+    <ns:result>
+      <ns:binding ns:name="?x">
+        <ns:uri>http://example/x</ns:uri>
+      </ns:binding>
+      <ns:binding ns:name="?type">
+        <ns:uri>http://example/type3</ns:uri>
+      </ns:binding>
+    </ns:result>
+  </ns:results>
+</ns:sparql>

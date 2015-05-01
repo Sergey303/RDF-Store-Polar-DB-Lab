@@ -6,7 +6,7 @@ namespace RDFTripleStore.OVns
 {
     public class OV_typedint : ObjectVariants, ILiteralNode
     {
-        private readonly string value; public readonly int curi;
+        internal readonly string value; public readonly int curi;
         private readonly NameTableUniversal nameTable;
 
         public OV_typedint(string value, int curi, NameTableUniversal nameTable)
@@ -52,16 +52,14 @@ namespace RDFTripleStore.OVns
         public string DataType { get { return nameTable.GetStringByCode(curi); } }
         public override int CompareTo(object obj)
         {
-            if (obj is ObjectVariants)
-            {
-                var cmpBase = base.CompareTo(obj);
-                //if (obj is OV_langstring) //если совпали варианты, то и типы идентичны.
-                if (cmpBase != 0)
-                    return cmpBase;
-                var otherTyped = (OV_typedint)obj;
-                return DataType.CompareTo(otherTyped.DataType);
-            }
-            throw new ArgumentException();
+            int baseComp = base.CompareTo(obj);
+            if (baseComp != 0) return baseComp;
+            var otherTyped = (OV_typedint)obj;
+            var cmpBase = String.Compare(DataType, otherTyped.DataType, StringComparison.InvariantCulture);
+            //if (obj is OV_langstring) //если совпали варианты, то и типы идентичны.
+            if (cmpBase != 0)  return cmpBase;
+            return System.String.Compare(value, otherTyped.value, System.StringComparison.InvariantCulture);
+            
         }
     }
 }

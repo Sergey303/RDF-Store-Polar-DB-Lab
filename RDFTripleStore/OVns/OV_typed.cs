@@ -56,16 +56,14 @@ namespace RDFTripleStore.OVns
         }
         public override int CompareTo(object obj)
         {
-            if (obj is ObjectVariants)
-            {
-                var cmpBase = base.CompareTo(obj);
-                //if (obj is OV_langstring) //если совпали варианты, то и типы идентичны.
-                if (cmpBase != 0)
-                    return cmpBase;
-                var otherTyped = (OV_typed)obj;
-                return DataType.CompareTo(otherTyped.DataType);
-            }
-            throw new ArgumentException();
+            int baseComp = base.CompareTo(obj);
+            if (baseComp != 0) return baseComp;
+            var otherTyped = (OV_typed)obj;
+            var cmpBase = String.Compare(DataType, otherTyped.DataType, StringComparison.InvariantCulture);
+            //if (obj is OV_langstring) //если совпали варианты, то и типы идентичны.
+            if (cmpBase != 0) return cmpBase;
+            return System.String.Compare(value, otherTyped.value, System.StringComparison.InvariantCulture);
+
         }
     }
 }

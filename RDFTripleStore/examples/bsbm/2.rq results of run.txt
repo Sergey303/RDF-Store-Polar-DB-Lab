@@ -1,0 +1,754 @@
+<ns:sparql xmlns:ns="http://www.w3.org/2005/sparql-results#">
+  <ns:head>
+    <ns:variable ns:name="?label" />
+    <ns:variable ns:name="?comment" />
+    <ns:variable ns:name="?producer" />
+    <ns:variable ns:name="?productFeature" />
+    <ns:variable ns:name="?propertyTextual1" />
+    <ns:variable ns:name="?propertyTextual2" />
+    <ns:variable ns:name="?propertyTextual3" />
+    <ns:variable ns:name="?propertyNumeric1" />
+    <ns:variable ns:name="?propertyNumeric2" />
+    <ns:variable ns:name="?propertyTextual4" />
+    <ns:variable ns:name="?propertyTextual5" />
+    <ns:variable ns:name="?propertyNumeric4" />
+  </ns:head>
+  <ns:results>
+    <ns:result>
+      <ns:binding ns:name="?label">
+        <ns:literal>totally annat</ns:literal>
+      </ns:binding>
+      <ns:binding ns:name="?comment">
+        <ns:literal>tsaritzas calkers noncorroborative thro agonizes dollars gumlike multifunction diastoles tyrannous liverish soothsaying ungathered noisiness realists rearmament feater nonenforcement facetiousness reassessments winded brainwashing federalizations impersonators unreeler incumbering jewry airmanship gweducks discourteous brazened stalkily lunars throughway parkas soothsaying splotchier arabesks rebelliously unbefitting vatting azores woolskin exiguous spates rancheros swayback civets mangles pakistanis inhibitors biting fluoroscopist accommodativeness nonplussing reunification equalises graupel pugilist narcotism overriding gallivants</ns:literal>
+      </ns:binding>
+      <ns:binding ns:name="?producer">
+        <ns:literal>velcro shying enticements</ns:literal>
+      </ns:binding>
+      <ns:binding ns:name="?productFeature">
+        <ns:literal>coplot worsteds</ns:literal>
+      </ns:binding>
+      <ns:binding ns:name="?propertyTextual1">
+        <ns:literal ns:type="http://www.w3.org/2001/XMLSchema#string">praises plaiters semiagricultural mesomorph scourger checkering sourball obsidians staggeringly cades restaff sireless dissatisfactions</ns:literal>
+      </ns:binding>
+      <ns:binding ns:name="?propertyTextual2">
+        <ns:literal ns:type="http://www.w3.org/2001/XMLSchema#string">dildo impregnably cratons reg glycogens bookends galop flyweights education</ns:literal>
+      </ns:binding>
+      <ns:binding ns:name="?propertyTextual3">
+        <ns:literal ns:type="http://www.w3.org/2001/XMLSchema#string">uprear choosey trining vivisectional realness testatrix polluters violates meditates subagents hup maharanee raison</ns:literal>
+      </ns:binding>
+      <ns:binding ns:name="?propertyNumeric1">
+        <ns:literal ns:type="http://www.w3.org/2001/XMLSchema#integer">831</ns:literal>
+      </ns:binding>
+      <ns:binding ns:name="?propertyNumeric2">
+        <ns:literal ns:type="http://www.w3.org/2001/XMLSchema#integer">312</ns:literal>
+      </ns:binding>
+      <ns:binding ns:name="?propertyTextual4">
+        <ns:literal ns:type="http://www.w3.org/2001/XMLSchema#string">footsteps endocrinologic auxiliaries leashed</ns:literal>
+      </ns:binding>
+    </ns:result>
+    <ns:result>
+      <ns:binding ns:name="?label">
+        <ns:literal>totally annat</ns:literal>
+      </ns:binding>
+      <ns:binding ns:name="?comment">
+        <ns:literal>tsaritzas calkers noncorroborative thro agonizes dollars gumlike multifunction diastoles tyrannous liverish soothsaying ungathered noisiness realists rearmament feater nonenforcement facetiousness reassessments winded brainwashing federalizations impersonators unreeler incumbering jewry airmanship gweducks discourteous brazened stalkily lunars throughway parkas soothsaying splotchier arabesks rebelliously unbefitting vatting azores woolskin exiguous spates rancheros swayback civets mangles pakistanis inhibitors biting fluoroscopist accommodativeness nonplussing reunification equalises graupel pugilist narcotism overriding gallivants</ns:literal>
+      </ns:binding>
+      <ns:binding ns:name="?producer">
+        <ns:literal>velcro shying enticements</ns:literal>
+      </ns:binding>
+      <ns:binding ns:name="?productFeature">
+        <ns:literal>ecotypic</ns:literal>
+      </ns:binding>
+      <ns:binding ns:name="?propertyTextual1">
+        <ns:literal ns:type="http://www.w3.org/2001/XMLSchema#string">praises plaiters semiagricultural mesomorph scourger checkering sourball obsidians staggeringly cades restaff sireless dissatisfactions</ns:literal>
+      </ns:binding>
+      <ns:binding ns:name="?propertyTextual2">
+        <ns:literal ns:type="http://www.w3.org/2001/XMLSchema#string">dildo impregnably cratons reg glycogens bookends galop flyweights education</ns:literal>
+      </ns:binding>
+      <ns:binding ns:name="?propertyTextual3">
+        <ns:literal ns:type="http://www.w3.org/2001/XMLSchema#string">uprear choosey trining vivisectional realness testatrix polluters violates meditates subagents hup maharanee raison</ns:literal>
+      </ns:binding>
+      <ns:binding ns:name="?propertyNumeric1">
+        <ns:literal ns:type="http://www.w3.org/2001/XMLSchema#integer">831</ns:literal>
+      </ns:binding>
+      <ns:binding ns:name="?propertyNumeric2">
+        <ns:literal ns:type="http://www.w3.org/2001/XMLSchema#integer">312</ns:literal>
+      </ns:binding>
+      <ns:binding ns:name="?propertyTextual4">
+        <ns:literal ns:type="http://www.w3.org/2001/XMLSchema#string">footsteps endocrinologic auxiliaries leashed</ns:literal>
+      </ns:binding>
+    </ns:result>
+    <ns:result>
+      <ns:binding ns:name="?label">
+        <ns:literal>totally annat</ns:literal>
+      </ns:binding>
+      <ns:binding ns:name="?comment">
+        <ns:literal>tsaritzas calkers noncorroborative thro agonizes dollars gumlike multifunction diastoles tyrannous liverish soothsaying ungathered noisiness realists rearmament feater nonenforcement facetiousness reassessments winded brainwashing federalizations impersonators unreeler incumbering jewry airmanship gweducks discourteous brazened stalkily lunars throughway parkas soothsaying splotchier arabesks rebelliously unbefitting vatting azores woolskin exiguous spates rancheros swayback civets mangles pakistanis inhibitors biting fluoroscopist accommodativeness nonplussing reunification equalises graupel pugilist narcotism overriding gallivants</ns:literal>
+      </ns:binding>
+      <ns:binding ns:name="?producer">
+        <ns:literal>velcro shying enticements</ns:literal>
+      </ns:binding>
+      <ns:binding ns:name="?productFeature">
+        <ns:literal>nonlocals bins</ns:literal>
+      </ns:binding>
+      <ns:binding ns:name="?propertyTextual1">
+        <ns:literal ns:type="http://www.w3.org/2001/XMLSchema#string">praises plaiters semiagricultural mesomorph scourger checkering sourball obsidians staggeringly cades restaff sireless dissatisfactions</ns:literal>
+      </ns:binding>
+      <ns:binding ns:name="?propertyTextual2">
+        <ns:literal ns:type="http://www.w3.org/2001/XMLSchema#string">dildo impregnably cratons reg glycogens bookends galop flyweights education</ns:literal>
+      </ns:binding>
+      <ns:binding ns:name="?propertyTextual3">
+        <ns:literal ns:type="http://www.w3.org/2001/XMLSchema#string">uprear choosey trining vivisectional realness testatrix polluters violates meditates subagents hup maharanee raison</ns:literal>
+      </ns:binding>
+      <ns:binding ns:name="?propertyNumeric1">
+        <ns:literal ns:type="http://www.w3.org/2001/XMLSchema#integer">831</ns:literal>
+      </ns:binding>
+      <ns:binding ns:name="?propertyNumeric2">
+        <ns:literal ns:type="http://www.w3.org/2001/XMLSchema#integer">312</ns:literal>
+      </ns:binding>
+      <ns:binding ns:name="?propertyTextual4">
+        <ns:literal ns:type="http://www.w3.org/2001/XMLSchema#string">footsteps endocrinologic auxiliaries leashed</ns:literal>
+      </ns:binding>
+    </ns:result>
+    <ns:result>
+      <ns:binding ns:name="?label">
+        <ns:literal>totally annat</ns:literal>
+      </ns:binding>
+      <ns:binding ns:name="?comment">
+        <ns:literal>tsaritzas calkers noncorroborative thro agonizes dollars gumlike multifunction diastoles tyrannous liverish soothsaying ungathered noisiness realists rearmament feater nonenforcement facetiousness reassessments winded brainwashing federalizations impersonators unreeler incumbering jewry airmanship gweducks discourteous brazened stalkily lunars throughway parkas soothsaying splotchier arabesks rebelliously unbefitting vatting azores woolskin exiguous spates rancheros swayback civets mangles pakistanis inhibitors biting fluoroscopist accommodativeness nonplussing reunification equalises graupel pugilist narcotism overriding gallivants</ns:literal>
+      </ns:binding>
+      <ns:binding ns:name="?producer">
+        <ns:literal>velcro shying enticements</ns:literal>
+      </ns:binding>
+      <ns:binding ns:name="?productFeature">
+        <ns:literal>homos</ns:literal>
+      </ns:binding>
+      <ns:binding ns:name="?propertyTextual1">
+        <ns:literal ns:type="http://www.w3.org/2001/XMLSchema#string">praises plaiters semiagricultural mesomorph scourger checkering sourball obsidians staggeringly cades restaff sireless dissatisfactions</ns:literal>
+      </ns:binding>
+      <ns:binding ns:name="?propertyTextual2">
+        <ns:literal ns:type="http://www.w3.org/2001/XMLSchema#string">dildo impregnably cratons reg glycogens bookends galop flyweights education</ns:literal>
+      </ns:binding>
+      <ns:binding ns:name="?propertyTextual3">
+        <ns:literal ns:type="http://www.w3.org/2001/XMLSchema#string">uprear choosey trining vivisectional realness testatrix polluters violates meditates subagents hup maharanee raison</ns:literal>
+      </ns:binding>
+      <ns:binding ns:name="?propertyNumeric1">
+        <ns:literal ns:type="http://www.w3.org/2001/XMLSchema#integer">831</ns:literal>
+      </ns:binding>
+      <ns:binding ns:name="?propertyNumeric2">
+        <ns:literal ns:type="http://www.w3.org/2001/XMLSchema#integer">312</ns:literal>
+      </ns:binding>
+      <ns:binding ns:name="?propertyTextual4">
+        <ns:literal ns:type="http://www.w3.org/2001/XMLSchema#string">footsteps endocrinologic auxiliaries leashed</ns:literal>
+      </ns:binding>
+    </ns:result>
+    <ns:result>
+      <ns:binding ns:name="?label">
+        <ns:literal>totally annat</ns:literal>
+      </ns:binding>
+      <ns:binding ns:name="?comment">
+        <ns:literal>tsaritzas calkers noncorroborative thro agonizes dollars gumlike multifunction diastoles tyrannous liverish soothsaying ungathered noisiness realists rearmament feater nonenforcement facetiousness reassessments winded brainwashing federalizations impersonators unreeler incumbering jewry airmanship gweducks discourteous brazened stalkily lunars throughway parkas soothsaying splotchier arabesks rebelliously unbefitting vatting azores woolskin exiguous spates rancheros swayback civets mangles pakistanis inhibitors biting fluoroscopist accommodativeness nonplussing reunification equalises graupel pugilist narcotism overriding gallivants</ns:literal>
+      </ns:binding>
+      <ns:binding ns:name="?producer">
+        <ns:literal>velcro shying enticements</ns:literal>
+      </ns:binding>
+      <ns:binding ns:name="?productFeature">
+        <ns:literal>moralist reproductiveness edictally</ns:literal>
+      </ns:binding>
+      <ns:binding ns:name="?propertyTextual1">
+        <ns:literal ns:type="http://www.w3.org/2001/XMLSchema#string">praises plaiters semiagricultural mesomorph scourger checkering sourball obsidians staggeringly cades restaff sireless dissatisfactions</ns:literal>
+      </ns:binding>
+      <ns:binding ns:name="?propertyTextual2">
+        <ns:literal ns:type="http://www.w3.org/2001/XMLSchema#string">dildo impregnably cratons reg glycogens bookends galop flyweights education</ns:literal>
+      </ns:binding>
+      <ns:binding ns:name="?propertyTextual3">
+        <ns:literal ns:type="http://www.w3.org/2001/XMLSchema#string">uprear choosey trining vivisectional realness testatrix polluters violates meditates subagents hup maharanee raison</ns:literal>
+      </ns:binding>
+      <ns:binding ns:name="?propertyNumeric1">
+        <ns:literal ns:type="http://www.w3.org/2001/XMLSchema#integer">831</ns:literal>
+      </ns:binding>
+      <ns:binding ns:name="?propertyNumeric2">
+        <ns:literal ns:type="http://www.w3.org/2001/XMLSchema#integer">312</ns:literal>
+      </ns:binding>
+      <ns:binding ns:name="?propertyTextual4">
+        <ns:literal ns:type="http://www.w3.org/2001/XMLSchema#string">footsteps endocrinologic auxiliaries leashed</ns:literal>
+      </ns:binding>
+    </ns:result>
+    <ns:result>
+      <ns:binding ns:name="?label">
+        <ns:literal>totally annat</ns:literal>
+      </ns:binding>
+      <ns:binding ns:name="?comment">
+        <ns:literal>tsaritzas calkers noncorroborative thro agonizes dollars gumlike multifunction diastoles tyrannous liverish soothsaying ungathered noisiness realists rearmament feater nonenforcement facetiousness reassessments winded brainwashing federalizations impersonators unreeler incumbering jewry airmanship gweducks discourteous brazened stalkily lunars throughway parkas soothsaying splotchier arabesks rebelliously unbefitting vatting azores woolskin exiguous spates rancheros swayback civets mangles pakistanis inhibitors biting fluoroscopist accommodativeness nonplussing reunification equalises graupel pugilist narcotism overriding gallivants</ns:literal>
+      </ns:binding>
+      <ns:binding ns:name="?producer">
+        <ns:literal>velcro shying enticements</ns:literal>
+      </ns:binding>
+      <ns:binding ns:name="?productFeature">
+        <ns:literal>entre beatifies tutting</ns:literal>
+      </ns:binding>
+      <ns:binding ns:name="?propertyTextual1">
+        <ns:literal ns:type="http://www.w3.org/2001/XMLSchema#string">praises plaiters semiagricultural mesomorph scourger checkering sourball obsidians staggeringly cades restaff sireless dissatisfactions</ns:literal>
+      </ns:binding>
+      <ns:binding ns:name="?propertyTextual2">
+        <ns:literal ns:type="http://www.w3.org/2001/XMLSchema#string">dildo impregnably cratons reg glycogens bookends galop flyweights education</ns:literal>
+      </ns:binding>
+      <ns:binding ns:name="?propertyTextual3">
+        <ns:literal ns:type="http://www.w3.org/2001/XMLSchema#string">uprear choosey trining vivisectional realness testatrix polluters violates meditates subagents hup maharanee raison</ns:literal>
+      </ns:binding>
+      <ns:binding ns:name="?propertyNumeric1">
+        <ns:literal ns:type="http://www.w3.org/2001/XMLSchema#integer">831</ns:literal>
+      </ns:binding>
+      <ns:binding ns:name="?propertyNumeric2">
+        <ns:literal ns:type="http://www.w3.org/2001/XMLSchema#integer">312</ns:literal>
+      </ns:binding>
+      <ns:binding ns:name="?propertyTextual4">
+        <ns:literal ns:type="http://www.w3.org/2001/XMLSchema#string">footsteps endocrinologic auxiliaries leashed</ns:literal>
+      </ns:binding>
+    </ns:result>
+    <ns:result>
+      <ns:binding ns:name="?label">
+        <ns:literal>totally annat</ns:literal>
+      </ns:binding>
+      <ns:binding ns:name="?comment">
+        <ns:literal>tsaritzas calkers noncorroborative thro agonizes dollars gumlike multifunction diastoles tyrannous liverish soothsaying ungathered noisiness realists rearmament feater nonenforcement facetiousness reassessments winded brainwashing federalizations impersonators unreeler incumbering jewry airmanship gweducks discourteous brazened stalkily lunars throughway parkas soothsaying splotchier arabesks rebelliously unbefitting vatting azores woolskin exiguous spates rancheros swayback civets mangles pakistanis inhibitors biting fluoroscopist accommodativeness nonplussing reunification equalises graupel pugilist narcotism overriding gallivants</ns:literal>
+      </ns:binding>
+      <ns:binding ns:name="?producer">
+        <ns:literal>velcro shying enticements</ns:literal>
+      </ns:binding>
+      <ns:binding ns:name="?productFeature">
+        <ns:literal>wives crossbeams tenpenny</ns:literal>
+      </ns:binding>
+      <ns:binding ns:name="?propertyTextual1">
+        <ns:literal ns:type="http://www.w3.org/2001/XMLSchema#string">praises plaiters semiagricultural mesomorph scourger checkering sourball obsidians staggeringly cades restaff sireless dissatisfactions</ns:literal>
+      </ns:binding>
+      <ns:binding ns:name="?propertyTextual2">
+        <ns:literal ns:type="http://www.w3.org/2001/XMLSchema#string">dildo impregnably cratons reg glycogens bookends galop flyweights education</ns:literal>
+      </ns:binding>
+      <ns:binding ns:name="?propertyTextual3">
+        <ns:literal ns:type="http://www.w3.org/2001/XMLSchema#string">uprear choosey trining vivisectional realness testatrix polluters violates meditates subagents hup maharanee raison</ns:literal>
+      </ns:binding>
+      <ns:binding ns:name="?propertyNumeric1">
+        <ns:literal ns:type="http://www.w3.org/2001/XMLSchema#integer">831</ns:literal>
+      </ns:binding>
+      <ns:binding ns:name="?propertyNumeric2">
+        <ns:literal ns:type="http://www.w3.org/2001/XMLSchema#integer">312</ns:literal>
+      </ns:binding>
+      <ns:binding ns:name="?propertyTextual4">
+        <ns:literal ns:type="http://www.w3.org/2001/XMLSchema#string">footsteps endocrinologic auxiliaries leashed</ns:literal>
+      </ns:binding>
+    </ns:result>
+    <ns:result>
+      <ns:binding ns:name="?label">
+        <ns:literal>totally annat</ns:literal>
+      </ns:binding>
+      <ns:binding ns:name="?comment">
+        <ns:literal>tsaritzas calkers noncorroborative thro agonizes dollars gumlike multifunction diastoles tyrannous liverish soothsaying ungathered noisiness realists rearmament feater nonenforcement facetiousness reassessments winded brainwashing federalizations impersonators unreeler incumbering jewry airmanship gweducks discourteous brazened stalkily lunars throughway parkas soothsaying splotchier arabesks rebelliously unbefitting vatting azores woolskin exiguous spates rancheros swayback civets mangles pakistanis inhibitors biting fluoroscopist accommodativeness nonplussing reunification equalises graupel pugilist narcotism overriding gallivants</ns:literal>
+      </ns:binding>
+      <ns:binding ns:name="?producer">
+        <ns:literal>velcro shying enticements</ns:literal>
+      </ns:binding>
+      <ns:binding ns:name="?productFeature">
+        <ns:literal>mooncalves detainees bugger</ns:literal>
+      </ns:binding>
+      <ns:binding ns:name="?propertyTextual1">
+        <ns:literal ns:type="http://www.w3.org/2001/XMLSchema#string">praises plaiters semiagricultural mesomorph scourger checkering sourball obsidians staggeringly cades restaff sireless dissatisfactions</ns:literal>
+      </ns:binding>
+      <ns:binding ns:name="?propertyTextual2">
+        <ns:literal ns:type="http://www.w3.org/2001/XMLSchema#string">dildo impregnably cratons reg glycogens bookends galop flyweights education</ns:literal>
+      </ns:binding>
+      <ns:binding ns:name="?propertyTextual3">
+        <ns:literal ns:type="http://www.w3.org/2001/XMLSchema#string">uprear choosey trining vivisectional realness testatrix polluters violates meditates subagents hup maharanee raison</ns:literal>
+      </ns:binding>
+      <ns:binding ns:name="?propertyNumeric1">
+        <ns:literal ns:type="http://www.w3.org/2001/XMLSchema#integer">831</ns:literal>
+      </ns:binding>
+      <ns:binding ns:name="?propertyNumeric2">
+        <ns:literal ns:type="http://www.w3.org/2001/XMLSchema#integer">312</ns:literal>
+      </ns:binding>
+      <ns:binding ns:name="?propertyTextual4">
+        <ns:literal ns:type="http://www.w3.org/2001/XMLSchema#string">footsteps endocrinologic auxiliaries leashed</ns:literal>
+      </ns:binding>
+    </ns:result>
+    <ns:result>
+      <ns:binding ns:name="?label">
+        <ns:literal>totally annat</ns:literal>
+      </ns:binding>
+      <ns:binding ns:name="?comment">
+        <ns:literal>tsaritzas calkers noncorroborative thro agonizes dollars gumlike multifunction diastoles tyrannous liverish soothsaying ungathered noisiness realists rearmament feater nonenforcement facetiousness reassessments winded brainwashing federalizations impersonators unreeler incumbering jewry airmanship gweducks discourteous brazened stalkily lunars throughway parkas soothsaying splotchier arabesks rebelliously unbefitting vatting azores woolskin exiguous spates rancheros swayback civets mangles pakistanis inhibitors biting fluoroscopist accommodativeness nonplussing reunification equalises graupel pugilist narcotism overriding gallivants</ns:literal>
+      </ns:binding>
+      <ns:binding ns:name="?producer">
+        <ns:literal>velcro shying enticements</ns:literal>
+      </ns:binding>
+      <ns:binding ns:name="?productFeature">
+        <ns:literal>comparability carminative fella</ns:literal>
+      </ns:binding>
+      <ns:binding ns:name="?propertyTextual1">
+        <ns:literal ns:type="http://www.w3.org/2001/XMLSchema#string">praises plaiters semiagricultural mesomorph scourger checkering sourball obsidians staggeringly cades restaff sireless dissatisfactions</ns:literal>
+      </ns:binding>
+      <ns:binding ns:name="?propertyTextual2">
+        <ns:literal ns:type="http://www.w3.org/2001/XMLSchema#string">dildo impregnably cratons reg glycogens bookends galop flyweights education</ns:literal>
+      </ns:binding>
+      <ns:binding ns:name="?propertyTextual3">
+        <ns:literal ns:type="http://www.w3.org/2001/XMLSchema#string">uprear choosey trining vivisectional realness testatrix polluters violates meditates subagents hup maharanee raison</ns:literal>
+      </ns:binding>
+      <ns:binding ns:name="?propertyNumeric1">
+        <ns:literal ns:type="http://www.w3.org/2001/XMLSchema#integer">831</ns:literal>
+      </ns:binding>
+      <ns:binding ns:name="?propertyNumeric2">
+        <ns:literal ns:type="http://www.w3.org/2001/XMLSchema#integer">312</ns:literal>
+      </ns:binding>
+      <ns:binding ns:name="?propertyTextual4">
+        <ns:literal ns:type="http://www.w3.org/2001/XMLSchema#string">footsteps endocrinologic auxiliaries leashed</ns:literal>
+      </ns:binding>
+    </ns:result>
+    <ns:result>
+      <ns:binding ns:name="?label">
+        <ns:literal>totally annat</ns:literal>
+      </ns:binding>
+      <ns:binding ns:name="?comment">
+        <ns:literal>tsaritzas calkers noncorroborative thro agonizes dollars gumlike multifunction diastoles tyrannous liverish soothsaying ungathered noisiness realists rearmament feater nonenforcement facetiousness reassessments winded brainwashing federalizations impersonators unreeler incumbering jewry airmanship gweducks discourteous brazened stalkily lunars throughway parkas soothsaying splotchier arabesks rebelliously unbefitting vatting azores woolskin exiguous spates rancheros swayback civets mangles pakistanis inhibitors biting fluoroscopist accommodativeness nonplussing reunification equalises graupel pugilist narcotism overriding gallivants</ns:literal>
+      </ns:binding>
+      <ns:binding ns:name="?producer">
+        <ns:literal>velcro shying enticements</ns:literal>
+      </ns:binding>
+      <ns:binding ns:name="?productFeature">
+        <ns:literal>whizzers unriper exculpating</ns:literal>
+      </ns:binding>
+      <ns:binding ns:name="?propertyTextual1">
+        <ns:literal ns:type="http://www.w3.org/2001/XMLSchema#string">praises plaiters semiagricultural mesomorph scourger checkering sourball obsidians staggeringly cades restaff sireless dissatisfactions</ns:literal>
+      </ns:binding>
+      <ns:binding ns:name="?propertyTextual2">
+        <ns:literal ns:type="http://www.w3.org/2001/XMLSchema#string">dildo impregnably cratons reg glycogens bookends galop flyweights education</ns:literal>
+      </ns:binding>
+      <ns:binding ns:name="?propertyTextual3">
+        <ns:literal ns:type="http://www.w3.org/2001/XMLSchema#string">uprear choosey trining vivisectional realness testatrix polluters violates meditates subagents hup maharanee raison</ns:literal>
+      </ns:binding>
+      <ns:binding ns:name="?propertyNumeric1">
+        <ns:literal ns:type="http://www.w3.org/2001/XMLSchema#integer">831</ns:literal>
+      </ns:binding>
+      <ns:binding ns:name="?propertyNumeric2">
+        <ns:literal ns:type="http://www.w3.org/2001/XMLSchema#integer">312</ns:literal>
+      </ns:binding>
+      <ns:binding ns:name="?propertyTextual4">
+        <ns:literal ns:type="http://www.w3.org/2001/XMLSchema#string">footsteps endocrinologic auxiliaries leashed</ns:literal>
+      </ns:binding>
+    </ns:result>
+    <ns:result>
+      <ns:binding ns:name="?label">
+        <ns:literal>totally annat</ns:literal>
+      </ns:binding>
+      <ns:binding ns:name="?comment">
+        <ns:literal>tsaritzas calkers noncorroborative thro agonizes dollars gumlike multifunction diastoles tyrannous liverish soothsaying ungathered noisiness realists rearmament feater nonenforcement facetiousness reassessments winded brainwashing federalizations impersonators unreeler incumbering jewry airmanship gweducks discourteous brazened stalkily lunars throughway parkas soothsaying splotchier arabesks rebelliously unbefitting vatting azores woolskin exiguous spates rancheros swayback civets mangles pakistanis inhibitors biting fluoroscopist accommodativeness nonplussing reunification equalises graupel pugilist narcotism overriding gallivants</ns:literal>
+      </ns:binding>
+      <ns:binding ns:name="?producer">
+        <ns:literal>velcro shying enticements</ns:literal>
+      </ns:binding>
+      <ns:binding ns:name="?productFeature">
+        <ns:literal>owed</ns:literal>
+      </ns:binding>
+      <ns:binding ns:name="?propertyTextual1">
+        <ns:literal ns:type="http://www.w3.org/2001/XMLSchema#string">praises plaiters semiagricultural mesomorph scourger checkering sourball obsidians staggeringly cades restaff sireless dissatisfactions</ns:literal>
+      </ns:binding>
+      <ns:binding ns:name="?propertyTextual2">
+        <ns:literal ns:type="http://www.w3.org/2001/XMLSchema#string">dildo impregnably cratons reg glycogens bookends galop flyweights education</ns:literal>
+      </ns:binding>
+      <ns:binding ns:name="?propertyTextual3">
+        <ns:literal ns:type="http://www.w3.org/2001/XMLSchema#string">uprear choosey trining vivisectional realness testatrix polluters violates meditates subagents hup maharanee raison</ns:literal>
+      </ns:binding>
+      <ns:binding ns:name="?propertyNumeric1">
+        <ns:literal ns:type="http://www.w3.org/2001/XMLSchema#integer">831</ns:literal>
+      </ns:binding>
+      <ns:binding ns:name="?propertyNumeric2">
+        <ns:literal ns:type="http://www.w3.org/2001/XMLSchema#integer">312</ns:literal>
+      </ns:binding>
+      <ns:binding ns:name="?propertyTextual4">
+        <ns:literal ns:type="http://www.w3.org/2001/XMLSchema#string">footsteps endocrinologic auxiliaries leashed</ns:literal>
+      </ns:binding>
+    </ns:result>
+    <ns:result>
+      <ns:binding ns:name="?label">
+        <ns:literal>totally annat</ns:literal>
+      </ns:binding>
+      <ns:binding ns:name="?comment">
+        <ns:literal>tsaritzas calkers noncorroborative thro agonizes dollars gumlike multifunction diastoles tyrannous liverish soothsaying ungathered noisiness realists rearmament feater nonenforcement facetiousness reassessments winded brainwashing federalizations impersonators unreeler incumbering jewry airmanship gweducks discourteous brazened stalkily lunars throughway parkas soothsaying splotchier arabesks rebelliously unbefitting vatting azores woolskin exiguous spates rancheros swayback civets mangles pakistanis inhibitors biting fluoroscopist accommodativeness nonplussing reunification equalises graupel pugilist narcotism overriding gallivants</ns:literal>
+      </ns:binding>
+      <ns:binding ns:name="?producer">
+        <ns:literal>velcro shying enticements</ns:literal>
+      </ns:binding>
+      <ns:binding ns:name="?productFeature">
+        <ns:literal>repeatable pores</ns:literal>
+      </ns:binding>
+      <ns:binding ns:name="?propertyTextual1">
+        <ns:literal ns:type="http://www.w3.org/2001/XMLSchema#string">praises plaiters semiagricultural mesomorph scourger checkering sourball obsidians staggeringly cades restaff sireless dissatisfactions</ns:literal>
+      </ns:binding>
+      <ns:binding ns:name="?propertyTextual2">
+        <ns:literal ns:type="http://www.w3.org/2001/XMLSchema#string">dildo impregnably cratons reg glycogens bookends galop flyweights education</ns:literal>
+      </ns:binding>
+      <ns:binding ns:name="?propertyTextual3">
+        <ns:literal ns:type="http://www.w3.org/2001/XMLSchema#string">uprear choosey trining vivisectional realness testatrix polluters violates meditates subagents hup maharanee raison</ns:literal>
+      </ns:binding>
+      <ns:binding ns:name="?propertyNumeric1">
+        <ns:literal ns:type="http://www.w3.org/2001/XMLSchema#integer">831</ns:literal>
+      </ns:binding>
+      <ns:binding ns:name="?propertyNumeric2">
+        <ns:literal ns:type="http://www.w3.org/2001/XMLSchema#integer">312</ns:literal>
+      </ns:binding>
+      <ns:binding ns:name="?propertyTextual4">
+        <ns:literal ns:type="http://www.w3.org/2001/XMLSchema#string">footsteps endocrinologic auxiliaries leashed</ns:literal>
+      </ns:binding>
+    </ns:result>
+    <ns:result>
+      <ns:binding ns:name="?label">
+        <ns:literal>totally annat</ns:literal>
+      </ns:binding>
+      <ns:binding ns:name="?comment">
+        <ns:literal>tsaritzas calkers noncorroborative thro agonizes dollars gumlike multifunction diastoles tyrannous liverish soothsaying ungathered noisiness realists rearmament feater nonenforcement facetiousness reassessments winded brainwashing federalizations impersonators unreeler incumbering jewry airmanship gweducks discourteous brazened stalkily lunars throughway parkas soothsaying splotchier arabesks rebelliously unbefitting vatting azores woolskin exiguous spates rancheros swayback civets mangles pakistanis inhibitors biting fluoroscopist accommodativeness nonplussing reunification equalises graupel pugilist narcotism overriding gallivants</ns:literal>
+      </ns:binding>
+      <ns:binding ns:name="?producer">
+        <ns:literal>velcro shying enticements</ns:literal>
+      </ns:binding>
+      <ns:binding ns:name="?productFeature">
+        <ns:literal>morons</ns:literal>
+      </ns:binding>
+      <ns:binding ns:name="?propertyTextual1">
+        <ns:literal ns:type="http://www.w3.org/2001/XMLSchema#string">praises plaiters semiagricultural mesomorph scourger checkering sourball obsidians staggeringly cades restaff sireless dissatisfactions</ns:literal>
+      </ns:binding>
+      <ns:binding ns:name="?propertyTextual2">
+        <ns:literal ns:type="http://www.w3.org/2001/XMLSchema#string">dildo impregnably cratons reg glycogens bookends galop flyweights education</ns:literal>
+      </ns:binding>
+      <ns:binding ns:name="?propertyTextual3">
+        <ns:literal ns:type="http://www.w3.org/2001/XMLSchema#string">uprear choosey trining vivisectional realness testatrix polluters violates meditates subagents hup maharanee raison</ns:literal>
+      </ns:binding>
+      <ns:binding ns:name="?propertyNumeric1">
+        <ns:literal ns:type="http://www.w3.org/2001/XMLSchema#integer">831</ns:literal>
+      </ns:binding>
+      <ns:binding ns:name="?propertyNumeric2">
+        <ns:literal ns:type="http://www.w3.org/2001/XMLSchema#integer">312</ns:literal>
+      </ns:binding>
+      <ns:binding ns:name="?propertyTextual4">
+        <ns:literal ns:type="http://www.w3.org/2001/XMLSchema#string">footsteps endocrinologic auxiliaries leashed</ns:literal>
+      </ns:binding>
+    </ns:result>
+    <ns:result>
+      <ns:binding ns:name="?label">
+        <ns:literal>totally annat</ns:literal>
+      </ns:binding>
+      <ns:binding ns:name="?comment">
+        <ns:literal>tsaritzas calkers noncorroborative thro agonizes dollars gumlike multifunction diastoles tyrannous liverish soothsaying ungathered noisiness realists rearmament feater nonenforcement facetiousness reassessments winded brainwashing federalizations impersonators unreeler incumbering jewry airmanship gweducks discourteous brazened stalkily lunars throughway parkas soothsaying splotchier arabesks rebelliously unbefitting vatting azores woolskin exiguous spates rancheros swayback civets mangles pakistanis inhibitors biting fluoroscopist accommodativeness nonplussing reunification equalises graupel pugilist narcotism overriding gallivants</ns:literal>
+      </ns:binding>
+      <ns:binding ns:name="?producer">
+        <ns:literal>velcro shying enticements</ns:literal>
+      </ns:binding>
+      <ns:binding ns:name="?productFeature">
+        <ns:literal>burster</ns:literal>
+      </ns:binding>
+      <ns:binding ns:name="?propertyTextual1">
+        <ns:literal ns:type="http://www.w3.org/2001/XMLSchema#string">praises plaiters semiagricultural mesomorph scourger checkering sourball obsidians staggeringly cades restaff sireless dissatisfactions</ns:literal>
+      </ns:binding>
+      <ns:binding ns:name="?propertyTextual2">
+        <ns:literal ns:type="http://www.w3.org/2001/XMLSchema#string">dildo impregnably cratons reg glycogens bookends galop flyweights education</ns:literal>
+      </ns:binding>
+      <ns:binding ns:name="?propertyTextual3">
+        <ns:literal ns:type="http://www.w3.org/2001/XMLSchema#string">uprear choosey trining vivisectional realness testatrix polluters violates meditates subagents hup maharanee raison</ns:literal>
+      </ns:binding>
+      <ns:binding ns:name="?propertyNumeric1">
+        <ns:literal ns:type="http://www.w3.org/2001/XMLSchema#integer">831</ns:literal>
+      </ns:binding>
+      <ns:binding ns:name="?propertyNumeric2">
+        <ns:literal ns:type="http://www.w3.org/2001/XMLSchema#integer">312</ns:literal>
+      </ns:binding>
+      <ns:binding ns:name="?propertyTextual4">
+        <ns:literal ns:type="http://www.w3.org/2001/XMLSchema#string">footsteps endocrinologic auxiliaries leashed</ns:literal>
+      </ns:binding>
+    </ns:result>
+    <ns:result>
+      <ns:binding ns:name="?label">
+        <ns:literal>totally annat</ns:literal>
+      </ns:binding>
+      <ns:binding ns:name="?comment">
+        <ns:literal>tsaritzas calkers noncorroborative thro agonizes dollars gumlike multifunction diastoles tyrannous liverish soothsaying ungathered noisiness realists rearmament feater nonenforcement facetiousness reassessments winded brainwashing federalizations impersonators unreeler incumbering jewry airmanship gweducks discourteous brazened stalkily lunars throughway parkas soothsaying splotchier arabesks rebelliously unbefitting vatting azores woolskin exiguous spates rancheros swayback civets mangles pakistanis inhibitors biting fluoroscopist accommodativeness nonplussing reunification equalises graupel pugilist narcotism overriding gallivants</ns:literal>
+      </ns:binding>
+      <ns:binding ns:name="?producer">
+        <ns:literal>velcro shying enticements</ns:literal>
+      </ns:binding>
+      <ns:binding ns:name="?productFeature">
+        <ns:literal>sightsaw frier cornel</ns:literal>
+      </ns:binding>
+      <ns:binding ns:name="?propertyTextual1">
+        <ns:literal ns:type="http://www.w3.org/2001/XMLSchema#string">praises plaiters semiagricultural mesomorph scourger checkering sourball obsidians staggeringly cades restaff sireless dissatisfactions</ns:literal>
+      </ns:binding>
+      <ns:binding ns:name="?propertyTextual2">
+        <ns:literal ns:type="http://www.w3.org/2001/XMLSchema#string">dildo impregnably cratons reg glycogens bookends galop flyweights education</ns:literal>
+      </ns:binding>
+      <ns:binding ns:name="?propertyTextual3">
+        <ns:literal ns:type="http://www.w3.org/2001/XMLSchema#string">uprear choosey trining vivisectional realness testatrix polluters violates meditates subagents hup maharanee raison</ns:literal>
+      </ns:binding>
+      <ns:binding ns:name="?propertyNumeric1">
+        <ns:literal ns:type="http://www.w3.org/2001/XMLSchema#integer">831</ns:literal>
+      </ns:binding>
+      <ns:binding ns:name="?propertyNumeric2">
+        <ns:literal ns:type="http://www.w3.org/2001/XMLSchema#integer">312</ns:literal>
+      </ns:binding>
+      <ns:binding ns:name="?propertyTextual4">
+        <ns:literal ns:type="http://www.w3.org/2001/XMLSchema#string">footsteps endocrinologic auxiliaries leashed</ns:literal>
+      </ns:binding>
+    </ns:result>
+    <ns:result>
+      <ns:binding ns:name="?label">
+        <ns:literal>totally annat</ns:literal>
+      </ns:binding>
+      <ns:binding ns:name="?comment">
+        <ns:literal>tsaritzas calkers noncorroborative thro agonizes dollars gumlike multifunction diastoles tyrannous liverish soothsaying ungathered noisiness realists rearmament feater nonenforcement facetiousness reassessments winded brainwashing federalizations impersonators unreeler incumbering jewry airmanship gweducks discourteous brazened stalkily lunars throughway parkas soothsaying splotchier arabesks rebelliously unbefitting vatting azores woolskin exiguous spates rancheros swayback civets mangles pakistanis inhibitors biting fluoroscopist accommodativeness nonplussing reunification equalises graupel pugilist narcotism overriding gallivants</ns:literal>
+      </ns:binding>
+      <ns:binding ns:name="?producer">
+        <ns:literal>velcro shying enticements</ns:literal>
+      </ns:binding>
+      <ns:binding ns:name="?productFeature">
+        <ns:literal>flyby towboats bloaters</ns:literal>
+      </ns:binding>
+      <ns:binding ns:name="?propertyTextual1">
+        <ns:literal ns:type="http://www.w3.org/2001/XMLSchema#string">praises plaiters semiagricultural mesomorph scourger checkering sourball obsidians staggeringly cades restaff sireless dissatisfactions</ns:literal>
+      </ns:binding>
+      <ns:binding ns:name="?propertyTextual2">
+        <ns:literal ns:type="http://www.w3.org/2001/XMLSchema#string">dildo impregnably cratons reg glycogens bookends galop flyweights education</ns:literal>
+      </ns:binding>
+      <ns:binding ns:name="?propertyTextual3">
+        <ns:literal ns:type="http://www.w3.org/2001/XMLSchema#string">uprear choosey trining vivisectional realness testatrix polluters violates meditates subagents hup maharanee raison</ns:literal>
+      </ns:binding>
+      <ns:binding ns:name="?propertyNumeric1">
+        <ns:literal ns:type="http://www.w3.org/2001/XMLSchema#integer">831</ns:literal>
+      </ns:binding>
+      <ns:binding ns:name="?propertyNumeric2">
+        <ns:literal ns:type="http://www.w3.org/2001/XMLSchema#integer">312</ns:literal>
+      </ns:binding>
+      <ns:binding ns:name="?propertyTextual4">
+        <ns:literal ns:type="http://www.w3.org/2001/XMLSchema#string">footsteps endocrinologic auxiliaries leashed</ns:literal>
+      </ns:binding>
+    </ns:result>
+    <ns:result>
+      <ns:binding ns:name="?label">
+        <ns:literal>totally annat</ns:literal>
+      </ns:binding>
+      <ns:binding ns:name="?comment">
+        <ns:literal>tsaritzas calkers noncorroborative thro agonizes dollars gumlike multifunction diastoles tyrannous liverish soothsaying ungathered noisiness realists rearmament feater nonenforcement facetiousness reassessments winded brainwashing federalizations impersonators unreeler incumbering jewry airmanship gweducks discourteous brazened stalkily lunars throughway parkas soothsaying splotchier arabesks rebelliously unbefitting vatting azores woolskin exiguous spates rancheros swayback civets mangles pakistanis inhibitors biting fluoroscopist accommodativeness nonplussing reunification equalises graupel pugilist narcotism overriding gallivants</ns:literal>
+      </ns:binding>
+      <ns:binding ns:name="?producer">
+        <ns:literal>velcro shying enticements</ns:literal>
+      </ns:binding>
+      <ns:binding ns:name="?productFeature">
+        <ns:literal>misfortunes</ns:literal>
+      </ns:binding>
+      <ns:binding ns:name="?propertyTextual1">
+        <ns:literal ns:type="http://www.w3.org/2001/XMLSchema#string">praises plaiters semiagricultural mesomorph scourger checkering sourball obsidians staggeringly cades restaff sireless dissatisfactions</ns:literal>
+      </ns:binding>
+      <ns:binding ns:name="?propertyTextual2">
+        <ns:literal ns:type="http://www.w3.org/2001/XMLSchema#string">dildo impregnably cratons reg glycogens bookends galop flyweights education</ns:literal>
+      </ns:binding>
+      <ns:binding ns:name="?propertyTextual3">
+        <ns:literal ns:type="http://www.w3.org/2001/XMLSchema#string">uprear choosey trining vivisectional realness testatrix polluters violates meditates subagents hup maharanee raison</ns:literal>
+      </ns:binding>
+      <ns:binding ns:name="?propertyNumeric1">
+        <ns:literal ns:type="http://www.w3.org/2001/XMLSchema#integer">831</ns:literal>
+      </ns:binding>
+      <ns:binding ns:name="?propertyNumeric2">
+        <ns:literal ns:type="http://www.w3.org/2001/XMLSchema#integer">312</ns:literal>
+      </ns:binding>
+      <ns:binding ns:name="?propertyTextual4">
+        <ns:literal ns:type="http://www.w3.org/2001/XMLSchema#string">footsteps endocrinologic auxiliaries leashed</ns:literal>
+      </ns:binding>
+    </ns:result>
+    <ns:result>
+      <ns:binding ns:name="?label">
+        <ns:literal>totally annat</ns:literal>
+      </ns:binding>
+      <ns:binding ns:name="?comment">
+        <ns:literal>tsaritzas calkers noncorroborative thro agonizes dollars gumlike multifunction diastoles tyrannous liverish soothsaying ungathered noisiness realists rearmament feater nonenforcement facetiousness reassessments winded brainwashing federalizations impersonators unreeler incumbering jewry airmanship gweducks discourteous brazened stalkily lunars throughway parkas soothsaying splotchier arabesks rebelliously unbefitting vatting azores woolskin exiguous spates rancheros swayback civets mangles pakistanis inhibitors biting fluoroscopist accommodativeness nonplussing reunification equalises graupel pugilist narcotism overriding gallivants</ns:literal>
+      </ns:binding>
+      <ns:binding ns:name="?producer">
+        <ns:literal>velcro shying enticements</ns:literal>
+      </ns:binding>
+      <ns:binding ns:name="?productFeature">
+        <ns:literal>schemery paroler caudated</ns:literal>
+      </ns:binding>
+      <ns:binding ns:name="?propertyTextual1">
+        <ns:literal ns:type="http://www.w3.org/2001/XMLSchema#string">praises plaiters semiagricultural mesomorph scourger checkering sourball obsidians staggeringly cades restaff sireless dissatisfactions</ns:literal>
+      </ns:binding>
+      <ns:binding ns:name="?propertyTextual2">
+        <ns:literal ns:type="http://www.w3.org/2001/XMLSchema#string">dildo impregnably cratons reg glycogens bookends galop flyweights education</ns:literal>
+      </ns:binding>
+      <ns:binding ns:name="?propertyTextual3">
+        <ns:literal ns:type="http://www.w3.org/2001/XMLSchema#string">uprear choosey trining vivisectional realness testatrix polluters violates meditates subagents hup maharanee raison</ns:literal>
+      </ns:binding>
+      <ns:binding ns:name="?propertyNumeric1">
+        <ns:literal ns:type="http://www.w3.org/2001/XMLSchema#integer">831</ns:literal>
+      </ns:binding>
+      <ns:binding ns:name="?propertyNumeric2">
+        <ns:literal ns:type="http://www.w3.org/2001/XMLSchema#integer">312</ns:literal>
+      </ns:binding>
+      <ns:binding ns:name="?propertyTextual4">
+        <ns:literal ns:type="http://www.w3.org/2001/XMLSchema#string">footsteps endocrinologic auxiliaries leashed</ns:literal>
+      </ns:binding>
+    </ns:result>
+    <ns:result>
+      <ns:binding ns:name="?label">
+        <ns:literal>totally annat</ns:literal>
+      </ns:binding>
+      <ns:binding ns:name="?comment">
+        <ns:literal>tsaritzas calkers noncorroborative thro agonizes dollars gumlike multifunction diastoles tyrannous liverish soothsaying ungathered noisiness realists rearmament feater nonenforcement facetiousness reassessments winded brainwashing federalizations impersonators unreeler incumbering jewry airmanship gweducks discourteous brazened stalkily lunars throughway parkas soothsaying splotchier arabesks rebelliously unbefitting vatting azores woolskin exiguous spates rancheros swayback civets mangles pakistanis inhibitors biting fluoroscopist accommodativeness nonplussing reunification equalises graupel pugilist narcotism overriding gallivants</ns:literal>
+      </ns:binding>
+      <ns:binding ns:name="?producer">
+        <ns:literal>velcro shying enticements</ns:literal>
+      </ns:binding>
+      <ns:binding ns:name="?productFeature">
+        <ns:literal>probationer drips silicas</ns:literal>
+      </ns:binding>
+      <ns:binding ns:name="?propertyTextual1">
+        <ns:literal ns:type="http://www.w3.org/2001/XMLSchema#string">praises plaiters semiagricultural mesomorph scourger checkering sourball obsidians staggeringly cades restaff sireless dissatisfactions</ns:literal>
+      </ns:binding>
+      <ns:binding ns:name="?propertyTextual2">
+        <ns:literal ns:type="http://www.w3.org/2001/XMLSchema#string">dildo impregnably cratons reg glycogens bookends galop flyweights education</ns:literal>
+      </ns:binding>
+      <ns:binding ns:name="?propertyTextual3">
+        <ns:literal ns:type="http://www.w3.org/2001/XMLSchema#string">uprear choosey trining vivisectional realness testatrix polluters violates meditates subagents hup maharanee raison</ns:literal>
+      </ns:binding>
+      <ns:binding ns:name="?propertyNumeric1">
+        <ns:literal ns:type="http://www.w3.org/2001/XMLSchema#integer">831</ns:literal>
+      </ns:binding>
+      <ns:binding ns:name="?propertyNumeric2">
+        <ns:literal ns:type="http://www.w3.org/2001/XMLSchema#integer">312</ns:literal>
+      </ns:binding>
+      <ns:binding ns:name="?propertyTextual4">
+        <ns:literal ns:type="http://www.w3.org/2001/XMLSchema#string">footsteps endocrinologic auxiliaries leashed</ns:literal>
+      </ns:binding>
+    </ns:result>
+    <ns:result>
+      <ns:binding ns:name="?label">
+        <ns:literal>totally annat</ns:literal>
+      </ns:binding>
+      <ns:binding ns:name="?comment">
+        <ns:literal>tsaritzas calkers noncorroborative thro agonizes dollars gumlike multifunction diastoles tyrannous liverish soothsaying ungathered noisiness realists rearmament feater nonenforcement facetiousness reassessments winded brainwashing federalizations impersonators unreeler incumbering jewry airmanship gweducks discourteous brazened stalkily lunars throughway parkas soothsaying splotchier arabesks rebelliously unbefitting vatting azores woolskin exiguous spates rancheros swayback civets mangles pakistanis inhibitors biting fluoroscopist accommodativeness nonplussing reunification equalises graupel pugilist narcotism overriding gallivants</ns:literal>
+      </ns:binding>
+      <ns:binding ns:name="?producer">
+        <ns:literal>velcro shying enticements</ns:literal>
+      </ns:binding>
+      <ns:binding ns:name="?productFeature">
+        <ns:literal>dippable locks serb</ns:literal>
+      </ns:binding>
+      <ns:binding ns:name="?propertyTextual1">
+        <ns:literal ns:type="http://www.w3.org/2001/XMLSchema#string">praises plaiters semiagricultural mesomorph scourger checkering sourball obsidians staggeringly cades restaff sireless dissatisfactions</ns:literal>
+      </ns:binding>
+      <ns:binding ns:name="?propertyTextual2">
+        <ns:literal ns:type="http://www.w3.org/2001/XMLSchema#string">dildo impregnably cratons reg glycogens bookends galop flyweights education</ns:literal>
+      </ns:binding>
+      <ns:binding ns:name="?propertyTextual3">
+        <ns:literal ns:type="http://www.w3.org/2001/XMLSchema#string">uprear choosey trining vivisectional realness testatrix polluters violates meditates subagents hup maharanee raison</ns:literal>
+      </ns:binding>
+      <ns:binding ns:name="?propertyNumeric1">
+        <ns:literal ns:type="http://www.w3.org/2001/XMLSchema#integer">831</ns:literal>
+      </ns:binding>
+      <ns:binding ns:name="?propertyNumeric2">
+        <ns:literal ns:type="http://www.w3.org/2001/XMLSchema#integer">312</ns:literal>
+      </ns:binding>
+      <ns:binding ns:name="?propertyTextual4">
+        <ns:literal ns:type="http://www.w3.org/2001/XMLSchema#string">footsteps endocrinologic auxiliaries leashed</ns:literal>
+      </ns:binding>
+    </ns:result>
+    <ns:result>
+      <ns:binding ns:name="?label">
+        <ns:literal>totally annat</ns:literal>
+      </ns:binding>
+      <ns:binding ns:name="?comment">
+        <ns:literal>tsaritzas calkers noncorroborative thro agonizes dollars gumlike multifunction diastoles tyrannous liverish soothsaying ungathered noisiness realists rearmament feater nonenforcement facetiousness reassessments winded brainwashing federalizations impersonators unreeler incumbering jewry airmanship gweducks discourteous brazened stalkily lunars throughway parkas soothsaying splotchier arabesks rebelliously unbefitting vatting azores woolskin exiguous spates rancheros swayback civets mangles pakistanis inhibitors biting fluoroscopist accommodativeness nonplussing reunification equalises graupel pugilist narcotism overriding gallivants</ns:literal>
+      </ns:binding>
+      <ns:binding ns:name="?producer">
+        <ns:literal>velcro shying enticements</ns:literal>
+      </ns:binding>
+      <ns:binding ns:name="?productFeature">
+        <ns:literal>interplead deputed</ns:literal>
+      </ns:binding>
+      <ns:binding ns:name="?propertyTextual1">
+        <ns:literal ns:type="http://www.w3.org/2001/XMLSchema#string">praises plaiters semiagricultural mesomorph scourger checkering sourball obsidians staggeringly cades restaff sireless dissatisfactions</ns:literal>
+      </ns:binding>
+      <ns:binding ns:name="?propertyTextual2">
+        <ns:literal ns:type="http://www.w3.org/2001/XMLSchema#string">dildo impregnably cratons reg glycogens bookends galop flyweights education</ns:literal>
+      </ns:binding>
+      <ns:binding ns:name="?propertyTextual3">
+        <ns:literal ns:type="http://www.w3.org/2001/XMLSchema#string">uprear choosey trining vivisectional realness testatrix polluters violates meditates subagents hup maharanee raison</ns:literal>
+      </ns:binding>
+      <ns:binding ns:name="?propertyNumeric1">
+        <ns:literal ns:type="http://www.w3.org/2001/XMLSchema#integer">831</ns:literal>
+      </ns:binding>
+      <ns:binding ns:name="?propertyNumeric2">
+        <ns:literal ns:type="http://www.w3.org/2001/XMLSchema#integer">312</ns:literal>
+      </ns:binding>
+      <ns:binding ns:name="?propertyTextual4">
+        <ns:literal ns:type="http://www.w3.org/2001/XMLSchema#string">footsteps endocrinologic auxiliaries leashed</ns:literal>
+      </ns:binding>
+    </ns:result>
+    <ns:result>
+      <ns:binding ns:name="?label">
+        <ns:literal>totally annat</ns:literal>
+      </ns:binding>
+      <ns:binding ns:name="?comment">
+        <ns:literal>tsaritzas calkers noncorroborative thro agonizes dollars gumlike multifunction diastoles tyrannous liverish soothsaying ungathered noisiness realists rearmament feater nonenforcement facetiousness reassessments winded brainwashing federalizations impersonators unreeler incumbering jewry airmanship gweducks discourteous brazened stalkily lunars throughway parkas soothsaying splotchier arabesks rebelliously unbefitting vatting azores woolskin exiguous spates rancheros swayback civets mangles pakistanis inhibitors biting fluoroscopist accommodativeness nonplussing reunification equalises graupel pugilist narcotism overriding gallivants</ns:literal>
+      </ns:binding>
+      <ns:binding ns:name="?producer">
+        <ns:literal>velcro shying enticements</ns:literal>
+      </ns:binding>
+      <ns:binding ns:name="?productFeature">
+        <ns:literal>detecter preserves concealers</ns:literal>
+      </ns:binding>
+      <ns:binding ns:name="?propertyTextual1">
+        <ns:literal ns:type="http://www.w3.org/2001/XMLSchema#string">praises plaiters semiagricultural mesomorph scourger checkering sourball obsidians staggeringly cades restaff sireless dissatisfactions</ns:literal>
+      </ns:binding>
+      <ns:binding ns:name="?propertyTextual2">
+        <ns:literal ns:type="http://www.w3.org/2001/XMLSchema#string">dildo impregnably cratons reg glycogens bookends galop flyweights education</ns:literal>
+      </ns:binding>
+      <ns:binding ns:name="?propertyTextual3">
+        <ns:literal ns:type="http://www.w3.org/2001/XMLSchema#string">uprear choosey trining vivisectional realness testatrix polluters violates meditates subagents hup maharanee raison</ns:literal>
+      </ns:binding>
+      <ns:binding ns:name="?propertyNumeric1">
+        <ns:literal ns:type="http://www.w3.org/2001/XMLSchema#integer">831</ns:literal>
+      </ns:binding>
+      <ns:binding ns:name="?propertyNumeric2">
+        <ns:literal ns:type="http://www.w3.org/2001/XMLSchema#integer">312</ns:literal>
+      </ns:binding>
+      <ns:binding ns:name="?propertyTextual4">
+        <ns:literal ns:type="http://www.w3.org/2001/XMLSchema#string">footsteps endocrinologic auxiliaries leashed</ns:literal>
+      </ns:binding>
+    </ns:result>
+    <ns:result>
+      <ns:binding ns:name="?label">
+        <ns:literal>totally annat</ns:literal>
+      </ns:binding>
+      <ns:binding ns:name="?comment">
+        <ns:literal>tsaritzas calkers noncorroborative thro agonizes dollars gumlike multifunction diastoles tyrannous liverish soothsaying ungathered noisiness realists rearmament feater nonenforcement facetiousness reassessments winded brainwashing federalizations impersonators unreeler incumbering jewry airmanship gweducks discourteous brazened stalkily lunars throughway parkas soothsaying splotchier arabesks rebelliously unbefitting vatting azores woolskin exiguous spates rancheros swayback civets mangles pakistanis inhibitors biting fluoroscopist accommodativeness nonplussing reunification equalises graupel pugilist narcotism overriding gallivants</ns:literal>
+      </ns:binding>
+      <ns:binding ns:name="?producer">
+        <ns:literal>velcro shying enticements</ns:literal>
+      </ns:binding>
+      <ns:binding ns:name="?productFeature">
+        <ns:literal>handmaidens</ns:literal>
+      </ns:binding>
+      <ns:binding ns:name="?propertyTextual1">
+        <ns:literal ns:type="http://www.w3.org/2001/XMLSchema#string">praises plaiters semiagricultural mesomorph scourger checkering sourball obsidians staggeringly cades restaff sireless dissatisfactions</ns:literal>
+      </ns:binding>
+      <ns:binding ns:name="?propertyTextual2">
+        <ns:literal ns:type="http://www.w3.org/2001/XMLSchema#string">dildo impregnably cratons reg glycogens bookends galop flyweights education</ns:literal>
+      </ns:binding>
+      <ns:binding ns:name="?propertyTextual3">
+        <ns:literal ns:type="http://www.w3.org/2001/XMLSchema#string">uprear choosey trining vivisectional realness testatrix polluters violates meditates subagents hup maharanee raison</ns:literal>
+      </ns:binding>
+      <ns:binding ns:name="?propertyNumeric1">
+        <ns:literal ns:type="http://www.w3.org/2001/XMLSchema#integer">831</ns:literal>
+      </ns:binding>
+      <ns:binding ns:name="?propertyNumeric2">
+        <ns:literal ns:type="http://www.w3.org/2001/XMLSchema#integer">312</ns:literal>
+      </ns:binding>
+      <ns:binding ns:name="?propertyTextual4">
+        <ns:literal ns:type="http://www.w3.org/2001/XMLSchema#string">footsteps endocrinologic auxiliaries leashed</ns:literal>
+      </ns:binding>
+    </ns:result>
+  </ns:results>
+</ns:sparql>

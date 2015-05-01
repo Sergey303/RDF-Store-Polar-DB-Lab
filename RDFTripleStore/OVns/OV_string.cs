@@ -54,5 +54,12 @@ namespace RDFTripleStore.OVns
         {
             return value;
         }
+        public override int CompareTo(object obj)
+        {
+            int baseComp = base.CompareTo(obj);
+            if (baseComp != 0) return baseComp;
+            var otherTyped = (OV_string)obj;
+            return System.String.Compare(value, otherTyped.value, System.StringComparison.InvariantCulture);
+        }
     }
 }

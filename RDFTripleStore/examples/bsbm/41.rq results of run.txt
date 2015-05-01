@@ -1,0 +1,57 @@
+<ns:sparql xmlns:ns="http://www.w3.org/2005/sparql-results#">
+  <ns:head>
+    <ns:variable ns:name="?product" />
+  </ns:head>
+  <ns:results>
+    <ns:result>
+      <ns:binding ns:name="?product">
+        <ns:uri>http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromProducer35/Product1565</ns:uri>
+      </ns:binding>
+    </ns:result>
+    <ns:result>
+      <ns:binding ns:name="?product">
+        <ns:uri>http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromProducer39/Product1786</ns:uri>
+      </ns:binding>
+    </ns:result>
+    <ns:result>
+      <ns:binding ns:name="?product">
+        <ns:uri>http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromProducer61/Product2829</ns:uri>
+      </ns:binding>
+    </ns:result>
+    <ns:result>
+      <ns:binding ns:name="?product">
+        <ns:uri>http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromProducer57/Product2642</ns:uri>
+      </ns:binding>
+    </ns:result>
+    <ns:result>
+      <ns:binding ns:name="?product">
+        <ns:uri>http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromProducer25/Product1171</ns:uri>
+      </ns:binding>
+    </ns:result>
+    <ns:result>
+      <ns:binding ns:name="?product">
+        <ns:uri>http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromProducer43/Product2050</ns:uri>
+      </ns:binding>
+    </ns:result>
+    <ns:result>
+      <ns:binding ns:name="?product">
+        <ns:uri>http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromProducer5/Product191</ns:uri>
+      </ns:binding>
+    </ns:result>
+    <ns:result>
+      <ns:binding ns:name="?product">
+        <ns:uri>http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromProducer22/Product1034</ns:uri>
+      </ns:binding>
+    </ns:result>
+    <ns:result>
+      <ns:binding ns:name="?product">
+        <ns:uri>http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromProducer16/Product751</ns:uri>
+      </ns:binding>
+    </ns:result>
+    <ns:result>
+      <ns:binding ns:name="?product">
+        <ns:uri>http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromProducer48/Product2226</ns:uri>
+      </ns:binding>
+    </ns:result>
+  </ns:results>
+</ns:sparql>

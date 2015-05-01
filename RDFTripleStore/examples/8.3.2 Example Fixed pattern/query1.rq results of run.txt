@@ -1,0 +1,8 @@
+<ns:sparql xmlns:ns="http://www.w3.org/2005/sparql-results#">
+  <ns:head>
+    <ns:variable ns:name="?s" />
+    <ns:variable ns:name="?p" />
+    <ns:variable ns:name="?o" />
+  </ns:head>
+  <ns:results />
+</ns:sparql>
