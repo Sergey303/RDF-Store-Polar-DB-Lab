@@ -34,7 +34,7 @@ namespace GoTripleStore
             // Опорная таблица
             table = new TableView(path + "stable", tp_tabelement);
             // Таблица имен (таб. кодирования)
-            coding_table = new NameTableUniversal(path);
+            coding_table = new NameTableUniversal(path);  
             // Индекс s
             index_s_arr = new IndexKeyImmutable<int>(path + "s_")
             {

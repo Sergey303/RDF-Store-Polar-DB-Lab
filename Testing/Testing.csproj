@@ -48,6 +48,7 @@
     <Compile Include="examples\bsbm\queries\parameters\Sarr.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SparqlTesting.cs" />
     <Compile Include="Testing.cs" />
   </ItemGroup>
   <ItemGroup>

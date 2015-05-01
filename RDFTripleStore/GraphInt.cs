@@ -31,7 +31,6 @@ namespace RDFTripleStore
              new NamedType("subject", new PType(PTypeEnumeration.integer)),
              new NamedType("predicate", new PType(PTypeEnumeration.integer)),
              new NamedType("obj", ObjectVariantsPolarType.ObjectVariantPolarType));
-            ng = new NodeGeneratorInt(path+"coding");
             Func<object, SPO_Troyka> spokeyproducer = v =>
                 {                   
                     object[] va = (object[])((object[])v)[1];
@@ -70,8 +69,9 @@ namespace RDFTripleStore
             };     
             // Опорная таблица
             table = new TableView(path + "stable", tp_tabelement);
+            if(table.Count()==0) table.Fill(new object[0]);
+            ng = new NodeGeneratorInt(path + "coding", table.Count() == 0);
             // Индекс spo
-
             spo_ind = new IndexDynamic<SPO_Troyka, IndexHalfkeyImmutable<SPO_Troyka>>(false)
             {
                 Table = table,

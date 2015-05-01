@@ -9,10 +9,17 @@ namespace RDFTripleStore
     public class NodeGeneratorInt:INodeGenerator
     {
         internal NameTableUniversal coding_table;
-        public NodeGeneratorInt(string path)
+        public NodeGeneratorInt(string path, bool empty)
         {     
             coding_table=new NameTableUniversal(path);
-            SpecialTypes = new SpecialTypesClass(this);          
+            if (empty)
+            {
+                Build();
+            }
+            else
+            {
+                SpecialTypes = new SpecialTypesClass(this);
+            }
         }
         public IIriNode CreateUriNode(string uri)
         {
