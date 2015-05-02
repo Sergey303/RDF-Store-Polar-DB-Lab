@@ -27,6 +27,22 @@ namespace Task15UniversalIndex
             private long record_off;
             private int hkey;
             private IndexHalfkeyImmutable<Tkey> index;
+            private bool key_exists = false;
+            private Tkey _key;
+            public Tkey Key
+            {
+                get
+                {
+                    if (!key_exists)
+                    {
+                        PaEntry entry = index.Table.Element(0);
+                        entry.offset = this.record_off;
+                        _key = index.KeyProducer((object[])entry.Get());
+                        key_exists = true;
+                    }
+                    return _key;
+                }
+            }
             public HalfPair(long rec_off, int hkey, IndexHalfkeyImmutable<Tkey> index)
             {
                 this.record_off = rec_off; this.hkey = hkey; this.index = index;
@@ -37,13 +53,14 @@ namespace Task15UniversalIndex
                 HalfPair pa = (HalfPair)pair;
                 int cmp = this.hkey.CompareTo(pa.hkey);
                 if (cmp != 0) return cmp;
-                if (index.Table.Count() == 0) throw new Exception("Ex: 2943991");
+                //if (index.Table.Count() == 0) throw new Exception("Ex: 2943991");
                 // Определяем ключ 
-                PaEntry entry = index.Table.Element(0);
-                entry.offset = pa.record_off;
-                Tkey key = index.KeyProducer((object[])entry.Get());
-                entry.offset = record_off;
-                return index.KeyProducer((object[])entry.Get()).CompareTo(key);
+                //PaEntry entry = index.Table.Element(0);
+                //entry.offset = pa.record_off;
+                //Tkey key = index.KeyProducer((object[])entry.Get());
+                //entry.offset = record_off;
+                //return index.KeyProducer((object[])entry.Get()).CompareTo(key);
+                return this.Key.CompareTo(pa.Key);
             }
             public int Compare(Tkey x, Tkey y)
             {
