@@ -12,7 +12,7 @@ using PolarDB;
 
 namespace GoTripleStore
 {
-    public class GoGraphStringBased : IGraph<Triple<string, string, ObjectVariants>>
+    public class GoGraphStringBased : IGra<PaEntry> // IGraph<Triple<string, string, ObjectVariants>>
     {
         private TableView table;
         private IndexViewImmutable<TripleSPO> spo_ind_arr;
@@ -28,7 +28,7 @@ namespace GoTripleStore
                     object[] va = (object[])((object[])v)[1];
                     return new TripleSPO()
                     {
-                        triple = new Triple<string, string, ObjectVariants>((string)va[0], (string)va[1],
+                        triple = new Tuple<string, string, ObjectVariants>((string)va[0], (string)va[1],
                             ObjectVariants.CreateLiteralNode(false))
                     };
                 };
@@ -48,54 +48,88 @@ namespace GoTripleStore
             };
         }
 
-        public void Build(IEnumerable<Triple<string, string, ObjectVariants>> triples)
+        public void Build(IEnumerable<Tuple<string, string, ObjectVariants>> triples)
         {
             table.Clear();
-            table.Fill(triples.Select(tr => new object[] { tr.Subject, tr.Predicate, tr.Object.ToWritable() }));
+            table.Fill(triples.Select(tr => new object[] { tr.Item1, tr.Item2, tr.Item3.ToWritable() }));
             spo_ind_arr.Build();
         }
-        public void Build(IGenerator<List<Triple<string, string, ObjectVariants>>> generator)
-        {
-            throw new NotImplementedException();
-        }
 
-        public IEnumerable<Triple<string, string, ObjectVariants>> Search(object subject = null, object predicate = null, ObjectVariants obj = null)
-        {
-            if (subject != null)
-            {
-                string ssubj = (string)subject;
-                string spred = (string)predicate;
-                TripleSPO key_triple = new TripleSPO() { triple = new Triple<string, string, ObjectVariants>(ssubj, spred, null) };
-                PaEntry tab_entity = table.TableCell.Root.Element(0);
-                IEnumerable<PaEntry> entities = spo_ind.GetAllByKey(key_triple);
-                var ou_triples = entities.Select(ent =>
-                {
-                    object[] three = (object[])(((object[])ent.Get())[1]);
-                    ObjectVariants ov = ((object[])three[2]).Writeble2OVariant();
-                    return new Triple<string, string, ObjectVariants>((string)three[0], (string)three[1], 
-                        ov);
-                });
-                return ou_triples;
-            }
-            else throw new NotImplementedException();
-        }
+        public Func<PaEntry, object[]> Dereference { get { return en => new object[3]; } }
 
         // Структуры, играющие роль ключа
         public class TripleSPO : IComparable
         {
-            public Triple<string, string, ObjectVariants> triple { get; set; }
+            public Tuple<string, string, ObjectVariants> triple { get; set; }
             public int CompareTo(object another)
             {
                 if (!(another is TripleSPO)) throw new Exception("kdjfk");
                 TripleSPO ano = (TripleSPO)another;
-                int cmp = triple.Subject.CompareTo(ano.triple.Subject);
-                if (cmp == 0 && ano.triple.Predicate != null)
+                int cmp = triple.Item1.CompareTo(ano.triple.Item1);
+                if (cmp == 0 && ano.triple.Item2 != null)
                 {
-                    cmp = triple.Predicate.CompareTo(ano.triple.Predicate);
-                    //if (cmp == 0) cmp = triple.Object.CompareTo(ano.triple.Object);
+                    cmp = triple.Item2.CompareTo(ano.triple.Item2);
+                    if (cmp == 0) cmp = triple.Item3.CompareTo(ano.triple.Item3);
                 }
                 return cmp;
             }
+        }
+
+
+        public object CodeIRI(string iri)
+        {
+            return iri;
+        }
+
+        public string DecodeIRI(object oiri)
+        {
+            return (string)oiri;
+        }
+
+        public object CodeOV(ObjectVariants ov)
+        {
+            return ov.ToWritable();
+        }
+
+        public ObjectVariants DecodeOV(object oov)
+        {
+            return oov.ToOVariant();
+        }
+
+        public IEnumerable<PaEntry> GetTriples()
+        {
+            throw new NotImplementedException();
+        }
+
+        public IEnumerable<PaEntry> GetTriplesWithSubject(object osubj)
+        {
+            string subj = (string)osubj;
+            return Enumerable.Empty<PaEntry>();
+        }
+
+        public IEnumerable<PaEntry> GetTriplesWithSubjectPredicate(object subj, object pred)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool Contains(object subj, object pred, object obj)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IEnumerable<PaEntry> GetTriplesWithPredicate(object pred)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IEnumerable<PaEntry> GetTriplesWithPredicateObject(object pred, object obj)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IEnumerable<PaEntry> GetTriplesWithObject(object obj)
+        {
+            throw new NotImplementedException();
         }
     }
 }
