@@ -15,10 +15,13 @@ namespace GoTripleStore
     public class GaGraphStringBased : IGra<PaEntry> // IGraph<Triple<string, string, ObjectVariants>>
     {
         private TableView table;
+        // Универсальные индексы
         private IndexViewImmutable<TripleSPOu> spo_ind_arr;
         private IndexDynamic<TripleSPOu, IndexViewImmutable<TripleSPOu>> spo_ind;
         private IndexViewImmutable<DuplePOu> po_ind_arr;
         private IndexDynamic<DuplePOu, IndexViewImmutable<DuplePOu>> po_ind;
+        private IndexViewImmutable<MonopleOu> o_ind_arr;
+        private IndexDynamic<MonopleOu, IndexViewImmutable<MonopleOu>> o_ind;
         
         private IndexHalfkeyImmutable<DupleSP> sp_index_arr;
         private IndexDynamic<DupleSP, IndexHalfkeyImmutable<DupleSP>> sp_index;
@@ -58,6 +61,14 @@ namespace GoTripleStore
                         ObjectVariants.CreateLiteralNode(false))
                 };
             };
+            Func<object, MonopleOu> uOkeyproducer = v =>
+            {
+                object[] va = (object[])((object[])v)[1];
+                return new MonopleOu()
+                {
+                    tuple = new Tuple<ObjectVariants>(ObjectVariants.CreateLiteralNode(false))
+                };
+            };
             // Опорная таблица
             table = new TableView(path + "stable", tp_tabelement);
             // Индекс spo
@@ -84,6 +95,18 @@ namespace GoTripleStore
                 Table = table,
                 IndexArray = po_ind_arr,
                 KeyProducer = uPOkeyproducer
+            };
+            // Индекс o
+            o_ind_arr = new IndexViewImmutable<MonopleOu>(path + "o_ind")
+            {
+                Table = table,
+                KeyProducer = uOkeyproducer
+            };
+            o_ind = new IndexDynamic<MonopleOu, IndexViewImmutable<MonopleOu>>(false)
+            {
+                Table = table,
+                IndexArray = o_ind_arr,
+                KeyProducer = uOkeyproducer
             };
 
             //// Отвергнуты вариант индекса по s с полуключем
@@ -195,6 +218,9 @@ namespace GoTripleStore
             
             po_ind_arr.Build();
             Console.WriteLine("po_ind_arr build ok.");
+
+            o_ind_arr.Build();
+            Console.WriteLine("o_ind_arr build ok.");
             
             //s_index_arr.Build();
             //Console.WriteLine("s_index_arr build ok.");
@@ -218,6 +244,7 @@ namespace GoTripleStore
             table.Warmup();
             spo_ind.Warmup();
             po_ind.Warmup();
+            o_ind.Warmup();
             //s_index_arr.Warmup();
             sp_index_arr.Warmup();
             spo_index_arr.Warmup();
@@ -254,6 +281,16 @@ namespace GoTripleStore
                 {
                     cmp = tuple.Item2.CompareTo(ano.tuple.Item2);
                 }
+                return cmp;
+            }
+        }
+        public class MonopleOu : IComparable
+        {
+            public Tuple<ObjectVariants> tuple { get; set; }
+            public int CompareTo(object another)
+            {
+                MonopleOu ano = (MonopleOu)another;
+                int cmp = tuple.Item1.CompareTo(ano.tuple.Item1);
                 return cmp;
             }
         }
@@ -393,9 +430,14 @@ namespace GoTripleStore
             return query.Any();
         }
 
-        public IEnumerable<PaEntry> GetTriplesWithPredicate(object pred)
+        public IEnumerable<PaEntry> GetTriplesWithPredicate(object opred)
         {
-            throw new NotImplementedException();
+            string pred = (string)opred;
+            var query = po_ind.GetAllByKey(new DuplePOu()
+            {
+                tuple = new Tuple<string, ObjectVariants>(pred, null)
+            }).Select(en => en.Field(1));
+            return query;
         }
 
         public IEnumerable<PaEntry> GetTriplesWithPredicateObject(object opred, object oobj)
@@ -413,9 +455,14 @@ namespace GoTripleStore
             return query;
         }
 
-        public IEnumerable<PaEntry> GetTriplesWithObject(object obj)
+        public IEnumerable<PaEntry> GetTriplesWithObject(object oobj)
         {
-            throw new NotImplementedException();
+            ObjectVariants obj = (ObjectVariants)oobj;
+            var query = o_ind.GetAllByKey(new MonopleOu()
+            {
+                tuple = new Tuple<ObjectVariants>(obj)
+            }).Select(en => en.Field(1));
+            return query;
         }
     }
 }
