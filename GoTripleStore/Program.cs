@@ -17,9 +17,87 @@ namespace GoTripleStore
         {
             System.Diagnostics.Stopwatch sw = new System.Diagnostics.Stopwatch();
             string path = "../../../Databases/";
-            Console.WriteLine("Start GoTripleStore coding triples.");
+            Console.WriteLine("Start GoTripleStore coding triples (GaGraphStringBased).");
             var query = ReadTripleStringsFromTurtle.LoadGraph(Config.Source_data_folder_path + "1.ttl")
                 .Select(tri => new Tuple<string,string,ObjectVariants>(tri.Subject, tri.Predicate, tri.Object));
+
+            //IGra<PaEntry> g = new GoGraphStringBased(path);
+            GaGraphStringBased g = new GaGraphStringBased(path);
+            bool toload = false;
+            if (toload)
+            {
+                sw.Restart();
+                g.Build(query);
+                sw.Stop();
+                Console.WriteLine("Load ok. duration={0}", sw.ElapsedMilliseconds);
+            }
+            else
+            { // разогрев
+                g.Warmup();
+            }
+            var flow = g.GetTriplesWithSubjectPredicate(
+                "http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromProducer10/Product468",
+                "http://www.w3.org/2000/01/rdf-schema#label");
+            foreach (var ent in flow)
+            {
+                var q = (object[])ent.Get();
+                Console.WriteLine("{0} {1} {2}", g.DecodeIRI(q[0]), g.DecodeIRI(q[1]), g.DecodeOV(q[2]));
+            }
+            //Console.WriteLine(flow.Count());
+            ProcessTrace(g);
+        }
+        private static void ProcessTrace(IGra<PaEntry> graph)
+        {
+            System.Xml.Linq.XElement tracing = System.Xml.Linq.XElement.Load(Config.Source_data_folder_path + "tracing100th.xml");
+            Console.WriteLine("N_tests = {0}", tracing.Elements().Count());
+            DateTime tt0 = DateTime.Now;
+            tt0 = DateTime.Now;
+            int ecnt = 0, ncnt = 0;
+            foreach (XElement spo in tracing.Elements())
+            {
+                XAttribute s_att = spo.Attribute("subj");
+                XAttribute p_att = spo.Attribute("pred");
+                XAttribute o_att = spo.Attribute("obj");
+                XAttribute r_att = spo.Attribute("res");
+                string s = s_att == null ? null : s_att.Value;
+                string p = p_att == null ? null : p_att.Value;
+                string o = o_att == null ? null : o_att.Value;
+                string res = r_att == null ? null : r_att.Value;
+                if (spo.Name == "spo")
+                {
+                    bool r = graph.Contains(s, p, new OV_iri(o));
+                    if ((res == "true" && r) || (res == "false" && !r)) { ecnt++; }
+                    else ncnt++;
+                }
+                else if (spo.Name == "spD")
+                {
+                    var query = graph.GetTriplesWithSubjectPredicate(s, p);
+                    int cnt = query.Count(); ecnt++;
+                }
+                else if (spo.Name == "spO")
+                {
+                    var query = graph.GetTriplesWithSubjectPredicate(s, p);
+                    if (query.Count() == 0 && res == "") continue;
+                    ecnt++;
+
+                }
+                else if (spo.Name == "Spo")
+                {
+                    var query = graph.GetTriplesWithPredicateObject(p, new OV_iri(o));
+                    if (query.Count() == 0 && res == "") continue;
+                    ecnt++;
+                }
+            }
+            Console.WriteLine("tracing duration=" + (DateTime.Now - tt0).Ticks / 10000L); tt0 = DateTime.Now;
+            Console.WriteLine("Equal {0} Not equal {1}", ecnt, ncnt);
+        }
+        public static void Main1()
+        {
+            System.Diagnostics.Stopwatch sw = new System.Diagnostics.Stopwatch();
+            string path = "../../../Databases/";
+            Console.WriteLine("Start GoTripleStore coding triples.");
+            var query = ReadTripleStringsFromTurtle.LoadGraph(Config.Source_data_folder_path + "1.ttl")
+                .Select(tri => new Tuple<string, string, ObjectVariants>(tri.Subject, tri.Predicate, tri.Object));
 
             //IGra<PaEntry> g = new GoGraphStringBased(path);
             GoGraphStringBased g = new GoGraphStringBased(path);

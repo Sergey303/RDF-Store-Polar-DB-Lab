@@ -42,6 +42,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="GaGraphStringBased.cs" />
     <Compile Include="GoGraphIntBased.cs" />
     <Compile Include="GoGraphStringBased.cs" />
     <Compile Include="IGra.cs" />
