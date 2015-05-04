@@ -12,7 +12,7 @@ using RDFTripleStore;
 
 namespace TestingNs
 {
-    public class SecondGraphString : GoGraphStringBased, IGraph 
+    public class SecondGraphString : GaGraphStringBased, IGraph 
     {
         private readonly NodeGenerator ng = new NodeGenerator();
 
@@ -55,21 +55,28 @@ namespace TestingNs
         {
             return base.GetTriplesWithSubjectPredicate(((IIriNode)subj).UriString, ((IIriNode)pred).UriString)
                 .ReadWritableTriples()
-                .Select(row => DecodeOV(row[2]));
+                .Select(row =>
+                {
+                    return DecodeOV(row[2]);
+                }).ToArray();
         }
 
         public IEnumerable<ObjectVariants> GetTriplesWithSubjectObject(ObjectVariants subj, ObjectVariants obj)
         {
+            throw new NotImplementedException();
             return base.GetTriplesWithSubjectPredicate(((IIriNode)subj).UriString, obj)
                   .ReadWritableTriples()
-                  .Select(row => ng.CreateUriNode(DecodeIRI(row[1])));
+                  .Select(row => ng.CreateUriNode(DecodeIRI(row[1]))).ToArray();
         }
 
         public IEnumerable<ObjectVariants> GetTriplesWithPredicateObject(ObjectVariants pred, ObjectVariants obj)
         {
             return base.GetTriplesWithPredicateObject(((IIriNode)pred).UriString, obj)
                 .ReadWritableTriples()
-                .Select(row => ng.CreateUriNode(DecodeIRI(row[0])));
+                .Select(row =>
+                {
+                    return ng.CreateUriNode(DecodeIRI(row[0]));
+                }).ToArray();
         }
 
         public IEnumerable<T> GetTriples<T>(Func<ObjectVariants, ObjectVariants, ObjectVariants, T> returns)
@@ -120,7 +127,7 @@ namespace TestingNs
         public void FromTurtle(string gString)
         {
             //table.Clear();
-            Build(ReadTripleStringsFromTurtle.LoadGraph(gString).Select(t=> Tuple.Create(t.Subject,t.Predicate,t.Object)));
+            Build(ReadTripleStringsFromTurtle.LoadGraph(gString).Select(t => Tuple.Create(t.Subject.ToLowerInvariant(), t.Predicate.ToLowerInvariant(), t.Object)));
         }
     }
 }

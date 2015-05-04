@@ -12,7 +12,7 @@ namespace TestingNs
     {
         public static void TestSparqlStore(int millions)
         {
-            SparqlStore sparqlStore = new SparqlStore("../../../Databases/");
+            SparqlStore2 sparqlStore = new SparqlStore2("../../../Databases/");
             Perfomance.ComputeTime(() =>
             {
                 // sparqlStore.ReloadFrom(Config.Source_data_folder_path + millions + ".ttl");
@@ -44,14 +44,14 @@ WHERE {
 
         public static void BSBm(int millions, bool load)
         {
-            SparqlStore sparqlStore = new SparqlStore("../../../Databases/");
+            SparqlStore2 sparqlStore = new SparqlStore2("../../../Databases/");
             if (load)
                 sparqlStore.ReloadFrom(Config.Source_data_folder_path + millions + ".ttl");
-           // RunBerlinsWithConstants(sparqlStore, millions);
-              RunBerlinsParameters(sparqlStore, millions);
+            RunBerlinsWithConstants(sparqlStore, millions);
+            //   RunBerlinsParameters(sparqlStore, millions);
         }
 
-        public static void RunBerlinsParameters(SparqlStore ts, int millions)
+        public static void RunBerlinsParameters(SparqlStore2 ts, int millions)
         {
 
             Console.WriteLine("bsbm parametered");
@@ -73,7 +73,7 @@ WHERE {
             }
         }
 
-        private static void SubTestRun(SparqlStore ts, StreamReader streamQueryParameters, int i1, int millions)
+        private static void SubTestRun(SparqlStore2 ts, StreamReader streamQueryParameters, int i1, int millions)
         {
             long[] results = new long[12];
             double[] minimums = Enumerable.Repeat(double.MaxValue, 12).ToArray();
@@ -126,7 +126,7 @@ WHERE {
             }
         }
 
-        private static void RunBerlinsWithConstants(SparqlStore ts, int millions)
+        private static void RunBerlinsWithConstants(SparqlStore2 ts, int millions)
         {
             long[] results = new long[12];
             Console.WriteLine("antrl with constants");
@@ -193,7 +193,7 @@ WHERE {
         public static void TestExamples()
         {
             DirectoryInfo examplesRoot = new DirectoryInfo(@"..\..\examples");
-            var store = new SparqlStore("../../../Databases/");
+            var store = new SparqlStore2("../../../Databases/");
             foreach (var exampleDir in examplesRoot.GetDirectories())
                 //  var exampleDir = new DirectoryInfo(@"..\..\examples\bsbm");
             {
@@ -233,7 +233,7 @@ WHERE {
             }
         }
 
-        private static void RunOneExample(DirectoryInfo exampleDir, SparqlStore store)
+        private static void RunOneExample(DirectoryInfo exampleDir, SparqlStore2 store)
         {
             foreach (var rqQueryFile in exampleDir.GetFiles("*.rq"))
             {

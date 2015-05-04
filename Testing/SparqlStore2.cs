@@ -13,15 +13,15 @@ using Antlr4.Runtime;
 
 namespace TestingNs
 {
-    public class SparqlStore : SecondGraphString, IStore
+    public class SparqlStore2 : SecondGraphString, IStore
     {
-        public SparqlStore(string path) : base(path)
+        public SparqlStore2(string path) : base(path)
         {
         }
 
         public void ReloadFrom(string fileName)
         {
-            ClearAll();
+          //  ClearAll();
             FromTurtle(fileName);    
         }
         public void ReloadFrom(Stream baseStream)
