@@ -59,7 +59,7 @@
     <Compile Include="Comparer\SPO_Troyka.cs" />
     <Compile Include="Comparer\SP_Pair.cs" />
     <Compile Include="Config.cs" />
-    <Compile Include="GraphInt.cs" />
+    <Compile Include="FirstGraphInt.cs" />
     <Compile Include="GraphString.cs" />
     <Compile Include="NodeGeneratorInt.cs" />
     <Compile Include="NodeGenerator.cs" />

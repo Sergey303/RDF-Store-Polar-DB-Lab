@@ -13,7 +13,7 @@ using Task15UniversalIndex;
 
 namespace RDFTripleStore
 {
-    public class GraphInt : IGraph
+    public class FirstGraphInt : IGraph
     {
         private TableView table;
 
@@ -25,7 +25,7 @@ namespace RDFTripleStore
         private IndexDynamic<int, IndexKeyImmutable<int>> p_ind;
         private IndexDynamic<ObjectVariants, IndexHalfkeyImmutable<ObjectVariants>> o_ind;
         protected NodeGeneratorInt ng;
-        public GraphInt(string path)
+        public FirstGraphInt(string path)
         {
             PType tp_tabelement = new PTypeRecord(
              new NamedType("subject", new PType(PTypeEnumeration.integer)),

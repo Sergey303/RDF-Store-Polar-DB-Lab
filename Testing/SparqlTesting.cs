@@ -2,9 +2,9 @@ using System;
 using System.IO;
 using System.Linq;
 using RDFCommon;
-using RDFTripleStore;
 using SparqlParseRun;
 using SparqlParseRun.SparqlClasses.Query.Result;
+using RDFTripleStore;
 
 namespace TestingNs
 {
@@ -202,7 +202,7 @@ WHERE {
                 var ttlDatabase = exampleDir.GetFiles("*.ttl").FirstOrDefault();
                 if (ttlDatabase == null) continue;
                 using (StreamReader reader = new StreamReader(ttlDatabase.FullName))
-                    store.ReloadFrom(reader.BaseStream);
+                    store.ReloadFrom(reader.ReadToEnd());//store.ReloadFrom(reader.BaseStream);
 
                 var nameGraphsDir = new DirectoryInfo(Path.Combine(exampleDir.FullName, "named graphs"));
                 if (nameGraphsDir.Exists)

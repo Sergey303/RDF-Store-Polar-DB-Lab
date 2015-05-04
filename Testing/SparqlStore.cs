@@ -4,14 +4,16 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Antlr4.Runtime;
+
 using RDFCommon;
 using SparqlParseRun;
 using SparqlParseRun.SparqlClasses.Query.Result;
+using RDFTripleStore;
+using Antlr4.Runtime;
 
-namespace RDFTripleStore
+namespace TestingNs
 {
-    public class SparqlStore : FirstGraphInt, IStore
+    public class SparqlStore : SecondGraphString, IStore
     {
         public SparqlStore(string path) : base(path)
         {
@@ -24,9 +26,10 @@ namespace RDFTripleStore
         }
         public void ReloadFrom(Stream baseStream)
         {
-            ClearAll();
-          base.FromTurtle(baseStream);    
+          //  ClearAll();
+          //base.FromTurtle(baseStream);    
         }
+
         public SparqlResultSet ParseAndRun(string query)
         {
             var queryContext = Parse(query);
@@ -57,7 +60,7 @@ namespace RDFTripleStore
 
         public IGraph CreateTempGraph()
         {
-           return new RamListOfTriplesGraph(ng.CreateUriNode("temp"));
+           return new RamListOfTriplesGraph(NodeGenerator.CreateUriNode("temp"));
         }
 
        
