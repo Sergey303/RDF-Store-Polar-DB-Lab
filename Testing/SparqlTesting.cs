@@ -22,27 +22,23 @@ namespace TestingNs
             {
                 Console.WriteLine(
                     (string)sparqlStore.ParseAndRun(
-                        @"PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+   @" PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
 PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
 PREFIX bsbm: <http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/vocabulary/>
 PREFIX dataFromProducer1: <http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromProducer1/> 
 
-SELECT DISTINCT ?prodFeature
+SELECT DISTINCT ?product
 WHERE { 
-	?prodFeature ?pp <http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromRatingSite1/Reviewer1> .	
+	dataFromProducer1:Product12 bsbm:productFeature ?prodFeature .
+	?product bsbm:productFeature ?prodFeature .
+    FILTER (dataFromProducer1:Product12 != ?product)	
+?product rdfs:label ?productLabel .
+	dataFromProducer1:Product12 bsbm:productPropertyNumeric1 ?origProperty1 .
+	?product bsbm:productPropertyNumeric1 ?simProperty1 .
+	FILTER (?simProperty1 < (?origProperty1 + 120) && ?simProperty1 > (?origProperty1 - 120))
      }
 ").ToJson());
-                Console.WriteLine("___________________________________________________________________________________");
-                Console.WriteLine(
-                    (string)sparqlStore.ParseAndRun(
-                        @"PREFIX dataFromVendor1: <http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromVendor1/>
-SELECT ?property ?hasValue ?isValueOf
-WHERE {
-  { dataFromVendor1:Offer1 ?property ?hasValue }
-  UNION
-  { ?isValueOf ?property dataFromVendor1:Offer1 }
-}
-").ToJson());
+              
             }, "run simple" + millions + ".ttl ");
         }
 
@@ -51,8 +47,8 @@ WHERE {
             SparqlStore sparqlStore = new SparqlStore("../../../Databases/");
             if (load)
                 sparqlStore.ReloadFrom(Config.Source_data_folder_path + millions + ".ttl");
-            RunBerlinsWithConstants(sparqlStore, millions);
-            //  RunBerlinsParameters(sparqlStore, millions);
+           // RunBerlinsWithConstants(sparqlStore, millions);
+              RunBerlinsParameters(sparqlStore, millions);
         }
 
         public static void RunBerlinsParameters(SparqlStore ts, int millions)
@@ -87,9 +83,9 @@ WHERE {
             long[] totalrun = new long[12];
             for (int j = 0; j < i1; j++)
             {
-                for (int i = 1; i < 13; i++)
+                for (int i = 0; i < 12; i++)
                 {
-                    string file = string.Format(@"..\..\examples\bsbm\queries\parameters\{0}.rq", i);
+                    string file = string.Format(@"..\..\examples\bsbm\queries\parameters\{0}.rq", i+1);
                     var readAllText = File.ReadAllText(file);
                     readAllText = QueryReadParameters(readAllText, streamQueryParameters);
 

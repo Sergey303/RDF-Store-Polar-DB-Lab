@@ -1,6 +1,8 @@
+using System;
+
 namespace RDFCommon.OVns
 {
-    public class OV_double : ObjectVariants, ILiteralNode
+    public class OV_double : ObjectVariants, ILiteralNode, INumLiteral
     {
         public readonly double value;
 
@@ -45,6 +47,11 @@ namespace RDFCommon.OVns
         }
 
         public override dynamic Content { get { return value; } }
+        public override ObjectVariants Change(Func<dynamic, dynamic> changing)
+        {
+            return new OV_double(changing(value));
+        }
+
         public string DataType { get { return SpecialTypesClass.Double.FullName; } }
         public override string ToString()
         {

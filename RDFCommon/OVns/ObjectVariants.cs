@@ -128,8 +128,13 @@ namespace RDFCommon.OVns
             throw new ArgumentException();
         }
 
-       
+        public override string ToString()
+        {
+            return "\""+Content+"\"^^<"+((ILiteralNode)this).DataType+">";
+        }
+
 
         public abstract dynamic Content { get; }
+        public abstract ObjectVariants Change(Func<dynamic, dynamic> changing);
     }
 }

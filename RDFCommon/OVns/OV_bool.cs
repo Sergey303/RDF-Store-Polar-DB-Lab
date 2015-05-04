@@ -1,3 +1,5 @@
+using System;
+
 namespace RDFCommon.OVns
 {
     public class OV_bool : ObjectVariants, ILiteralNode
@@ -45,6 +47,11 @@ namespace RDFCommon.OVns
 
 
         public override dynamic Content { get { return value; } }
+        public override ObjectVariants Change(Func<dynamic, dynamic> changing)
+        {
+            return new OV_bool(changing(value));
+        }
+
         public string DataType { get { return SpecialTypesClass.Bool.FullName; } }
         public override string ToString()
         {

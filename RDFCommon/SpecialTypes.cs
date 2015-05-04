@@ -1,3 +1,4 @@
+using RDFCommon.OVns;
 using RDFTripleStore;
 
 namespace RDFCommon
@@ -21,21 +22,21 @@ namespace RDFCommon
         public static UriPrefixed RdfRest = new UriPrefixed("rdf:", "rest", XmlSchema.Default.rdf_syntax_ns);
            public static UriPrefixed RdfType = new UriPrefixed("rdf:", XmlSchema.Default.type, XmlSchema.Default.rdf_syntax_ns);
         public static UriPrefixed Nil = new UriPrefixed("rdf:", XmlSchema.Default.nil, XmlSchema.Default.rdf_syntax_ns);
-        public IIriNode date;
-        public IIriNode @string;
-        //public IIriNode simpleLiteral;
-        public IIriNode langString;
-        public IIriNode integer;
-        public IIriNode @decimal;
-        public IIriNode @double;
-        public IIriNode @bool;
-        public IIriNode @float;
-        public IIriNode timeDuration;
-        public IIriNode dateTime;
-        public IIriNode nil;
-        public IIriNode first;
-        public IIriNode rest;
-        public IIriNode type;
+        public ObjectVariants date;
+        public ObjectVariants @string;
+        //public ObjectVariants simpleLiteral;
+        public ObjectVariants langString;
+        public ObjectVariants integer;
+        public ObjectVariants @decimal;
+        public ObjectVariants @double;
+        public ObjectVariants @bool;
+        public ObjectVariants @float;
+        public ObjectVariants timeDuration;
+        public ObjectVariants dateTime;
+        public ObjectVariants nil;
+        public ObjectVariants first;
+        public ObjectVariants rest;
+        public ObjectVariants type;
 
         public static string[] GetAll()
         {

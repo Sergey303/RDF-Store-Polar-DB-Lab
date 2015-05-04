@@ -2,7 +2,7 @@ using System;
 
 namespace RDFCommon.OVns
 {
-    public class OV_time : ObjectVariants
+    public class OV_time : ObjectVariants, ILiteralNode
     {
         public readonly TimeSpan value;
 
@@ -24,6 +24,11 @@ namespace RDFCommon.OVns
         public override dynamic Content
         {
             get { return value; }
+        }
+
+        public override ObjectVariants Change(Func<dynamic, dynamic> changing)
+        {
+            return new OV_time(changing(value));
         }
 
         // override object.Equals
@@ -64,5 +69,7 @@ namespace RDFCommon.OVns
             var otherTyped = (OV_time)obj;
             return value.CompareTo(otherTyped.value);
         }
+
+        public string DataType { get { return SpecialTypesClass.DayTimeDuration.FullName; } }
     }
 }

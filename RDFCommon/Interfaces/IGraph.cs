@@ -1,29 +1,31 @@
+using System;
 using System.Collections.Generic;
 using System.IO;
+using RDFCommon.OVns;
 
 namespace RDFCommon
 {
     public interface IGraph
     {
-        IGraphNode Name { get; }
+        ObjectVariants Name { get; }
 
         INodeGenerator NodeGenerator { get; }   
       
         void Clear();
-    
-    /// <summary>
+
+        /// <summary>
         /// Selects all Triples where the Object is a given Node
         /// </summary>
         /// <param name="o">Node</param>
         /// <returns></returns>
-        IEnumerable<Triple<ISubjectNode, IPredicateNode, IObjectNode>> GetTriplesWithObject(IObjectNode o);
+        IEnumerable<T> GetTriplesWithObject<T>(ObjectVariants o, Func<ObjectVariants, ObjectVariants, T> createResult);
 
         /// <summary>
         /// Selects all Triples where the Predicate is a given Node
         /// </summary>
         /// <param name="n">Node</param>
         /// <returns></returns>
-        IEnumerable<Triple<ISubjectNode, IPredicateNode, IObjectNode>> GetTriplesWithPredicate(IPredicateNode p);
+        IEnumerable<T> GetTriplesWithPredicate<T>(ObjectVariants p, Func<ObjectVariants, ObjectVariants,T> createResult);
 
         
         /// <summary>
@@ -31,7 +33,7 @@ namespace RDFCommon
         /// </summary>
         /// <param name="n">Node</param>
         /// <returns></returns>
-        IEnumerable<Triple<ISubjectNode, IPredicateNode, IObjectNode>> GetTriplesWithSubject(ISubjectNode s);
+        IEnumerable<T> GetTriplesWithSubject<T>(ObjectVariants s, Func<ObjectVariants, ObjectVariants,T> createResult);
 
         /// <summary>
         /// Selects all Triples with the given Subject and Predicate
@@ -39,7 +41,7 @@ namespace RDFCommon
         /// <param name="subj">Subject</param>
         /// <param name="pred">Predicate</param>
         /// <returns></returns>
-        IEnumerable<IObjectNode> GetTriplesWithSubjectPredicate(ISubjectNode subj, IPredicateNode pred);
+        IEnumerable<ObjectVariants> GetTriplesWithSubjectPredicate(ObjectVariants subj, ObjectVariants pred);
 
         /// <summary>
         /// Selects all Triples with the given Subject and Object
@@ -47,7 +49,7 @@ namespace RDFCommon
         /// <param name="subj">Subject</param>
         /// <param name="obj">Object</param>
         /// <returns></returns>
-        IEnumerable<IPredicateNode> GetTriplesWithSubjectObject(ISubjectNode subj, IObjectNode obj);
+        IEnumerable<ObjectVariants> GetTriplesWithSubjectObject(ObjectVariants subj, ObjectVariants obj);
 
         /// <summary>
         /// Selects all Triples with the given Predicate and Object
@@ -55,21 +57,21 @@ namespace RDFCommon
         /// <param name="pred">Predicate</param>
         /// <param name="obj">Object</param>
         /// <returns></returns>
-        IEnumerable<ISubjectNode> GetTriplesWithPredicateObject(IPredicateNode pred, IObjectNode obj);
-        IEnumerable<Triple<ISubjectNode, IPredicateNode, IObjectNode>> GetTriples();
+        IEnumerable<ObjectVariants> GetTriplesWithPredicateObject(ObjectVariants pred, ObjectVariants obj);
+        IEnumerable<T> GetTriples<T>(Func<ObjectVariants,ObjectVariants,ObjectVariants, T> returns );
 
 
-        void Add(ISubjectNode s, IPredicateNode p, IObjectNode o);
+        void Add(ObjectVariants s, ObjectVariants p, ObjectVariants o);
      
        // void LoadFrom(IUriNode @from);
 
-        void Insert(IEnumerable<Triple<ISubjectNode, IPredicateNode, IObjectNode>> triples);
+        void Insert(IEnumerable<Triple<ObjectVariants, ObjectVariants, ObjectVariants>> triples);
 
-        void Add(Triple<ISubjectNode, IPredicateNode, IObjectNode> t);
-        bool Contains(ISubjectNode subject, IPredicateNode predicate, IObjectNode obj);
-        void Delete(IEnumerable<Triple<ISubjectNode, IPredicateNode, IObjectNode>> triples);
+        void Add(Triple<ObjectVariants, ObjectVariants, ObjectVariants> t);
+        bool Contains(ObjectVariants subject, ObjectVariants predicate, ObjectVariants obj);
+        void Delete(IEnumerable<Triple<ObjectVariants, ObjectVariants, ObjectVariants>> triples);
       
-        IEnumerable<ISubjectNode> GetAllSubjects();
+        IEnumerable<ObjectVariants> GetAllSubjects();
         long GetTriplesCount();
 
         bool Any();

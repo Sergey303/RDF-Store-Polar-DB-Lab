@@ -3,69 +3,70 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using RDFCommon;
+using RDFCommon.OVns;
 using RDFTripleStore.parsers.RDFTurtle;
 
 namespace RDFTripleStore
 {
     public class RamListOfTriplesGraph : NodeGenerator, IGraph 
     {
-        public RamListOfTriplesGraph(IGraphNode name)
+        public RamListOfTriplesGraph(ObjectVariants name)
         {
           //  Name = Guid.NewGuid().ToString();
             Name = name;
             
         }
-        private readonly List<Triple<ISubjectNode, IPredicateNode, IObjectNode>> triples=new List<Triple<ISubjectNode, IPredicateNode, IObjectNode>>();
+        private readonly List<Triple<ObjectVariants, ObjectVariants, ObjectVariants>> triples=new List<Triple<ObjectVariants, ObjectVariants, ObjectVariants>>();
 
         public RamListOfTriplesGraph()
         {
            
         }
 
-        public IEnumerable<IObjectNode> GetTriplesWithSubjectPredicate(ISubjectNode subjectNode, IPredicateNode predicateNode)
+        public IEnumerable<ObjectVariants> GetTriplesWithSubjectPredicate(ObjectVariants subjectNode, ObjectVariants predicateNode)
         {
             return triples.Where(triple => triple.Subject .Equals( subjectNode) && triple.Predicate .Equals( predicateNode)).Select(triple => triple.Object);
         }
 
-        public IEnumerable<IPredicateNode> GetTriplesWithSubjectObject(ISubjectNode subjectNode, IObjectNode objectNode)
+        public IEnumerable<ObjectVariants> GetTriplesWithSubjectObject(ObjectVariants subjectNode, ObjectVariants objectNode)
         {
             return triples.Where(triple => triple.Subject .Equals( subjectNode) && triple.Object .Equals( objectNode)).Select(triple => triple.Predicate);
 
         }
 
-        public IEnumerable<Triple<ISubjectNode, IPredicateNode, IObjectNode>> GetTriplesWithSubject(ISubjectNode subjectNode)
+        public IEnumerable<T> GetTriplesWithSubject<T>(ObjectVariants subjectNode, Func<ObjectVariants,ObjectVariants, T> returns)
         {
-            return triples.Where(triple => triple.Subject .Equals( subjectNode)).ToArray();
+            return triples.Where(triple => triple.Subject.Equals(subjectNode)).Select(triple =>  returns(triple.Predicate, triple.Object));
         }
 
-        public IEnumerable<ISubjectNode> GetTriplesWithPredicateObject(IPredicateNode predicateNode, IObjectNode objectNode)
+        public IEnumerable<ObjectVariants> GetTriplesWithPredicateObject(ObjectVariants predicateNode, ObjectVariants objectNode)
         {
             return triples.Where(triple => triple.Predicate .Equals( predicateNode) && triple.Object .Equals( objectNode)).Select(triple => triple.Subject);
         }
 
-        public IEnumerable<Triple<ISubjectNode, IPredicateNode, IObjectNode>> GetTriplesWithPredicate(IPredicateNode predicateNode)
+        public IEnumerable<T> GetTriplesWithPredicate<T>(ObjectVariants predicateNode, Func<ObjectVariants, ObjectVariants, T> returns)
         {
-            return triples.Where(triple => triple.Predicate .Equals( predicateNode));
+            return triples.Where(triple => triple.Predicate .Equals( predicateNode)).Select(triple => returns(triple.Subject, triple.Object));
         }
 
-     
 
-        public IEnumerable<Triple<ISubjectNode, IPredicateNode, IObjectNode>> GetTriplesWithObject(IObjectNode o)
+
+        public IEnumerable<T> GetTriplesWithObject<T>(ObjectVariants o, Func<ObjectVariants, ObjectVariants, T> returns)
         {
-            return triples.Where(triple => triple.Object .Equals( o));
+            return triples.Where(triple => triple.Object.Equals(o)).Select(triple => returns(triple.Subject, triple.Predicate)); 
         }
 
-        public IEnumerable<Triple<ISubjectNode, IPredicateNode, IObjectNode>> GetTriples()
+        public IEnumerable<T> GetTriples<T>(Func<ObjectVariants, ObjectVariants, ObjectVariants, T> returns)
         {
-            return triples;
+            return triples.Select(triple => returns(triple.Subject, triple.Predicate, triple.Object));
         }
 
-        public bool Contains(ISubjectNode subject, IPredicateNode predicate, IObjectNode @object)
+        public bool Contains(ObjectVariants subject, ObjectVariants predicate, ObjectVariants @object)
         {
            return triples.Any(triple => triple.Subject.Equals(subject) && triple.Predicate.Equals(predicate) && triple.Object.Equals(@object));
         }
 
-        public void Delete(IEnumerable<Triple<ISubjectNode, IPredicateNode, IObjectNode>> ts)
+        public void Delete(IEnumerable<Triple<ObjectVariants, ObjectVariants, ObjectVariants>> ts)
         {
             foreach (var triple in ts)
                 triples.Remove(triple);
@@ -73,7 +74,7 @@ namespace RDFTripleStore
 
    
 
-        public IEnumerable<ISubjectNode> GetAllSubjects()
+        public IEnumerable<ObjectVariants> GetAllSubjects()
         {
             return triples.Select(t => t.Subject).Distinct();
         }
@@ -94,14 +95,14 @@ namespace RDFTripleStore
             generator.Start(list => triples.AddRange(
                 list.Select(
                     t =>    
-                        new Triple<ISubjectNode, IPredicateNode, IObjectNode>(
+                        new Triple<ObjectVariants, ObjectVariants, ObjectVariants>(
                             NodeGenerator.CreateUriNode(t.Subject),
                             NodeGenerator.CreateUriNode(t.Predicate), 
-                            (IObjectNode) t.Object))));
+                            (ObjectVariants) t.Object))));
         }
 
 
-        public IGraphNode Name { get; private set; }
+        public ObjectVariants Name { get; private set; }
         public INodeGenerator NodeGenerator { get { return this; }}
 
         public void Clear()
@@ -110,9 +111,9 @@ namespace RDFTripleStore
         }
 
     
-        public void Add(ISubjectNode s, IPredicateNode p, IObjectNode o)
+        public void Add(ObjectVariants s, ObjectVariants p, ObjectVariants o)
         {
-           triples.Add(new Triple<ISubjectNode, IPredicateNode, IObjectNode>(s,p,o));
+           triples.Add(new Triple<ObjectVariants, ObjectVariants, ObjectVariants>(s,p,o));
         }
 
     
@@ -124,17 +125,17 @@ namespace RDFTripleStore
 
         
 
-        public void Insert(IEnumerable<Triple<ISubjectNode, IPredicateNode, IObjectNode>> triples)
+        public void Insert(IEnumerable<Triple<ObjectVariants, ObjectVariants, ObjectVariants>> triples)
         {
           this.triples.AddRange(triples);
         }
 
-        public void Add(Triple<ISubjectNode, IPredicateNode, IObjectNode> t)
+        public void Add(Triple<ObjectVariants, ObjectVariants, ObjectVariants> t)
         {
          triples.Add(t);
         }
 
-        public void AddRange(IEnumerable<Triple<ISubjectNode, IPredicateNode, IObjectNode>> triples)
+        public void AddRange(IEnumerable<Triple<ObjectVariants, ObjectVariants, ObjectVariants>> triples)
         {
             this.triples.AddRange(triples);
         }

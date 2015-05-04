@@ -4,9 +4,11 @@ namespace RDFCommon
 {
     public class NoGraphExeption : Exception
     {
-        public NoGraphExeption(IGraphNode name)
+        private readonly string name;
+
+        public NoGraphExeption(string name)
         {
-            
+            this.name = name;
         }
     }
 }

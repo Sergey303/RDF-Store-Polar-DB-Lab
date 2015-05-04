@@ -14,9 +14,10 @@ namespace RDFCommon.OVns
             this.nameTable = nameTable;
         }
 
-        public OV_iriint(int code, string uri)
+        public OV_iriint(int code, Func<int, string> nameTable, string uri)
         {
             this.code = code;
+            this.nameTable = nameTable;
             originalString = uri;
         }
 
@@ -66,6 +67,12 @@ namespace RDFCommon.OVns
         public override dynamic Content
         {
             get { return code; }
+        }
+
+        public override ObjectVariants Change(Func<dynamic, dynamic> changing)
+        {
+            dynamic newIri = changing(UriString);
+            return new OV_iriint(nameTable(newIri), nameTable, newIri);
         }
 
         public string UriString { get { return code==-1 ? originalString : nameTable(code); } }

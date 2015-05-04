@@ -1,3 +1,5 @@
+using System;
+
 namespace RDFCommon.OVns
 {
     public class OV_iri : ObjectVariants, IIriNode, IBlankNode
@@ -62,6 +64,12 @@ namespace RDFCommon.OVns
         {
             get { return uriString; }
         }
+
+        public override ObjectVariants Change(Func<dynamic, dynamic> changing)
+        {
+            return new OV_iri(changing(uriString));
+        }
+
         public override int CompareTo(object obj)
         {
             int baseComp = base.CompareTo(obj);
@@ -69,5 +77,7 @@ namespace RDFCommon.OVns
             var otherTyped = (OV_iri)obj;
             return System.String.Compare(uriString, otherTyped.uriString, System.StringComparison.InvariantCulture);
         }
+
+      
     }
 }
