@@ -26,6 +26,11 @@ namespace RDFCommon.OVns
             get { return value; }
         }
 
+        public override ObjectVariants Change(Func<dynamic, dynamic> changing)
+        {
+            return new OV_dateTime(changing(value));
+        }
+
         // override object.Equals
         public override bool Equals(object obj)
         {

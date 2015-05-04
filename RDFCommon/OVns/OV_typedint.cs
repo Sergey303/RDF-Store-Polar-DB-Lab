@@ -47,6 +47,11 @@ namespace RDFCommon.OVns
         }
 
         public override dynamic Content { get { return value; } }
+        public override ObjectVariants Change(Func<dynamic, dynamic> changing)
+        {
+            return new OV_typedint(changing(value), curi, nameTable);
+        }
+
         public string DataType { get { return nameTable(curi); } }
         public override int CompareTo(object obj)
         {

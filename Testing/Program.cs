@@ -7,8 +7,8 @@
             //RamGraph graph=new RamGraph();
             //graph.TestReadTtl_Cocor(1);
             //graph.TestSearch();
-            //  Testing.TestSparqlStore(1);
-            SparqlTesting.BSBm(1, true);
+          //   SparqlTesting.TestSparqlStore(1);
+            SparqlTesting.BSBm(1, false);
             //  Testing.TestExamples();
         }
     }

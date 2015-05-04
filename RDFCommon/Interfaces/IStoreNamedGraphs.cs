@@ -1,38 +1,53 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using RDFCommon.OVns;
 
 namespace RDFCommon
 {
     public interface IStoreNamedGraphs
     {
-        IEnumerable<IGrouping<IGraphNode, IObjectNode>> GetTriplesWithSubjectPredicateFromGraphs(ISubjectNode subjectNode, IPredicateNode predicateNode, DataSet graphs);
-        IEnumerable<IGrouping<IGraphNode, IPredicateNode>> GetTriplesWithSubjectObjectFromGraphs(ISubjectNode subjectNode, IObjectNode objectNode, DataSet graphs);
-        IEnumerable<IGrouping<IGraphNode, Triple<ISubjectNode, IPredicateNode, IObjectNode>>> GetTriplesWithSubjectFromGraphs(ISubjectNode subjectNode, DataSet graphs);
-        IEnumerable<IGrouping<IGraphNode, ISubjectNode>> GetTriplesWithPredicateObjectFromGraphs(IPredicateNode predicateNode, IObjectNode objectNode, DataSet graphs);
-        IEnumerable<IGrouping<IGraphNode, Triple<ISubjectNode, IPredicateNode, IObjectNode>>> GetTriplesWithPredicateFromGraphs(IPredicateNode predicateNode, DataSet graphs);
-        IEnumerable<IGrouping<IGraphNode, Triple<ISubjectNode, IPredicateNode, IObjectNode>>> GetTriplesWithObjectFromGraphs(IObjectNode objectNode, DataSet graphs);
-        IEnumerable<IGrouping<IGraphNode, Triple<ISubjectNode, IPredicateNode, IObjectNode>>> GetTriplesFromGraphs(DataSet graphs);
-        IGraph CreateGraph(IGraphNode sparqlUriNode);
-        bool Contains(ISubjectNode sValue, IPredicateNode pValue, IObjectNode oValue, DataSet graphs);
-        void DropGraph(IGraphNode sparqlGrpahRefTypeEnum);
-        void Clear(IGraphNode uri);
+        IEnumerable<ObjectVariants> GetPredicate(ObjectVariants subjectNode, ObjectVariants objectNode, ObjectVariants graph);
+        IEnumerable<ObjectVariants> GetSubject(ObjectVariants predicateNode, ObjectVariants objectNode, ObjectVariants graph);
+        IEnumerable<ObjectVariants> GetObject(ObjectVariants subjectNode, ObjectVariants predicateNode, ObjectVariants graph);
+        IEnumerable<ObjectVariants> GetGraph(ObjectVariants subjectNode, ObjectVariants predicateNode, ObjectVariants objectNode);
 
-        void Delete(IGraphNode g, IEnumerable<Triple<ISubjectNode, IPredicateNode, IObjectNode>> triples);
-        void DeleteFromAll(IEnumerable<Triple<ISubjectNode, IPredicateNode, IObjectNode>> triples);
-        void Insert(IGraphNode name, IEnumerable<Triple<ISubjectNode, IPredicateNode, IObjectNode>> triples);
+        IEnumerable<T> GetTriplesWithSubjectPredicate<T>(ObjectVariants subjectNode, ObjectVariants predicateNode, Func<ObjectVariants, ObjectVariants, T> returns);
+        IEnumerable<T> GetTriplesWithPredicateObject<T>(ObjectVariants predicateNode, ObjectVariants objectNode, Func<ObjectVariants, ObjectVariants, T> returns);
+        IEnumerable<T> GetTriplesWithSubjectObject<T>(ObjectVariants subjectNode, ObjectVariants objectNode, Func<ObjectVariants, ObjectVariants, T> returns);
+
+        IEnumerable<T> GetTriplesWithSubjectFromGraph<T>(ObjectVariants subjectNode, ObjectVariants graph, Func<ObjectVariants, ObjectVariants, T> returns);
+        IEnumerable<T> GetTriplesWithPredicateFromGraph<T>(ObjectVariants predicateNode, ObjectVariants graph, Func<ObjectVariants, ObjectVariants, T> returns);
+        IEnumerable<T> GetTriplesWithObjectFromGraph<T>(ObjectVariants objectNode, ObjectVariants graph, Func<ObjectVariants, ObjectVariants, T> returns);
+
+        IEnumerable<T> GetTriplesWithPredicate<T>(ObjectVariants predicateNode, Func<ObjectVariants, ObjectVariants, ObjectVariants, T> returns);
+        IEnumerable<T> GetTriplesWithObject<T>(ObjectVariants objectNode, Func<ObjectVariants, ObjectVariants, ObjectVariants, T> returns);
+        IEnumerable<T> GetTriplesWithSubject<T>(ObjectVariants subjectNode, Func<ObjectVariants, ObjectVariants, ObjectVariants, T> returns);
+        IEnumerable<T> GetTriplesFromGraph<T>(ObjectVariants graph, Func<ObjectVariants, ObjectVariants, ObjectVariants, T> returns);
+
+        IGraph CreateGraph(ObjectVariants sparqlUriNode);
+        bool Contains(ObjectVariants sValue, ObjectVariants pValue, ObjectVariants oValue, ObjectVariants graph);
+        void DropGraph(ObjectVariants sparqlGrpahRefTypeEnum);
+        void Clear(ObjectVariants uri);
+
+        void Delete(ObjectVariants g, IEnumerable<Triple<ObjectVariants, ObjectVariants, ObjectVariants>> triples);
+        void DeleteFromAll(IEnumerable<Triple<ObjectVariants, ObjectVariants, ObjectVariants>> triples);
+        void Insert(ObjectVariants name, IEnumerable<Triple<ObjectVariants, ObjectVariants, ObjectVariants>> triples);
 
       //  IGraph TryGetGraph(IUriNode graphUriNode);
 
-        DataSet GetGraphs(ISubjectNode sValue, IPredicateNode pValue, IObjectNode oValue, DataSet graphs);
        //  Dictionary<IUriNode,IGraph> Named { get;  }
-        void AddGraph(IGraphNode to, IGraph fromGraph);
-        void ReplaceGraph(IGraphNode to, IGraph graph);
-        IEnumerable<KeyValuePair<IGraphNode, long>> GetAllGraphCounts();
-        void ClearAllNamedGraphs();
+        void AddGraph(ObjectVariants to, IGraph fromGraph);
+        void ReplaceGraph(ObjectVariants to, IGraph graph);
+        IEnumerable<KeyValuePair<ObjectVariants, long>> GetAllGraphCounts();
+
        // bool ContainsGraph(IUriNode to);
 
-        IGraph GetGraph(IGraphNode graphUriNode);
-        IEnumerable<ISubjectNode> GetAllSubjects(IGraphNode graphUri);
-        bool Any(IGraphNode graphUri);
+        IGraph GetGraph(ObjectVariants graphUriNode);
+        IEnumerable<ObjectVariants> GetAllSubjects(ObjectVariants graphUri);
+        bool Any(ObjectVariants graphUri);
+
+        void ClearAllNamedGraphs();
+        IEnumerable<T> GetAll<T>(Func<ObjectVariants, ObjectVariants, ObjectVariants, ObjectVariants, T> func);
     }
 }

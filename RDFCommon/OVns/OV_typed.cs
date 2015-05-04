@@ -44,6 +44,11 @@ namespace RDFCommon.OVns
         }
 
         public override dynamic Content { get { return value; } }
+        public override ObjectVariants Change(Func<dynamic, dynamic> changing)
+        {
+            return new OV_typed(changing(value), turi);
+        }
+
         public string DataType { get { return turi; } }
         public override string ToString()
         {

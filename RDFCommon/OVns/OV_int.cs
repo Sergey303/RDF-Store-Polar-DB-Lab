@@ -1,6 +1,8 @@
+using System;
+
 namespace RDFCommon.OVns
 {
-    public class OV_int : ObjectVariants, ILiteralNode
+    public class OV_int : ObjectVariants, ILiteralNode, INumLiteral
     {
         public readonly int value;
 
@@ -48,6 +50,11 @@ namespace RDFCommon.OVns
 
 
         public override dynamic Content { get { return value; } }
+        public override ObjectVariants Change(Func<dynamic, dynamic> changing)
+        {
+            return new OV_float(changing(value));
+        }
+
         public string DataType { get { return SpecialTypesClass.Integer.FullName; } }
         public override string ToString()
         {

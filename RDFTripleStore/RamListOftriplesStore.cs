@@ -1,4 +1,5 @@
 using RDFCommon;
+using RDFCommon.OVns;
 
 namespace RDFTripleStore
 {
@@ -6,7 +7,8 @@ namespace RDFTripleStore
     {
         readonly RdfNamedGraphs graphs=new RdfNamedGraphs();
 
-        public RamListOftriplesStore(IGraphNode name) : base(name)
+        public RamListOftriplesStore(ObjectVariants name)
+            : base(name)
         {
         }
 
@@ -15,7 +17,7 @@ namespace RDFTripleStore
          
         }
 
-        public IStoreNamedGraphs NamedGraphs { get { return graphs; } }
+        public IStoreNamedGraphs NamedGraphs { get { return null; } }
         public void ClearAll()
         {
             Clear();

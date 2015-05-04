@@ -51,6 +51,7 @@
     <Compile Include="Interfaces\ILanguageLiteral.cs" />
     <Compile Include="Interfaces\ILiteralNode.cs" />
     <Compile Include="Interfaces\INodeGenerator.cs" />
+    <Compile Include="Interfaces\INumLiteral.cs" />
     <Compile Include="Interfaces\IObjectNode.cs" />
     <Compile Include="Interfaces\IPredicateNode.cs" />
     <Compile Include="Interfaces\ISpecialGraph.cs" />
@@ -73,6 +74,7 @@
     <Compile Include="OVns\OV_int.cs" />
     <Compile Include="OVns\OV_iri.cs" />
     <Compile Include="OVns\OV_iriint.cs" />
+    <Compile Include="OVns\OV_Lang.cs" />
     <Compile Include="OVns\OV_langstring.cs" />
     <Compile Include="OVns\OV_string.cs" />
     <Compile Include="OVns\OV_time.cs" />

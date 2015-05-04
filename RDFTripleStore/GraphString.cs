@@ -13,7 +13,7 @@ using Task15UniversalIndex;
 
 namespace RDFTripleStore
 {
-    public class GraphString : IGraph
+    public class GraphString// : IGraph
     {
         private TableView table;
 
@@ -95,7 +95,7 @@ namespace RDFTripleStore
         }
 
 
-        public IGraphNode Name { get { return ng.CreateUriNode("g"); } }
+        public ObjectVariants Name { get { return ng.CreateUriNode("g"); } }
         public INodeGenerator NodeGenerator { get { return ng; } }
 
         /// <summary>
@@ -105,17 +105,17 @@ namespace RDFTripleStore
         /// <param name="subject">если null или не указан, то будет вычислен из объекта ent</param>
         /// <param name="predicate">если null или не указан, то будет вычислен из объекта ent</param>
         /// <param name="objectNode">если null или не указан, то будет вычислен из объекта ent</param>
-        private Triple<ISubjectNode, IPredicateNode, IObjectNode> CTle(object[] row, ISubjectNode subject = null,
-            IPredicateNode predicate = null, IObjectNode objectNode = null)
+        private Triple<ObjectVariants, ObjectVariants, ObjectVariants> CTle(object[] row, ObjectVariants subject = null,
+            ObjectVariants predicate = null, ObjectVariants objectNode = null)
         { 
-            return new Triple<ISubjectNode, IPredicateNode, IObjectNode>(subject ?? ng.GetUri((string) row[0])
+            return new Triple<ObjectVariants, ObjectVariants, ObjectVariants>(subject ?? ng.GetUri((string) row[0])
                 , predicate ?? ng.GetUri((string) row[1])
                 , objectNode ?? row[2].ToOVariant());
         }
 
     
 
-        public IEnumerable<Triple<ISubjectNode, IPredicateNode, IObjectNode>> GetTriplesWithObject(IObjectNode o)
+        public IEnumerable<Triple<ObjectVariants, ObjectVariants, ObjectVariants>> GetTriplesWithObject(ObjectVariants o)
         {
             return os_ind.GetAllByKey(new Comparer.Comparer(((ObjectVariants)o)))
                 .Select(entry => entry.Get())
@@ -125,7 +125,7 @@ namespace RDFTripleStore
 
      
 
-        public IEnumerable<Triple<ISubjectNode, IPredicateNode, IObjectNode>> GetTriplesWithPredicate(IPredicateNode p)
+        public IEnumerable<Triple<ObjectVariants, ObjectVariants, ObjectVariants>> GetTriplesWithPredicate(ObjectVariants p)
         {
             return po_ind.GetAllByKey(new Comparer.Comparer((((IIriNode)p)).UriString))
                    .Select(entry => entry.Get())
@@ -133,7 +133,7 @@ namespace RDFTripleStore
                 .Select(ent => CTle(ent, predicate: p));
         }
 
-        public IEnumerable<Triple<ISubjectNode, IPredicateNode, IObjectNode>> GetTriplesWithSubject(ISubjectNode s)
+        public IEnumerable<Triple<ObjectVariants, ObjectVariants, ObjectVariants>> GetTriplesWithSubject(ObjectVariants s)
         {
             var count = table.Count();
             Console.WriteLine(count);
@@ -143,7 +143,7 @@ namespace RDFTripleStore
                                 .Select(ent => CTle(ent, subject: s));
         }
 
-        public IEnumerable<IObjectNode> GetTriplesWithSubjectPredicate(ISubjectNode subject, IPredicateNode predicate)
+        public IEnumerable<ObjectVariants> GetTriplesWithSubjectPredicate(ObjectVariants subject, ObjectVariants predicate)
         {
             IEnumerable<PaEntry> entities = spo_ind.GetAllByKey(new Comparer2((((IIriNode)subject)).UriString, (((IIriNode)predicate)).UriString));
             return entities
@@ -152,7 +152,7 @@ namespace RDFTripleStore
                 .Select(row => row[2].ToOVariant());
         }
 
-        public IEnumerable<IPredicateNode> GetTriplesWithSubjectObject(ISubjectNode subject, IObjectNode obj)
+        public IEnumerable<ObjectVariants> GetTriplesWithSubjectObject(ObjectVariants subject, ObjectVariants obj)
         {
             string ssubj = (((IIriNode)subject)).UriString;
             var objVar = (((ObjectVariants)obj));
@@ -164,7 +164,7 @@ namespace RDFTripleStore
                 .Select(row => ng.CreateUriNode((string)row[1]));
         }
 
-        public IEnumerable<ISubjectNode> GetTriplesWithPredicateObject(IPredicateNode predicate, IObjectNode obj)
+        public IEnumerable<ObjectVariants> GetTriplesWithPredicateObject(ObjectVariants predicate, ObjectVariants obj)
         {
             string pred = (((IIriNode)predicate)).UriString;
             var objVar = (((ObjectVariants)obj));
@@ -177,7 +177,7 @@ namespace RDFTripleStore
         }
 
     
-        public bool Contains(ISubjectNode subject, IPredicateNode predicate, IObjectNode obj)
+        public bool Contains(ObjectVariants subject, ObjectVariants predicate, ObjectVariants obj)
         {
             string ssubj = (((IIriNode)subject)).UriString;
             string pred = (((IIriNode)predicate)).UriString;
@@ -189,14 +189,14 @@ namespace RDFTripleStore
                   .ReadWritableTriples()
                   .Any();
         }
-        public IEnumerable<Triple<ISubjectNode, IPredicateNode, IObjectNode>> GetTriples()
+        public IEnumerable<Triple<ObjectVariants, ObjectVariants, ObjectVariants>> GetTriples()
         {
             return table.TableCell.Root.ElementValues()
                 .ReadWritableTriples()
                 .Select(ent => CTle(ent));
         }
 
-        public void Add(ISubjectNode s, IPredicateNode p, IObjectNode o)
+        public void Add(ObjectVariants s, ObjectVariants p, ObjectVariants o)
         {
             table.AppendValue(new object[] { ((OV_iriint)s).code, ((OV_iriint)p).code, (( ObjectVariants )o).ToWritable() });
         }
@@ -204,20 +204,20 @@ namespace RDFTripleStore
         {
             table.Clear();
         }
-        public void Insert(IEnumerable<Triple<ISubjectNode, IPredicateNode, IObjectNode>> triples)
+        public void Insert(IEnumerable<Triple<ObjectVariants, ObjectVariants, ObjectVariants>> triples)
         {
             foreach (var triple in triples)
                 Add(triple);
         }
 
-        public void Add(Triple<ISubjectNode, IPredicateNode, IObjectNode> t)
+        public void Add(Triple<ObjectVariants, ObjectVariants, ObjectVariants> t)
         {
             Add(t.Subject, t.Predicate, t.Object);
         }
 
      
 
-        public void Delete(IEnumerable<Triple<ISubjectNode, IPredicateNode, IObjectNode>> triples)
+        public void Delete(IEnumerable<Triple<ObjectVariants, ObjectVariants, ObjectVariants>> triples)
         {
             foreach (var triple in triples)
             {
@@ -231,7 +231,7 @@ namespace RDFTripleStore
             }                          
         }
 
-        public IEnumerable<ISubjectNode> GetAllSubjects()
+        public IEnumerable<ObjectVariants> GetAllSubjects()
         {
             return new HashSet<string>(table.TableCell.Root.ElementValues()
                 .ReadWritableTriples()

@@ -39,10 +39,6 @@
     <Reference Include="PolarDB">
       <HintPath>..\dll\PolarDB.dll</HintPath>
     </Reference>
-    <Reference Include="SparqlParseRun, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\dll\SparqlParseRun.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -50,6 +46,10 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
+    <Reference Include="Task13UniversalIndex, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\UniversalIndex\bin\Debug\Task13UniversalIndex.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Comparer\Comparer.cs" />
@@ -85,13 +85,13 @@
     <Folder Include="parsers\SPARQL\" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\SparqlWpf\SparqlParseRun\SparqlParseRun.csproj">
+      <Project>{ae8cbedb-a66e-4705-953e-c16793426e89}</Project>
+      <Name>SparqlParseRun</Name>
+    </ProjectReference>
     <ProjectReference Include="..\RDFCommon\RDFCommon.csproj">
       <Project>{7eb60f80-87ca-4645-9e1f-051735195d92}</Project>
       <Name>RDFCommon</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\UniversalIndex\UniversalIndex.csproj">
-      <Project>{E4AB7A63-7B55-43E9-B1AA-C8E0F8AA87E3}</Project>
-      <Name>UniversalIndex</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

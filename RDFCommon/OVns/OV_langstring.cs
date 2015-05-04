@@ -54,6 +54,11 @@ namespace RDFCommon.OVns
 
         public string Lang { get { return lang; } }
         public override dynamic Content { get { return value; } }
+        public override ObjectVariants Change(Func<dynamic, dynamic> changing)
+        {
+            return new OV_langstring(changing(value), lang);
+        }
+
         public string DataType { get { return SpecialTypesClass.LangString.FullName; } }
         public override string ToString()
         {
