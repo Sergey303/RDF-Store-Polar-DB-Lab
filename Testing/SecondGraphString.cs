@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using GoTripleStore;
+
 using RDFCommon;
 using RDFCommon.Interfaces;
 using RDFCommon.OVns;
@@ -33,28 +31,32 @@ namespace TestingNs
         public IEnumerable<T> GetTriplesWithObject<T>(ObjectVariants o, Func<ObjectVariants, ObjectVariants, T> createResult)
         {
             return base.GetTriplesWithObject(o)
-                .ReadWritableTriples()
+                .Select(base.Dereference)
+                //.ReadWritableTriples()
                 .Select(row => createResult(ng.CreateUriNode(DecodeIRI(row[0])), ng.CreateUriNode(DecodeIRI(row[1]))));
         }
 
         public IEnumerable<T> GetTriplesWithPredicate<T>(ObjectVariants p, Func<ObjectVariants, ObjectVariants, T> createResult)
         {
             return base.GetTriplesWithPredicate(((IIriNode)p).UriString)
-                .ReadWritableTriples()
+             //   .ReadWritableTriples()
+                .Select(base.Dereference)
                 .Select(row => createResult(ng.CreateUriNode(DecodeIRI(row[0])), DecodeOV(row[2])));
         }
 
         public IEnumerable<T> GetTriplesWithSubject<T>(ObjectVariants s, Func<ObjectVariants, ObjectVariants, T> createResult)
         {
             return base.GetTriplesWithSubject(((IIriNode)s).UriString)
-                .ReadWritableTriples()
+                //ReadWritableTriples()
+                .Select(base.Dereference)
                 .Select(row => createResult(ng.CreateUriNode(DecodeIRI(row[1])), DecodeOV(row[2])));
         }
 
         public IEnumerable<ObjectVariants> GetTriplesWithSubjectPredicate(ObjectVariants subj, ObjectVariants pred)
         {
             return base.GetTriplesWithSubjectPredicate(((IIriNode)subj).UriString, ((IIriNode)pred).UriString)
-                .ReadWritableTriples()
+              //  .ReadWritableTriples()
+                .Select(base.Dereference)
                 .Select(row =>
                 {
                     return DecodeOV(row[2]);
@@ -65,14 +67,16 @@ namespace TestingNs
         {
             throw new NotImplementedException();
             return base.GetTriplesWithSubjectPredicate(((IIriNode)subj).UriString, obj)
-                  .ReadWritableTriples()
+                  //.ReadWritableTriples()
+                .Select(base.Dereference)
                   .Select(row => ng.CreateUriNode(DecodeIRI(row[1]))).ToArray();
         }
 
         public IEnumerable<ObjectVariants> GetTriplesWithPredicateObject(ObjectVariants pred, ObjectVariants obj)
         {
             return base.GetTriplesWithPredicateObject(((IIriNode)pred).UriString, obj)
-                .ReadWritableTriples()
+               // .ReadWritableTriples()
+                 .Select(base.Dereference)
                 .Select(row =>
                 {
                     return ng.CreateUriNode(DecodeIRI(row[0]));
@@ -124,10 +128,13 @@ namespace TestingNs
             throw new NotImplementedException();
         }
 
-        public void FromTurtle(string gString)
+        public void FromTurtle(string path)
         {
             //table.Clear();
-            Build(ReadTripleStringsFromTurtle.LoadGraph(gString).Select(t => Tuple.Create(t.Subject.ToLowerInvariant(), t.Predicate.ToLowerInvariant(), t.Object)));
+            //Build(ReadTripleStringsFromTurtle.LoadGraph(gString).Select(t => Tuple.Create(t.Subject.ToLowerInvariant(), t.Predicate.ToLowerInvariant(), t.Object)));
+        Build(path);
+
         }
+        
     }
 }
