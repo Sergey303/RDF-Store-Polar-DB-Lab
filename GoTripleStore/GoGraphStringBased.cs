@@ -19,6 +19,8 @@ namespace GoTripleStore
         private IndexDynamic<TripleSPO, IndexViewImmutable<TripleSPO>> spo_ind;
         private IndexViewImmutable<DuplePO> po_ind_arr;
         private IndexDynamic<DuplePO, IndexViewImmutable<DuplePO>> po_ind;
+        private IndexViewImmutable<ObjectVariants> o_ind_arr;
+        private IndexDynamic<ObjectVariants, IndexViewImmutable<ObjectVariants>> o_ind;
         public GoGraphStringBased(string path)
         {
             PType tp_tabelement = new PTypeRecord(
@@ -31,7 +33,7 @@ namespace GoTripleStore
                     return new TripleSPO()
                     {
                         triple = new Tuple<string, string, ObjectVariants>((string)va[0], (string)va[1],
-                            ObjectVariants.CreateLiteralNode(false))
+                            va[2].ToOVariant())
                     };
                 };
             Func<object, DuplePO> POkeyproducer = v =>
@@ -40,8 +42,13 @@ namespace GoTripleStore
                 return new DuplePO()
                 {
                     tuple = new Tuple<string, ObjectVariants>((string)va[1],
-                        ObjectVariants.CreateLiteralNode(false))
+                        va[2].ToOVariant())
                 };
+            };
+            Func<object, ObjectVariants> uOkeyproducer = v =>
+            {
+                object[] va = (object[])((object[])v)[1];
+                return va[2].ToOVariant();
             };
             // Опорная таблица
             table = new TableView(path + "stable", tp_tabelement);
@@ -69,14 +76,27 @@ namespace GoTripleStore
                 IndexArray = po_ind_arr,
                 KeyProducer = POkeyproducer
             };
+            // Индекс o
+            o_ind_arr = new IndexViewImmutable<ObjectVariants>(path + "o_ind")
+            {
+                Table = table,
+                KeyProducer = uOkeyproducer
+            };
+            o_ind = new IndexDynamic<ObjectVariants, IndexViewImmutable<ObjectVariants>>(false)
+            {
+                Table = table,
+                IndexArray = o_ind_arr,
+                KeyProducer = uOkeyproducer
+            };
         }
-
+        public void Clear() { table.Clear(); }
         public void Build(IEnumerable<Tuple<string, string, ObjectVariants>> triples)
         {
             table.Clear();
             table.Fill(triples.Select(tr => new object[] { tr.Item1, tr.Item2, tr.Item3.ToWritable() }));
             spo_ind_arr.Build();
             po_ind_arr.Build();
+            o_ind_arr.Build();
         }
 
         public Func<PaEntry, object[]> Dereference { get { return en => (object[])en.Field(1).Get(); } }
@@ -189,9 +209,11 @@ namespace GoTripleStore
             return query;
         }
 
-        public IEnumerable<PaEntry> GetTriplesWithObject(object obj)
+        public IEnumerable<PaEntry> GetTriplesWithObject(object oobj)
         {
-            throw new NotImplementedException();
+            ObjectVariants obj = (ObjectVariants)oobj;
+            var query = o_ind.GetAllByKey(obj).Select(en => en.Field(1));
+            return query;
         }
     }
 }

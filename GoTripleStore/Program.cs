@@ -69,16 +69,30 @@ namespace GoTripleStore
                     if ((res == "true" && r) || (res == "false" && !r)) { ecnt++; }
                     else ncnt++;
                 }
-                else if (spo.Name == "spD")
+                else if (spo.Name == "spD_")
                 {
                     var query = graph.GetTriplesWithSubjectPredicate(s, p);
                     int cnt = query.Count(); ecnt++;
                 }
-                else if (spo.Name == "spO")
+                else if (spo.Name == "spO" || spo.Name == "spD")
                 {
                     var query = graph.GetTriplesWithSubjectPredicate(s, p);
-                    if (query.Count() == 0 && res == "") continue;
-                    ecnt++;
+                    int count = query.Count();
+                    if (count == 0 && res == "") { ecnt++; continue; }
+                    if (count == res.Split(' ').Count())
+                    {
+                        ecnt++;
+                        if (count == 1)
+                        {
+                            var ent = query.First();
+                            var v = (graph.Dereference(ent)[2]).ToOVariant();
+                            Console.WriteLine("{0}==>{1}", res, v);
+                        }
+                    }
+                    else
+                    {
+                        ncnt++;
+                    }
 
                 }
                 else if (spo.Name == "Spo")

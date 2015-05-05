@@ -207,6 +207,8 @@ namespace GoTripleStore
             //};
         }
 
+        public void Clear() { table.Clear(); }
+
         public void Build(IEnumerable<Tuple<string, string, ObjectVariants>> triples)
         {
             table.Clear();
@@ -250,7 +252,14 @@ namespace GoTripleStore
             spo_index_arr.Warmup();
             //po_index_arr.Warmup(); // вариант с полуключем
         }
-        public Func<PaEntry, object[]> Dereference { get { return en => (object[])en.Field(1).Get(); } }
+        public Func<PaEntry, object[]> Dereference { get 
+        {
+            return en =>
+            {
+                //var v = en.Get();
+                return (object[])en.Get();
+            };
+        } }
 
         // Структуры, играющие роль ключа
         public class TripleSPOu : IComparable
