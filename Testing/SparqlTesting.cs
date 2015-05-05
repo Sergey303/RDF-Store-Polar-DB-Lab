@@ -42,6 +42,27 @@ WHERE {
             }, "run simple" + millions + ".ttl ");
         }
 
+        public static void TestQuery(string queryString, bool load, int millions)
+        {
+            SparqlStore2 sparqlStore = new SparqlStore2("../../../Databases/");
+            if (load)
+            Perfomance.ComputeTime(() =>
+            {
+                sparqlStore.ReloadFrom(Config.Source_data_folder_path + millions + ".ttl");
+            }, "build " + millions + ".ttl ");
+
+            
+            
+
+            SparqlQuery query = null;
+            Perfomance.ComputeTime(() => query = sparqlStore.Parse(queryString), "parse ");
+            SparqlResultSet results = null;
+            Perfomance.ComputeTime(() => results = query.Run(sparqlStore), "run ");
+            
+
+            Console.WriteLine("count "+results.Results.Count());
+        }
+
         public static void BSBm(int millions, bool load)
         {
             SparqlStore2 sparqlStore = new SparqlStore2("../../../Databases/");
