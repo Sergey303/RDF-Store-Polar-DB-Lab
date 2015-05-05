@@ -113,12 +113,14 @@ WHERE {
             using (StreamWriter r = new StreamWriter(@"..\..\output.txt", true))
             {
                 r.WriteLine("milions " + millions);
+                r.WriteLine("date time " + DateTime.Now);
                 r.WriteLine("max memory usage " + maxMemoryUsage);
                 r.WriteLine("average " + string.Join(", ", results.Select(l => l == 0 ? "inf" : (500 * 1000 / l).ToString())));
                 r.WriteLine("minimums " + string.Join(", ", minimums));
                 r.WriteLine("maximums " + string.Join(", ", maximums));
                 r.WriteLine("total parse " + string.Join(", ", totalparseMS));
                 r.WriteLine("total run " + string.Join(", ", totalrun));
+                r.WriteLine("total " + totalparseMS.Sum()+totalrun.Sum());
                 //    r.WriteLine("countCodingUsages {0} totalMillisecondsCodingUsages {1}", TripleInt.EntitiesCodeCache.Count, TripleInt.totalMilisecondsCodingUsages);
 
                 //r.WriteLine("EWT average search" + EntitiesMemoryHashTable.total / EntitiesMemoryHashTable.count);
