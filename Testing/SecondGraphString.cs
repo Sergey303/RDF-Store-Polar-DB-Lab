@@ -27,7 +27,7 @@ namespace TestingNs
         public INodeGenerator NodeGenerator { get { return ng; } }
         public void Clear()
         {
-            throw new NotImplementedException();
+            //throw new NotImplementedException();
         }
 
         public IEnumerable<T> GetTriplesWithObject<T>(ObjectVariants o, Func<ObjectVariants, ObjectVariants, T> createResult)

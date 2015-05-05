@@ -207,6 +207,8 @@ namespace GoTripleStore
             //};
         }
 
+        public void Clear() { table.Clear(); }
+
         public void Build(IEnumerable<Tuple<string, string, ObjectVariants>> triples)
         {
             table.Clear();
