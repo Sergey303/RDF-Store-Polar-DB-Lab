@@ -9,7 +9,7 @@ namespace RDFTripleStore
 
         public static bool NotDeleted(object[] entry)
         {
-            return !(bool)entry[0];
+            return true; // !(bool)entry[0];
         }
 
         public static IEnumerable<object[]> ReadWritableTriples(this IEnumerable<object> source)
