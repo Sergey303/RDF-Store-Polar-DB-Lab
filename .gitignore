@@ -192,3 +192,4 @@ ModelManifest.xml
 /RDFTripleStore/Perfomance.txt
 /Databases/*.pac
 /Databases/*.pac
+/Testing/output.txt

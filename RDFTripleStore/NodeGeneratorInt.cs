@@ -33,6 +33,7 @@ namespace RDFTripleStore
 
         public ObjectVariants CreateLiteralNode(string p)
         {
+            p = p.Trim('"', '\'');
             return new OV_string(p);
         }
 

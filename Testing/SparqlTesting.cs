@@ -15,7 +15,7 @@ namespace TestingNs
             SparqlStore2 sparqlStore = new SparqlStore2("../../../Databases/");
             Perfomance.ComputeTime(() =>
             {
-                // sparqlStore.ReloadFrom(Config.Source_data_folder_path + millions + ".ttl");
+                sparqlStore.ReloadFrom(Config.Source_data_folder_path + millions + ".ttl");
             }, "build " + millions + ".ttl ");
             //   Console.WriteLine(sparqlStore.GetTriplesWithSubject(sparqlStore.NodeGenerator.CreateUriNode("http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromVendor1/")));
             Perfomance.ComputeTime(() =>
@@ -47,13 +47,13 @@ WHERE {
             SparqlStore2 sparqlStore = new SparqlStore2("../../../Databases/");
             if (load)
                 sparqlStore.ReloadFrom(Config.Source_data_folder_path + millions + ".ttl");
-            RunBerlinsWithConstants(sparqlStore, millions);
-            //   RunBerlinsParameters(sparqlStore, millions);
+            //   RunBerlinsWithConstants(sparqlStore, millions);
+            RunBerlinsParameters(sparqlStore, millions);
         }
 
         public static void RunBerlinsParameters(SparqlStore2 ts, int millions)
         {
-
+           ts.Warmup();
             Console.WriteLine("bsbm parametered");
             var paramvaluesFilePath = string.Format(@"..\..\examples\bsbm\queries\parameters\param values for{0} m.txt", millions);
             //            using (StreamWriter streamQueryParameters = new StreamWriter(paramvaluesFilePath))

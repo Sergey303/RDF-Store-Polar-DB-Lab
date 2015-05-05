@@ -49,7 +49,7 @@ namespace TestingNs
                 return new TripleSPOu()
                 {
                     triple = new Tuple<string, string, ObjectVariants>((string)va[0], (string)va[1],
-                        ObjectVariants.CreateLiteralNode(false))
+                        va[2].ToOVariant())
                 };
             };
             Func<object, DuplePOu> uPOkeyproducer = v =>
@@ -58,7 +58,7 @@ namespace TestingNs
                 return new DuplePOu()
                 {
                     tuple = new Tuple<string, ObjectVariants>((string)va[1],
-                        ObjectVariants.CreateLiteralNode(false))
+                     va[2].ToOVariant())
                 };
             };
             Func<object, MonopleOu> uOkeyproducer = v =>
@@ -66,7 +66,7 @@ namespace TestingNs
                 object[] va = (object[])((object[])v)[1];
                 return new MonopleOu()
                 {
-                    tuple = new Tuple<ObjectVariants>(ObjectVariants.CreateLiteralNode(false))
+                    tuple = new Tuple<ObjectVariants>(va[2].ToOVariant())
                 };
             };
             // Опорная таблица
@@ -391,7 +391,7 @@ namespace TestingNs
 
         public IEnumerable<PaEntry> GetTriples()
         {
-            throw new NotImplementedException();
+            return table.TableCell.Root.Elements();
         }
 
         public IEnumerable<PaEntry> GetTriplesWithSubject(object osubj)
@@ -476,7 +476,7 @@ namespace TestingNs
 
         public void Build(string path)
         {
-            var generator = new TripleGeneratorBufferedParallel(path, "g", 100000);
+            var generator = new TripleGeneratorBufferedParallel(path, "g");
 table.Clear();
 
         table.Fill(new Object[0]);
@@ -487,6 +487,7 @@ table.Clear();
                     table.AppendValue(new object[] {t.Subject, t.Predicate, t.Object.ToWritable() });
                 }  
             });
+            
             Console.WriteLine("table fill ok.");
             
             spo_ind_arr.Build();

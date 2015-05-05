@@ -74,6 +74,7 @@ namespace TestingNs
 
         public IEnumerable<ObjectVariants> GetTriplesWithPredicateObject(ObjectVariants pred, ObjectVariants obj)
         {
+         
             return base.GetTriplesWithPredicateObject(((IIriNode)pred).UriString, obj)
                // .ReadWritableTriples()
                  .Select(base.Dereference)
@@ -120,7 +121,7 @@ namespace TestingNs
 
         public long GetTriplesCount()
         {
-            throw new NotImplementedException();
+           return base.GetTriples().Count();
         }
 
         public bool Any()
