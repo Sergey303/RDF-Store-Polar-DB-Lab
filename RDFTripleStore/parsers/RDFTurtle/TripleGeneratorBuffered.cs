@@ -39,8 +39,8 @@ namespace RDFTripleStore.parsers.RDFTurtle
                         onGenerate(buffer);
                         buffer=new List<Triple<string, string, ObjectVariants>>();
                     }
-                })
-                ;
+                });
+            onGenerate(buffer);
         }
     }
 }
