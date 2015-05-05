@@ -8,5 +8,4 @@
 "?reviewer",
 "?revName",
 "?rating1",
-"?rating2",
-"?date" ] }, "results": { "bindings" : [] } }
+"?rating2" ] }, "results": { "bindings" : [{"?productLabel" : { "type" : "literal", "value" : "substituting meriting detesting" }}] } }
