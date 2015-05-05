@@ -8,7 +8,7 @@
             //graph.TestReadTtl_Cocor(1);
             //graph.TestSearch();
         //     SparqlTesting.TestSparqlStore(1);
-            SparqlTesting.BSBm(1, false);
+            SparqlTesting.BSBm(1, true);
             //  Testing.TestExamples();
         }
     }
