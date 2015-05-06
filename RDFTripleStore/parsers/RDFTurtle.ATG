@@ -2,11 +2,13 @@ using System;
 using RDFCommon;
 using System.Collections.Generic;
 using System.Linq;
-using RDFTripleStore.OVns;
+using RDFCommon.OVns;
 
 COMPILER RDFTurtle
  
  public string graphName;
+
+NodeGenerator ng=new NodeGenerator();
 
 public Action<string, string, ObjectVariants> ft;
 private readonly Prologue prologue = new Prologue();
@@ -89,7 +91,7 @@ RDFTurtle
 /*____________________________________________*/
 	Objectlist<string s, string p>	=(. ObjectVariants ov; .)	Object<out ov> (. ft(s,p,ov); .) {',' Object<out ov> (. ft(s,p,ov); .) }.
 /*____________________________________________*/
-	Verb<out string p>	=  (. p=null; .)	(Iri<out p> | 'a' (. p = SpecialTypesClass.RdfType.FullName; .)).
+	Verb<out string p>	=  (. p=null; .)	(Iri<out p> | 'a' (. p = SpecialTypesClass.RdfType; .)).
 /*____________________________________________*/
 	Subject <out string value>	=  (. value=null; .) (Iri <out value> | Blanknode<out value> | Collection<out value>).
    /*____________________________________________	Predicate	=	Iri. ____________________________________________*/
@@ -97,46 +99,46 @@ RDFTurtle
 	((Iri<out iri> | Blanknode<out iri> | Collection<out iri> | Blanknodepropertylist<out iri>) (. value = new OV_iri(iri); .) 
 	| 	Rdfliteral<out value> | Numericliteral<out value> | Booleanliteral<out value>).
 /*____________________________________________ Literal<out value>	=	Rdfliteral | Numericliteral | Booleanliteral<out > .____________________________________________*/
-	Blanknodepropertylist<out string value>	=	'[' (. value= ObjectVariants.CreateBlankNode(graphName); .)
+	Blanknodepropertylist<out string value>	=	'[' (. value= ng.CreateBlank(); .)
 													 Predicateobjectlist<value> ']'.
 /*____________________________________________*/
 	Collection<out string value>	=	'(' (. ObjectVariants ov; var nodes = new List<ObjectVariants>(); .) 
 	{ Object<out ov> (.  nodes.Add(ov); .) } ')'
-	(. var rdfFirst = SpecialTypesClass.RdfFirst.FullName;
-            var rdfRest = SpecialTypesClass.RdfRest.FullName;
-                string sparqlBlankNodeFirst = ObjectVariants.CreateBlankNode(graphName);
-                string sparqlBlankNodeNext = ObjectVariants.CreateBlankNode(graphName);
+	(. var rdfFirst = SpecialTypesClass.RdfFirst;
+            var rdfRest = SpecialTypesClass.RdfRest;
+                string sparqlBlankNodeFirst = ng.CreateBlank();
+                string sparqlBlankNodeNext = ng.CreateBlank();
             foreach (var node in nodes.Take(nodes.Count - 1))
             {
                 ft(sparqlBlankNodeNext, rdfFirst, node);
-                ft(sparqlBlankNodeNext, rdfRest, new OV_iri(sparqlBlankNodeNext = ObjectVariants.CreateBlankNode(graphName)));
+                ft(sparqlBlankNodeNext, rdfRest, new OV_iri(sparqlBlankNodeNext = ng.CreateBlank()));
             }
             ft(sparqlBlankNodeNext, rdfFirst, nodes[nodes.Count - 1]);
-            ft(sparqlBlankNodeNext, rdfRest, new OV_iri(SpecialTypesClass.Nil.FullName));
+            ft(sparqlBlankNodeNext, rdfRest, new OV_iri(SpecialTypesClass.Nil));
             value = sparqlBlankNodeFirst;
 	 .).
 /*____________________________________________*/
 	Numericliteral <out ObjectVariants value>	= (. value=null; .)	
-	(integer (. value=ObjectVariants.CreateLiteralNode(t.val); .) 
-	 | decimal (. value=ObjectVariants.CreateLiteralNode(t.val); .) 
-	 | double (. value=ObjectVariants.CreateLiteralNode(t.val); .)).
+	(integer (. value=new OV_int(t.val); .) 
+	 | decimal (. value=new OV_decimal(t.val); .) 
+	 | double (. value=new OV_double(t.val); .)).
 /*____________________________________________*/
 	Rdfliteral<out ObjectVariants value>	= (. value=null; .)	
 								(String (. string str=t.val; .) 
-							[langtag  (.  value=ObjectVariants.CreateLang(str, t.val); .)
-							| "^^" (.string literalType; .) Iri<out literalType> (. value = ObjectVariants.CreateLiteralNode(str, literalType); .)
-							] (. if(value==null) value=ObjectVariants.CreateLiteralNode(str); .)).
+							[langtag  (.  value=new OV_langstring(str, t.val); .)
+							| "^^" (.string literalType; .) Iri<out literalType> (. value = ng.CreateLiteralNode(str, literalType); .)
+							] (. if(value==null) value=new OV_string(str); .)).
 /*____________________________________________*/
-	Booleanliteral<out ObjectVariants value>	= (. value=null; .)	("true" (. value = ObjectVariants.CreateLiteralNode(true); .) | "false" (. value=ObjectVariants.CreateLiteralNode(false); .)).
+	Booleanliteral<out ObjectVariants value>	= (. value=null; .)	("true" (. value = new OV_bool(true); .) | "false" (. value=new OV_bool(false); .)).
 /*____________________________________________*/
 	String	=	stringliteralquote | stringliteralsinglequote | stringliterallongsinglequote | stringliterallongquote.
 /*____________________________________________*/
 	Iri<out string value>	= (. value=null; .)
-	(iriref (. value=prologue.GetFromIri(t.val.Substring(1, t.val.Length-2)).FullName; .) 
-	| pnameln (. value=prologue.GetUriFromPrefixed(t.val).FullName; .) | pnamens (. value=prologue.GetUriFromPrefixedNamespace(t.val).FullName; .)).
+	(iriref (. value=prologue.GetFromIri(t.val.Substring(1, t.val.Length-2)); .) 
+	| pnameln (. value=prologue.GetUriFromPrefixed(t.val); .) | pnamens (. value=prologue.GetUriFromPrefixedNamespace(t.val); .)).
 /*____________________________________________		Prefixedname	=	pnameln | pnamens. ____________________________________________*/
 	Blanknode<out string value>	=  (. value=null; .)
-  (blanknodelabel  (. value=ObjectVariants.CreateBlankNode(t.val,graphName); .)
-| anon (. value=ObjectVariants.CreateBlankNode(graphName); .)).
+  (blanknodelabel  (. value=ng.CreateBlank(t.val,graphName); .)
+| anon (. value=ng.CreateBlank(); .)).
 /*____________________________________________*/
 END RDFTurtle.

@@ -52,7 +52,7 @@ namespace RDFCommon.OVns
             return new OV_nonPositiveInteger(changing(value));
         }
 
-        public string DataType { get { return SpecialTypesClass.Double.FullName; } }
+        public string DataType { get { return SpecialTypesClass.Double; } }
         public override string ToString()
         {
             return value.ToString();

@@ -77,7 +77,7 @@ namespace RDFCommon.OVns
             var otherTyped = (OV_iri)obj;
             return System.String.Compare(uriString, otherTyped.uriString, System.StringComparison.InvariantCulture);
         }
-
+        
       
     }
 }

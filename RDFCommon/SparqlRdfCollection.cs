@@ -9,7 +9,7 @@ namespace RDFCommon
     {
         public List<IAllNode> nodes = new List<IAllNode>();
 
-        public ObjectVariants GetNode(Action<Triple<ObjectVariants, ObjectVariants, ObjectVariants>> addTriple, INodeGenerator q)
+        public ObjectVariants GetNode(Action<ObjectVariants, ObjectVariants, ObjectVariants> addTriple, INodeGenerator q)
         {
 
 
@@ -17,11 +17,11 @@ namespace RDFCommon
                 ObjectVariants sparqlBlankNodeNext = q.CreateBlankNode();
             foreach (var node in nodes.Take(nodes.Count - 1))
             {
-                addTriple(new Triple<ObjectVariants, ObjectVariants, ObjectVariants>(sparqlBlankNodeNext, q.SpecialTypes.first, (ObjectVariants)node));
-                addTriple(new Triple<ObjectVariants, ObjectVariants, ObjectVariants>(sparqlBlankNodeNext, q.SpecialTypes.rest, sparqlBlankNodeNext = q.CreateBlankNode()));
+                addTriple(sparqlBlankNodeNext, q.SpecialTypes.first, (ObjectVariants)node);
+                addTriple(sparqlBlankNodeNext, q.SpecialTypes.rest, sparqlBlankNodeNext = q.CreateBlankNode());
             }
-            addTriple(new Triple<ObjectVariants, ObjectVariants, ObjectVariants>(sparqlBlankNodeNext, q.SpecialTypes.first, (ObjectVariants)nodes[nodes.Count - 1]));
-            addTriple(new Triple<ObjectVariants, ObjectVariants, ObjectVariants>(sparqlBlankNodeNext, q.SpecialTypes.rest, q.SpecialTypes.nil));
+            addTriple(sparqlBlankNodeNext, q.SpecialTypes.first, (ObjectVariants)nodes[nodes.Count - 1]);
+            addTriple(sparqlBlankNodeNext, q.SpecialTypes.rest, q.SpecialTypes.nil);
             return sparqlBlankNodeFirst;
         }
     }

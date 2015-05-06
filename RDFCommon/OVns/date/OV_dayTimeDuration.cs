@@ -2,27 +2,23 @@ using System;
 
 namespace RDFCommon.OVns
 {
-    public class OV_bool : ObjectVariants, ILiteralNode
+    public class OV_dayTimeDuration : ObjectVariants, ILiteralNode, INumLiteral
     {
-        public readonly bool value;
+        public readonly TimeSpan value;
 
-        public OV_bool(bool value)
+        public OV_dayTimeDuration(TimeSpan value)
         {
             this.value = value;
         }
 
-        public OV_bool(string s) : this( bool.Parse(s))
-        {
-        }
-
         public override ObjectVariantEnum Variant
         {
-            get { return ObjectVariantEnum.Bool; }
+            get { return ObjectVariantEnum.Int; }
         }
 
         public override object WritableValue
         {
-            get { return value; }
+            get { return value.Ticks; }
         }
 
         // override object.Equals
@@ -40,23 +36,26 @@ namespace RDFCommon.OVns
                 return false;
             }
 
-            return value == ((OV_bool)obj).value;
+            return value == ((OV_dayTimeDuration)obj).value;
 
         }
 
         public override int GetHashCode()
         {
-            return unchecked((27644437 ^ value.GetHashCode()) * (127 ^ Variant.GetHashCode()));
+            var hashCode = value.GetHashCode();
+            return unchecked(( 79 ^ hashCode) * ( 127 ^ Variant.GetHashCode()));
+            //int c = Variant.GetHashCode() << 27 | (hashCode & ((1 << 27) - 1));
+            //return c;
         }
 
 
         public override dynamic Content { get { return value; } }
         public override ObjectVariants Change(Func<dynamic, dynamic> changing)
         {
-            return new OV_bool(changing(value));
+            return new OV_dayTimeDuration(changing(value));
         }
 
-        public string DataType { get { return SpecialTypesClass.Bool; } }
+        public string DataType { get { return SpecialTypesClass.Integer; } }
         public override string ToString()
         {
             return value.ToString();
@@ -65,7 +64,7 @@ namespace RDFCommon.OVns
         {
             int baseComp = base.CompareTo(obj);
             if (baseComp != 0) return baseComp;
-            var otherTyped = (OV_bool)obj;           
+            var otherTyped = (OV_dayTimeDuration)obj;
             return value.CompareTo(otherTyped.value);
         }
     }

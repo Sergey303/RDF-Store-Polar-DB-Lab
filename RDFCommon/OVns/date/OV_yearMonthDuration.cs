@@ -55,7 +55,7 @@ namespace RDFCommon.OVns
             return new OV_yearMonthDuration(changing(value));
         }
 
-        public string DataType { get { return SpecialTypesClass.Integer.FullName; } }
+        public string DataType { get { return SpecialTypesClass.Integer; } }
         public override string ToString()
         {
             return value.ToString();

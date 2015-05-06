@@ -2,17 +2,13 @@ using System;
 
 namespace RDFCommon.OVns
 {
-    public class OV_bool : ObjectVariants, ILiteralNode
+    public class OV_anyURI : ObjectVariants, ILiteralNode
     {
-        public readonly bool value;
+        public readonly string value;
 
-        public OV_bool(bool value)
+        public OV_anyURI(string value)
         {
             this.value = value;
-        }
-
-        public OV_bool(string s) : this( bool.Parse(s))
-        {
         }
 
         public override ObjectVariantEnum Variant
@@ -40,7 +36,7 @@ namespace RDFCommon.OVns
                 return false;
             }
 
-            return value == ((OV_bool)obj).value;
+            return value == ((OV_anyURI)obj).value;
 
         }
 
@@ -65,7 +61,7 @@ namespace RDFCommon.OVns
         {
             int baseComp = base.CompareTo(obj);
             if (baseComp != 0) return baseComp;
-            var otherTyped = (OV_bool)obj;           
+            var otherTyped = (OV_anyURI)obj;           
             return value.CompareTo(otherTyped.value);
         }
     }

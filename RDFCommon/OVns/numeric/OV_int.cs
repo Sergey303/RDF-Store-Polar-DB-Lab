@@ -11,6 +11,13 @@ namespace RDFCommon.OVns
             this.value = value;
         }
 
+        public OV_int(string s)
+            : this(int.Parse(s))
+        {
+            
+
+        }
+
         public override ObjectVariantEnum Variant
         {
             get { return ObjectVariantEnum.Int; }
@@ -55,7 +62,7 @@ namespace RDFCommon.OVns
             return new OV_int(changing(value));
         }
 
-        public string DataType { get { return SpecialTypesClass.Integer.FullName; } }
+        public string DataType { get { return SpecialTypesClass.Integer; } }
         public override string ToString()
         {
             return value.ToString();

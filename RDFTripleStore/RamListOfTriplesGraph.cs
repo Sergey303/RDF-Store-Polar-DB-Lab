@@ -10,7 +10,7 @@ namespace RDFTripleStore
 {
     public class RamListOfTriplesGraph : NodeGenerator, IGraph 
     {
-        public RamListOfTriplesGraph(ObjectVariants name)
+        public RamListOfTriplesGraph(string name)
         {
           //  Name = Guid.NewGuid().ToString();
             Name = name;
@@ -91,18 +91,18 @@ namespace RDFTripleStore
 
         public void FromTurtle(string fileName)
         {
-            var generator = new TripleGeneratorBufferedParallel(fileName, Name.ToString());
+            var generator = new TripleGeneratorBufferedParallel(fileName, Name);
             generator.Start(list => triples.AddRange(
                 list.Select(
                     t =>    
                         new Triple<ObjectVariants, ObjectVariants, ObjectVariants>(
-                            NodeGenerator.CreateUriNode(t.Subject),
-                            NodeGenerator.CreateUriNode(t.Predicate), 
+                            NodeGenerator.AddIri(t.Subject),
+                            NodeGenerator.AddIri(t.Predicate), 
                             (ObjectVariants) t.Object))));
         }
 
 
-        public ObjectVariants Name { get; private set; }
+        public string Name { get; private set; }
         public INodeGenerator NodeGenerator { get { return this; }}
 
         public void Clear()

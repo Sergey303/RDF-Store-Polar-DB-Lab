@@ -2,8 +2,11 @@ using System;
 using RDFCommon;
 using System.Collections.Generic;
 using System.Linq;
-using System;
 using RDFCommon.OVns;
+
+
+
+using System;
 
 namespace RDFTripleStore.parsers.RDFTurtle {
 
@@ -38,6 +41,8 @@ public class Parser {
 	int errDist = minErrDist;
 
 public string graphName;
+
+NodeGenerator ng=new NodeGenerator();
 
 public Action<string, string, ObjectVariants> ft;
 private readonly Prologue prologue = new Prologue();
@@ -202,7 +207,7 @@ private readonly Prologue prologue = new Prologue();
 
 	void Blanknodepropertylist(out string value) {
 		Expect(22);
-		value= ObjectVariants.CreateBlankNode(graphName); 
+		value= ng.CreateBlank(); 
 		Predicateobjectlist(value);
 		Expect(23);
 	}
@@ -213,7 +218,7 @@ private readonly Prologue prologue = new Prologue();
 			Iri(out p);
 		} else if (la.kind == 21) {
 			Get();
-			p = SpecialTypesClass.RdfType.FullName; 
+			p = SpecialTypesClass.RdfType; 
 		} else SynErr(34);
 	}
 
@@ -254,13 +259,13 @@ private readonly Prologue prologue = new Prologue();
 		value=null; 
 		if (la.kind == 1) {
 			Get();
-			value=prologue.GetFromIri(t.val.Substring(1, t.val.Length-2)).FullName; 
+			value=prologue.GetFromIri(t.val.Substring(1, t.val.Length-2)); 
 		} else if (la.kind == 3) {
 			Get();
-			value=prologue.GetUriFromPrefixed(t.val).FullName; 
+			value=prologue.GetUriFromPrefixed(t.val); 
 		} else if (la.kind == 2) {
 			Get();
-			value=prologue.GetUriFromPrefixedNamespace(t.val).FullName; 
+			value=prologue.GetUriFromPrefixedNamespace(t.val); 
 		} else SynErr(36);
 	}
 
@@ -268,10 +273,10 @@ private readonly Prologue prologue = new Prologue();
 		value=null; 
 		if (la.kind == 4) {
 			Get();
-			value=ObjectVariants.CreateBlankNode(t.val,graphName); 
+			value=ng.CreateBlank(t.val,graphName); 
 		} else if (la.kind == 13) {
 			Get();
-			value=ObjectVariants.CreateBlankNode(graphName); 
+			value=ng.CreateBlank(); 
 		} else SynErr(37);
 	}
 
@@ -283,17 +288,17 @@ private readonly Prologue prologue = new Prologue();
 			nodes.Add(ov); 
 		}
 		Expect(25);
-		var rdfFirst = SpecialTypesClass.RdfFirst.FullName;
-		       var rdfRest = SpecialTypesClass.RdfRest.FullName;
-		           string sparqlBlankNodeFirst = ObjectVariants.CreateBlankNode(graphName);
-		           string sparqlBlankNodeNext = ObjectVariants.CreateBlankNode(graphName);
+		var rdfFirst = SpecialTypesClass.RdfFirst;
+		       var rdfRest = SpecialTypesClass.RdfRest;
+		           string sparqlBlankNodeFirst = ng.CreateBlank();
+		           string sparqlBlankNodeNext = ng.CreateBlank();
 		       foreach (var node in nodes.Take(nodes.Count - 1))
 		       {
 		           ft(sparqlBlankNodeNext, rdfFirst, node);
-		           ft(sparqlBlankNodeNext, rdfRest, new OV_iri(sparqlBlankNodeNext = ObjectVariants.CreateBlankNode(graphName)));
+		           ft(sparqlBlankNodeNext, rdfRest, new OV_iri(sparqlBlankNodeNext = ng.CreateBlank()));
 		       }
 		       ft(sparqlBlankNodeNext, rdfFirst, nodes[nodes.Count - 1]);
-		       ft(sparqlBlankNodeNext, rdfRest, new OV_iri(SpecialTypesClass.Nil.FullName));
+		       ft(sparqlBlankNodeNext, rdfRest, new OV_iri(SpecialTypesClass.Nil));
 		       value = sparqlBlankNodeFirst;
 		
 	}
@@ -305,28 +310,28 @@ private readonly Prologue prologue = new Prologue();
 		if (la.kind == 5 || la.kind == 26) {
 			if (la.kind == 5) {
 				Get();
-				value=ObjectVariants.CreateLang(str, t.val); 
+				value=new OV_langstring(str, t.val); 
 			} else {
 				Get();
 				string literalType; 
 				Iri(out literalType);
-				value = ObjectVariants.CreateLiteralNode(str, literalType); 
+				value = ng.CreateLiteralNode(str, literalType); 
 			}
 		}
-		if(value==null) value=ObjectVariants.CreateLiteralNode(str); 
+		if(value==null) value=new OV_string(str); 
 	}
 
 	void Numericliteral(out ObjectVariants value) {
 		value=null; 
 		if (la.kind == 6) {
 			Get();
-			value=ObjectVariants.CreateLiteralNode(t.val); 
+			value=new OV_int(t.val); 
 		} else if (la.kind == 7) {
 			Get();
-			value=ObjectVariants.CreateLiteralNode(t.val); 
+			value=new OV_decimal(t.val); 
 		} else if (la.kind == 8) {
 			Get();
-			value=ObjectVariants.CreateLiteralNode(t.val); 
+			value=new OV_double(t.val); 
 		} else SynErr(38);
 	}
 
@@ -334,10 +339,10 @@ private readonly Prologue prologue = new Prologue();
 		value=null; 
 		if (la.kind == 27) {
 			Get();
-			value = ObjectVariants.CreateLiteralNode(true); 
+			value = new OV_bool(true); 
 		} else if (la.kind == 28) {
 			Get();
-			value=ObjectVariants.CreateLiteralNode(false); 
+			value=new OV_bool(false); 
 		} else SynErr(39);
 	}
 

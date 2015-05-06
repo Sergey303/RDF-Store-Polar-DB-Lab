@@ -11,6 +11,15 @@ namespace RDFCommon.OVns
             this.value = value;
         }
 
+        public OV_date(string s)
+        {
+            if (DateTimeOffset.TryParse(s, out value))
+                return;
+            DateTime date;
+            DateTime.TryParse(s, out date);
+            value=new DateTimeOffset(date);
+        }
+
         public override ObjectVariantEnum Variant
         {
             get { return ObjectVariantEnum.Date; }
@@ -54,7 +63,7 @@ namespace RDFCommon.OVns
             return new OV_date(changing(value));
         }
 
-        public string DataType { get { return SpecialTypesClass.Date.FullName; } }
+        public string DataType { get { return SpecialTypesClass.Date; } }
         public override string ToString()
         {
             return value.ToString();

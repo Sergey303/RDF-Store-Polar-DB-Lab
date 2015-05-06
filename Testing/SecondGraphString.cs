@@ -21,7 +21,7 @@ namespace TestingNs
  
         }
 
-        public ObjectVariants Name { get; private set; }
+        public string Name { get; private set; }
         public INodeGenerator NodeGenerator { get { return ng; } }
         public void Clear()
         {
@@ -33,7 +33,7 @@ namespace TestingNs
             return base.GetTriplesWithObject(o)
                 .Select(base.Dereference)
                 //.ReadWritableTriples()
-                .Select(row => createResult(ng.CreateUriNode(DecodeIRI(row[0])), ng.CreateUriNode(DecodeIRI(row[1]))));
+                .Select(row => createResult(new OV_iri(DecodeIRI(row[0])), new OV_iri((DecodeIRI(row[1])))));
         }
 
         public IEnumerable<T> GetTriplesWithPredicate<T>(ObjectVariants p, Func<ObjectVariants, ObjectVariants, T> createResult)
@@ -41,7 +41,7 @@ namespace TestingNs
             return base.GetTriplesWithPredicate(((IIriNode)p).UriString)
              //   .ReadWritableTriples()
                 .Select(base.Dereference)
-                .Select(row => createResult(ng.CreateUriNode(DecodeIRI(row[0])), DecodeOV(row[2])));
+                .Select(row => createResult(new OV_iri(DecodeIRI(row[0])), DecodeOV(row[2])));
         }
 
         public IEnumerable<T> GetTriplesWithSubject<T>(ObjectVariants s, Func<ObjectVariants, ObjectVariants, T> createResult)
@@ -49,7 +49,7 @@ namespace TestingNs
             return base.GetTriplesWithSubject(((IIriNode)s).UriString)
                 //ReadWritableTriples()
                 .Select(base.Dereference)
-                .Select(row => createResult(ng.CreateUriNode(DecodeIRI(row[1])), DecodeOV(row[2])));
+                .Select(row => createResult(new OV_iri(DecodeIRI(row[1])), DecodeOV(row[2])));
         }
 
         public IEnumerable<ObjectVariants> GetTriplesWithSubjectPredicate(ObjectVariants subj, ObjectVariants pred)
@@ -69,7 +69,7 @@ namespace TestingNs
             return base.GetTriplesWithSubjectPredicate(((IIriNode)subj).UriString, obj)
                   //.ReadWritableTriples()
                 .Select(base.Dereference)
-                  .Select(row => ng.CreateUriNode(DecodeIRI(row[1]))).ToArray();
+                  .Select(row => new  OV_iri(DecodeIRI(row[1]))).ToArray();
         }
 
         public IEnumerable<ObjectVariants> GetTriplesWithPredicateObject(ObjectVariants pred, ObjectVariants obj)
@@ -78,10 +78,7 @@ namespace TestingNs
             return base.GetTriplesWithPredicateObject(((IIriNode)pred).UriString, obj)
                // .ReadWritableTriples()
                  .Select(base.Dereference)
-                .Select(row =>
-                {
-                    return ng.CreateUriNode(DecodeIRI(row[0]));
-                }).ToArray();
+                .Select(row => new OV_iri(DecodeIRI(row[0]))).ToArray();
         }
 
         public IEnumerable<T> GetTriples<T>(Func<ObjectVariants, ObjectVariants, ObjectVariants, T> returns)

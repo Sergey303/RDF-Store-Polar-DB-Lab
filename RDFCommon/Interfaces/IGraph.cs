@@ -7,7 +7,7 @@ namespace RDFCommon
 {
     public interface IGraph
     {
-        ObjectVariants Name { get; }
+        string Name { get; }
 
         INodeGenerator NodeGenerator { get; }   
       

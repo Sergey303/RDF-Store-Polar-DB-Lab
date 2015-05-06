@@ -11,6 +11,12 @@ namespace RDFCommon.OVns
             this.value = value;
         }
 
+        public OV_float(string s): this(float.Parse(s))
+        {
+            
+
+        }
+
         public override ObjectVariantEnum Variant
         {
             get { return ObjectVariantEnum.Float; }
@@ -53,7 +59,7 @@ namespace RDFCommon.OVns
             return new OV_float(changing(value));
         }
 
-        public string DataType { get { return SpecialTypesClass.Float.FullName; } }
+        public string DataType { get { return SpecialTypesClass.Float; } }
         public override string ToString()
         {
             return value.ToString();

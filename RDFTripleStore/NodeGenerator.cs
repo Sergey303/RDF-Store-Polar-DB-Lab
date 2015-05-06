@@ -10,144 +10,107 @@ namespace RDFTripleStore
         {
             SpecialTypes=new SpecialTypesClass(this);
         }
-        public ObjectVariants CreateUriNode(string uri)
-        {
-            return new OV_iri(uri.ToLowerInvariant()); 
-        }
-
-        public ObjectVariants CreateUriNode(UriPrefixed uri)
-        {
-            return new OV_iri(uri.FullName.ToLowerInvariant());
-        }
-
-        public ObjectVariants CreateLiteralNode(string p)
-        {
-            p = p.Trim('"', '\'');
-            return new OV_string(p);
-        }
-
-        public ObjectVariants CreateLiteralWithLang(string s, string lang)
-        {
-            s = s.Trim('"', '\'');
-            return new OV_langstring(s, lang); 
-        }
-
-
-        public ObjectVariants CreateLiteralNode(int parse)
-        {
-            return new OV_int(parse);//SimpleLiteralNode
-
-        }
-
-        public ObjectVariants CreateLiteralNode(decimal p)
-        {
-            return new OV_decimal(p);//SimpleLiteralNode
-        }
-
-        public ObjectVariants CreateLiteralNode(double p)
-        {
-            return new OV_double(p);//SimpleLiteralNode
-        }
-
-        public ObjectVariants CreateLiteralNode(bool p)
-        {
-            return new OV_bool(p);// ? BoolLiteralNode.TrueNode((SpecialTypes.Bool)) : BoolLiteralNode.FalseNode((SpecialTypes.Bool));
-        }
-
-
-
-        public ObjectVariants CreateBlankNode(ObjectVariants graphName, string blankNodeString = null)
-        {
-            return new OV_iri(CreateBlankNode(((IIriNode) graphName).UriString, blankNodeString));
-        }
-
-        public ObjectVariants GetUri(string uri)
+  
+        
+        public virtual ObjectVariants GetUri(string uri)
         {
           return new OV_iri(uri);
         }
 
-        public SpecialTypesClass SpecialTypes { get; private set; }
-        public ObjectVariants GetUriNode(UriPrefixed uriPrefixed)
-        {
-            return GetUri(uriPrefixed.FullName);
-        }
-
+        public SpecialTypesClass SpecialTypes { get; protected set; }
+   
         public ObjectVariants CreateBlankNode()
         {
-            throw new NotImplementedException();
+            return
+                new OV_iri("Http://iis.nsk.su/.well-known/genid/blank"
+                              + BlankNodeGenerateNums()
+                              + BlankNodeGenerateNums());
         }
 
-        public ObjectVariants CreateLiteralNode(string p, ObjectVariants typeUriNode)
+        public virtual ObjectVariants AddIri(string iri)
+        {
+            return new OV_iri(iri);
+        }
+
+        private long BlankNodeGenerateNums()
+        {
+            return (long)(random.NextDouble() * 1000 * 1000 * 1000 * 1000);
+        }
+
+        public ObjectVariants CreateLiteralNode(string p, string typeUriNode)
         {
             p = p.Trim('"','\'');
-            
-            if (typeUriNode == this.SpecialTypes.@string)
-                return new OV_string(p);
-            else if (typeUriNode.Equals(this.SpecialTypes.date))
+
+            switch (typeUriNode)
             {
-                DateTime date;
-                if(!DateTime.TryParse(p, out date)) throw new ArgumentException(p);
-                return new OV_date(date);
-            }
-            else if (typeUriNode.Equals(this.SpecialTypes.dateTime))
-            {
+                case SpecialTypesClass.String:
+                    return new OV_string(p);
+                case (SpecialTypesClass.@Bool):
+                    return new OV_bool(p);
+                case (SpecialTypesClass.@Decimal):
+                    return new OV_decimal(p);
+                case (SpecialTypesClass.Integer):
+                    return new OV_int(p);
+                case (SpecialTypesClass.@Float):
+                    return new OV_float(p);
+                case (SpecialTypesClass.@Double):
+                    return new OV_double(p);
                 
-                return new OV_dateTimeStamp(p);
+                case (SpecialTypesClass.Date):
+                    return new OV_date(p);
+                case (SpecialTypesClass.Time):
+                    return new OV_time(p);
+                case (SpecialTypesClass.DateTime):
+                    return new OV_dateTimeStamp(p);
+                case (SpecialTypesClass.DateTimeStamp):
+                    return new OV_dateTimeStamp(p);
+
+                //case (SpecialTypesClass.GYear):
+                //    return new OV_double(p);
+                //case (SpecialTypesClass.GMonth):
+                //    return new OV_double(p);
+                //case (SpecialTypesClass.GDay):
+                //    return new OV_double(p);
+                //case (SpecialTypesClass.GYearMonth):
+                //    return new OV_double(p);
+                //case (SpecialTypesClass.GMonthDay):
+                //    return new OV_double(p);
+                //case (SpecialTypesClass.Duration):
+                //    return new OV_double(p);
+                //case (SpecialTypesClass.YearMonthDuration):
+                //    return new OV_double(p);
+                //case (SpecialTypesClass.DayTimeDuration):
+                //    return new OV_double(p);
+                
+                //todo
+                default:
+                    return CreateLiteralOtherType(p, typeUriNode);
             }
-            else if (typeUriNode .Equals(this.SpecialTypes.@bool))
-            {
-                bool b;
-                if (!bool.TryParse(p, out b)) throw new ArgumentException(p);
-                return new OV_bool(b);
-            }
-            else if (typeUriNode.Equals(SpecialTypes.@decimal))
-            {
-                decimal d;
-                if (!decimal.TryParse(p.Replace(".", ","), out d)) throw new ArgumentException(p);
-             return new OV_decimal(d);
-            }                                                    
-            else if (typeUriNode .Equals(SpecialTypes.@double))
-            {
-                double d;
-                if (!double.TryParse(p.Replace(".", ","), out d)) throw new ArgumentException(p);
-                return new OV_double(d);
-            }
-            else if (typeUriNode .Equals(SpecialTypes.@float) )
-            {
-                float f;
-                if (!float.TryParse(p.Replace(".",","), out f)) throw new ArgumentException(p);
-            return new OV_float(f);
-            }
-            else if (typeUriNode .Equals( SpecialTypes.integer)    )
-            {
-                int i;
-                if (!int.TryParse(p, out i)) throw new ArgumentException(p);
-                return new OV_int(i);
-            }
-            //else if (typeUriNode .Equals( SpecialTypes.DayTimeDuration.FullName)
-            //{
-            //    TimeSpan i;
-            //    if (!TimeSpan.TryParse(p, out i)) throw new ArgumentException(p);
-            //    return new ObjectVariant(11,i);
-            //}
-            else 
-            return new OV_typed(p, typeUriNode.Content );   
         }
 
-        public string CreateBlankNode(string graph, string blankNodeString = null)
+        public ObjectVariants CreateBlankNode(string graph, string blankNodeString = null)
         {
             if (graph != null) blankNodeString = graph + "/" + blankNodeString;
-            if(blankNodeString==null)
-                blankNodeString = "blank" + (long)(random.NextDouble() * 1000 * 1000 * 1000 * 1000);
 
-          
+            return new OV_iri(blankNodeString); 
+        }
+        public string CreateBlank(string graph, string blankNodeString)
+        {
+            if (graph != null) blankNodeString = graph + "/" + blankNodeString;
+
             return blankNodeString;
         }
-
+        public string CreateBlank()
+        {
+            return "";
+        }
         private Random random = new Random();
 
 
-    
+        public virtual ObjectVariants CreateLiteralOtherType(string p, string typeUriNode)
+        {
+            return new OV_typed(p, typeUriNode);   
+        }
     }
     
 }

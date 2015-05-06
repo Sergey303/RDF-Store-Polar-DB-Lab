@@ -200,7 +200,7 @@ namespace RDFTripleStore
         }
 
 
-        public ObjectVariants Name { get { return ng.CreateUriNode("g"); } }
+        public string Name { get { return "g"; } }
         public INodeGenerator NodeGenerator { get { return ng; }} 
 
       

@@ -49,7 +49,7 @@ namespace RDFCommon.OVns
             return new OV_decimal(changing(value));
         }
 
-        public string DataType { get { return SpecialTypesClass.Decimal.FullName; } }
+        public string DataType { get { return SpecialTypesClass.Decimal; } }
         public override string ToString()
         {
             return value.ToString();

@@ -4,11 +4,20 @@ namespace RDFCommon.OVns
 {
     public class OV_time : ObjectVariants, ILiteralNode
     {
-        public readonly TimeSpan value;
+        public readonly DateTimeOffset value;
 
-        public OV_time(TimeSpan value)
+        public OV_time(DateTimeOffset value)
         {
             this.value = value;
+        }
+
+        public OV_time(string s)
+        {                      
+            if (DateTimeOffset.TryParse(s, out value))
+                return;
+            DateTime date;
+            DateTime.TryParse(s, out date);
+            value = new DateTimeOffset(date);
         }
 
         public override ObjectVariantEnum Variant
@@ -70,6 +79,6 @@ namespace RDFCommon.OVns
             return value.CompareTo(otherTyped.value);
         }
 
-        public string DataType { get { return SpecialTypesClass.DayTimeDuration.FullName; } }
+        public string DataType { get { return SpecialTypesClass.DayTimeDuration; } }
     }
 }

@@ -59,7 +59,7 @@ namespace RDFCommon.OVns
             return new OV_langstring(changing(value), lang);
         }
 
-        public string DataType { get { return SpecialTypesClass.LangString.FullName; } }
+        public string DataType { get { return SpecialTypesClass.LangString; } }
         public override string ToString()
         {
             return value.ToString();

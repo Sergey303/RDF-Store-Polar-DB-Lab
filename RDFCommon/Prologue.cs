@@ -13,7 +13,7 @@ namespace RDFCommon
         private string baseUri;
         public string StringRepresentationOfProlog;
 
-        public UriPrefixed GetUriFromPrefixed(string p)
+        public string GetUriFromPrefixed(string p)
         {
             if (p.StartsWith("<") && p.EndsWith(">"))
                 return GetFromIri(p); 
@@ -23,7 +23,7 @@ namespace RDFCommon
             if (!prefix2Namspace.TryGetValue(uriPrefixed.Prefix, out fullNamespace))
                 throw new Exception("prefix " + uriPrefixed.Prefix);
             uriPrefixed.Namespace = fullNamespace;
-            return uriPrefixed;
+            return fullNamespace + uriPrefixed.LocalName;
         }
 
         public static UriPrefixed SplitUndefined(string p)
@@ -51,7 +51,7 @@ namespace RDFCommon
             var i = Math.Max(rsi, Math.Max(lsi, Math.Max(ssi, dot)));
             return new UriPrefixed(null, p.Substring(i + 1), p.Substring(0, i+1));
         }
-        public UriPrefixed GetUriFromPrefixedNamespace(string p)
+        public string GetUriFromPrefixedNamespace(string p)
         {
             var match = PrefixNSSlpit.Match(p);
             var prefix = match.Groups[1].Value;
@@ -59,10 +59,10 @@ namespace RDFCommon
           //  if (prefix == "_" ) throw new NotImplementedException();
             string fullNamespace;
             if (!prefix2Namspace.TryGetValue(prefix, out fullNamespace)) throw new Exception("prefix " + prefix);
-            return new UriPrefixed(prefix,"",fullNamespace);
+            return fullNamespace;
         }
 
-        public UriPrefixed GetFromString(string p)
+        public string GetFromString(string p)
         {
             if (p.StartsWith("<") && p.EndsWith(">"))
             {
@@ -70,16 +70,16 @@ namespace RDFCommon
             }
             if (p.StartsWith("http://") || p.StartsWith("mailto:"))
             {
-                return SplitUri(p);
+                return p;
             }
             return GetUriFromPrefixed(p);
         }
 
-        public UriPrefixed GetFromIri(string p)
+        public string GetFromIri(string p)
         {      
             if(p.StartsWith("<") && p.EndsWith(">"))           
             p = p.Substring(1, p.Length - 2);
-            return baseUri == null ? SplitUri(p) : new UriPrefixed(":", p.ToLowerInvariant(), baseUri);
+            return baseUri == null ? p : baseUri + p;
         }
 
 

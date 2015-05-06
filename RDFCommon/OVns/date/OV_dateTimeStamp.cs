@@ -56,7 +56,7 @@ namespace RDFCommon.OVns
             return new OV_dateTimeStamp(changing(value));
         }
 
-        public string DataType { get { return SpecialTypesClass.DayTimeDuration.FullName; } }
+        public string DataType { get { return SpecialTypesClass.DayTimeDuration; } }
         public override string ToString()
         {
             return value.ToString();

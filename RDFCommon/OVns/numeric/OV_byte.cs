@@ -2,22 +2,23 @@ using System;
 
 namespace RDFCommon.OVns
 {
-    public class OV_bool : ObjectVariants, ILiteralNode
+    public class OV_byte : ObjectVariants, ILiteralNode, INumLiteral
     {
-        public readonly bool value;
+        public readonly byte value;
 
-        public OV_bool(bool value)
+        public OV_byte(byte value)
         {
             this.value = value;
         }
 
-        public OV_bool(string s) : this( bool.Parse(s))
+        public OV_byte(string s) : this(byte.Parse(s))
         {
+            
         }
 
         public override ObjectVariantEnum Variant
         {
-            get { return ObjectVariantEnum.Bool; }
+            get { return ObjectVariantEnum.Double; }
         }
 
         public override object WritableValue
@@ -40,23 +41,23 @@ namespace RDFCommon.OVns
                 return false;
             }
 
-            return value == ((OV_bool)obj).value;
+            return value == ((OV_byte)obj).value;
 
         }
 
         public override int GetHashCode()
         {
-            return unchecked((27644437 ^ value.GetHashCode()) * (127 ^ Variant.GetHashCode()));
+            int hashCode=value.GetHashCode();
+            return unchecked((23 ^ hashCode) * (29 ^ Variant.GetHashCode()));
         }
-
 
         public override dynamic Content { get { return value; } }
         public override ObjectVariants Change(Func<dynamic, dynamic> changing)
         {
-            return new OV_bool(changing(value));
+            return new OV_double(changing(value));
         }
 
-        public string DataType { get { return SpecialTypesClass.Bool; } }
+        public string DataType { get { return SpecialTypesClass.Double; } }
         public override string ToString()
         {
             return value.ToString();
@@ -65,7 +66,7 @@ namespace RDFCommon.OVns
         {
             int baseComp = base.CompareTo(obj);
             if (baseComp != 0) return baseComp;
-            var otherTyped = (OV_bool)obj;           
+            var otherTyped = (OV_byte)obj;
             return value.CompareTo(otherTyped.value);
         }
     }

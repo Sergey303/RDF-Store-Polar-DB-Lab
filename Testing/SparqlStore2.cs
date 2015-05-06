@@ -60,7 +60,7 @@ namespace TestingNs
 
         public IGraph CreateTempGraph()
         {
-           return new RamListOfTriplesGraph(NodeGenerator.CreateUriNode("temp"));
+           return new RamListOfTriplesGraph("temp");
         }
 
        

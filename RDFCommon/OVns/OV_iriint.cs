@@ -5,22 +5,16 @@ namespace RDFCommon.OVns
     public class OV_iriint : ObjectVariants, IIriNode
     {
         public readonly int code;
-        private readonly Func<int, string> nameTable;
-        private string originalString;
+        private readonly Func<int, string> decode;
+        
 
-        public OV_iriint(int code, Func<int, string> nameTable)
+        public OV_iriint(int code, Func<int, string> decode)
         {
             this.code = code;
-            this.nameTable = nameTable;
+            this.decode = decode;
         }
 
-        public OV_iriint(int code, Func<int, string> nameTable, string uri)
-        {
-            this.code = code;
-            this.nameTable = nameTable;
-            originalString = uri;
-        }
-
+        
         public override ObjectVariantEnum Variant
         {
             get { return ObjectVariantEnum.IriInt; }
@@ -72,10 +66,11 @@ namespace RDFCommon.OVns
         public override ObjectVariants Change(Func<dynamic, dynamic> changing)
         {
             dynamic newIri = changing(UriString);
-            return new OV_iriint(nameTable(newIri), nameTable, newIri);
+            //return new OV_iriint(getCode(newIri), getCode);
+            return new OV_iri(newIri);
         }
 
-        public string UriString { get { return code==-1 ? originalString : nameTable(code); } }
+        public string UriString { get { return decode(code); } }
         public override int CompareTo(object obj)
         {
             int baseComp = base.CompareTo(obj);

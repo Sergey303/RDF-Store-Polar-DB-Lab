@@ -61,40 +61,86 @@
     <Compile Include="Interfaces\ISubjectNode.cs" />
     <Compile Include="Interfaces\IIriNode.cs" />
     <Compile Include="NoGraphExeption.cs" />
-    <Compile Include="OVns\date\OV_gYear.cs" />
-    <Compile Include="OVns\date\OV_gMonth.cs" />
-    <Compile Include="OVns\date\OV_gDay.cs" />
+    <Compile Include="OVns\date\OV_duration.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="OVns\date\OV_gDay.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="OVns\date\OV_gMonth.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="OVns\date\OV_gYear.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="OVns\date\OV_gYearMonth.cs" />
     <Compile Include="OVns\date\OV_gMonthDay.cs" />
-    <Compile Include="OVns\date\OV_duration.cs" />
     <Compile Include="OVns\date\OV_yearMonthDuration.cs" />
-    <Compile Include="OVns\date\OV_int.cs" />
-    <Compile Include="OVns\numeric\OV_byte.cs" />
-    <Compile Include="OVns\numeric\OV_short.cs" />
-    <Compile Include="OVns\numeric\OV_integer.cs" />
-    <Compile Include="OVns\numeric\OV_long.cs" />
-    <Compile Include="OVns\numeric\OV_unsignedByte.cs" />
-    <Compile Include="OVns\numeric\OV_unsignedShort.cs" />
-    <Compile Include="OVns\numeric\OV_unsignedInt.cs" />
-    <Compile Include="OVns\numeric\OV_unsignedLong.cs" />
-    <Compile Include="OVns\numeric\OV_positiveInteger.cs" />
-    <Compile Include="OVns\numeric\OV_nonNegativeInteger.cs" />
-    <Compile Include="OVns\numeric\OV_negativeInteger.cs" />
-    <Compile Include="OVns\numeric\OV_nonPositiveInteger.cs" />
+    <Compile Include="OVns\date\OV_dayTimeDuration.cs" />
+    <Compile Include="OVns\numeric\OV_byte.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="OVns\numeric\OV_decimal.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="OVns\numeric\OV_double.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="OVns\numeric\OV_float.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="OVns\numeric\OV_int.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="OVns\numeric\OV_integer.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="OVns\numeric\OV_long.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="OVns\numeric\OV_negativeInteger.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="OVns\numeric\OV_nonNegativeInteger.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="OVns\numeric\OV_nonPositiveInteger.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="OVns\numeric\OV_positiveInteger.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="OVns\numeric\OV_short.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="OVns\numeric\OV_unsignedByte.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="OVns\numeric\OV_unsignedInt.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="OVns\numeric\OV_unsignedLong.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="OVns\numeric\OV_unsignedShort.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="OVns\ObjectVariantEnum.cs" />
     <Compile Include="OVns\ObjectVariants.cs" />
     <Compile Include="OVns\ObjectVariantsEx.cs" />
+    <Compile Include="OVns\OV_anyURI.cs" />
+    <Compile Include="OVns\OV_language.cs" />
+    <Compile Include="OVns\OV_normalizedString.cs" />
+    <Compile Include="OVns\OV_token.cs" />
+    <Compile Include="OVns\OV_NMTOKEN.cs" />
+    <Compile Include="OVns\OV_Name.cs" />
+    <Compile Include="OVns\OV_NCName.cs" />
     <Compile Include="OVns\OV_bool.cs" />
     <Compile Include="OVns\date\OV_date.cs" />
     <Compile Include="OVns\date\OV_dateTime.cs" />
     <Compile Include="OVns\date\OV_dateTimeStamp.cs" />
-    <Compile Include="OVns\numeric\OV_decimal.cs" />
-    <Compile Include="OVns\numeric\OV_double.cs" />
-    <Compile Include="OVns\numeric\OV_float.cs" />
-    <Compile Include="OVns\numeric\OV_int.cs" />
     <Compile Include="OVns\OV_iri.cs" />
     <Compile Include="OVns\OV_iriint.cs" />
-    <Compile Include="OVns\OV_Lang.cs" />
     <Compile Include="OVns\OV_langstring.cs" />
     <Compile Include="OVns\OV_string.cs" />
     <Compile Include="OVns\date\OV_time.cs" />

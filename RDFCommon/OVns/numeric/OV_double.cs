@@ -11,6 +11,12 @@ namespace RDFCommon.OVns
             this.value = value;
         }
 
+        public OV_double(string s) : this(double.Parse( s))
+        {
+            
+
+        }
+
         public override ObjectVariantEnum Variant
         {
             get { return ObjectVariantEnum.Double; }
@@ -52,7 +58,7 @@ namespace RDFCommon.OVns
             return new OV_double(changing(value));
         }
 
-        public string DataType { get { return SpecialTypesClass.Double.FullName; } }
+        public string DataType { get { return SpecialTypesClass.Double; } }
         public override string ToString()
         {
             return value.ToString();

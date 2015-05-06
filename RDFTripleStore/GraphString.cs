@@ -95,7 +95,7 @@ namespace RDFTripleStore
         }
 
 
-        public ObjectVariants Name { get { return ng.CreateUriNode("g"); } }
+        public string Name { get { return "g"; } }
         public INodeGenerator NodeGenerator { get { return ng; } }
 
         /// <summary>
@@ -161,7 +161,7 @@ namespace RDFTripleStore
             return entities
                 .Select(entry => entry.Get())
                 .ReadWritableTriples()
-                .Select(row => ng.CreateUriNode((string)row[1]));
+                .Select(row => ng.GetUri((string)row[1]));
         }
 
         public IEnumerable<ObjectVariants> GetTriplesWithPredicateObject(ObjectVariants predicate, ObjectVariants obj)
@@ -173,7 +173,7 @@ namespace RDFTripleStore
             return entities
                   .Select(entry => entry.Get())
                   .ReadWritableTriples()
-                  .Select(row => ng.CreateUriNode((string)row[0]));
+                  .Select(row => ng.GetUri((string)row[0]));
         }
 
     

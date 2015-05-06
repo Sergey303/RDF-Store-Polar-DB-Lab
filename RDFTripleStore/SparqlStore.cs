@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Antlr4.Runtime;
 using RDFCommon;
+using RDFCommon.OVns;
 using SparqlParseRun;
 using SparqlParseRun.SparqlClasses.Query.Result;
 
@@ -57,9 +58,9 @@ namespace RDFTripleStore
 
         public IGraph CreateTempGraph()
         {
-           return new RamListOfTriplesGraph(ng.CreateUriNode("temp"));
+           return new RamListOfTriplesGraph("temp");
         }
 
-       
+     
     }
 }

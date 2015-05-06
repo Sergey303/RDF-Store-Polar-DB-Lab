@@ -8,6 +8,7 @@ namespace RDFTripleStore.parsers.RDFTurtle
 {
     public static class ReadTripleStringsFromTurtle
     {
+        public static NodeGenerator Generator = new NodeGenerator();
         public static IEnumerable<Triple<string, string, ObjectVariants>> LoadGraph(string datafile)
         {
             int ntriples = 0;
@@ -90,10 +91,10 @@ namespace RDFTripleStore.parsers.RDFTurtle
                         }
                         yield return new Triple<string, string, ObjectVariants>(subject, predicate,
                             lang != null
-                                ? ObjectVariants.CreateLang(sdata, lang)
+                                ? new OV_langstring(sdata, lang)
                                 : datatype != null
-                                    ? ObjectVariants.CreateLiteralNode(sdata, datatype)
-                                    : ObjectVariants.CreateLiteralNode(sdata));
+                                    ? Generator.CreateLiteralNode(sdata, datatype)
+                                    : new OV_string(sdata));
 
                     }
                     else
