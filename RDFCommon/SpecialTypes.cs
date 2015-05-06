@@ -1,27 +1,65 @@
+using System.Xml.Schema;
 using RDFCommon.OVns;
-using RDFTripleStore;
+
 
 namespace RDFCommon
 {
     public class SpecialTypesClass
     {
+        public static UriPrefixed String = new UriPrefixed(xmlSchemaPrefix, "string", xmlSchemaNs);
+        public static UriPrefixed Bool = new UriPrefixed(xmlSchemaPrefix, "boolean", xmlSchemaNs);
+        public static UriPrefixed Decimal = new UriPrefixed(xmlSchemaPrefix, "decimal", xmlSchemaNs);
+        public static UriPrefixed Integer = new UriPrefixed(xmlSchemaPrefix, "integr", xmlSchemaNs);
 
-        public static UriPrefixed Integer = new UriPrefixed(XmlSchema.Default.xmlSchemaPrefix, XmlSchema.Default.Integer, XmlSchema.Default.xmlSchemaNs);
-        public static UriPrefixed Float = new UriPrefixed(XmlSchema.Default.xmlSchemaPrefix, XmlSchema.Default.Float, XmlSchema.Default.xmlSchemaNs);
-        public static UriPrefixed Double = new UriPrefixed(XmlSchema.Default.xmlSchemaPrefix, XmlSchema.Default.Double, XmlSchema.Default.xmlSchemaNs);
-        public static UriPrefixed Decimal = new UriPrefixed(XmlSchema.Default.xmlSchemaPrefix, XmlSchema.Default.Decimal, XmlSchema.Default.xmlSchemaNs);
-        public static UriPrefixed Bool = new UriPrefixed(XmlSchema.Default.xmlSchemaPrefix, XmlSchema.Default.Bool, XmlSchema.Default.xmlSchemaNs);
-        public static UriPrefixed Date = new UriPrefixed(XmlSchema.Default.xmlSchemaPrefix, XmlSchema.Default.Date, XmlSchema.Default.xmlSchemaNs);
-        public static UriPrefixed DateTime = new UriPrefixed(XmlSchema.Default.xmlSchemaPrefix, XmlSchema.Default.DateTime, XmlSchema.Default.xmlSchemaNs);
-        public static UriPrefixed LangString = new UriPrefixed(XmlSchema.Default.xmlSchemaPrefix, XmlSchema.Default.LangString, XmlSchema.Default.xmlSchemaNs);
-        public static UriPrefixed String = new UriPrefixed(XmlSchema.Default.xmlSchemaPrefix, XmlSchema.Default.String, XmlSchema.Default.xmlSchemaNs);
-        public static UriPrefixed DayTimeDuration = new UriPrefixed(XmlSchema.Default.xmlSchemaPrefix, XmlSchema.Default.DayTimeDuration, XmlSchema.Default.xmlSchemaNs);
-        //public static UriPrefixed SimpleLiteral = new UriPrefixed("smpl:", "", XmlSchema.Default.simple_literal);
+        public static UriPrefixed Float = new UriPrefixed(xmlSchemaPrefix, "float", xmlSchemaNs);
+        public static UriPrefixed Double = new UriPrefixed(xmlSchemaPrefix, "double", xmlSchemaNs);
 
-        public static UriPrefixed RdfFirst = new UriPrefixed("rdf:", "first", XmlSchema.Default.rdf_syntax_ns);
-        public static UriPrefixed RdfRest = new UriPrefixed("rdf:", "rest", XmlSchema.Default.rdf_syntax_ns);
-           public static UriPrefixed RdfType = new UriPrefixed("rdf:", XmlSchema.Default.type, XmlSchema.Default.rdf_syntax_ns);
-        public static UriPrefixed Nil = new UriPrefixed("rdf:", XmlSchema.Default.nil, XmlSchema.Default.rdf_syntax_ns);
+        public static UriPrefixed Date = new UriPrefixed(xmlSchemaPrefix, "date", xmlSchemaNs);
+        public static UriPrefixed Time = new UriPrefixed(xmlSchemaPrefix, "time", xmlSchemaNs);
+        public static UriPrefixed DateTime = new UriPrefixed(xmlSchemaPrefix, "dateTime", xmlSchemaNs);
+        public static UriPrefixed DateTimeStamp = new UriPrefixed(xmlSchemaPrefix, "dateTimeStamp", xmlSchemaNs);
+
+        public static UriPrefixed GYear = new UriPrefixed(xmlSchemaPrefix, "gYear", xmlSchemaNs);
+        public static UriPrefixed GMonth = new UriPrefixed(xmlSchemaPrefix, "gMonth", xmlSchemaNs);
+        public static UriPrefixed GDay = new UriPrefixed(xmlSchemaPrefix, "gDay", xmlSchemaNs);
+        public static UriPrefixed GYearMonth = new UriPrefixed(xmlSchemaPrefix, "gYearMonth", xmlSchemaNs);
+        public static UriPrefixed GMonthDay = new UriPrefixed(xmlSchemaPrefix, "gMonthDay", xmlSchemaNs);
+        public static UriPrefixed Duration = new UriPrefixed(xmlSchemaPrefix, "duration", xmlSchemaNs);
+        public static UriPrefixed YearMonthDuration = new UriPrefixed(xmlSchemaPrefix, "yearMonthDuration", xmlSchemaNs);
+        public static UriPrefixed DayTimeDuration = new UriPrefixed(xmlSchemaPrefix, "dayTimeDuration", xmlSchemaNs);
+
+
+        public static UriPrefixed Byte = new UriPrefixed(xmlSchemaPrefix, "byte", xmlSchemaNs);
+        public static UriPrefixed Short = new UriPrefixed(xmlSchemaPrefix, "short", xmlSchemaNs);
+        public static UriPrefixed Int = new UriPrefixed(xmlSchemaPrefix, "int", xmlSchemaNs);
+        public static UriPrefixed Long = new UriPrefixed(xmlSchemaPrefix, "long", xmlSchemaNs);
+        public static UriPrefixed UnsignedByte = new UriPrefixed(xmlSchemaPrefix, "unsignedByte", xmlSchemaNs);
+        public static UriPrefixed unsignedShort = new UriPrefixed(xmlSchemaPrefix, "unsignedShort", xmlSchemaNs);
+        public static UriPrefixed unsignedInt = new UriPrefixed(xmlSchemaPrefix, "unsignedInt", xmlSchemaNs);
+        public static UriPrefixed unsignedLong = new UriPrefixed(xmlSchemaPrefix, "unsignedLong", xmlSchemaNs);
+        public static UriPrefixed positiveInteger = new UriPrefixed(xmlSchemaPrefix, "positiveInteger", xmlSchemaNs);
+        public static UriPrefixed nonNegativeInteger = new UriPrefixed(xmlSchemaPrefix, "nonNegativeInteger", xmlSchemaNs);
+        public static UriPrefixed negativeInteger = new UriPrefixed(xmlSchemaPrefix, "negativeInteger", xmlSchemaNs);
+        public static UriPrefixed nonPositiveInteger = new UriPrefixed(xmlSchemaPrefix, "nonPositiveInteger", xmlSchemaNs);
+
+
+        public static UriPrefixed hexBinary = new UriPrefixed(xmlSchemaPrefix, "hexBinary", xmlSchemaNs);
+        public static UriPrefixed base64Binary = new UriPrefixed(xmlSchemaPrefix, "base64Binary", xmlSchemaNs);
+        public static UriPrefixed anyURI = new UriPrefixed(xmlSchemaPrefix, "anyURI", xmlSchemaNs);
+        public static UriPrefixed language = new UriPrefixed(xmlSchemaPrefix, "language", xmlSchemaNs);
+        public static UriPrefixed normalizedString = new UriPrefixed(xmlSchemaPrefix, "normalizedString", xmlSchemaNs);
+        public static UriPrefixed token = new UriPrefixed(xmlSchemaPrefix, "token", xmlSchemaNs);
+        public static UriPrefixed NMTOKEN = new UriPrefixed(xmlSchemaPrefix, "NMTOKEN", xmlSchemaNs);
+        public static UriPrefixed Name = new UriPrefixed(xmlSchemaPrefix, "Name", xmlSchemaNs);
+        public static UriPrefixed NCName = new UriPrefixed(xmlSchemaPrefix, "NCName", xmlSchemaNs);
+
+        public static UriPrefixed LangString = new UriPrefixed("rdf:", "langString", rdf_syntax_ns);
+        //public static UriPrefixed SimpleLiteral = new UriPrefixed("smpl:", "", simple_literal);
+
+        public static UriPrefixed RdfFirst = new UriPrefixed("rdf:", "first", rdf_syntax_ns);
+        public static UriPrefixed RdfRest = new UriPrefixed("rdf:", "rest", rdf_syntax_ns);
+           public static UriPrefixed RdfType = new UriPrefixed("rdf:", "type", rdf_syntax_ns);
+        public static UriPrefixed Nil = new UriPrefixed("rdf:", "nil", rdf_syntax_ns);
         public ObjectVariants date;
         public ObjectVariants @string;
         //public ObjectVariants simpleLiteral;
@@ -37,6 +75,9 @@ namespace RDFCommon
         public ObjectVariants first;
         public ObjectVariants rest;
         public ObjectVariants type;
+        private const string rdf_syntax_ns = "http://www.w3.org/1999/02/22-rdf-syntax-ns#";
+        private const string xmlSchemaNs = "http://www.w3.org/2001/XMLSchema#";
+        private const string xmlSchemaPrefix="xsd:";
 
         public static string[] GetAll()
         {

@@ -2,18 +2,23 @@ using System;
 
 namespace RDFCommon.OVns
 {
-    public class OV_decimal : ObjectVariants, ILiteralNode, INumLiteral
+    public class OV_integer : ObjectVariants, ILiteralNode, INumLiteral
     {
-        public readonly decimal value;
+        public readonly int value;
 
-        public OV_decimal(decimal value)
+        public OV_integer(int value)
         {
             this.value = value;
         }
 
+        public OV_integer(string s) : this(int.Parse(s))
+        {
+            
+        }
+
         public override ObjectVariantEnum Variant
         {
-            get { return ObjectVariantEnum.Decimal; }
+            get { return ObjectVariantEnum.Double; }
         }
 
         public override object WritableValue
@@ -36,24 +41,23 @@ namespace RDFCommon.OVns
                 return false;
             }
 
-            return value == ((OV_decimal)obj).value;
+            return value == ((OV_int)obj).value;
 
         }
 
         public override int GetHashCode()
         {
-            var hashCode = value.GetHashCode();
-            return unchecked((31 ^ hashCode )* (37 ^ Variant.GetHashCode()));
-
+            int hashCode=value.GetHashCode();
+            return unchecked((23 ^ hashCode) * (29 ^ Variant.GetHashCode()));
         }
 
         public override dynamic Content { get { return value; } }
         public override ObjectVariants Change(Func<dynamic, dynamic> changing)
         {
-            return new OV_decimal(changing(value));
+            return new OV_double(changing(value));
         }
 
-        public string DataType { get { return SpecialTypesClass.Decimal.FullName; } }
+        public string DataType { get { return SpecialTypesClass.Double.FullName; } }
         public override string ToString()
         {
             return value.ToString();
@@ -62,7 +66,7 @@ namespace RDFCommon.OVns
         {
             int baseComp = base.CompareTo(obj);
             if (baseComp != 0) return baseComp;
-            var otherTyped = (OV_decimal)obj;
+            var otherTyped = (OV_int)obj;
             return value.CompareTo(otherTyped.value);
         }
     }

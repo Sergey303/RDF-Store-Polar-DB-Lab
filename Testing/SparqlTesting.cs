@@ -1,7 +1,9 @@
 using System;
 using System.IO;
 using System.Linq;
+using System.Runtime.InteropServices;
 using RDFCommon;
+using RDFCommon.OVns;
 using SparqlParseRun;
 using SparqlParseRun.SparqlClasses.Query.Result;
 using RDFTripleStore;
@@ -51,16 +53,22 @@ WHERE {
                 sparqlStore.ReloadFrom(Config.Source_data_folder_path + millions + ".ttl");
             }, "build " + millions + ".ttl ");
 
-            
-            
 
-            SparqlQuery query;
+
+
+            SparqlQuery query = null;
             Perfomance.ComputeTime(() => query = sparqlStore.Parse(queryString), "parse ");
-            SparqlResultSet results;
-            Perfomance.ComputeTime(() => query = results = query.Run(sparqlStore), "run ");
+            SparqlResultSet results=null;
+            Perfomance.ComputeTime(() => results = query.Run(sparqlStore), "run ");
             
 
             Console.WriteLine("count "+results.Results.Count());
+            var c= 
+            sparqlStore.GetTriplesWithPredicateObject(
+                "http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/vocabulary/productfeature",
+                new OV_iri("http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/productfeature142"))
+                .Count();
+            Console.WriteLine(c);
         }
 
         public static void BSBm(int millions, bool load)

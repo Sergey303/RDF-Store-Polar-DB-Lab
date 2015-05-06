@@ -60,9 +60,8 @@ namespace RDFCommon.OVns
             }
             else if (typeUriNode == SpecialTypesClass.DateTime.FullName)
             {
-                DateTimeOffset date;
-                if (!DateTimeOffset.TryParse(p, out date)) throw new ArgumentException(p);
-                return new OV_dateTimeZone(date);
+                
+                return new OV_dateTimeStamp(p);
             }
             else if (typeUriNode == (SpecialTypesClass.Bool.FullName))
             {

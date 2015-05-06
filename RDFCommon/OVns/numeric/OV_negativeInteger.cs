@@ -2,25 +2,29 @@ using System;
 
 namespace RDFCommon.OVns
 {
-    public class OV_date : ObjectVariants, ILiteralNode
+    public class OV_negativeInteger : ObjectVariants, ILiteralNode, INumLiteral
     {
-        public readonly DateTime value;
+        public readonly int value;
 
-        public OV_date(DateTime value)
+        public OV_negativeInteger(int value)
         {
             this.value = value;
         }
 
+        public OV_negativeInteger(string s) : this(int.Parse(s))
+        {
+            
+        }
+
         public override ObjectVariantEnum Variant
         {
-            get { return ObjectVariantEnum.Date; }
+            get { return ObjectVariantEnum.Double; }
         }
 
         public override object WritableValue
         {
-            get { return value.ToBinary(); }
+            get { return value; }
         }
-
 
         // override object.Equals
         public override bool Equals(object obj)
@@ -37,24 +41,23 @@ namespace RDFCommon.OVns
                 return false;
             }
 
-            return value == ((OV_date)obj).value;
+            return value == ((OV_negativeInteger)obj).value;
 
         }
 
         public override int GetHashCode()
         {
-            var hashCode = value.GetHashCode();
-            return unchecked((59 ^ hashCode) *(61 ^ Variant.GetHashCode()));
+            int hashCode=value.GetHashCode();
+            return unchecked((23 ^ hashCode) * (29 ^ Variant.GetHashCode()));
         }
-
 
         public override dynamic Content { get { return value; } }
         public override ObjectVariants Change(Func<dynamic, dynamic> changing)
         {
-            return new OV_date(changing(value));
+            return new OV_negativeInteger(changing(value));
         }
 
-        public string DataType { get { return SpecialTypesClass.Date.FullName; } }
+        public string DataType { get { return SpecialTypesClass.Double.FullName; } }
         public override string ToString()
         {
             return value.ToString();
@@ -63,7 +66,7 @@ namespace RDFCommon.OVns
         {
             int baseComp = base.CompareTo(obj);
             if (baseComp != 0) return baseComp;
-            var otherTyped = (OV_date)obj;
+            var otherTyped = (OV_negativeInteger)obj;
             return value.CompareTo(otherTyped.value);
         }
     }

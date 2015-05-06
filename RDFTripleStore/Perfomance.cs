@@ -20,7 +20,7 @@ namespace RDFTripleStore
             action.Invoke();
             timer.Stop();
             if (!outputFile)
-                Console.WriteLine("{0} {1}ticks", mesage, timer.Elapsed.Ticks);
+                Console.WriteLine("{0} {1}ms", mesage, timer.Elapsed.TotalMilliseconds);
             else
                 using (StreamWriter file = new StreamWriter(pathOutputFile, true))
                     file.WriteLine("{0} {1}ms", mesage, timer.Elapsed.Ticks*1.0 /10000);  //=100 * 10^-9 sec.

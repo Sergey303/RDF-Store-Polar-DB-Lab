@@ -17,7 +17,7 @@ namespace RDFCommon.OVns
             (s, nt) => new OV_decimal((decimal) s),
             (s, nt) => new OV_float((float) s),
             (s, nt) => new OV_int((int) s),
-            (s, nt) => new OV_dateTimeZone(DateTimeOffset.FromFileTime((long) s)),
+            (s, nt) => new OV_dateTimeStamp(DateTimeOffset.FromFileTime((long) s)), 
             (s, nt) => new OV_dateTime(DateTime.FromBinary((long) s)),
             (s, nt) => new OV_date(DateTime.FromBinary((long) s)),
             (s, nt) => new OV_time(TimeSpan.FromTicks((long) s)),

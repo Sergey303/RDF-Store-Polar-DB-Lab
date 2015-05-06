@@ -2,23 +2,23 @@ using System;
 
 namespace RDFCommon.OVns
 {
-    public class OV_dateTimeZone : ObjectVariants, ILiteralNode
+    public class OV_int : ObjectVariants, ILiteralNode, INumLiteral
     {
-        public readonly DateTimeOffset value;
+        public readonly int value;
 
-        public OV_dateTimeZone(DateTimeOffset value)
+        public OV_int(int value)
         {
             this.value = value;
         }
 
         public override ObjectVariantEnum Variant
         {
-            get { return ObjectVariantEnum.DateTimeZone; }
+            get { return ObjectVariantEnum.Int; }
         }
 
         public override object WritableValue
         {
-            get { return value.ToFileTime(); }
+            get { return value; }
         }
 
         // override object.Equals
@@ -36,24 +36,26 @@ namespace RDFCommon.OVns
                 return false;
             }
 
-            return value == ((OV_dateTimeZone)obj).value;
+            return value == ((OV_int)obj).value;
 
         }
 
         public override int GetHashCode()
         {
             var hashCode = value.GetHashCode();
-            return unchecked((41 ^ hashCode) * (43 ^ Variant.GetHashCode()));
+            return unchecked(( 79 ^ hashCode) * ( 127 ^ Variant.GetHashCode()));
+            //int c = Variant.GetHashCode() << 27 | (hashCode & ((1 << 27) - 1));
+            //return c;
         }
 
 
         public override dynamic Content { get { return value; } }
         public override ObjectVariants Change(Func<dynamic, dynamic> changing)
         {
-            return new OV_dateTimeZone(changing(value));
+            return new OV_int(changing(value));
         }
 
-        public string DataType { get { return SpecialTypesClass.DayTimeDuration.FullName; } }
+        public string DataType { get { return SpecialTypesClass.Integer.FullName; } }
         public override string ToString()
         {
             return value.ToString();
@@ -62,7 +64,7 @@ namespace RDFCommon.OVns
         {
             int baseComp = base.CompareTo(obj);
             if (baseComp != 0) return baseComp;
-            var otherTyped = (OV_dateTimeZone)obj;
+            var otherTyped = (OV_int)obj;
             return value.CompareTo(otherTyped.value);
         }
     }

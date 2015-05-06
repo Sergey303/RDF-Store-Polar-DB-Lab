@@ -61,23 +61,43 @@
     <Compile Include="Interfaces\ISubjectNode.cs" />
     <Compile Include="Interfaces\IIriNode.cs" />
     <Compile Include="NoGraphExeption.cs" />
+    <Compile Include="OVns\date\OV_gYear.cs" />
+    <Compile Include="OVns\date\OV_gMonth.cs" />
+    <Compile Include="OVns\date\OV_gDay.cs" />
+    <Compile Include="OVns\date\OV_gYearMonth.cs" />
+    <Compile Include="OVns\date\OV_gMonthDay.cs" />
+    <Compile Include="OVns\date\OV_duration.cs" />
+    <Compile Include="OVns\date\OV_yearMonthDuration.cs" />
+    <Compile Include="OVns\date\OV_int.cs" />
+    <Compile Include="OVns\numeric\OV_byte.cs" />
+    <Compile Include="OVns\numeric\OV_short.cs" />
+    <Compile Include="OVns\numeric\OV_integer.cs" />
+    <Compile Include="OVns\numeric\OV_long.cs" />
+    <Compile Include="OVns\numeric\OV_unsignedByte.cs" />
+    <Compile Include="OVns\numeric\OV_unsignedShort.cs" />
+    <Compile Include="OVns\numeric\OV_unsignedInt.cs" />
+    <Compile Include="OVns\numeric\OV_unsignedLong.cs" />
+    <Compile Include="OVns\numeric\OV_positiveInteger.cs" />
+    <Compile Include="OVns\numeric\OV_nonNegativeInteger.cs" />
+    <Compile Include="OVns\numeric\OV_negativeInteger.cs" />
+    <Compile Include="OVns\numeric\OV_nonPositiveInteger.cs" />
     <Compile Include="OVns\ObjectVariantEnum.cs" />
     <Compile Include="OVns\ObjectVariants.cs" />
     <Compile Include="OVns\ObjectVariantsEx.cs" />
     <Compile Include="OVns\OV_bool.cs" />
-    <Compile Include="OVns\OV_date.cs" />
-    <Compile Include="OVns\OV_dateTime.cs" />
-    <Compile Include="OVns\OV_dateTimeZone.cs" />
-    <Compile Include="OVns\OV_decimal.cs" />
-    <Compile Include="OVns\OV_double.cs" />
-    <Compile Include="OVns\OV_float.cs" />
-    <Compile Include="OVns\OV_int.cs" />
+    <Compile Include="OVns\date\OV_date.cs" />
+    <Compile Include="OVns\date\OV_dateTime.cs" />
+    <Compile Include="OVns\date\OV_dateTimeStamp.cs" />
+    <Compile Include="OVns\numeric\OV_decimal.cs" />
+    <Compile Include="OVns\numeric\OV_double.cs" />
+    <Compile Include="OVns\numeric\OV_float.cs" />
+    <Compile Include="OVns\numeric\OV_int.cs" />
     <Compile Include="OVns\OV_iri.cs" />
     <Compile Include="OVns\OV_iriint.cs" />
     <Compile Include="OVns\OV_Lang.cs" />
     <Compile Include="OVns\OV_langstring.cs" />
     <Compile Include="OVns\OV_string.cs" />
-    <Compile Include="OVns\OV_time.cs" />
+    <Compile Include="OVns\date\OV_time.cs" />
     <Compile Include="OVns\OV_typed.cs" />
     <Compile Include="OVns\OV_typedint.cs" />
     <Compile Include="Prologue.cs" />
@@ -92,17 +112,9 @@
       <SubType>
       </SubType>
     </Compile>
-    <Compile Include="XmlSchema.Designer.cs">
-      <DependentUpon>XmlSchema.settings</DependentUpon>
-      <AutoGen>True</AutoGen>
-      <DesignTimeSharedInput>True</DesignTimeSharedInput>
-    </Compile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="XmlSchema.settings">
-      <Generator>SettingsSingleFileGenerator</Generator>
-      <LastGenOutput>XmlSchema.Designer.cs</LastGenOutput>
-    </None>
+    <None Include="app.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

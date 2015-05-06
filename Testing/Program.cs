@@ -21,19 +21,8 @@ PREFIX dataFromProducer1: <http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instan
 
 SELECT DISTINCT ?product ?productLabel
 WHERE { 
-	dataFromProducer1:Product12 bsbm:productFeature ?prodFeature .
-	?product bsbm:productFeature ?prodFeature .
-    FILTER (dataFromProducer1:Product12 != ?product)	
-	?product rdfs:label ?productLabel .
-	dataFromProducer1:Product12 bsbm:productPropertyNumeric1 ?origProperty1 .
-	?product bsbm:productPropertyNumeric1 ?simProperty1 .
-	FILTER (?simProperty1 < (?origProperty1 + 120) && ?simProperty1 > (?origProperty1 - 120))
-	dataFromProducer1:Product12 bsbm:productPropertyNumeric2 ?origProperty2 .
-	?product bsbm:productPropertyNumeric2 ?simProperty2 .
-	FILTER (?simProperty2 < (?origProperty2 + 170) && ?simProperty2 > (?origProperty2 - 170))
+	?product bsbm:productFeature <http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/productfeature142> .	
 }
-ORDER BY ?productLabel
-LIMIT 5
                                     ", false, 1);
         }
     }

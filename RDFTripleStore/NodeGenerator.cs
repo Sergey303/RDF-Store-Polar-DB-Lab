@@ -91,9 +91,8 @@ namespace RDFTripleStore
             }
             else if (typeUriNode.Equals(this.SpecialTypes.dateTime))
             {
-                DateTimeOffset date;
-                if (!DateTimeOffset.TryParse(p, out date)) throw new ArgumentException(p);
-                return new OV_dateTimeZone(date);
+                
+                return new OV_dateTimeStamp(p);
             }
             else if (typeUriNode .Equals(this.SpecialTypes.@bool))
             {
