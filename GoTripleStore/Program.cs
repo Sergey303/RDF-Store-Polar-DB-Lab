@@ -19,7 +19,7 @@ namespace GoTripleStore
             string path = "../../../Databases/";
             Console.WriteLine("Start GoTripleStore coding triples (GaGraphStringBased).");
             var query = ReadTripleStringsFromTurtle.LoadGraph(Config.Source_data_folder_path + "1.ttl")
-                .Select(tri => new Tuple<string,string,ObjectVariants>(tri.Subject, tri.Predicate, tri.Object));
+                .Select(tri => new Tuple<string, string, ObjectVariants>(tri.Subject, tri.Predicate, tri.Object));
 
             //IGra<PaEntry> g = new GoGraphStringBased(path);
             GaGraphStringBased g = new GaGraphStringBased(path);
@@ -33,7 +33,66 @@ namespace GoTripleStore
             }
             else
             { // разогрев
-                g.Warmup();
+                //g.Warmup();
+            }
+
+            {
+                sw.Restart();
+                //var fl = g.GetTriplesWithSubjectPredicate(
+                //    "http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/datafromproducer1/product12",
+                //    "http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/vocabulary/productfeature"
+                //    );
+                var fl = g.GetTriplesWithSubjectPredicate(
+                    "http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/datafromproducer1/product12",
+                    "http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/vocabulary/productpropertynumeric1"
+    );
+                int n = fl.Count();
+                sw.Stop();
+                Console.WriteLine("n={0} duration={1}", n, sw.ElapsedMilliseconds);
+                //foreach (var ent in fl)
+                //{
+                //    var v = g.Dereference(ent);
+                //    Console.WriteLine("{0} {1} {2} .", v[0], v[1], v[2].ToOVariant());
+                //}
+
+                sw.Restart();
+                var fl2 = g.GetTriplesWithSubjectPredicate(
+                    "http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/datafromproducer1/product12",
+                    "http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/vocabulary/productpropertynumeric1"
+                    );
+                n = fl2.Count();
+                sw.Stop();
+                Console.WriteLine("Ой! n={0} duration={1}", n, sw.ElapsedMilliseconds);
+
+                var c = g.GetTriplesWithPredicateObject(
+               "http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/vocabulary/productfeature",
+               new OV_iri("http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/productfeature142"))
+               .Count();
+                Console.WriteLine("Ай! n={0}", c);
+                
+                TripleStore ts = new TripleStore(g);
+
+                //var str_fl = ts.GetObjBySubjPred(
+                //    "http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/datafromproducer1/product12",
+                //    "http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/vocabulary/productfeature"
+                //    );
+                //foreach (var v in str_fl)
+                //{
+                //    Console.WriteLine(v);
+                //}
+
+                // =============== Это пропуск СПАРКЛ-ЛИНК тестов ===============
+
+                var test = BerlinTests.QueryTest(ts);
+                sw.Restart();
+                Console.WriteLine("n_results={0} duration={1}", test.Count(), sw.ElapsedMilliseconds);
+                sw.Stop();
+                foreach (var pack in test)
+                {
+                    //Console.WriteLine(pack.row[0]);
+                }
+
+                return;
             }
             var flow = g.GetTriplesWithSubjectPredicate(
                 "http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromProducer10/Product468",

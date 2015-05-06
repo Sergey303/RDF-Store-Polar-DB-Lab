@@ -49,7 +49,7 @@ namespace GoTripleStore
                 return new TripleSPOu()
                 {
                     triple = new Tuple<string, string, ObjectVariants>((string)va[0], (string)va[1],
-                        ObjectVariants.CreateLiteralNode(false))
+                        ((object[])va[2]).Writeble2OVariant())
                 };
             };
             Func<object, DuplePOu> uPOkeyproducer = v =>
@@ -58,7 +58,7 @@ namespace GoTripleStore
                 return new DuplePOu()
                 {
                     tuple = new Tuple<string, ObjectVariants>((string)va[1],
-                        ObjectVariants.CreateLiteralNode(false))
+                        ((object[])va[2]).Writeble2OVariant())
                 };
             };
             Func<object, MonopleOu> uOkeyproducer = v =>
@@ -66,7 +66,7 @@ namespace GoTripleStore
                 object[] va = (object[])((object[])v)[1];
                 return new MonopleOu()
                 {
-                    tuple = new Tuple<ObjectVariants>(ObjectVariants.CreateLiteralNode(false))
+                    tuple = new Tuple<ObjectVariants>(((object[])va[2]).Writeble2OVariant())
                 };
             };
             // Опорная таблица
@@ -391,7 +391,9 @@ namespace GoTripleStore
 
         public IEnumerable<PaEntry> GetTriples()
         {
-            throw new NotImplementedException();
+            return table.TableCell.Root.Elements()
+                .Where(ent => ! (bool)ent.Field(0).Get())
+                .Select(ent => ent.Field(1));
         }
 
         public IEnumerable<PaEntry> GetTriplesWithSubject(object osubj)
@@ -456,7 +458,7 @@ namespace GoTripleStore
             var query = po_ind.GetAllByKey(new DuplePOu()
             {
                 tuple = new Tuple<string, ObjectVariants>(pred, obj)
-            }).Select(en => en.Field(1));
+            }).Select(en => en.Field(1)).ToArray();
             //var query = po_index.GetAllByKey(new DuplePO() // вариант с полуключем
             //{
             //    tuple = new Tuple<string, ObjectVariants>(pred, obj)

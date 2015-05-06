@@ -45,15 +45,19 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BerlinTests.cs" />
     <Compile Include="GaGraphStringBased.cs" />
     <Compile Include="GoGraphIntBased.cs" />
     <Compile Include="GoGraphStringBased.cs" />
     <Compile Include="IGra.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RPack.cs" />
+    <Compile Include="TripleStore.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Concepts.txt" />
+    <Content Include="Experiments.txt" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\PolarDB\PolarDB.csproj">
