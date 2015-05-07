@@ -19,6 +19,8 @@ namespace SparqlParseRun.SparqlClasses.Query.Result
             {
                 {variable, new SparqlVariableBinding(variable,newObj)}
             };
+            rowArray = new[] {newObj};
+
         }
         public SparqlResult(SparqlResult old, ObjectVariants newObj1, VariableNode variable1, ObjectVariants newObj2, VariableNode variable2)
         {
@@ -49,10 +51,15 @@ namespace SparqlParseRun.SparqlClasses.Query.Result
 
         public SparqlVariableBinding this[VariableNode index]
         {
-            get { return row[index]; }
+            get
+            {
+                return row[index];
+            }
             set
             {
-                row[index]= value;
+                row[index] = value;
+                rowArray = new ObjectVariants[] { value.Value };
+
             }
         }
 
@@ -98,6 +105,6 @@ namespace SparqlParseRun.SparqlClasses.Query.Result
                 return sum;
             }
         }
-        ObjectVariants[] rowArray=new ObjectVariants[];
+        public ObjectVariants[] rowArray;
     }
 }

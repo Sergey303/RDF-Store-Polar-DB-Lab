@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using RDFCommon.OVns;
 using RDFCommon;
 using SparqlParseRun.SparqlClasses.Expressions;
@@ -11,7 +12,7 @@ namespace SparqlParseRun
     public class RdfQuery11Translator 
     {
         public Dictionary<string, VariableNode> Variables = new Dictionary<string, VariableNode>();
-        public Dictionary<string, SparqlBlankNode> BlankNodes = new Dictionary<string, SparqlBlankNode>();
+    //    public Dictionary<string, SparqlBlankNode> BlankNodes = new Dictionary<string, SparqlBlankNode>();
         public DataSet ActiveGraphs = new DataSet();
       public DataSet NamedGraphs = new DataSet();
       public readonly Prologue prolog = new Prologue();
@@ -39,9 +40,9 @@ namespace SparqlParseRun
         internal VariableNode GetVariable(string p)
         {
             VariableNode variable;
-            if (Variables.TryGetValue(p, out variable)) return variable;
-            Variables.Add(p, variable=new VariableNode(p));
-            return variable;
+            if (Variables.TryGetValue(p, out variable)) return (VariableNode)variable;
+            Variables.Add(p, variable=new VariableNode(p, Variables.Count));
+            return (VariableNode)variable;
         }
 
 
@@ -68,16 +69,19 @@ namespace SparqlParseRun
       
         public new SparqlBlankNode CreateBlankNode(string blankNodeString)
         {
-            SparqlBlankNode blankNode;
-            if (BlankNodes.TryGetValue(blankNodeString, out blankNode)) return blankNode;
-            BlankNodes.Add(blankNodeString, blankNode = new SparqlBlankNode(blankNodeString));
-            return blankNode;
+            blankNodeString = "blank " + blankNodeString;
+            VariableNode blankNode;
+            if (Variables.TryGetValue(blankNodeString, out blankNode)) return (SparqlBlankNode)blankNode;
+            Variables.Add(blankNodeString, blankNode = new SparqlBlankNode(blankNodeString, Variables.Count));
+            return (SparqlBlankNode)blankNode;
         }
 
         public new SparqlBlankNode CreateBlankNode()
         {
-            var sparqlBlankNode = new SparqlBlankNode();  
-            return sparqlBlankNode;
+            var blankNode = new SparqlBlankNode("generated ", Variables.Count);
+            Variables.Add(Guid.NewGuid().ToString(), blankNode); //todo
+
+            return blankNode;
         }
     }
 }

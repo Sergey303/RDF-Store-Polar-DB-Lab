@@ -1,4 +1,5 @@
-﻿using RDFCommon;
+﻿using System;
+using RDFCommon;
 using SparqlParseRun.SparqlClasses.GraphPattern;
 using SparqlParseRun.SparqlClasses.Query.Result;
 using SparqlParseRun.SparqlClasses.SolutionModifier;
@@ -32,7 +33,12 @@ namespace SparqlParseRun.SparqlClasses.Query
             Q.Store = store;
             ResultSet.Variables = Q.Variables;
             ResultSet.Results = sparqlWhere.Run(ResultSet.Results);
-       
+            foreach (var result in ResultSet.Results)
+            {
+                Console.WriteLine("____________________________________");
+                Console.WriteLine(result.rowArray[0]);
+                Console.WriteLine("#################################");
+            }
             if (sparqlSolutionModifier != null )
                 ResultSet.Results = sparqlSolutionModifier.Run(ResultSet.Results, ResultSet);
 

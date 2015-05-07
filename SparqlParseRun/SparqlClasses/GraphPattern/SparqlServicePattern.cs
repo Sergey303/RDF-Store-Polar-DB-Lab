@@ -73,7 +73,7 @@ namespace SparqlParseRun.SparqlClasses.GraphPattern
                         .Elements()
                         .Select(xResult => new SparqlResult(xResult.Elements()
                             .Select(xb =>
-                                new SparqlVariableBinding(new VariableNode(xb.Attribute("name").Value),
+                                new SparqlVariableBinding(q.GetVariable(xb.Attribute("name").Value),
                                     Xml2Node(xn, xb.Elements().FirstOrDefault())))
                             .ToDictionary(b1 => b1.Variable)))))
                     yield return result;

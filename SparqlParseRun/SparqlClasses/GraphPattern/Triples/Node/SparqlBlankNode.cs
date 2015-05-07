@@ -6,12 +6,12 @@ namespace SparqlParseRun.SparqlClasses.GraphPattern.Triples.Node
     {
 
 
-        public SparqlBlankNode(string  varName):base(varName)
+        public SparqlBlankNode(string varName, int count):base(varName, count)
         {
             
         }
 
-        public SparqlBlankNode()
+        public SparqlBlankNode(int count)    :base("blank var", count)
         {
          
         }
