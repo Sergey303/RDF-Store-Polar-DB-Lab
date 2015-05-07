@@ -83,14 +83,28 @@ namespace GoTripleStore
 
                 // =============== Это пропуск СПАРКЛ-ЛИНК тестов ===============
 
-                var test = BerlinTests.QueryTest(ts);
+                //TripleStore ts = new TripleStore(g);
+                int cnt;
+                var test = BerlinTests.Query1(ts);
                 sw.Restart();
-                Console.WriteLine("n_results={0} duration={1}", test.Count(), sw.ElapsedMilliseconds);
+                cnt = test.Count();
                 sw.Stop();
-                foreach (var pack in test)
-                {
-                    //Console.WriteLine(pack.row[0]);
-                }
+                Console.WriteLine("n_results={0} duration={1}", cnt, sw.ElapsedMilliseconds);
+
+                // Диагностический фрагмент
+                //TripleStore_Diag ts_d = new TripleStore_Diag(g); 
+                //int cnt;
+                //var test = BerlinTests.QueryTestOpti(ts_d);
+                //sw.Restart();
+                //ts_d.StartAccumulate();
+                //cnt = test.Count();
+                //sw.Stop();
+                //Console.WriteLine("n_results={0} duration={1}", cnt, sw.ElapsedMilliseconds);
+                //sw.Restart();
+                //ts_d.StartUse();
+                //cnt = test.Count();
+                //sw.Stop();
+                //Console.WriteLine("n_results={0} duration={1}", cnt, sw.ElapsedMilliseconds);
 
                 return;
             }

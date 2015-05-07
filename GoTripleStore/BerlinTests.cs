@@ -41,6 +41,35 @@ namespace GoTripleStore
                 ;
             return quer;
         }
+
+        public static IEnumerable<RPack> QueryTestOpti(TripleStore ts)
+        {
+            object[] row = new object[7];
+            int _prodFeature = 0, _produc = 1, _productLabel = 2, _origProperty1 = 3, _simProperty1 = 4;
+            int _origProperty2 = 5, _simProperty2 = 6;
+            var quer = Enumerable.Repeat<RPack>(new RPack(row, ts), 1)
+                .spD("http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/datafromproducer1/product12",
+                    "http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/vocabulary/productpropertynumeric1",
+                    _origProperty1)
+                .spD("http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/datafromproducer1/product12",
+                    "http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/vocabulary/productpropertynumeric2",
+                    _origProperty2)
+                .spO("http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/datafromproducer1/product12",
+                    "http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/vocabulary/productfeature", _prodFeature)
+                .Spo(_produc, bsbm + "productfeature", _prodFeature)
+                .Where(pack => pack.Val(_produc) != "http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/datafromproducer1/product12")
+                .spD(_produc, rdfs + "label", _productLabel)
+                .spD(_produc, "http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/vocabulary/productpropertynumeric1",
+                    _simProperty1)
+                .Where(pack => pack.Vai(_simProperty1) < (pack.Vai(_origProperty1) + 120) &&
+                    pack.Vai(_simProperty1) > (pack.Vai(_origProperty1) - 120))
+                .spD(_produc, "http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/vocabulary/productpropertynumeric2",
+                    _simProperty2)
+                .Where(pack => pack.Vai(_simProperty2) < (pack.Vai(_origProperty2) + 170) &&
+                    pack.Vai(_simProperty2) > (pack.Vai(_origProperty2) - 170))
+                ;
+            return quer;
+        }
         //
         public static IEnumerable<RPack> Query1(TripleStore ts)
         {
