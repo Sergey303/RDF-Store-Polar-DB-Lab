@@ -11,6 +11,7 @@ namespace SparqlParseRun.SparqlClasses.Query.Result
     {
         //public bool result;
         public readonly Dictionary<VariableNode, SparqlVariableBinding> row;
+        
 
         public SparqlResult(SparqlResult old, ObjectVariants newObj, VariableNode variable)
         {
@@ -40,7 +41,8 @@ namespace SparqlParseRun.SparqlClasses.Query.Result
 
         public SparqlResult()
         {
-          row=new Dictionary<VariableNode, SparqlVariableBinding>(); 
+          row=new Dictionary<VariableNode, SparqlVariableBinding>();
+            rowArray = new ObjectVariants[1];
         }
 
        
@@ -96,5 +98,6 @@ namespace SparqlParseRun.SparqlClasses.Query.Result
                 return sum;
             }
         }
+        ObjectVariants[] rowArray=new ObjectVariants[];
     }
 }

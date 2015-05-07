@@ -29,7 +29,7 @@ namespace RDFTripleStore
         {
             KeyValuePair<Dictionary<string, ObjectVariants>, Dictionary<string, HashSet<string>>> finded;
             if (triples.TryGetValue(o, out finded)) return Enumerable.Empty<T>();
-            return
+            return null;
         }
 
         public IEnumerable<T> GetTriplesWithPredicate<T>(ObjectVariants p, Func<ObjectVariants, ObjectVariants, T> createResult)
