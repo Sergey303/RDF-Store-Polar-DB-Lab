@@ -4,7 +4,7 @@ namespace TestingNs
 {
   public static class Config
     {
-      public static string Source_data_folder_path;
+      public static readonly string Source_data_folder_path;
 
       static Config()
       {

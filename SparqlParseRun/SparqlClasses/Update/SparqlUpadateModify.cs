@@ -1,0 +1,134 @@
+﻿using System.Collections.Generic;
+using System.Linq;
+using RDFCommon;
+using RDFCommon.OVns;
+using SparqlParseRun.SparqlClasses.GraphPattern;
+using SparqlParseRun.SparqlClasses.GraphPattern.Triples;
+using SparqlParseRun.SparqlClasses.GraphPattern.Triples.Node;
+using SparqlParseRun.SparqlClasses.Query.Result;
+
+namespace SparqlParseRun.SparqlClasses.Update
+{
+    public class SparqlUpdateModify : ISparqlUpdate    
+    {
+        private SparqlGraphPattern @where;
+        private ObjectVariants with;
+        private SparqlQuardsPattern insert;
+        private SparqlQuardsPattern delete;
+
+        public void SetWith(ObjectVariants iri)
+        {
+            with = iri;
+        }
+        public SparqlUpdateModify()
+        {
+            
+        }
+        public SparqlUpdateModify(SparqlQuardsPattern sparqlUpdateDelete)
+        {
+            delete = sparqlUpdateDelete;
+        }
+     
+
+        internal void SetInsert(SparqlQuardsPattern sparqlUpdateInsert)
+        {
+            insert = sparqlUpdateInsert;
+        }
+
+        internal void SetDelete(SparqlQuardsPattern sparqlUpdateDelete)
+        {
+            delete = sparqlUpdateDelete;
+        }
+
+        internal void SetWhere(SparqlGraphPattern sparqlGraphPattern)
+        {
+            @where = sparqlGraphPattern;
+        }
+
+        public void Run(IStore store)
+        {
+            var results = @where.Run(Enumerable.Repeat(new SparqlResult(), 1));
+            SparqlTriple[] defaultGraphTriplesInsert = null;
+            SparqlTriple[] defaultGraphTriplesDelete = null;
+            SparqlGraphGraph[] graphPatternsInsert = null;
+            SparqlGraphGraph[] graphPatternsDelete=null;
+            if (insert != null)
+            {                  
+                defaultGraphTriplesInsert =
+                    insert.Where(pattern => pattern.PatternType == SparqlGraphPatternType.SparqlTriple)
+                        .Cast<SparqlTriple>()
+                        .ToArray();
+                graphPatternsInsert = insert
+                    .Where(pattern => pattern.PatternType == SparqlGraphPatternType.Graph)
+                    .Cast<SparqlGraphGraph>()
+                    .ToArray();
+            }
+            if (delete != null)
+            {
+                defaultGraphTriplesDelete =
+                    delete.Where(pattern => pattern.PatternType == SparqlGraphPatternType.SparqlTriple)
+                        .Cast<SparqlTriple>()
+                        .ToArray();
+
+                graphPatternsDelete = delete
+                    .Where(pattern => pattern.PatternType == SparqlGraphPatternType.Graph)
+                    .Cast<SparqlGraphGraph>()
+                    .ToArray();
+            }
+
+            foreach (var result in results)
+            {
+                if (delete != null)
+                {
+                    if (with == null)
+                        foreach (SparqlTriple triple in defaultGraphTriplesDelete)
+                            triple.Substitution(result,
+                                store.Delete,
+                                store.Name);
+                    else
+                        foreach (SparqlTriple triple in defaultGraphTriplesDelete)
+                            triple.Substitution(result,
+                                with,
+                                store.NamedGraphs.Delete);
+                    foreach (SparqlGraphGraph sparqlGraphPattern in graphPatternsDelete)
+                    {
+                        if (sparqlGraphPattern.Name is VariableNode)
+                        {
+                            var gVariableNode = ((VariableNode)sparqlGraphPattern.Name);
+                            foreach (var triple in sparqlGraphPattern.GetTriples())
+                                triple.Substitution(result, gVariableNode, store.NamedGraphs.Delete);
+                        }
+                        else
+                            foreach (var triple in sparqlGraphPattern.GetTriples())
+                                triple.Substitution(result, sparqlGraphPattern.Name, store.NamedGraphs.Delete);
+                    }
+                }
+                if (insert != null)
+                {
+                    if (with == null)
+                    foreach (SparqlTriple triple in defaultGraphTriplesInsert)
+                        triple.Substitution(result,
+                            store.Add,
+                            store.Name);
+                    else
+                        foreach (SparqlTriple triple in defaultGraphTriplesInsert)
+                            triple.Substitution(result,
+                                with,
+                                store.NamedGraphs.Add);
+                    foreach (SparqlGraphGraph sparqlGraphPattern in graphPatternsInsert)
+                    {
+                        if (sparqlGraphPattern.Name is VariableNode)
+                        {
+                            var gVariableNode = ((VariableNode) sparqlGraphPattern.Name);
+                            foreach (var triple in sparqlGraphPattern.GetTriples())
+                                triple.Substitution(result, gVariableNode, store.NamedGraphs.Add);
+                        }
+                        else
+                            foreach (var triple in sparqlGraphPattern.GetTriples())
+                                triple.Substitution(result, sparqlGraphPattern.Name, store.NamedGraphs.Add);
+                    }
+                }
+            }
+        }
+    }
+}

@@ -1,7 +1,8 @@
 namespace RDFCommon
 {
-    public interface ILiteralNode :IObjectNode
+    public interface ILiteralNode
     {  
         string DataType { get; }
+        dynamic Content { get; }
     }
 }

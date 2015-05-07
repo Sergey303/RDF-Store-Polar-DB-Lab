@@ -7,7 +7,7 @@ namespace RDFTripleStore
     {
         readonly RdfNamedGraphs graphs=new RdfNamedGraphs();
 
-        public RamListOftriplesStore(ObjectVariants name)
+        public RamListOftriplesStore(string name)
             : base(name)
         {
         }

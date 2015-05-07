@@ -4,14 +4,12 @@ using System.Linq;
 using RDFCommon;
 using RDFCommon.Interfaces;
 using RDFCommon.OVns;
-using RDFTripleStore;
-using RDFTripleStore.parsers;
 using Task15UniversalIndex;
 using PolarDB;
 
 namespace GoTripleStore
 {
-    public class GoGraphIntBased : IGraph<Triple<int, int, ObjectVariants>>
+    public class GoGraphIntBased : IGraph<TripleIntOV>
     {
         internal TableView table;
         private NameTableUniversal coding_table;
@@ -156,7 +154,7 @@ namespace GoTripleStore
         }
         private int _portion = 500000;
         public int Portion { set { _portion = value; } }
-        public void Build(IEnumerable<Triple<string, string, ObjectVariants>> triples)
+        public void Build(IEnumerable<TripleStrOV> triples)
         {
             table.Clear();
             table.TableCell.Fill(new object[0]);
@@ -208,6 +206,43 @@ namespace GoTripleStore
             BuildIndexes();
         }
 
+        public void Build(IGenerator<List<TripleStrOV>> generator)
+        {
+            table.Clear();
+            table.TableCell.Fill(new object[0]);
+            coding_table.Clear();
+            coding_table.Fill(new string[0]);
+            coding_table.BuildIndexes();
+            generator.Start(buffer =>
+            {
+                IEnumerable<string> ids = buffer.SelectMany(tri =>
+                {
+                    IEnumerable<string> iris = new string[] { tri.Subject, tri.Predicate };
+                    if (tri.Object.Variant == ObjectVariantEnum.Iri)
+                        iris = iris.Concat(new string[] { ((OV_iri)tri.Object).UriString });
+                    return iris;
+                });
+                var dictionary = coding_table.InsertPortion(ids);
+                foreach (var tri in buffer)
+                {
+                    int isubj = dictionary[tri.Subject];
+                    int ipred = dictionary[tri.Predicate];
+                    ObjectVariants ov = tri.Object;
+                    if (ov.Variant == ObjectVariantEnum.Iri)
+                    {
+                        int iobj = dictionary[((OV_iri)ov).UriString];
+                        ov = new OV_iriint(iobj, coding_table.GetStringByCode);
+                    }
+                    table.TableCell.Root.AppendElement(new object[] { false, new object[] { isubj, ipred, ov.ToWritable() } });
+                }    
+            });
+        
+            coding_table.BuildScale();
+            table.TableCell.Flush();
+
+            BuildIndexes();
+        }
+
         public void Warmup()
         {
             table.Warmup();
@@ -224,15 +259,7 @@ namespace GoTripleStore
                 index_po_arr_base.Warmup();
             }
         }
-        public void Build(IEnumerable<Triple<int, int, ObjectVariants>> triples)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void Build(IGenerator<List<Triple<string, string, ObjectVariants>>> generator)
-        {
-            throw new NotImplementedException();
-        }
+       
         public void BuildIndexes()
         {
             index_s_arr.Build();
@@ -258,7 +285,7 @@ namespace GoTripleStore
                 Console.WriteLine("index_po_arr_base ok.");
             }
         }
-        public IEnumerable<Triple<int, int, ObjectVariants>> Search(object subject = null, object predicate = null, ObjectVariants obj = null)
+        public IEnumerable<TripleIntOV> Search(object subject = null, object predicate = null, ObjectVariants obj = null)
         {
             if (subject != null && predicate == null && obj == null)
             {
@@ -271,7 +298,7 @@ namespace GoTripleStore
                     int s = (int)three[0];
                     int p = (int)three[1];
                     var o = ((object[])three[2]).Writeble2OVariant(coding_table.GetStringByCode);
-                    return new Triple<int, int, ObjectVariants>(s, p, o);
+                    return new TripleIntOV(s, p, o);
                 });
                 return query;
             }
@@ -287,7 +314,7 @@ namespace GoTripleStore
                     int s = (int)three[0];
                     int p = (int)three[1];
                     var o = ((object[])three[2]).Writeble2OVariant(coding_table.GetStringByCode);
-                    return new Triple<int, int, ObjectVariants>(s, p, o);
+                    return new TripleIntOV(s, p, o);
                 });
                 return qu;
             }
@@ -310,7 +337,7 @@ namespace GoTripleStore
                     int s = (int)three[0];
                     int p = (int)three[1];
                     var o = ((object[])three[2]).Writeble2OVariant(coding_table.GetStringByCode);
-                    return new Triple<int, int, ObjectVariants>(s, p, o);
+                    return new TripleIntOV(s, p, o);
                 });
                 return qu;
             }
@@ -330,14 +357,14 @@ namespace GoTripleStore
                 //var query = index_po.GetAllByKey(pop);
                 var query = ishalfkey_index_po ? index_po.GetAllByKey(pop) : index_po_base.GetAllByKey(pop);
                 //query.Count();
-                //return Enumerable.Empty<Triple<int, int, ObjectVariants>>();
+                //return Enumerable.Empty<TripleIntOV>();
                 var qu = query.Select(ent =>
                 {
                     object[] three = (object[])((object[])ent.Get())[1];
                     int s = (int)three[0];
                     int p = (int)three[1];
                     var o = ((object[])three[2]).Writeble2OVariant(coding_table.GetStringByCode);
-                    return new Triple<int, int, ObjectVariants>(s, p, o);
+                    return new TripleIntOV(s, p, o);
                 });
                 return qu;
             }
@@ -373,85 +400,6 @@ namespace GoTripleStore
         {
             return coding_table.GetStringByCode(cod);
         }
-        public class SP_Pair : IComparable
-        {
-            int s, p;
-            public SP_Pair(int subject, int predicate) { this.s = subject; this.p = predicate; }
-            //int S { get; set; }
-            //int P { get; set; }
-            public int CompareTo(object another)
-            {
-                SP_Pair ano = (SP_Pair)another;
-                int cmp = this.GetHashCode().CompareTo(ano.GetHashCode());
-                if (cmp == 0)
-                {
-                    cmp = this.s.CompareTo(ano.s);
-                }
-                if (cmp == 0)
-                {
-                    cmp = this.p.CompareTo(ano.p);
-                }
-                return cmp;
-            }
-            public override int GetHashCode()
-            {
-                //return s.GetHashCode() ^ p.GetHashCode();
-                return ( 3001^ s.GetHashCode() ) * (1409 ^ p.GetHashCode());
-            }
-        }
-        public class SPO_Troyka : IComparable
-        {
-            int s, p; ObjectVariants ov;
-            public SPO_Troyka(int subject, int predicate, ObjectVariants ov) { this.s = subject; this.p = predicate; this.ov = ov; }
-            public int CompareTo(object another)
-            {
-                SPO_Troyka ano = (SPO_Troyka)another;
-                int cmp = this.GetHashCode().CompareTo(ano.GetHashCode());
-                if (cmp == 0)
-                {
-                    cmp = this.s.CompareTo(ano.s);
-                }
-                if (cmp == 0)
-                {
-                    cmp = this.p.CompareTo(ano.p);
-                }
-                if (cmp == 0)
-                {
-                   cmp = this.ov.CompareTo(ano.ov);
-                }
-                return cmp;
-            }
-            public override int GetHashCode()
-            {
-                return (2 ^ s.GetHashCode() ) * (3 ^ p.GetHashCode()) * (7 ^ ov.GetHashCode());
-            }
-        }
-        public class PO_Pair : IComparable
-        {
-            int p; ObjectVariants ov;
-            public PO_Pair(int predicate, ObjectVariants ov) { this.p = predicate; this.ov = ov; }
-            public int CompareTo(object another)
-            {
-                PO_Pair ano = (PO_Pair)another;
-                int cmp = this.GetHashCode().CompareTo(ano.GetHashCode());
-                if (cmp == 0)
-                {
-                    cmp = this.p.CompareTo(ano.p);
-                }
-                if (cmp == 0)
-                {
-                    cmp = this.ov.CompareTo(ano.ov);
-                }
-                return cmp;
-            }
-            public override int GetHashCode()
-            {
-                //return p.GetHashCode() + 7777 * ov.GetHashCode();
-                return unchecked((2 ^p.GetHashCode()) * (3 ^ov.GetHashCode()));
-                //return unchecked(ov.GetHashCode() + 77777 * p.GetHashCode()); 
-                //int v = ov.Variant.GetHashCode();
-                //return unchecked(ov.GetHashCode() + p.GetHashCode() * 77777); 
-            }
-        }
+
     }
 }

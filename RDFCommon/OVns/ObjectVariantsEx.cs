@@ -17,10 +17,10 @@ namespace RDFCommon.OVns
             (s, nt) => new OV_decimal((decimal) s),
             (s, nt) => new OV_float((float) s),
             (s, nt) => new OV_int((int) s),
-            (s, nt) => new OV_dateTimeZone(DateTimeOffset.FromFileTime((long) s)),
+            (s, nt) => new OV_dateTimeStamp(DateTimeOffset.FromFileTime((long) s)), 
             (s, nt) => new OV_dateTime(DateTime.FromBinary((long) s)),
             (s, nt) => new OV_date(DateTime.FromBinary((long) s)),
-            (s, nt) => new OV_time(TimeSpan.FromTicks((long) s)),
+            (s, nt) => new OV_time(DateTimeOffset.FromFileTime((long)s)),
             (typed, nt) => new OV_typed((string) ((object[]) typed)[0], (string) ((object[]) typed)[1]),
             (typed, decode) => new OV_typedint((string) ((object[]) typed)[0], (int) ((object[]) typed)[1], decode),
         };

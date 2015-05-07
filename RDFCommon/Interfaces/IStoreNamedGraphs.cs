@@ -25,25 +25,25 @@ namespace RDFCommon
         IEnumerable<T> GetTriplesWithSubject<T>(ObjectVariants subjectNode, Func<ObjectVariants, ObjectVariants, ObjectVariants, T> returns);
         IEnumerable<T> GetTriplesFromGraph<T>(ObjectVariants graph, Func<ObjectVariants, ObjectVariants, ObjectVariants, T> returns);
 
-        IGraph CreateGraph(ObjectVariants sparqlUriNode);
+        IGraph CreateGraph(string sparqlUriNode);
         bool Contains(ObjectVariants sValue, ObjectVariants pValue, ObjectVariants oValue, ObjectVariants graph);
-        void DropGraph(ObjectVariants sparqlGrpahRefTypeEnum);
-        void Clear(ObjectVariants uri);
+        void DropGraph(string sparqlGrpahRefTypeEnum);
+        void Clear(string uri);
 
-        void Delete(ObjectVariants g, IEnumerable<Triple<ObjectVariants, ObjectVariants, ObjectVariants>> triples);
-        void DeleteFromAll(IEnumerable<Triple<ObjectVariants, ObjectVariants, ObjectVariants>> triples);
-        void Insert(ObjectVariants name, IEnumerable<Triple<ObjectVariants, ObjectVariants, ObjectVariants>> triples);
+        void Delete(ObjectVariants g, ObjectVariants s, ObjectVariants p, ObjectVariants o);
+        void DeleteFromAll(IEnumerable<TripleOV> triples);
+        void Add(ObjectVariants name, ObjectVariants s, ObjectVariants p, ObjectVariants o);
 
       //  IGraph TryGetGraph(IUriNode graphUriNode);
 
        //  Dictionary<IUriNode,IGraph> Named { get;  }
-        void AddGraph(ObjectVariants to, IGraph fromGraph);
+        void AddGraph(string to, IGraph fromGraph);
         void ReplaceGraph(ObjectVariants to, IGraph graph);
         IEnumerable<KeyValuePair<ObjectVariants, long>> GetAllGraphCounts();
 
        // bool ContainsGraph(IUriNode to);
 
-        IGraph GetGraph(ObjectVariants graphUriNode);
+        IGraph GetGraph(string graphUriNode);
         IEnumerable<ObjectVariants> GetAllSubjects(ObjectVariants graphUri);
         bool Any(ObjectVariants graphUri);
 

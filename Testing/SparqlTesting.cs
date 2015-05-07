@@ -2,9 +2,9 @@ using System;
 using System.IO;
 using System.Linq;
 using RDFCommon;
+using RDFTripleStore;
 using SparqlParseRun;
 using SparqlParseRun.SparqlClasses.Query.Result;
-using RDFTripleStore;
 
 namespace TestingNs
 {
@@ -12,7 +12,7 @@ namespace TestingNs
     {
         public static void TestSparqlStore(int millions)
         {
-            SparqlStore2 sparqlStore = new SparqlStore2("../../../Databases/");
+            SecondStringSore sparqlStore = new SecondStringSore("../../../Databases/");
             Perfomance.ComputeTime(() =>
             {
                 sparqlStore.ReloadFrom(Config.Source_data_folder_path + millions + ".ttl");
@@ -20,8 +20,7 @@ namespace TestingNs
             //   Console.WriteLine(sparqlStore.GetTriplesWithSubject(sparqlStore.NodeGenerator.CreateUriNode("http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromVendor1/")));
             Perfomance.ComputeTime(() =>
             {
-                Console.WriteLine(
-                    (string)sparqlStore.ParseAndRun(sq).ToJson());
+                Console.WriteLine(sparqlStore.ParseAndRun(sq).ToJson());
               
             }, "run simple" + millions + ".ttl ");
         }
@@ -62,7 +61,7 @@ WHERE {
 
         public static void TestQuery(string queryString, bool load, int millions)
         {
-            SparqlStore2 sparqlStore = new SparqlStore2("../../../Databases/");
+            SecondStringSore sparqlStore = new SecondStringSore("../../../Databases/");
             if (load)
             Perfomance.ComputeTime(() =>
             {
@@ -84,14 +83,14 @@ WHERE {
 
         public static void BSBm(int millions, bool load)
         {
-            SparqlStore2 sparqlStore = new SparqlStore2("../../../Databases/");
+            SecondStringSore sparqlStore = new SecondStringSore("../../../Databases/");
             if (load)
                 sparqlStore.ReloadFrom(Config.Source_data_folder_path + millions + ".ttl");
             //   RunBerlinsWithConstants(sparqlStore, millions);
             RunBerlinsParameters(sparqlStore, millions);
         }
 
-        public static void RunBerlinsParameters(SparqlStore2 ts, int millions)
+        public static void RunBerlinsParameters(SecondStringSore ts, int millions)
         {
            ts.Warmup();
             Console.WriteLine("bsbm parametered");
@@ -113,7 +112,7 @@ WHERE {
             }
         }
 
-        private static void SubTestRun(SparqlStore2 ts, StreamReader streamQueryParameters, int i1, int millions)
+        private static void SubTestRun(SecondStringSore ts, StreamReader streamQueryParameters, int i1, int millions)
         {
             long[] results = new long[12];
             double[] minimums = Enumerable.Repeat(double.MaxValue, 12).ToArray();
@@ -168,7 +167,7 @@ WHERE {
             }
         }
 
-        private static void RunBerlinsWithConstants(SparqlStore2 ts, int millions)
+        private static void RunBerlinsWithConstants(SecondStringSore ts, int millions)
         {
             long[] results = new long[12];
             Console.WriteLine("antrl with constants");
@@ -226,8 +225,8 @@ WHERE {
         {
             if (readLine.StartsWith("http://"))
                 return "<" + readLine + ">";
-            UriPrefixed splitPrefixed = Prologue.SplitPrefixed(readLine);
-            if (splitPrefixed.Prefix == "bsbm-inst:")
+            var splitPrefixed = Prologue.SplitPrefixed(readLine);
+            if (splitPrefixed.prefix == "bsbm-inst:")
                 return "<http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/>";
             return readLine;
         }
@@ -235,7 +234,7 @@ WHERE {
         public static void TestExamples()
         {
             DirectoryInfo examplesRoot = new DirectoryInfo(@"..\..\examples");
-            var store = new SparqlStore2("../../../Databases/");
+            var store = new SecondStringSore("../../../Databases/");
             foreach (var exampleDir in examplesRoot.GetDirectories())
                 //  var exampleDir = new DirectoryInfo(@"..\..\examples\bsbm");
             {
@@ -264,7 +263,7 @@ WHERE {
                                 if (!Uri.TryCreate(headComment, UriKind.Absolute, out uri)) continue;
                                 var graph =
                                     store.NamedGraphs.CreateGraph(
-                                        store.NodeGenerator.CreateUriNode(Prologue.SplitUri(uri.AbsoluteUri)));
+                                        Prologue.SplitUri(uri.AbsoluteUri).FullName);
                                 graph.FromTurtle(reader.ReadToEnd());
                             }
                         RunOneExample(exampleDir, store);
@@ -275,7 +274,7 @@ WHERE {
             }
         }
 
-        private static void RunOneExample(DirectoryInfo exampleDir, SparqlStore2 store)
+        private static void RunOneExample(DirectoryInfo exampleDir, SecondStringSore store)
         {
             foreach (var rqQueryFile in exampleDir.GetFiles("*.rq"))
             {

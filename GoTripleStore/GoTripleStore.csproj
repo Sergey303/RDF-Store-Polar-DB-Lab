@@ -5,7 +5,7 @@
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{1F8F5775-2B6C-4CCD-8C59-6FC80BEC60AE}</ProjectGuid>
-    <OutputType>Exe</OutputType>
+    <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>GoTripleStore</RootNamespace>
     <AssemblyName>GoTripleStore</AssemblyName>
@@ -68,9 +68,9 @@
       <Project>{7eb60f80-87ca-4645-9e1f-051735195d92}</Project>
       <Name>RDFCommon</Name>
     </ProjectReference>
-    <ProjectReference Include="..\RDFTripleStore\RDFTripleStore.csproj">
-      <Project>{16601fe6-f095-410b-9f63-efc948c2b939}</Project>
-      <Name>RDFTripleStore</Name>
+    <ProjectReference Include="..\RDFTurtleParser\RDFTurtleParser.csproj">
+      <Project>{bbdc3ba5-1ecd-40b5-b3a3-c6b498e07cd1}</Project>
+      <Name>RDFTurtleParser</Name>
     </ProjectReference>
     <ProjectReference Include="..\UniversalIndex\UniversalIndex.csproj">
       <Project>{e4ab7a63-7b55-43e9-b1aa-c8e0f8aa87e3}</Project>

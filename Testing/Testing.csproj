@@ -38,8 +38,7 @@
     <Reference Include="PolarDB">
       <HintPath>..\dll\PolarDB.dll</HintPath>
     </Reference>
-    <Reference Include="SparqlParseRun, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="SparqlParseRun">
       <HintPath>..\dll\SparqlParseRun.dll</HintPath>
     </Reference>
     <Reference Include="System" />
@@ -53,11 +52,9 @@
   <ItemGroup>
     <Compile Include="Config.cs" />
     <Compile Include="examples\bsbm\queries\parameters\Sarr.cs" />
-    <Compile Include="GaGraphStringBased.cs" />
+    <Compile Include="Perfomance.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SecondGraphString.cs" />
-    <Compile Include="SparqlStore2.cs" />
     <Compile Include="SparqlTesting.cs" />
     <Compile Include="Testing.cs" />
   </ItemGroup>
@@ -397,6 +394,10 @@
     <ProjectReference Include="..\RDFTripleStore\RDFTripleStore.csproj">
       <Project>{16601FE6-F095-410B-9F63-EFC948C2B939}</Project>
       <Name>RDFTripleStore</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\RDFTurtleParser\RDFTurtleParser.csproj">
+      <Project>{bbdc3ba5-1ecd-40b5-b3a3-c6b498e07cd1}</Project>
+      <Name>RDFTurtleParser</Name>
     </ProjectReference>
     <ProjectReference Include="..\UniversalIndex\UniversalIndex.csproj">
       <Project>{E4AB7A63-7B55-43E9-B1AA-C8E0F8AA87E3}</Project>

@@ -4,19 +4,19 @@ using System.IO;
 using System.Linq;
 using RDFCommon;
 using RDFCommon.OVns;
-using RDFTripleStore.parsers.RDFTurtle;
+using RDFTurtleParser;
 
 namespace RDFTripleStore
 {
     public class RamListOfTriplesGraph : NodeGenerator, IGraph 
     {
-        public RamListOfTriplesGraph(ObjectVariants name)
+        public RamListOfTriplesGraph(string name)
         {
           //  Name = Guid.NewGuid().ToString();
             Name = name;
             
         }
-        private readonly List<Triple<ObjectVariants, ObjectVariants, ObjectVariants>> triples=new List<Triple<ObjectVariants, ObjectVariants, ObjectVariants>>();
+        private readonly List<TripleOV> triples=new List<TripleOV>();
 
         public RamListOfTriplesGraph()
         {
@@ -66,10 +66,13 @@ namespace RDFTripleStore
            return triples.Any(triple => triple.Subject.Equals(subject) && triple.Predicate.Equals(predicate) && triple.Object.Equals(@object));
         }
 
-        public void Delete(IEnumerable<Triple<ObjectVariants, ObjectVariants, ObjectVariants>> ts)
+        public void Delete(ObjectVariants s, ObjectVariants p, ObjectVariants o)
         {
-            foreach (var triple in ts)
-                triples.Remove(triple);
+            foreach (var t in triples.Where(triple => triple.Subject.Equals(s) && triple.Predicate.Equals(p) && triple.Object.Equals(o)).ToArray())
+            {
+                triples.Remove(t);    
+            }
+            
         }
 
    
@@ -91,18 +94,18 @@ namespace RDFTripleStore
 
         public void FromTurtle(string fileName)
         {
-            var generator = new TripleGeneratorBufferedParallel(fileName, Name.ToString());
+            var generator = new TripleGeneratorBufferedParallel(fileName, Name);
             generator.Start(list => triples.AddRange(
                 list.Select(
                     t =>    
-                        new Triple<ObjectVariants, ObjectVariants, ObjectVariants>(
-                            NodeGenerator.CreateUriNode(t.Subject),
-                            NodeGenerator.CreateUriNode(t.Predicate), 
+                        new TripleOV(
+                            NodeGenerator.AddIri(t.Subject),
+                            NodeGenerator.AddIri(t.Predicate), 
                             (ObjectVariants) t.Object))));
         }
 
 
-        public ObjectVariants Name { get; private set; }
+        public string Name { get; private set; }
         public INodeGenerator NodeGenerator { get { return this; }}
 
         public void Clear()
@@ -113,7 +116,7 @@ namespace RDFTripleStore
     
         public void Add(ObjectVariants s, ObjectVariants p, ObjectVariants o)
         {
-           triples.Add(new Triple<ObjectVariants, ObjectVariants, ObjectVariants>(s,p,o));
+           triples.Add(new TripleOV(s,p,o));
         }
 
     
@@ -125,19 +128,6 @@ namespace RDFTripleStore
 
         
 
-        public void Insert(IEnumerable<Triple<ObjectVariants, ObjectVariants, ObjectVariants>> triples)
-        {
-          this.triples.AddRange(triples);
-        }
-
-        public void Add(Triple<ObjectVariants, ObjectVariants, ObjectVariants> t)
-        {
-         triples.Add(t);
-        }
-
-        public void AddRange(IEnumerable<Triple<ObjectVariants, ObjectVariants, ObjectVariants>> triples)
-        {
-            this.triples.AddRange(triples);
-        }
+ 
     }
 }

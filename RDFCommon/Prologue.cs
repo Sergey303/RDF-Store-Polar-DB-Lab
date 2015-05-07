@@ -13,35 +13,28 @@ namespace RDFCommon
         private string baseUri;
         public string StringRepresentationOfProlog;
 
-        public UriPrefixed GetUriFromPrefixed(string p)
+        public string GetUriFromPrefixed(string p)
         {
             if (p.StartsWith("<") && p.EndsWith(">"))
                 return GetFromIri(p); 
             var uriPrefixed = SplitPrefixed(p);
             // if(prefix=="_")   throw new NotImplementedException();
             string fullNamespace;
-            if (!prefix2Namspace.TryGetValue(uriPrefixed.Prefix, out fullNamespace))
-                throw new Exception("prefix " + uriPrefixed.Prefix);
-            uriPrefixed.Namespace = fullNamespace;
-            return uriPrefixed;
+            if (!prefix2Namspace.TryGetValue(uriPrefixed.prefix, out fullNamespace))
+                throw new Exception("prefix " + uriPrefixed.prefix);
+            
+            return fullNamespace + uriPrefixed.localname;
         }
 
-        public static UriPrefixed SplitUndefined(string p)
-        {
-            if (p.StartsWith("<") && p.EndsWith(">"))
-                return SplitUri(p.Substring(1, p.Length - 2));
-            if (p.StartsWith("http://") || p.StartsWith("mailto:"))
-                return SplitUri(p);
-            return SplitPrefixed(p);
-        }
-        public static UriPrefixed SplitPrefixed(string p)
+       
+        public static PrefixLocalName SplitPrefixed(string p)
         {  
             var match = PrefixNSSlpit.Match(p);
             var prefix = match.Groups[1].Value;
-            var shortName = match.Groups[2].Value.ToLowerInvariant();
-            return new UriPrefixed(prefix, shortName, null);
+            var localName = match.Groups[2].Value.ToLowerInvariant();
+            return new PrefixLocalName(prefix, localName);
         }
-                public static UriPrefixed SplitUri(string p)
+                public static NamespaceLocalName SplitUri(string p)
                 {
                     p = p.ToLowerInvariant();
             var rsi = p.LastIndexOf('\\');
@@ -49,9 +42,9 @@ namespace RDFCommon
             var ssi = p.LastIndexOf('#');
             var dot = p.LastIndexOf('.');
             var i = Math.Max(rsi, Math.Max(lsi, Math.Max(ssi, dot)));
-            return new UriPrefixed(null, p.Substring(i + 1), p.Substring(0, i+1));
+            return new NamespaceLocalName( p.Substring(i + 1), p.Substring(0, i+1));
         }
-        public UriPrefixed GetUriFromPrefixedNamespace(string p)
+        public string GetUriFromPrefixedNamespace(string p)
         {
             var match = PrefixNSSlpit.Match(p);
             var prefix = match.Groups[1].Value;
@@ -59,10 +52,10 @@ namespace RDFCommon
           //  if (prefix == "_" ) throw new NotImplementedException();
             string fullNamespace;
             if (!prefix2Namspace.TryGetValue(prefix, out fullNamespace)) throw new Exception("prefix " + prefix);
-            return new UriPrefixed(prefix,"",fullNamespace);
+            return fullNamespace;
         }
 
-        public UriPrefixed GetFromString(string p)
+        public string GetFromString(string p)
         {
             if (p.StartsWith("<") && p.EndsWith(">"))
             {
@@ -70,16 +63,16 @@ namespace RDFCommon
             }
             if (p.StartsWith("http://") || p.StartsWith("mailto:"))
             {
-                return SplitUri(p);
+                return p;
             }
             return GetUriFromPrefixed(p);
         }
 
-        public UriPrefixed GetFromIri(string p)
+        public string GetFromIri(string p)
         {      
             if(p.StartsWith("<") && p.EndsWith(">"))           
             p = p.Substring(1, p.Length - 2);
-            return baseUri == null ? SplitUri(p) : new UriPrefixed(":", p.ToLowerInvariant(), baseUri);
+            return baseUri == null ? p : baseUri + p;
         }
 
 
@@ -97,17 +90,44 @@ namespace RDFCommon
             namspace2Prefix.Add(ns, prefix);
         }
 
-        public UriPrefixed SetThisPrefix(UriPrefixed uri)
+
+      
+    }
+
+    public struct IriPrefixed
+    {
+        public readonly string ns, prefix, localName;
+
+        public IriPrefixed(string ns, string prefix, string localName)
         {
-            string existsPrefix;
-            if (namspace2Prefix.TryGetValue(uri.Namespace, out existsPrefix))
-                uri.Prefix = existsPrefix;
-            return uri;
+            this.ns = ns;
+            this.prefix = prefix;
+            this.localName = localName;
+        }
+    }
+
+    public struct PrefixLocalName
+    {
+        public readonly string prefix;
+        public readonly string localname;
+
+        public PrefixLocalName(string prefix, string localname) 
+        {
+            this.prefix = prefix;
+            this.localname = localname;
+        }
+    }
+     public struct NamespaceLocalName
+    {
+        public readonly string @namespace;
+        public readonly string localname;
+
+        public NamespaceLocalName(string @namespace, string localname) 
+        {
+            this.@namespace = @namespace;
+            this.localname = localname;
         }
 
-        public UriPrefixed SetThisPrefix(string uriString)
-        {
-            return SplitUndefined(uriString);
-        }
+         public string FullName { get { return @namespace + localname; } }
     }
 }

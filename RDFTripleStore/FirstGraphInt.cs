@@ -2,18 +2,17 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using GoTripleStore;
 using PolarDB;
 using RDFCommon;
 using RDFCommon.Interfaces;
 using RDFCommon.OVns;
-using RDFTripleStore.Comparer;
-using RDFTripleStore.parsers;
-using RDFTripleStore.parsers.RDFTurtle;
+using RDFTurtleParser;
 using Task15UniversalIndex;
 
 namespace RDFTripleStore
 {
-    public class FirstGraphInt : IGraph
+    public class FirstIntGraph : IGraph
     {
         private TableView table;
 
@@ -25,7 +24,7 @@ namespace RDFTripleStore
         private IndexDynamic<int, IndexKeyImmutable<int>> p_ind;
         private IndexDynamic<ObjectVariants, IndexHalfkeyImmutable<ObjectVariants>> o_ind;
         protected NodeGeneratorInt ng;
-        public FirstGraphInt(string path)
+        public FirstIntGraph(string path)
         {
             PType tp_tabelement = new PTypeRecord(
              new NamedType("subject", new PType(PTypeEnumeration.integer)),
@@ -149,7 +148,7 @@ namespace RDFTripleStore
             };
         }
 
-        public void Build(IGenerator<List<Triple<string, string, ObjectVariants>>> generator)
+        public void Build(IGenerator<List<TripleStrOV>> generator)
         {
             table.Clear();
             table.Fill(new object[0]);
@@ -200,7 +199,7 @@ namespace RDFTripleStore
         }
 
 
-        public ObjectVariants Name { get { return ng.CreateUriNode("g"); } }
+        public string Name { get { return "g"; } }
         public INodeGenerator NodeGenerator { get { return ng; }} 
 
       
@@ -210,7 +209,7 @@ namespace RDFTripleStore
         {
             return o_ind.GetAllByKey(((ObjectVariants)o))
                 .Select(entry => entry.Get())
-                .ReadWritableTriples()
+                .Cast<object[]>()
                 .Select(row => returns(ReadSubject(row), ReadPredicate(row)));
         }
 
@@ -232,7 +231,7 @@ namespace RDFTripleStore
         {
             return p_ind.GetAllByKey(((OV_iriint) p).code)
                 .Select(entry => entry.Get())
-                .ReadWritableTriples()
+                .Cast<object[]>()
                 .Select(ent => returns(ReadSubject(ent), ReadObject(ent)));
         }
 
@@ -240,7 +239,7 @@ namespace RDFTripleStore
         {
             return s_ind.GetAllByKey(((OV_iriint) s).code)
                 .Select(entry => entry.Get())
-                .ReadWritableTriples()
+                .Cast<object[]>()
                 .Select(ent => returns(ReadPredicate(ent), ReadSubject(ent)));
         }
 
@@ -249,7 +248,7 @@ namespace RDFTripleStore
             IEnumerable<PaEntry> entities = sp_ind.GetAllByKey(new SP_Pair(((OV_iriint)subject).code, ((OV_iriint)predicate).code));
             return entities
                  .Select(entry => entry.Get())
-                .ReadWritableTriples()
+                .Cast<object[]>()
                 .Select(row => row[2].ToOVariant(ng.coding_table.GetStringByCode));
         }
 
@@ -261,7 +260,7 @@ namespace RDFTripleStore
             IEnumerable<PaEntry> entities = so_ind.GetAllByKey(key_triple);
             return entities
                 .Select(entry => entry.Get())
-                .ReadWritableTriples()
+                .Cast<object[]>()
                 .Select(row => ng.GetCoded((int)row[1]));
         }
 
@@ -273,7 +272,7 @@ namespace RDFTripleStore
             IEnumerable<PaEntry> entities = po_ind.GetAllByKey(key_triple);
             return entities
                   .Select(entry => entry.Get())
-                  .ReadWritableTriples()
+                  .Cast<object[]>()
                   .Select(row => ng.GetCoded((int)row[0]));
         }
 
@@ -287,13 +286,13 @@ namespace RDFTripleStore
             IEnumerable<PaEntry> entities = spo_ind.GetAllByKey(key_triple);
             return entities
                   .Select(entry => entry.Get())
-                  .ReadWritableTriples()
+                  .Cast<object[]>()
                   .Any();
         }
         public IEnumerable<T> GetTriples<T>(Func<ObjectVariants,ObjectVariants,ObjectVariants,T>returns )
         {
             return table.TableCell.Root.ElementValues()
-                .ReadWritableTriples()
+                .Cast<object[]>()
                 .Select(ent => returns(ReadSubject(ent), ReadPredicate(ent), ReadObject(ent)));
         }
 
@@ -319,24 +318,21 @@ namespace RDFTripleStore
 
 
 
-        public void Delete(IEnumerable<Triple<ObjectVariants, ObjectVariants, ObjectVariants>> triples)
-        {
-            foreach (var triple in triples)
-            {
-                int ssubj = (((OV_iriint)triple.Subject)).code;
-                int pred = (((OV_iriint)triple.Predicate)).code;
-                var objVar = (((ObjectVariants)triple.Object));
-                var key_triple = new SPO_Troyka(ssubj, pred, objVar);
-                IEnumerable<PaEntry> entities = spo_ind.GetAllByKey(key_triple);
-                foreach (var ent in entities)
-                    table.DeleteEntry(ent);
-            }
+        public void Delete(ObjectVariants s, ObjectVariants p, ObjectVariants o)
+        {         
+            int ssubj = (((OV_iriint) s)).code;
+            int pred = (((OV_iriint) p)).code;
+            if (o is OV_iri) return;
+            var key_triple = new SPO_Troyka(ssubj, pred, o);
+            IEnumerable<PaEntry> entities = spo_ind.GetAllByKey(key_triple);
+            foreach (var ent in entities)
+                table.DeleteEntry(ent);
         }
 
         public IEnumerable<ObjectVariants> GetAllSubjects()
         {
             return new HashSet<int>(table.TableCell.Root.ElementValues()
-                .ReadWritableTriples()
+                .Cast<object[]>()
                 .Select(t => t[0])
                 .Cast<int>())
                 .Select(s => ng.GetCoded(s)); 

@@ -5,20 +5,19 @@ using System.Xml.Linq;
 using RDFCommon;
 using RDFCommon.Interfaces;
 using RDFCommon.OVns;
-using RDFTripleStore;
-using RDFTripleStore.parsers.RDFTurtle;
 using PolarDB;
+using RDFTurtleParser;
 
 namespace GoTripleStore
 {
     public class Program
     {
-        public static void Main()
+        public static void Main(string Source_data_folder_path)
         {
             System.Diagnostics.Stopwatch sw = new System.Diagnostics.Stopwatch();
             string path = "../../../Databases/";
             Console.WriteLine("Start GoTripleStore coding triples (GaGraphStringBased).");
-            var query = ReadTripleStringsFromTurtle.LoadGraph(Config.Source_data_folder_path + "1.ttl")
+            var query = ReadTripleStringsFromTurtle.LoadGraph(Source_data_folder_path + "1.ttl")
                 .Select(tri => new Tuple<string, string, ObjectVariants>(tri.Subject, tri.Predicate, tri.Object));
 
             //IGra<PaEntry> g = new GoGraphStringBased(path);
@@ -117,11 +116,11 @@ namespace GoTripleStore
                 Console.WriteLine("{0} {1} {2}", g.DecodeIRI(q[0]), g.DecodeIRI(q[1]), g.DecodeOV(q[2]));
             }
             //Console.WriteLine(flow.Count());
-            ProcessTrace(g);
+            ProcessTrace(g, Source_data_folder_path);
         }
-        private static void ProcessTrace(IGra<PaEntry> graph)
+        private static void ProcessTrace(IGra<PaEntry> graph, string Source_data_folder_path)
         {
-            System.Xml.Linq.XElement tracing = System.Xml.Linq.XElement.Load(Config.Source_data_folder_path + "tracing100th.xml");
+            System.Xml.Linq.XElement tracing = System.Xml.Linq.XElement.Load(Source_data_folder_path + "tracing100th.xml");
             Console.WriteLine("N_tests = {0}", tracing.Elements().Count());
             DateTime tt0 = DateTime.Now;
             tt0 = DateTime.Now;
@@ -178,12 +177,12 @@ namespace GoTripleStore
             Console.WriteLine("tracing duration=" + (DateTime.Now - tt0).Ticks / 10000L); tt0 = DateTime.Now;
             Console.WriteLine("Equal {0} Not equal {1}", ecnt, ncnt);
         }
-        public static void Main1()
+        public static void Main1(string Source_data_folder_path)
         {
             System.Diagnostics.Stopwatch sw = new System.Diagnostics.Stopwatch();
             string path = "../../../Databases/";
             Console.WriteLine("Start GoTripleStore coding triples.");
-            var query = ReadTripleStringsFromTurtle.LoadGraph(Config.Source_data_folder_path + "1.ttl")
+            var query = ReadTripleStringsFromTurtle.LoadGraph(Source_data_folder_path + "1.ttl")
                 .Select(tri => new Tuple<string, string, ObjectVariants>(tri.Subject, tri.Predicate, tri.Object));
 
             //IGra<PaEntry> g = new GoGraphStringBased(path);
@@ -205,11 +204,11 @@ namespace GoTripleStore
                 Console.WriteLine("{0} {1} {2}", g.DecodeIRI(q[0]), g.DecodeIRI(q[1]), g.DecodeOV(q[2]));
             }
             //Console.WriteLine(flow.Count());
-            ProcessTrace(g);
+            ProcessTrace(g, Source_data_folder_path);
         }
-        private static void ProcessTrace(GoGraphStringBased graph)
+        private static void ProcessTrace(GoGraphStringBased graph, string Source_data_folder_path)
         {
-            System.Xml.Linq.XElement tracing = System.Xml.Linq.XElement.Load(Config.Source_data_folder_path + "tracing100th.xml");
+            System.Xml.Linq.XElement tracing = System.Xml.Linq.XElement.Load(Source_data_folder_path + "tracing100th.xml");
             Console.WriteLine("N_tests = {0}", tracing.Elements().Count());
             DateTime tt0 = DateTime.Now;
             tt0 = DateTime.Now;
@@ -254,12 +253,12 @@ namespace GoTripleStore
         }
 
 
-        public static void Main0()
+        public static void Main0(string Source_data_folder_path)
         {  // Работа с кодированными триплетами
             System.Diagnostics.Stopwatch sw = new System.Diagnostics.Stopwatch();
             string path = "../../../Databases/";
             Console.WriteLine("Start GoTripleStore coding triples.");
-            var query = ReadTripleStringsFromTurtle.LoadGraph(Config.Source_data_folder_path + "1.ttl");
+            var query = ReadTripleStringsFromTurtle.LoadGraph(Source_data_folder_path + "1.ttl");
             
             GoGraphIntBased cgraph = new GoGraphIntBased(path);
             bool toload = false;
@@ -284,12 +283,12 @@ namespace GoTripleStore
                 Console.WriteLine("Triple: {0} {1} {2}", cgraph.Decode(t.Subject), cgraph.Decode(t.Predicate), t.Object);
             }
 
-            ProcessTrace(cgraph);
+            ProcessTrace(cgraph, Source_data_folder_path);
         }
         // Выполнение операций по "следу" tracing
-        private static void ProcessTrace(GoGraphIntBased graph)
+        private static void ProcessTrace(GoGraphIntBased graph, string Source_data_folder_path)
         {
-            System.Xml.Linq.XElement tracing = System.Xml.Linq.XElement.Load(Config.Source_data_folder_path + "tracing100th.xml");
+            System.Xml.Linq.XElement tracing = System.Xml.Linq.XElement.Load(Source_data_folder_path + "tracing100th.xml");
             Console.WriteLine("N_tests = {0}", tracing.Elements().Count());
             DateTime tt0 = DateTime.Now;
             // Трансляия трассы
@@ -395,9 +394,9 @@ namespace GoTripleStore
             Console.WriteLine("Equal {0} Not equal {1}", ecnt, ncnt);
         }
         // Выполнение операций по "следу" tracing
-        private static void ProcessTrace0(IGraph<Triple<int, int, ObjectVariants>> graph)
+        private static void ProcessTrace0(IGraph<TripleIntOV> graph, string Source_data_folder_path)
         {
-            System.Xml.Linq.XElement tracing = System.Xml.Linq.XElement.Load(Config.Source_data_folder_path + "tracing100th.xml");
+            System.Xml.Linq.XElement tracing = System.Xml.Linq.XElement.Load(Source_data_folder_path + "tracing100th.xml");
             Console.WriteLine("N_tests = {0}", tracing.Elements().Count());
             DateTime tt0 = DateTime.Now;
             int ecnt = 0, ncnt = 0;

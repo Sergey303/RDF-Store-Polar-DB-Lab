@@ -2,7 +2,7 @@ using System;
 
 namespace RDFCommon
 {
-    public interface IIriNode :ISubjectNode,IObjectNode,IPredicateNode,IGraphNode
+    public interface IIriNode
     {
          string UriString { get; }           
     }
