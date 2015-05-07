@@ -4,8 +4,6 @@ using System.Linq;
 using RDFCommon;
 using RDFCommon.Interfaces;
 using RDFCommon.OVns;
-using RDFTripleStore;
-using RDFTripleStore.parsers;
 using Task15UniversalIndex;
 using PolarDB;
 
@@ -224,6 +222,43 @@ namespace GoTripleStore
             o_ind_arr.Build();
             Console.WriteLine("o_ind_arr build ok.");
             
+            //s_index_arr.Build();
+            //Console.WriteLine("s_index_arr build ok.");
+            //s_index_arr.Statistics();
+
+            sp_index_arr.Build();
+            Console.WriteLine("sp_index_arr build ok.");
+            sp_index_arr.Statistics();
+
+            spo_index_arr.Build();
+            Console.WriteLine("spo_index_arr build ok.");
+            spo_index_arr.Statistics();
+
+            //po_index_arr.Build(); // варинат с полуключем
+            //Console.WriteLine("po_index_arr build ok.");
+            //po_index_arr.Statistics();
+        }
+
+        public void Build(IGenerator<List<TripleStrOV>> generator)
+        {
+            table.Clear();
+            table.Fill(new Object[0]);
+            generator.Start(list =>
+            {
+                foreach (var t in list)
+                    table.AppendValue(t);
+            });
+            Console.WriteLine("table fill ok.");
+
+            spo_ind_arr.Build();
+            Console.WriteLine("spo_ind_arr build ok.");
+
+            po_ind_arr.Build();
+            Console.WriteLine("po_ind_arr build ok.");
+
+            o_ind_arr.Build();
+            Console.WriteLine("o_ind_arr build ok.");
+
             //s_index_arr.Build();
             //Console.WriteLine("s_index_arr build ok.");
             //s_index_arr.Statistics();

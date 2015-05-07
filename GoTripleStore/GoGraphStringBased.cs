@@ -4,8 +4,6 @@ using System.Linq;
 using RDFCommon;
 using RDFCommon.Interfaces;
 using RDFCommon.OVns;
-using RDFTripleStore;
-using RDFTripleStore.parsers;
 using Task15UniversalIndex;
 using PolarDB;
 

@@ -4,8 +4,7 @@ using System.Linq;
 using RDFCommon;
 using RDFCommon.Interfaces;
 using RDFCommon.OVns;
-using RDFTripleStore;
-using RDFTripleStore.parsers.RDFTurtle;
+using RDFTurtleParser;
 
 
 namespace TestingNs

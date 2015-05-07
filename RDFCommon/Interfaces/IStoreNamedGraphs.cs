@@ -30,9 +30,9 @@ namespace RDFCommon
         void DropGraph(string sparqlGrpahRefTypeEnum);
         void Clear(string uri);
 
-        void Delete(ObjectVariants g, IEnumerable<Triple<ObjectVariants, ObjectVariants, ObjectVariants>> triples);
-        void DeleteFromAll(IEnumerable<Triple<ObjectVariants, ObjectVariants, ObjectVariants>> triples);
-        void Insert(ObjectVariants name, IEnumerable<Triple<ObjectVariants, ObjectVariants, ObjectVariants>> triples);
+        void Delete(ObjectVariants g, ObjectVariants s, ObjectVariants p, ObjectVariants o);
+        void DeleteFromAll(IEnumerable<TripleOV> triples);
+        void Add(ObjectVariants name, ObjectVariants s, ObjectVariants p, ObjectVariants o);
 
       //  IGraph TryGetGraph(IUriNode graphUriNode);
 

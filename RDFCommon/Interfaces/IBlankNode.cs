@@ -1,6 +1,6 @@
 namespace RDFCommon
 {
-    public interface IBlankNode :ISubjectNode,IObjectNode
+    public interface IBlankNode
     {
         string Name { get; }
         

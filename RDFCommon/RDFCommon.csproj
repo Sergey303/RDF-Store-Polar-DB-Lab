@@ -30,6 +30,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="PolarDB">
+      <HintPath>..\dll\PolarDB.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -39,28 +42,18 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ContainsGraphWhenCreatingException.cs" />
-    <Compile Include="DataSet.cs" />
-    <Compile Include="Grouping.cs" />
-    <Compile Include="Interfaces\IAllNode.cs" />
     <Compile Include="Interfaces\IBlankNode.cs" />
-    <Compile Include="Interfaces\IDataset.cs" />
     <Compile Include="Interfaces\IGenerator.cs" />
     <Compile Include="Interfaces\IGraph.cs" />
-    <Compile Include="Interfaces\IGraphNode.cs" />
     <Compile Include="Interfaces\ILanguageLiteral.cs" />
     <Compile Include="Interfaces\ILiteralNode.cs" />
     <Compile Include="Interfaces\INodeGenerator.cs" />
     <Compile Include="Interfaces\INumLiteral.cs" />
-    <Compile Include="Interfaces\IObjectNode.cs" />
-    <Compile Include="Interfaces\IPredicateNode.cs" />
     <Compile Include="Interfaces\ISpecialGraph.cs" />
     <Compile Include="Interfaces\IStore.cs" />
     <Compile Include="Interfaces\IStoreNamedGraphs.cs" />
     <Compile Include="Interfaces\IStringLiteralNode.cs" />
-    <Compile Include="Interfaces\ISubjectNode.cs" />
     <Compile Include="Interfaces\IIriNode.cs" />
-    <Compile Include="NoGraphExeption.cs" />
     <Compile Include="OVns\date\OV_duration.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -77,6 +70,8 @@
     <Compile Include="OVns\date\OV_gMonthDay.cs" />
     <Compile Include="OVns\date\OV_yearMonthDuration.cs" />
     <Compile Include="OVns\date\OV_dayTimeDuration.cs" />
+    <Compile Include="OVns\NodeGenerator.cs" />
+    <Compile Include="OVns\NodeGeneratorInt.cs" />
     <Compile Include="OVns\numeric\OV_byte.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -128,39 +123,38 @@
     <Compile Include="OVns\ObjectVariantEnum.cs" />
     <Compile Include="OVns\ObjectVariants.cs" />
     <Compile Include="OVns\ObjectVariantsEx.cs" />
-    <Compile Include="OVns\OV_anyURI.cs" />
-    <Compile Include="OVns\OV_language.cs" />
-    <Compile Include="OVns\OV_normalizedString.cs" />
-    <Compile Include="OVns\OV_token.cs" />
-    <Compile Include="OVns\OV_NMTOKEN.cs" />
-    <Compile Include="OVns\OV_Name.cs" />
-    <Compile Include="OVns\OV_NCName.cs" />
-    <Compile Include="OVns\OV_bool.cs" />
+    <Compile Include="OVns\ObjectVariantsPolarType.cs" />
+    <Compile Include="OVns\other\OV_anyURI.cs" />
+    <Compile Include="OVns\general\OV_language.cs" />
+    <Compile Include="OVns\other\OV_normalizedString.cs" />
+    <Compile Include="OVns\other\OV_token.cs" />
+    <Compile Include="OVns\other\OV_NMTOKEN.cs" />
+    <Compile Include="OVns\other\OV_Name.cs" />
+    <Compile Include="OVns\other\OV_NCName.cs" />
+    <Compile Include="OVns\general\OV_bool.cs" />
     <Compile Include="OVns\date\OV_date.cs" />
     <Compile Include="OVns\date\OV_dateTime.cs" />
     <Compile Include="OVns\date\OV_dateTimeStamp.cs" />
-    <Compile Include="OVns\OV_iri.cs" />
-    <Compile Include="OVns\OV_iriint.cs" />
-    <Compile Include="OVns\OV_langstring.cs" />
-    <Compile Include="OVns\OV_string.cs" />
+    <Compile Include="OVns\general\OV_iri.cs" />
+    <Compile Include="OVns\general\OV_iriint.cs" />
+    <Compile Include="OVns\general\OV_langstring.cs" />
+    <Compile Include="OVns\general\OV_string.cs" />
     <Compile Include="OVns\date\OV_time.cs" />
-    <Compile Include="OVns\OV_typed.cs" />
-    <Compile Include="OVns\OV_typedint.cs" />
+    <Compile Include="OVns\general\OV_typed.cs" />
+    <Compile Include="OVns\general\OV_typedint.cs" />
+    <Compile Include="OVns\SpecialTypes.cs" />
     <Compile Include="Prologue.cs" />
-    <Compile Include="PrologueFullString.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SparqlGrpahRefTypeEnum.cs" />
-    <Compile Include="SparqlRdfCollection.cs" />
-    <Compile Include="SpecialTypes.cs" />
-    <Compile Include="Quard.cs" />
     <Compile Include="Triple.cs" />
-    <Compile Include="UriPrefixed.cs">
-      <SubType>
-      </SubType>
-    </Compile>
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\UniversalIndex\UniversalIndex.csproj">
+      <Project>{e4ab7a63-7b55-43e9-b1aa-c8e0f8aa87e3}</Project>
+      <Name>UniversalIndex</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

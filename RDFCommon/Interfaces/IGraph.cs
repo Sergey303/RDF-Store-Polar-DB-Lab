@@ -63,13 +63,9 @@ namespace RDFCommon
 
         void Add(ObjectVariants s, ObjectVariants p, ObjectVariants o);
      
-       // void LoadFrom(IUriNode @from);
-
-        void Insert(IEnumerable<Triple<ObjectVariants, ObjectVariants, ObjectVariants>> triples);
-
-        void Add(Triple<ObjectVariants, ObjectVariants, ObjectVariants> t);
+       
         bool Contains(ObjectVariants subject, ObjectVariants predicate, ObjectVariants obj);
-        void Delete(IEnumerable<Triple<ObjectVariants, ObjectVariants, ObjectVariants>> triples);
+        void Delete(ObjectVariants subject, ObjectVariants predicate, ObjectVariants obj);
       
         IEnumerable<ObjectVariants> GetAllSubjects();
         long GetTriplesCount();

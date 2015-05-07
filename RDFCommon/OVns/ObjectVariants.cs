@@ -2,7 +2,7 @@ using System;
 
 namespace RDFCommon.OVns
 {
-    public abstract class ObjectVariants   :IObjectNode       , IComparable
+    public abstract class ObjectVariants   : IComparable
     {
         public  abstract ObjectVariantEnum Variant { get; }
         public abstract object WritableValue { get; }

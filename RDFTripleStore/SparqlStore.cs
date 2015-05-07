@@ -12,9 +12,9 @@ using SparqlParseRun.SparqlClasses.Query.Result;
 
 namespace RDFTripleStore
 {
-    public class SparqlStore : FirstGraphInt, IStore
+    public class FirstIntStore : FirstIntGraph, IStore
     {
-        public SparqlStore(string path) : base(path)
+        public FirstIntStore(string path) : base(path)
         {
         }
 
