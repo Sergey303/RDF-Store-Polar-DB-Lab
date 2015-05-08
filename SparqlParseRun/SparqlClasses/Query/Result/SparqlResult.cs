@@ -19,29 +19,41 @@ namespace SparqlParseRun.SparqlClasses.Query.Result
             {
                 {variable, newObj}
             };
-            rowArray = new[] {newObj};
-
+            
+            rowArray = old.rowArray;
+            rowArray[variable.Index] = newObj;
         }
         public SparqlResult(SparqlResult old, ObjectVariants newObj1, VariableNode variable1, ObjectVariants newObj2, VariableNode variable2)
         {
             if(variable2==null)
+            {
+                throw new Exception();
                 row = new Dictionary<VariableNode, ObjectVariants>(old.row)
             {
+               
                 {variable1, newObj1},
-            };
+            };}
             else
                 row = new Dictionary<VariableNode, ObjectVariants>(old.row)
             {
                 {variable1 ,newObj1},
                 {variable2, newObj2}
             };
+            rowArray = old.rowArray;
+            rowArray[variable1.Index] = newObj1;
+            rowArray[variable2.Index] = newObj2; 
+
         }
-    
 
         public SparqlResult()
         {
             row = new Dictionary<VariableNode, ObjectVariants>();
-            rowArray = new ObjectVariants[1];
+        }
+        public SparqlResult(int count)
+        {
+            count = 2;
+            row = new Dictionary<VariableNode, ObjectVariants>();
+            rowArray = new ObjectVariants[count];
         }
 
 
@@ -59,7 +71,7 @@ namespace SparqlParseRun.SparqlClasses.Query.Result
             set
             {
                 row[var] = value;
-                rowArray = new ObjectVariants[] { value };
+                rowArray[var.Index] = value;
 
             }
         }
@@ -68,12 +80,7 @@ namespace SparqlParseRun.SparqlClasses.Query.Result
         public bool ContainsKey(VariableNode var)
         {
             return row.ContainsKey(var);
-        }
-
-  
-       
-
-        
+        }                       
 
         public bool Equals(SparqlResult other)
         {

@@ -79,7 +79,7 @@ WHERE {
          
 
             Console.WriteLine("count "+results.Results.Count());
-            Console.WriteLine("{0} ", results.ToJson());
+         //   Console.WriteLine("{0} ", results.ToJson());
         }
 
         public static void BSBm(int millions, bool load)

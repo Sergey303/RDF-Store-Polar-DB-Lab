@@ -35,9 +35,7 @@ namespace SparqlParseRun.SparqlClasses.Query
             ResultSet.Results = sparqlWhere.Run(ResultSet.Results);
             foreach (var result in ResultSet.Results)
             {
-                Console.WriteLine("____________________________________");
-                Console.WriteLine(result.rowArray[0]);
-                Console.WriteLine("#################################");
+                Console.WriteLine(result.rowArray[1]);
             }
             if (sparqlSolutionModifier != null )
                 ResultSet.Results = sparqlSolutionModifier.Run(ResultSet.Results, ResultSet);
