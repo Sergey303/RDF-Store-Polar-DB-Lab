@@ -77,11 +77,11 @@ namespace SparqlParseRun.SparqlClasses.SolutionModifier
             // TODO: Complete member initialization
             getNode = result =>
             {
-                SparqlVariableBinding sparqlVariableBinding;
-                if (result.row.TryGetValue(variableNode, out sparqlVariableBinding))
-                    return sparqlVariableBinding.Value is ILiteralNode &&  !(sparqlVariableBinding.Value is ILanguageLiteral)
-                        ? ((ILiteralNode)sparqlVariableBinding.Value).Content
-                        : sparqlVariableBinding.Value;
+                ObjectVariants sparqlVariableBinding = result[variableNode];
+                if (sparqlVariableBinding !=null)
+                    return sparqlVariableBinding is ILiteralNode &&  !(sparqlVariableBinding is ILanguageLiteral)
+                        ? ((ILiteralNode)sparqlVariableBinding ).Content
+                        : sparqlVariableBinding;
                 else return new SparqlUnDefinedNode(); 
             };
 

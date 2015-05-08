@@ -11,7 +11,7 @@ namespace SparqlParseRun.SparqlClasses.Query.Result
 
         public SpraqlGroupOfResults(VariableNode variable, ObjectVariants value)
         {
-            row.Add(variable, new SparqlVariableBinding(variable, value));
+            Add(variable, value);
         }
 
         public SpraqlGroupOfResults()
@@ -27,7 +27,7 @@ namespace SparqlParseRun.SparqlClasses.Query.Result
             {
                 i++;
                 if(variable==null) continue;
-                row.Add(variable,new SparqlVariableBinding(variable,valuesArray[i]));
+                Add(variable, valuesArray[i]);
             }   
         }
     }

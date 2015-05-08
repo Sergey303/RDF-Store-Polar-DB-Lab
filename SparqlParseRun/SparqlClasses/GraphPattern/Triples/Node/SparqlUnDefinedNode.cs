@@ -22,6 +22,12 @@ namespace SparqlParseRun.SparqlClasses.GraphPattern.Triples.Node
             get { throw new NotImplementedException(); }
         }
 
+        public static ObjectVariants Undef =new SparqlUnDefinedNode();
+        public override string ToString()
+        {
+            return "UNDEF";
+        }
+
         public override ObjectVariants Change(Func<dynamic, dynamic> changing)
         {
             throw new NotImplementedException();

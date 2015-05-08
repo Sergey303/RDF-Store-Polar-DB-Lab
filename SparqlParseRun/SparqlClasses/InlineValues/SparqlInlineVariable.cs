@@ -7,7 +7,7 @@ using SparqlParseRun.SparqlClasses.Query.Result;
 
 namespace SparqlParseRun.SparqlClasses.InlineValues
 {
-    public class SparqlInlineVariable : ISparqlGraphPattern
+    public class SparqlInlineVariable : HashSet<ObjectVariants>,ISparqlGraphPattern
     {
         private readonly VariableNode variableNode;
 
@@ -16,28 +16,22 @@ namespace SparqlParseRun.SparqlClasses.InlineValues
             // TODO: Complete member initialization
             this.variableNode = variableNode;
         }
-        public List<SparqlVariableBinding> VariableBindingsList = new List<SparqlVariableBinding>() ;
-
-        internal void Add(ObjectVariants sparqlNode)
-        {
-           VariableBindingsList.Add(new SparqlVariableBinding(variableNode, sparqlNode));
-        }
 
         public IEnumerable<SparqlResult> Run(IEnumerable<SparqlResult> bindings)
         {
-            SparqlVariableBinding exists;
+            ObjectVariants exists;
             foreach (SparqlResult result in bindings)
-                if (result.row.TryGetValue(variableNode, out exists))
+            {
+                exists = result[variableNode];
+                if (exists != null)
                 {
-                    if (VariableBindingsList.Contains(exists)) yield return result; //TODO test
+                    if (this.Contains(exists)) yield return result; //TODO test
                 }
                 else
-                    foreach (SparqlVariableBinding newvariableBinding in VariableBindingsList)
+                    foreach (var newvariableBinding in this)
                         yield return
-                            new SparqlResult(new Dictionary<VariableNode, SparqlVariableBinding>(result.row)
-                            {
-                                {variableNode, newvariableBinding}
-                            });
+                            new SparqlResult(result, newvariableBinding, variableNode);
+            }
         }
 
         public SparqlGraphPatternType PatternType { get{return SparqlGraphPatternType.InlineDataValues;} }

@@ -24,21 +24,23 @@ namespace SparqlParseRun.SparqlClasses.Expressions
             {
                 var firstVar = this as SparqlVarExpression;
                 var secondVar = value as SparqlVarExpression;
-                SparqlVariableBinding firstVarValue;
+                ObjectVariants firstVarValue;
                 SparqlVariableBinding secondVarValue;
-                var firstsKnowns = firstVar == null || result.row.TryGetValue(firstVar.Variable, out firstVarValue);
-                var secondsKnowns = secondVar == null || result.row.TryGetValue(secondVar.Variable, out secondVarValue);
+                var firstsKnowns = firstVar == null || result.ContainsKey(firstVar.Variable);
+                var secondsKnowns = secondVar == null || result.ContainsKey(secondVar.Variable);
                 if (firstsKnowns)
                 {               
                     if (secondsKnowns) return new OV_bool(funkClone(result).Equals(value.Func(result)));
-                    result.row.Add(secondVar.Variable,
-                        new SparqlVariableBinding(secondVar.Variable, funkClone(result)));
+                    else throw new Exception();
+                    result.Add(secondVar.Variable,
+                         funkClone(result));
                     return new OV_bool(true);
                 }
+                else throw new Exception();
                 if (secondsKnowns)
-                    result.row.Add(firstVar.Variable,
-                        new SparqlVariableBinding(firstVar.Variable, value.Func(result)));
-                else throw new NotImplementedException();
+                    result.Add(firstVar.Variable,
+                         value.Func(result));
+                else throw new Exception();
 
                 return new OV_bool(true);
             };

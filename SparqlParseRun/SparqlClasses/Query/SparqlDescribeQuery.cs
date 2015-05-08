@@ -47,6 +47,7 @@ namespace SparqlParseRun.SparqlClasses.Query
             var rdfInMemoryGraph = store.CreateTempGraph();
             if (isAll)
                 foreach (ObjectVariants node in ResultSet.Results.SelectMany(result => result
+                    .GetAll   ((var, value) => value)
                     //.Where(node => node is ObjectVariants).Cast<ObjectVariants>()
                     ))
                 {
@@ -66,6 +67,7 @@ namespace SparqlParseRun.SparqlClasses.Query
             {
                 foreach (ObjectVariants node in nodeList.Where(node => node is VariableNode)
                     .SelectMany(uriNode => ResultSet.Results.SelectMany(result => result
+                                            .GetAll((var, value) => value)
                         //.Where(node => node is ObjectVariants).Cast<ObjectVariants>()
                         )))
                 {

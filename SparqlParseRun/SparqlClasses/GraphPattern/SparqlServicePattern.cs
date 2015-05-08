@@ -33,19 +33,18 @@ namespace SparqlParseRun.SparqlClasses.GraphPattern
 
         public IEnumerable<SparqlResult> Run(IEnumerable<SparqlResult> variableBindings)
         {
-            HashSet<VariableNode> vars = new HashSet<VariableNode>();
+            //HashSet<VariableNode> vars = new HashSet<VariableNode>(q.Variables.Select(pair => pair.Value)); 
             var bindings = variableBindings as SparqlResult[] ?? variableBindings.ToArray();
-            foreach (var pair in bindings.SelectMany(variableBinding => variableBinding.row.Where(pair => !vars.Contains(pair.Key))))
-                vars.Add(pair.Key);
+            //foreach (var pair in bindings.SelectMany(variableBinding => variableBinding.row.Where(pair => !vars.Contains(pair.Key))))
+            //    vars.Add(pair.Key);
             // string s = string.Format("VALUES ({0})", variableBindings.SelectMany(r=>r.row.Values).Select(binding => binding.));
-            SparqlVariableBinding b;
+            ObjectVariants b;
 
             string query = string.Format("{0} SELECT * WHERE {1}   VALUES ({2}) {{ {3} }}", 
-                prolog, sparqlGraphPattern, string.Join(" ", vars.Select(v => v.VariableName)),
+                prolog, sparqlGraphPattern, string.Join(" ", q.Variables.Values.Select(pv => pv.VariableName)),
                 string.Join(Environment.NewLine, 
-                        bindings.Select(variableBinding =>  "(" + string.Join(" ", 
-                            vars.Select(var => variableBinding.row.TryGetValue(var, out b) ? b.Value.ToString() : "UNDEF"))
-                                                        + ")")));                   
+                        bindings.Select(variableBinding =>  "(" + string.Join(" ",
+                            q.Variables.Values.Select(v => (variableBinding[v] ?? SparqlUnDefinedNode.Undef ).ToString()))+ ")")));                   
            
                 try
                 {
@@ -62,20 +61,19 @@ namespace SparqlParseRun.SparqlClasses.GraphPattern
         private IEnumerable<SparqlResult> Download(IEnumerable<SparqlResult> variableBindings, string query)
         {
             XNamespace xn = "http://www.w3.org/2005/sparql-results#";
-            SparqlVariableBinding uriFromVar = null;
+            
             var variableUri = uri as VariableNode;
             if (variableUri != null)
                 foreach (var result in variableBindings
-                    .Where(
-                        binding => binding.row.TryGetValue(variableUri, out uriFromVar) && uriFromVar.Value is ObjectVariants)
-                    .SelectMany(sourceBinding => XElement.Load(uriFromVar.Value + "?query=" + query)
+                    .Select(binding => binding[variableUri])
+                    .Where(uriFromVar => (uriFromVar !=null) )
+                    .SelectMany(uriFromVar => XElement.Load(uriFromVar + "?query=" + query)
                         .Element(xn + "results")
                         .Elements()
                         .Select(xResult => new SparqlResult(xResult.Elements()
                             .Select(xb =>
                                 new SparqlVariableBinding(q.GetVariable(xb.Attribute("name").Value),
-                                    Xml2Node(xn, xb.Elements().FirstOrDefault())))
-                            .ToDictionary(b1 => b1.Variable)))))
+                                    Xml2Node(xn, xb.Elements().FirstOrDefault())))))))
                     yield return result;
             else
             {
@@ -97,8 +95,7 @@ namespace SparqlParseRun.SparqlClasses.GraphPattern
                                 var node = xb.Elements().FirstOrDefault();
                                 return new SparqlVariableBinding(variable,
                                     Xml2Node(xn, node));
-                            })
-                            .ToDictionary(b1 => b1.Variable))))
+                            }))))
                         //if(result.row.Values.All(b => ! sourceBinding.row.ContainsKey(b.Variable) ))
                         yield return result;
                 }

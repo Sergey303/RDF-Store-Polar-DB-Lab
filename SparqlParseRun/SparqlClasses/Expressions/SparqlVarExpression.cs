@@ -1,4 +1,5 @@
 ﻿using RDFCommon;
+using RDFCommon.OVns;
 using SparqlParseRun.SparqlClasses.GraphPattern.Triples.Node;
 using SparqlParseRun.SparqlClasses.Query.Result;
 
@@ -6,7 +7,7 @@ namespace SparqlParseRun.SparqlClasses.Expressions
 {
     class SparqlVarExpression : SparqlExpression
     {
-        public VariableNode Variable;
+       public VariableNode Variable;
 
         public SparqlVarExpression(VariableNode variableNode)
         {
@@ -14,10 +15,11 @@ namespace SparqlParseRun.SparqlClasses.Expressions
             Variable = variableNode;
             Func = result =>
             {
-                SparqlVariableBinding sparqlVariableBinding;
-                if (result.row.TryGetValue(Variable, out sparqlVariableBinding))
-                    return sparqlVariableBinding.Value;
-                else return new SparqlUnDefinedNode();
+                //ObjectVariants sparqlVariableBinding;
+                ////if (result.TryGetValue(Variable, out sparqlVariableBinding))
+                ////    return sparqlVariableBinding;
+                ////else return new SparqlUnDefinedNode();
+                return result[variableNode];
             };
         }
 
