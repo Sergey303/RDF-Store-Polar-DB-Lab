@@ -12,7 +12,7 @@ namespace GoTripleStore
 {
     public class Program
     {
-        public static void Main(string Source_data_folder_path)
+        public static void Main2(string Source_data_folder_path)
         {
             System.Diagnostics.Stopwatch sw = new System.Diagnostics.Stopwatch();
             string path = "../../../Databases/";

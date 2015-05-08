@@ -1,8 +1,6 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2013
-VisualStudioVersion = 12.0.31101.0
-MinimumVisualStudioVersion = 10.0.40219.1
+# Visual Studio Express 2012 for Web
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RDFTripleStore", "RDFTripleStore.csproj", "{16601FE6-F095-410B-9F63-EFC948C2B939}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{23C24F4C-8B94-4E99-9F15-FDE693B4A074}"
@@ -19,6 +17,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RDFCommon", "..\RDFCommon\RDFCommon.csproj", "{7EB60F80-87CA-4645-9E1F-051735195D92}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Testing", "..\Testing\Testing.csproj", "{17DDD8B8-D2BA-48BE-B53F-C366D3467EA3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RDFTurtleParser", "..\RDFTurtleParser\RDFTurtleParser.csproj", "{BBDC3BA5-1ECD-40B5-B3A3-C6B498E07CD1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -90,6 +90,16 @@ Global
 		{17DDD8B8-D2BA-48BE-B53F-C366D3467EA3}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{17DDD8B8-D2BA-48BE-B53F-C366D3467EA3}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{17DDD8B8-D2BA-48BE-B53F-C366D3467EA3}.Release|x86.ActiveCfg = Release|Any CPU
+		{BBDC3BA5-1ECD-40B5-B3A3-C6B498E07CD1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BBDC3BA5-1ECD-40B5-B3A3-C6B498E07CD1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BBDC3BA5-1ECD-40B5-B3A3-C6B498E07CD1}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{BBDC3BA5-1ECD-40B5-B3A3-C6B498E07CD1}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{BBDC3BA5-1ECD-40B5-B3A3-C6B498E07CD1}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{BBDC3BA5-1ECD-40B5-B3A3-C6B498E07CD1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BBDC3BA5-1ECD-40B5-B3A3-C6B498E07CD1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BBDC3BA5-1ECD-40B5-B3A3-C6B498E07CD1}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{BBDC3BA5-1ECD-40B5-B3A3-C6B498E07CD1}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{BBDC3BA5-1ECD-40B5-B3A3-C6B498E07CD1}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
