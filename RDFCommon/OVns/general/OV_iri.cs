@@ -8,7 +8,7 @@ namespace RDFCommon.OVns
 
         public OV_iri(string fullId)
         {
-            uriString = fullId.ToLowerInvariant();
+            uriString = fullId;
         }
 
         public override ObjectVariantEnum Variant

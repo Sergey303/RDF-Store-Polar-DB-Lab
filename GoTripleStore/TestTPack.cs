@@ -91,13 +91,34 @@ namespace GoTripleStore
         public IEnumerable<Triple> GetTriplesWithSubject(ObjectVariants subj)
         {
             //return go.GetTriplesWithSubject(((OV_iri)subj).UriString);
-
+            throw new NotImplementedException();
         }
-            //IEnumerable<Triple> GetTriplesWithSubjectPredicate(ObjectVariants subj, ObjectVariants pred);
+
+        public IEnumerable<Triple> GetTriplesWithSubjectPredicate(ObjectVariants subj, ObjectVariants pred)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IEnumerable<Triple> GetTriplesWithPredicate(ObjectVariants pred)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IEnumerable<Triple> GetTriplesWithPredicateObject(ObjectVariants pred, ObjectVariants obj)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IEnumerable<Triple> GetTriplesWithObject(ObjectVariants obj)
+        {
+            throw new NotImplementedException();
+        }
+
+        //IEnumerable<Triple> GetTriplesWithSubjectPredicate(ObjectVariants subj, ObjectVariants pred);
             //IEnumerable<Triple> GetTriplesWithPredicate(ObjectVariants pred);
             //IEnumerable<Triple> GetTriplesWithPredicateObject(ObjectVariants pred, ObjectVariants obj);
             //IEnumerable<Triple> GetTriplesWithObject(ObjectVariants obj);
-        }
+        
 
     }
 }

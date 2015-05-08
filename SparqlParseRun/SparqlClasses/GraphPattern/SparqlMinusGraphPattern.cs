@@ -9,17 +9,19 @@ namespace SparqlParseRun.SparqlClasses.GraphPattern
     public class SparqlMinusGraphPattern : ISparqlGraphPattern
     {
         private readonly ISparqlGraphPattern sparqlGraphPattern;
+        private readonly RdfQuery11Translator q;
 
-        public SparqlMinusGraphPattern(ISparqlGraphPattern sparqlGraphPattern)
+        public SparqlMinusGraphPattern(ISparqlGraphPattern sparqlGraphPattern, RdfQuery11Translator q)
         {
             // TODO: Complete member initialization
             this.sparqlGraphPattern = sparqlGraphPattern;
+            this.q = q;
         }
 
         public IEnumerable<SparqlResult> Run(IEnumerable<SparqlResult> variableBindings)
         {
             var minusResults =
-                sparqlGraphPattern.Run(Enumerable.Repeat(new SparqlResult(), 1))
+                sparqlGraphPattern.Run(Enumerable.Repeat(new SparqlResult(q), 1))
                     ;
             return variableBindings.Where(result => minusResults.All(minusResult =>
                 minusResult.TestAll((minusVar, minusValue) =>

@@ -11,6 +11,7 @@ namespace SparqlParseRun.SparqlClasses.Update
 {
     public class SparqlUpdateModify : ISparqlUpdate    
     {
+        private readonly RdfQuery11Translator q;
         private SparqlGraphPattern @where;
         private ObjectVariants with;
         private SparqlQuardsPattern insert;
@@ -20,10 +21,11 @@ namespace SparqlParseRun.SparqlClasses.Update
         {
             with = iri;
         }
-        public SparqlUpdateModify()
+        public SparqlUpdateModify(RdfQuery11Translator q)
         {
-            
+            this.q = q;
         }
+
         public SparqlUpdateModify(SparqlQuardsPattern sparqlUpdateDelete)
         {
             delete = sparqlUpdateDelete;
@@ -47,7 +49,7 @@ namespace SparqlParseRun.SparqlClasses.Update
 
         public void Run(IStore store)
         {
-            var results = @where.Run(Enumerable.Repeat(new SparqlResult(), 1));
+            var results = @where.Run(Enumerable.Repeat(new SparqlResult(q), 1));
             SparqlTriple[] defaultGraphTriplesInsert = null;
             SparqlTriple[] defaultGraphTriplesDelete = null;
             SparqlGraphGraph[] graphPatternsInsert = null;
