@@ -47,10 +47,10 @@ namespace SparqlParseRun.SparqlClasses.Query.Result
                         new XElement(xn + "results",
                             Results.Select(result =>
                                 new XElement(xn + "result",
-                                    result.row.Values.Select(binding => 
+                                    result.GetAll((var, value)=> 
                                         new XElement(xn + "binding",    
-                                            new XAttribute(xn + "name", binding.Variable.VariableName),
-                                            BindingToXml(xn, binding.Value)))))));
+                                            new XAttribute(xn + "name", var.VariableName),
+                                            BindingToXml(xn, value)))))));
                 case ResultType.Describe:
                 case ResultType.Construct:
                     return GraphResult.ToXml(prolog);
@@ -134,9 +134,9 @@ namespace SparqlParseRun.SparqlClasses.Query.Result
                      string.Format(@"{{ {0}, ""results"": {{ ""bindings"" : [{1}] }} }}", headVars,
                          string.Join("," + Environment.NewLine, Results.Select(result => string.Format("{{{0}}}",
                              string.Join("," + Environment.NewLine,
-                                 result.row.Values.Select(binding =>
-                                     string.Format("\"{0}\" : {1}", binding.Variable.VariableName,
-                                         binding.Value.ToJson())))))) );
+                                 result.GetAll((var, value) =>
+                                     string.Format("\"{0}\" : {1}", var.VariableName,
+                                         value.ToJson())))))) );
                 case ResultType.Describe:
                 case ResultType.Construct:
                     return GraphResult.ToJson();

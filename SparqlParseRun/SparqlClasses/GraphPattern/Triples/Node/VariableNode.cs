@@ -8,19 +8,18 @@ namespace SparqlParseRun.SparqlClasses.GraphPattern.Triples.Node
     public class VariableNode : ObjectVariants, IVariableNode
     {
         public readonly string VariableName;
+        private readonly int index;
         //public NodeType NodeType { get { return NodeType.Variable; } }
         //public INode Value;
         //  public int index;
 
-        public VariableNode(string variableName)
+        public VariableNode(string variableName, int index)
         {
             VariableName = variableName;
+            this.index = index;
         }
 
-        protected VariableNode()
-        {
-           
-        }
+      
 
         public override dynamic Content
         {
@@ -42,6 +41,9 @@ namespace SparqlParseRun.SparqlClasses.GraphPattern.Triples.Node
             get { throw new NotImplementedException(); }
         }
 
-      
+        public int Index
+        {
+            get { return index; }
+        }
     }
 }

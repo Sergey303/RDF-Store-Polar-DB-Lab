@@ -35,24 +35,24 @@ namespace SparqlParseRun.SparqlClasses.InlineValues
 
         public IEnumerable<SparqlResult> Run(IEnumerable<SparqlResult> bindings)
         {
-            SparqlVariableBinding exists;
+            ObjectVariants exists;
             foreach (SparqlResult result in bindings)
             {
                 foreach (var arrayofBindings in VariablesBindingsList)
                 {
                     bool iSContinue = false;
-                    var newResult =
-                        new Dictionary<VariableNode, SparqlVariableBinding>(result.row);
                     foreach (var sparqlVariableBinding in arrayofBindings.Where(binding => binding!=null))
-                        if (result.row.TryGetValue(sparqlVariableBinding.Variable, out exists))
+                    {
+                        exists = result[sparqlVariableBinding.Variable];
+                        if (exists!=null)
                         {
-                            if (exists.Value.Equals(sparqlVariableBinding.Value)) continue;
+                            if (exists.Equals(sparqlVariableBinding.Value)) continue;
                             iSContinue = true;
                             break;
                         }
-                        else newResult.Add(sparqlVariableBinding.Variable, sparqlVariableBinding);
+                        else result.Add(sparqlVariableBinding.Variable, sparqlVariableBinding.Value);}
                     if (iSContinue) continue;
-                    yield return new SparqlResult(newResult);  
+                    yield return result;
                 }
             }
         }

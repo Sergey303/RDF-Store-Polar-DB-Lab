@@ -48,13 +48,14 @@ namespace SparqlParseRun.SparqlClasses.GraphPattern.Triples.Path
                 }
                 else
                 {
-                    SparqlVariableBinding o = null;
+                    ObjectVariants o = null;
                     newSubjects.Enqueue(Subject);
                     foreach (var binding in bindings)
                     {
-                        if (binding.row.TryGetValue(oVariableNode, out o))
+                        o = binding[oVariableNode];
+                        if (o!=null)
                         {
-                            if (TestSOConnection(Subject, o.Value))
+                            if (TestSOConnection(Subject, o))
                                 yield return binding;
                         }
                         else
@@ -71,12 +72,13 @@ namespace SparqlParseRun.SparqlClasses.GraphPattern.Triples.Path
             {
                 if (oVariableNode == null) //s variable o const
                 {
-                    SparqlVariableBinding s = null;
+                    ObjectVariants s = null;
                     foreach (var binding in bindings)
                     {
-                        if (binding.row.TryGetValue(sVariableNode, out s))
+                        s = binding[sVariableNode];
+                        if (s!=null)
                         {
-                            if (TestSOConnection(s.Value, Object))
+                            if (TestSOConnection(s, Object))
                                 yield return binding;
                         }
                         else
@@ -90,31 +92,32 @@ namespace SparqlParseRun.SparqlClasses.GraphPattern.Triples.Path
                 }
                 else // both variables
                 {
-                    SparqlVariableBinding o = null;
-                    SparqlVariableBinding s = null;
+                    ObjectVariants o = null;
+                    ObjectVariants s = null;
                 
-                    if (
-                        bindings.All(
-                            binding => binding.row.ContainsKey(sVariableNode) || binding.row.ContainsKey(oVariableNode)))
+                    if (bindings.All(
+                            binding => binding.ContainsKey(sVariableNode) || binding.ContainsKey(oVariableNode)))
                         foreach (var binding in bindings)
                         {
-                            if (binding.row.TryGetValue(sVariableNode, out s))
+                            s = binding[sVariableNode];
+                            o = binding[oVariableNode];
+                            if (s!=null)
                             {
-                                if (binding.row.TryGetValue(oVariableNode, out o))
+                                if (o!=null)
                                 {
-                                    if (TestSOConnection(s.Value, o.Value))
+                                    if (TestSOConnection(s, o))
                                         yield return binding;
                                 }
                                 else
                                 {
-                                    foreach (var node in  GetAllSConnections(s.Value))
+                                    foreach (var node in  GetAllSConnections(s))
                                         yield return new SparqlResult(binding, node, oVariableNode);
                                 }
                             }
 
-                            else if (binding.row.TryGetValue(oVariableNode, out o))
+                            else if (o != null)
                             {
-                                foreach (var node in  GetAllOConnections(o.Value))
+                                foreach (var node in  GetAllOConnections(o))
                                     yield return new SparqlResult(binding, node, sVariableNode);
                             }
                             else // both unknowns
@@ -127,23 +130,26 @@ namespace SparqlParseRun.SparqlClasses.GraphPattern.Triples.Path
                         bothVariablesChache = predicatePath.CreateTriple(sVariableNode, oVariableNode, q)
                             .Aggregate(Enumerable.Repeat(new SparqlResult(), 1),
                                 (enumerable, triple) => triple.Run(enumerable))
-                            .Select(r => new KeyValuePair<ObjectVariants, ObjectVariants>(r[sVariableNode].Value, r[oVariableNode].Value))
+                            .Select(r => new KeyValuePair<ObjectVariants, ObjectVariants>(r[sVariableNode], r[oVariableNode]))
                             .ToArray();
 
-                        foreach (var binding in bindings)
-                            if (binding.row.TryGetValue(sVariableNode, out s))
-                                if (binding.row.TryGetValue(oVariableNode, out o))
+                        foreach (var binding in bindings)     
+                        {
+                            s = binding[sVariableNode];
+                            o = binding[oVariableNode];
+                            if (s!=null)
+                                if (o!=null)
                                 {
-                                    if (TestSOConnectionFromCache(s.Value, o.Value))
+                                    if (TestSOConnectionFromCache(s, o))
                                         yield return binding;
                                 }
                                 else
                                 {
-                                    foreach (var node in GetAllSConnectionsFromCache(s.Value))
+                                    foreach (var node in GetAllSConnectionsFromCache(s))
                                         yield return new SparqlResult(binding, node, oVariableNode);
                                 }
-                            else if (binding.row.TryGetValue(oVariableNode, out o))
-                                foreach (var node in GetAllOConnectionsFromCache(o.Value))
+                            else if (o!=null)
+                                foreach (var node in GetAllOConnectionsFromCache(o))
                                     yield return new SparqlResult(binding, node, sVariableNode);
                             else // both unknowns
                             {
@@ -163,7 +169,7 @@ namespace SparqlParseRun.SparqlClasses.GraphPattern.Triples.Path
                                     foreach (var node in GetAllSConnectionsFromCache(sbj))
                                         yield return
                                             new SparqlResult(binding, sbj, sVariableNode, node, oVariableNode);
-                            }
+                            }}
                     }
                 }
             }
@@ -179,7 +185,7 @@ namespace SparqlParseRun.SparqlClasses.GraphPattern.Triples.Path
                     subjects.Enqueue(subj);
             while (subjects.Count > 0)
                 foreach (var objt in RunTriple(subjects.Dequeue(), oVariableNode)
-                    .Select(sparqlResult => sparqlResult[oVariableNode].Value)
+                    .Select(sparqlResult => sparqlResult[oVariableNode])
                     .Where(objt =>
                     {
                         var isNewS = !history.Contains(objt);
@@ -234,7 +240,7 @@ namespace SparqlParseRun.SparqlClasses.GraphPattern.Triples.Path
 
             while (objects.Count > 0)
                 foreach (var subjt in RunTriple(sVariableNode, objects.Dequeue())
-                    .Select(sparqlResult => sparqlResult[sVariableNode].Value)
+                    .Select(sparqlResult => sparqlResult[sVariableNode])
                     .Where(subjt =>
                     {
                         var isNewS = !history.Contains(subjt);
@@ -294,7 +300,7 @@ namespace SparqlParseRun.SparqlClasses.GraphPattern.Triples.Path
             var newVariable = (SparqlBlankNode)q.CreateBlankNode();
             while (newSubjects.Count > 0)
                 if (RunTriple(newSubjects.Dequeue(), newVariable)
-                    .Select(sparqlResult => sparqlResult[newVariable].Value)
+                    .Select(sparqlResult => sparqlResult[newVariable])
                     .Where(o => !history.Contains(o))
                     .Any(o =>
                     {

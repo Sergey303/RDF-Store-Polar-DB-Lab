@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using RDFCommon.OVns;
 using SparqlParseRun.SparqlClasses.Expressions;
 using SparqlParseRun.SparqlClasses.GraphPattern.Triples.Node;
 using SparqlParseRun.SparqlClasses.Query.Result;
@@ -25,16 +26,16 @@ namespace SparqlParseRun.SparqlClasses.GraphPattern
             return variableBindings.Select(
                 variableBinding =>
                 {
-                    variableBinding.row.Add(variableNode,RunExpressionCreateBind(variableBinding));
+                    variableBinding.Add(variableNode,RunExpressionCreateBind(variableBinding));
                     return variableBinding;
                 });
         }
 
         public SparqlGraphPatternType PatternType { get{return SparqlGraphPatternType.Bind;} }
 
-        public SparqlVariableBinding RunExpressionCreateBind(SparqlResult variableBinding)
+        public ObjectVariants RunExpressionCreateBind(SparqlResult variableBinding)
         {
-            return new SparqlVariableBinding(variableNode, sparqlExpression.Func(variableBinding));
+            return sparqlExpression.Func(variableBinding);
         }
 
 

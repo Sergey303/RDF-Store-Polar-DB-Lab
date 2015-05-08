@@ -32,26 +32,11 @@ namespace SparqlParseRun.SparqlClasses.GraphPattern.Triples.Path
            IEnumerable<SparqlResult> bindings = variableBindings as SparqlResult[] ?? variableBindings.ToArray();
             foreach (var variableBinding in bindings)
             {
-                bool isSKnowns = true;
-                bool isOKnowns = true;
-                if (firstVar == null)
-                {
-                    s = sNode;
-                }
-                else if (variableBinding.row.TryGetValue(firstVar, out firstVarValue))
-                {
-                    s = firstVarValue.Value;
-                }
-                else isSKnowns = false;
-                if (secondVar == null)
-                {
-                    o = sNode;
-                }
-                else if (variableBinding.row.TryGetValue(secondVar, out secondVarValue))
-                {
-                    o = secondVarValue.Value;
-                }
-                else isOKnowns = false;
+
+                s = firstVar == null ? sNode : variableBinding[firstVar];
+                o = secondVar == null ? oNode : variableBinding[secondVar]; 
+                bool isSKnowns = s!=null;
+                bool isOKnowns = o!=null;
                 if (isSKnowns)
                 {
                     if (isOKnowns)

@@ -31,7 +31,7 @@ namespace SparqlParseRun.SparqlClasses.SparqlAggregateExpression
         {
             // TODO: Complete member initialization
             Variable = variableNode;
-            Constrained = (result => result[variableNode].Value);
+            Constrained = (result => result[variableNode]);
         }
 
         public VariableNode Variable { get; set; }
@@ -40,7 +40,7 @@ namespace SparqlParseRun.SparqlClasses.SparqlAggregateExpression
         {
             // TODO: Complete member initialization
             Variable = sparqlExpressionAsVariable.variableNode;
-            Constrained = (result=>sparqlExpressionAsVariable.RunExpressionCreateBind(result).Value);
+            Constrained = sparqlExpressionAsVariable.RunExpressionCreateBind;
             IsDistinct = sparqlExpressionAsVariable.sparqlExpression.IsDistinct;
         }
 

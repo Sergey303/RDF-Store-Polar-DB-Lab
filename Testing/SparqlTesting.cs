@@ -75,7 +75,8 @@ WHERE {
             Perfomance.ComputeTime(() => query = sparqlStore.Parse(queryString), "parse ");
             SparqlResultSet results = null;
             Perfomance.ComputeTime(() => results = query.Run(sparqlStore), "run ");
-            
+
+         
 
             Console.WriteLine("count "+results.Results.Count());
             Console.WriteLine("{0} ", results.ToJson());

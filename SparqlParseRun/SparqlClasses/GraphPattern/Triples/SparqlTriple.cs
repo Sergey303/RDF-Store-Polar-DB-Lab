@@ -18,9 +18,7 @@ namespace SparqlParseRun.SparqlClasses.GraphPattern.Triples
         private bool isSKnown = true;
         private bool isPKnown = true;
         private bool isOKnown = true;
-        private SparqlVariableBinding sBinding;
-        private SparqlVariableBinding pBinding;
-        private SparqlVariableBinding oBinding;
+   
         protected readonly VariableNode sVariableNode;
         private readonly VariableNode pVariableNode;
         protected readonly VariableNode oVariableNode;
@@ -54,20 +52,24 @@ namespace SparqlParseRun.SparqlClasses.GraphPattern.Triples
 
         private IEnumerable<SparqlResult> CreateBindings(SparqlResult variableBinding)
         {
-            ObjectVariants sValue = Subject;
-            ObjectVariants pValue = Predicate;
-            ObjectVariants oValue = Object;
 
+            ObjectVariants sValue = null;
+            ObjectVariants pValue = null;
+            ObjectVariants oValue = null;
+            TryGetSpoVariablesValues(variableBinding, out sValue, out pValue, out oValue);
 
-            TryGetSpoVariablesValues(variableBinding, ref sValue, ref pValue, ref oValue);
-            SparqlVariableBinding varGraphValue;
 
             if (variableDataSet == null)
-                if (graphs.Count == 0) return SetVariablesValues(variableBinding, sValue, pValue, oValue);   //todo
+                if (graphs.Count == 0) return SetVariablesValues(variableBinding, sValue, pValue, oValue); //todo
                 else return SetVariablesValuesFromGraphs(variableBinding, sValue, pValue, oValue, graphs);
-            else if (variableBinding.row.TryGetValue(variableDataSet.Variable, out varGraphValue))
-                return SetVariablesValuesFromGraphs(variableBinding, sValue, pValue, oValue,  new DataSet() {varGraphValue.Value});
-            else return SetVariablesValuesVarGraphs(variableBinding, sValue, pValue, oValue);
+            else
+            {
+                ObjectVariants varGraphValue = variableBinding[variableDataSet.Variable];
+                if (varGraphValue != null)
+                    return SetVariablesValuesFromGraphs(variableBinding, sValue, pValue, oValue,
+                        new DataSet() {varGraphValue});
+                else return SetVariablesValuesVarGraphs(variableBinding, sValue, pValue, oValue);
+            }
         }
 
       
@@ -214,46 +216,25 @@ namespace SparqlParseRun.SparqlClasses.GraphPattern.Triples
             }
         }
 
-        private void TryGetSpoVariablesValues(SparqlResult variableBinding, ref ObjectVariants sValue, ref ObjectVariants pValue,
-            ref ObjectVariants oValue)
-        {
+        private void TryGetSpoVariablesValues(SparqlResult variableBinding, out ObjectVariants sValue,
+            out ObjectVariants pValue,
+            out ObjectVariants oValue)
+        {   
+            sValue = sVariableNode != null ? variableBinding[sVariableNode] : Subject;
+            pValue = pVariableNode != null ? variableBinding[pVariableNode] : Predicate;   
+            oValue = oVariableNode != null ? variableBinding[oVariableNode] : Object;
 
-            isSKnown = true;
-            isPKnown = true;
-            isOKnown = true;
-            if (sVariableNode != null)
-                if (variableBinding.row.TryGetValue(sVariableNode, out sBinding))
-                {
-                    sValue = sBinding.Value;
-                    if (sValue == null) throw new Exception("subject is not ObjectVariants");
-                }
-                else
-                    isSKnown = false;
-            if (pVariableNode != null)
-                if (variableBinding.row.TryGetValue(pVariableNode, out pBinding))
-                {
-                    pValue = pBinding.Value;
-                    if (pValue == null) throw new Exception("predicate is not uri");
-                }
-                else
-                    isPKnown = false;
-            if (oVariableNode != null)
-                if (variableBinding.row.TryGetValue(oVariableNode, out oBinding))
-                {
-                    oValue = oBinding.Value;
-                    if (pValue == null) throw new Exception("node is not object");
-
-                }
-                else
-                    isOKnown = false;
+            isSKnown = sValue != null;
+            isPKnown = pValue != null;
+            isOKnown = oValue != null;
         }
 
         public void Substitution(SparqlResult variableBinding, Action<ObjectVariants, ObjectVariants, ObjectVariants> actTriple, string name = null)
         {                          
            ObjectVariants sValue;
            ObjectVariants pValue;
-           ObjectVariants oValue;  
-           IsSKnown(variableBinding, out sValue, out pValue, out oValue);
+           ObjectVariants oValue;
+           TryGetSpoVariablesValues(variableBinding, out sValue, out pValue, out oValue);
            if (!isSKnown && sVariableNode is IBlankNode) sValue =q.Store.NodeGenerator.CreateBlankNode((sVariableNode).Content, name);
            if (!isOKnown && oVariableNode is IBlankNode) oValue = q.Store.NodeGenerator.CreateBlankNode((oVariableNode).Content, name);
           // if (!isPKnown && pVariableNode is IBlankNode) pValue = ((SparqlBlankNode)pVariableNode).RdfBlankNode;
@@ -269,7 +250,7 @@ namespace SparqlParseRun.SparqlClasses.GraphPattern.Triples
             ObjectVariants pValue;
             ObjectVariants oValue;
 
-            IsSKnown(variableBinding, out sValue, out pValue, out oValue);
+            TryGetSpoVariablesValues(variableBinding, out sValue, out pValue, out oValue);
                  
             if (!isSKnown && sVariableNode is IBlankNode) 
                 sValue = q.Store.NodeGenerator.CreateBlankNode((sVariableNode).Content, ((IIriNode)g).UriString );
@@ -278,52 +259,17 @@ namespace SparqlParseRun.SparqlClasses.GraphPattern.Triples
             
             actQuard(g, sValue, pValue, oValue);  
         }
-        public void Substitution(SparqlResult variableBinding, VariableNode gVariableNode, Action<ObjectVariants, ObjectVariants, ObjectVariants, ObjectVariants> actQuard)
-        {                                
+
+        public void Substitution(SparqlResult variableBinding, VariableNode gVariableNode,
+            Action<ObjectVariants, ObjectVariants, ObjectVariants, ObjectVariants> actQuard)
+        {
             ObjectVariants g;
-            SparqlVariableBinding gBinding;
-            if (variableBinding.row.TryGetValue(gVariableNode, out gBinding))
-                g = sBinding.Value;
-            else throw new Exception("graph hasn't value");
+            g = variableBinding[pVariableNode];
+            if (g == null)
+                throw new Exception("graph hasn't value");
 
             Substitution(variableBinding, g, actQuard);
         }
-        private void IsSKnown(SparqlResult variableBinding, out ObjectVariants sValue, out ObjectVariants pValue, out ObjectVariants oValue)
-        {
-            sValue = Subject;
-            pValue = Predicate;
-            oValue = Object;
-            isSKnown = true;
-            isPKnown = true;
-            isOKnown = true;
 
-
-
-            if (sVariableNode != null)
-                if (variableBinding.row.TryGetValue(sVariableNode, out sBinding))
-                {
-                    sValue = sBinding.Value;
-                    if (sValue == null) throw new Exception("subject is not ObjectVariants");
-                }
-                else
-                    isSKnown = false;
-            if (pVariableNode != null)
-                if (variableBinding.row.TryGetValue(pVariableNode, out pBinding))
-                {
-                    pValue = pBinding.Value;
-                    if (pValue == null) throw new Exception("predicate is not uri");
-                }
-                else
-                    isPKnown = false;
-            if (oVariableNode != null)
-                if (variableBinding.row.TryGetValue(oVariableNode, out oBinding))
-                {
-                    oValue = oBinding.Value;
-                    if (pValue == null) throw new Exception("node is not object");
-                   
-                }
-                else
-                    isOKnown = false;
-        }
     }
 }

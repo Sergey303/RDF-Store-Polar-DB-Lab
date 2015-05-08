@@ -1,4 +1,5 @@
-﻿using RDFCommon;
+﻿using System;
+using RDFCommon;
 using SparqlParseRun.SparqlClasses.GraphPattern;
 using SparqlParseRun.SparqlClasses.Query;
 using SparqlParseRun.SparqlClasses.Query.Result;
@@ -26,10 +27,9 @@ namespace SparqlParseRun
             Q.Store = store;
             ResultSet.Variables = Q.Variables;
             ResultSet.Results = sparqlWhere.Run(ResultSet.Results);
+         
             if (sparqlSolutionModifier != null)
-                ResultSet.Results = sparqlSolutionModifier.Run(ResultSet.Results);
-          
-          
+                ResultSet.Results = sparqlSolutionModifier.Run(ResultSet.Results);   
             return ResultSet;
         }
         public SparqlQueryTypeEnum Type { get; set; }

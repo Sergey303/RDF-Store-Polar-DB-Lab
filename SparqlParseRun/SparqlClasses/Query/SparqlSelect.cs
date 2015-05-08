@@ -29,13 +29,10 @@ namespace SparqlParseRun.SparqlClasses.Query
             if (bindings.Length == 0) return bindings;
             if (isAll)
             {
-                var listForRemove = new List<VariableNode>();
+              
                 foreach (var sparqlResult in bindings)
                 {
-                    listForRemove.AddRange(sparqlResult.row.Keys.Where(v => string.IsNullOrWhiteSpace(v.VariableName)));
-                    foreach (var variableNode in listForRemove)
-                        sparqlResult.row.Remove(variableNode);
-                    listForRemove.Clear();
+                    sparqlResult.RemoveBlanks();
                 }
             }
             else
@@ -62,8 +59,8 @@ namespace SparqlParseRun.SparqlClasses.Query
                         for (int i = 0; i < newList.Length; i++)
                         {
                             var newVariable = expressionAsVariable.RunExpressionCreateBind(bindings[i]);
-                            newList[i].row.Add(expressionAsVariable.variableNode, newVariable);
-                            bindings[i].row.Add(expressionAsVariable.variableNode, newVariable);
+                            newList[i].Add(expressionAsVariable.variableNode, newVariable);
+                            bindings[i].Add(expressionAsVariable.variableNode, newVariable);
                         }
                     }
                     else if (variableNode != null)
@@ -71,8 +68,8 @@ namespace SparqlParseRun.SparqlClasses.Query
                         if (resultSet != null)
                             resultSet.Variables.Add(variableNode.VariableName, variableNode);
                         for (int i = 0; i < newList.Length; i++)
-                            if (bindings[i].row.ContainsKey(variableNode))
-                                newList[i].row.Add(variableNode, bindings[i][variableNode]);
+                            if (bindings[i].ContainsKey(variableNode))
+                                newList[i].Add(variableNode, bindings[i][variableNode]);
                     }
                     else
                         throw new ArgumentNullException("variableNode");
@@ -108,9 +105,9 @@ namespace SparqlParseRun.SparqlClasses.Query
         {
             public bool Equals(SparqlResult x, SparqlResult y)
             {
-                if (x.row.Count != y.row.Count) return false;
+                //if (x.Count != y.Count) return false;
                 SparqlVariableBinding v2;
-                return x.row.Keys.All(key => y.row.TryGetValue(key, out v2) && x[key] .Value.Equals(v2.Value));
+                return x.TestAll((var, value) => y[var].Equals(x[var]));
             }
 
             public int GetHashCode(SparqlResult obj)
@@ -118,8 +115,8 @@ namespace SparqlParseRun.SparqlClasses.Query
                 unchecked
                 {
                     int sum = 0;
-                    foreach (SparqlVariableBinding b in obj.row.Values)
-                        sum += b.Value.GetHashCode()^2;
+                    obj.GetAll((var, value) => 
+                        sum +=(int) Math.Pow(value.GetHashCode(), 2));
                     return sum;
                 }
             }
