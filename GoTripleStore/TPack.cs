@@ -40,13 +40,13 @@ namespace GoTripleStore
         public ObjectVariants Get(ObjectVariants si)
         {
 
-            return si.Variant == ObjectVariantEnum.Double ? row[((OV_integer)si).value] : si;
+            return si.Variant == ObjectVariantEnum.Index ? row[((OV_index)si).value] : si;
         }
         // Запись значения в массив
         public void Set(ObjectVariants si, ObjectVariants valu)
         {
-            if (si.Variant == ObjectVariantEnum.Double) throw new Exception("argument must be an index");
-            int ind = ((OV_integer)si).value;
+            if (si.Variant == ObjectVariantEnum.Index) throw new Exception("argument must be an index");
+            int ind = ((OV_index)si).value;
             row[ind] = valu;
         }
     }
@@ -67,7 +67,7 @@ namespace GoTripleStore
             ObjectVariants[] values = new ObjectVariants[3];
             values[0] = onepack.Get(subj); values[1] = onepack.Get(pred); values[2] = onepack.Get(obj);
             // Маска
-            int mask = (values[0] != null ? 1 : 0) << 2 | (values[1] != null ? 1 : 0) << 1 | (values[0] != null ? 1 : 0);
+            int mask = (values[0] == null ? 1 : 0) << 2 | (values[1] == null ? 1 : 0) << 1 | (values[2] == null ? 1 : 0);
             // Значения: 0-spo, 1-spO, 2-sPo, 3-sPO, 4-Spo, 5-SpO, 6-SPo, 7-SPO
             if (mask == 0)
             {

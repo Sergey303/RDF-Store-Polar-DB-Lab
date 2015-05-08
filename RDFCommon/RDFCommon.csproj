@@ -84,6 +84,7 @@
     <Compile Include="OVns\numeric\OV_float.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="OVns\numeric\OV_index.cs" />
     <Compile Include="OVns\numeric\OV_int.cs">
       <SubType>Code</SubType>
     </Compile>

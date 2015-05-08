@@ -10,9 +10,9 @@ namespace GoTripleStore
 {
     class TestTPack
     {
-        public static void Main()
+        public static void Main3()
         {
-            string Source_data_folder_path = System.IO.File.ReadAllLines("../../../config.txt")
+            string Source_data_folder_path = System.IO.File.ReadAllLines("../../../config.ini")
                 .Where(line => line.StartsWith("#source_data_folder_path"))
                 .Select(line => line.Substring("#source_data_folder_path".Length + 1))
                 .First();
@@ -36,7 +36,20 @@ namespace GoTripleStore
                 //g.Warmup();
             }
 
+            IGraph gra = new TPackGraph(g);
+            Console.WriteLine("gra ok.");
 
+            var fl = g.GetTriplesWithSubjectPredicate(
+                "http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/datafromproducer1/product12",
+                "http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/vocabulary/productpropertynumeric1");
+            int n = fl.Count();
+            Console.WriteLine("n={0}", n);
+
+            sw.Stop();
+            var qu = Query6t(gra);
+            int cnt = qu.Count();
+            Console.WriteLine("query6t ok. cnt={0}", cnt);
+            
                     
         }
         public static IEnumerable<TPack> Query6t(IGraph g)
@@ -47,7 +60,7 @@ namespace GoTripleStore
             var quer = Enumerable.Repeat<TPack>(new TPack(row, g), 1)
                 .spo(new OV_iri("http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/datafromproducer1/product12"),
                     new OV_iri("http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/vocabulary/productpropertynumeric1"),
-                    new OV_double(_origProperty1))
+                    new OV_index(_origProperty1))
                 //.spD("http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/datafromproducer1/product12",
                 //    "http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/vocabulary/productpropertynumeric2",
                 //    _origProperty2)
@@ -90,14 +103,49 @@ namespace GoTripleStore
         }
         public IEnumerable<Triple> GetTriplesWithSubject(ObjectVariants subj)
         {
-            //return go.GetTriplesWithSubject(((OV_iri)subj).UriString);
-
+            return go.GetTriplesWithSubject(((OV_iri)subj).UriString)
+                .Select(ent => 
+                {
+                    object[] va = go.Dereference(ent);
+                    return new Triple(new OV_iri((string)va[0]), new OV_iri((string)va[1]), va[2].ToOVariant());
+                });
         }
-            //IEnumerable<Triple> GetTriplesWithSubjectPredicate(ObjectVariants subj, ObjectVariants pred);
-            //IEnumerable<Triple> GetTriplesWithPredicate(ObjectVariants pred);
-            //IEnumerable<Triple> GetTriplesWithPredicateObject(ObjectVariants pred, ObjectVariants obj);
-            //IEnumerable<Triple> GetTriplesWithObject(ObjectVariants obj);
+        public IEnumerable<Triple> GetTriplesWithSubjectPredicate(ObjectVariants subj, ObjectVariants pred)
+        {
+            var qq = go.GetTriplesWithSubjectPredicate(((OV_iri)subj).UriString, ((OV_iri)pred).UriString).ToArray();
+            return go.GetTriplesWithSubjectPredicate(((OV_iri)subj).UriString, ((OV_iri)pred).UriString)
+                .Select(ent =>
+                {
+                    object[] va = go.Dereference(ent);
+                    return new Triple(new OV_iri((string)va[0]), new OV_iri((string)va[1]), va[2].ToOVariant());
+                });
         }
-
+        public IEnumerable<Triple> GetTriplesWithPredicate(ObjectVariants pred)
+        {
+            return go.GetTriplesWithPredicate(((OV_iri)pred).UriString)
+                .Select(ent =>
+                {
+                    object[] va = go.Dereference(ent);
+                    return new Triple(new OV_iri((string)va[0]), new OV_iri((string)va[1]), va[2].ToOVariant());
+                });
+        }
+        public IEnumerable<Triple> GetTriplesWithPredicateObject(ObjectVariants pred, ObjectVariants obj)
+        {
+            return go.GetTriplesWithPredicateObject(((OV_iri)pred).UriString, obj)
+                .Select(ent =>
+                {
+                    object[] va = go.Dereference(ent);
+                    return new Triple(new OV_iri((string)va[0]), new OV_iri((string)va[1]), va[2].ToOVariant());
+                });
+        }
+        public IEnumerable<Triple> GetTriplesWithObject(ObjectVariants obj)
+        {
+            return go.GetTriplesWithObject(obj)
+                .Select(ent =>
+                {
+                    object[] va = go.Dereference(ent);
+                    return new Triple(new OV_iri((string)va[0]), new OV_iri((string)va[1]), va[2].ToOVariant());
+                });
+        }
     }
 }

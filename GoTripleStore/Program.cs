@@ -12,17 +12,30 @@ namespace GoTripleStore
 {
     public class Program
     {
-        public static void Main2(string Source_data_folder_path)
+        public static void Main()
         {
+            string Source_data_folder_path = System.IO.File.ReadAllLines("../../../config.ini")
+                .Where(line => line.StartsWith("#source_data_folder_path"))
+                .Select(line => line.Substring("#source_data_folder_path".Length + 1))
+                .First();
             System.Diagnostics.Stopwatch sw = new System.Diagnostics.Stopwatch();
             string path = "../../../Databases/";
             Console.WriteLine("Start GoTripleStore coding triples (GaGraphStringBased).");
+            string subj77 = "http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromProducer1/Product12";
             var query = ReadTripleStringsFromTurtle.LoadGraph(Source_data_folder_path + "1.ttl")
+                .Where(tri =>
+                {
+                    if (tri.Subject == subj77)
+                    {
+                        Console.WriteLine("{0} {1} {2} .", tri.Subject, tri.Predicate, tri.Object);
+                    }
+                    return true;
+                })
                 .Select(tri => new Tuple<string, string, ObjectVariants>(tri.Subject, tri.Predicate, tri.Object));
 
             //IGra<PaEntry> g = new GoGraphStringBased(path);
             GaGraphStringBased g = new GaGraphStringBased(path);
-            bool toload = false;
+            bool toload = true;
             if (toload)
             {
                 sw.Restart();
@@ -37,22 +50,29 @@ namespace GoTripleStore
 
             {
                 sw.Restart();
+                var tr = g.GetTriples().Skip(10000).Take(100).Last();
+                object[] v3 = g.Dereference(tr);
+                Console.WriteLine("{0} {1} {2} .", v3[0], v3[1], v3[2].ToOVariant());
+
+                string subj0 = (string)v3[0];
+
+                //var fl = g.GetTriplesWithSubject("http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromProducer1/Product12");
+                var fl = g.GetTriplesWithSubject(
+                    "http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromProducer1/Product12"
+                    //,"http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/vocabulary/ProductFeature"
+                    );
                 //var fl = g.GetTriplesWithSubjectPredicate(
                 //    "http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/datafromproducer1/product12",
-                //    "http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/vocabulary/productfeature"
-                //    );
-                var fl = g.GetTriplesWithSubjectPredicate(
-                    "http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/datafromproducer1/product12",
-                    "http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/vocabulary/productpropertynumeric1"
-    );
+                //    "http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/vocabulary/productpropertynumeric1");
                 int n = fl.Count();
                 sw.Stop();
                 Console.WriteLine("n={0} duration={1}", n, sw.ElapsedMilliseconds);
-                //foreach (var ent in fl)
-                //{
-                //    var v = g.Dereference(ent);
-                //    Console.WriteLine("{0} {1} {2} .", v[0], v[1], v[2].ToOVariant());
-                //}
+                foreach (var ent in fl)
+                {
+                    var v = g.Dereference(ent);
+                    Console.WriteLine("{0} {1} {2} .", v[0], v[1], v[2].ToOVariant());
+                }
+
 
                 sw.Restart();
                 var fl2 = g.GetTriplesWithSubjectPredicate(
@@ -68,7 +88,9 @@ namespace GoTripleStore
                new OV_iri("http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/productfeature142"))
                .Count();
                 Console.WriteLine("Ай! n={0}", c);
-                
+
+                return;
+
                 TripleStore ts = new TripleStore(g);
 
                 //var str_fl = ts.GetObjBySubjPred(
