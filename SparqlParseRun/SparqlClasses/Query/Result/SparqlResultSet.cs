@@ -12,8 +12,8 @@ namespace SparqlParseRun.SparqlClasses.Query.Result
 {
     public class SparqlResultSet
     {
-        private readonly Prologue prolog;
-        public IEnumerable<SparqlResult> Results = new List<SparqlResult>() {new SparqlResult()};
+        private readonly RdfQuery11Translator q;
+        public IEnumerable<SparqlResult> Results ;
         public IGraph GraphResult;
         internal ResultType ResultType;
 
@@ -30,9 +30,10 @@ namespace SparqlParseRun.SparqlClasses.Query.Result
 
         internal Dictionary<string, VariableNode> Variables = new Dictionary<string, VariableNode>();
 
-        public SparqlResultSet(Prologue prolog)
+        public SparqlResultSet(RdfQuery11Translator q)
         {
-            this.prolog = prolog;
+            this.q = q;
+            Results = new List<SparqlResult>() {new SparqlResult(q.Variables.Count)};
         }
 
         public XElement ToXml()
@@ -53,7 +54,7 @@ namespace SparqlParseRun.SparqlClasses.Query.Result
                                             BindingToXml(xn, value)))))));
                 case ResultType.Describe:
                 case ResultType.Construct:
-                    return GraphResult.ToXml(prolog);
+                    return GraphResult.ToXml(q.prolog);
                 case ResultType.Ask:
                     return new XElement(xn + "sparql", //new XAttribute(XNamespace.Xmlns , xn),
                         new XElement(xn + "head",
