@@ -246,7 +246,7 @@ namespace GoTripleStore
             generator.Start(list =>
             {
                 foreach (var t in list)
-                    table.AppendValue(t);
+                    table.AppendValue(new object[]{t.Subject, t.Predicate, t.Object.ToWritable()});
             });
             Console.WriteLine("table fill ok.");
 

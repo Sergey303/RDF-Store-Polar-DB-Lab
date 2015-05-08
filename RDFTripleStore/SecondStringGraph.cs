@@ -131,7 +131,6 @@ namespace TestingNs
         public void FromTurtle(string path)
         {
             //table.Clear();
-            //Build(ReadTripleStringsFromTurtle.LoadGraph(gString).Select(t => Tuple.Create(t.Subject.ToLowerInvariant(), t.Predicate.ToLowerInvariant(), t.Object)));
         Build(new TripleGeneratorBufferedParallel(path, "g"));
 
         }

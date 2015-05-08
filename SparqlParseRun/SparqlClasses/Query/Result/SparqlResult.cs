@@ -127,7 +127,13 @@ namespace SparqlParseRun.SparqlClasses.Query.Result
 
         private List<VariableNode> selected;
         private RdfQuery11Translator q;
-         //public IEnumerator<SparqlResult> Branching() 
+
+        private SparqlResult(ObjectVariants[] copy)
+        {
+            rowArray = copy;
+        }
+
+        //public IEnumerator<SparqlResult> Branching() 
         public bool[] Backup()
         {
             return rowArray.Select(v => v != null).ToArray();
@@ -140,6 +146,14 @@ namespace SparqlParseRun.SparqlClasses.Query.Result
                 if(backup[i]) continue;
                 rowArray[i] = null;
             }
+        }
+
+
+        public SparqlResult Clone()
+        {
+            ObjectVariants[] copy=new ObjectVariants[rowArray.Length];
+            rowArray.CopyTo(copy,0);
+            return new SparqlResult(copy);
         }
     }
 }
