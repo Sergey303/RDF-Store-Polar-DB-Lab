@@ -39,13 +39,12 @@ namespace GoTripleStore
         // Метод по значению si (часть шаблона триплета) выдает или si как литерал, или берет значение в массиве
         public ObjectVariants Get(ObjectVariants si)
         {
-
             return si.Variant == ObjectVariantEnum.Index ? row[((OV_index)si).value] : si;
         }
         // Запись значения в массив
         public void Set(ObjectVariants si, ObjectVariants valu)
         {
-            if (si.Variant == ObjectVariantEnum.Index) throw new Exception("argument must be an index");
+            if (si.Variant != ObjectVariantEnum.Index) throw new Exception("argument must be an index");
             int ind = ((OV_index)si).value;
             row[ind] = valu;
         }
@@ -64,30 +63,37 @@ namespace GoTripleStore
         public static IEnumerable<TPack> ProcessTripleTemplate(TPack onepack, ObjectVariants subj, ObjectVariants pred, ObjectVariants obj)
         {
             // Значения для обработки
-            ObjectVariants[] values = new ObjectVariants[3];
-            values[0] = onepack.Get(subj); values[1] = onepack.Get(pred); values[2] = onepack.Get(obj);
+            //ObjectVariants[] values = new ObjectVariants[3];
+            ObjectVariants S, P, O;
+            S = onepack.Get(subj); P = onepack.Get(pred); O = onepack.Get(obj);
             // Маска
-            int mask = (values[0] == null ? 1 : 0) << 2 | (values[1] == null ? 1 : 0) << 1 | (values[2] == null ? 1 : 0);
+            int mask = (S == null ? 1 : 0) << 2 | (P == null ? 1 : 0) << 1 | (O == null ? 1 : 0);
             // Значения: 0-spo, 1-spO, 2-sPo, 3-sPO, 4-Spo, 5-SpO, 6-SPo, 7-SPO
-            if (mask == 0)
-            {
-                bool ok = onepack.G.Contains(values[0], values[1], values[2]);
-                if (ok) return Enumerable.Repeat<TPack>(onepack, 1);
-                else Enumerable.Empty<TPack>();
-            }
+            //if (mask == 0)
+            //{
+            //    bool ok = onepack.G.Contains(S, P, O);
+            //    //if (ok) return Enumerable.Repeat<TPack>(onepack, 1);
+            //    //else return Enumerable.Empty<TPack>();
+            //}
             // Далее могут быть 0, 1, много решений
             Triple[] solutions = new Triple[0];
             switch (mask)
             {
-                case 1: { solutions = onepack.G.GetTriplesWithSubjectPredicate(subj, pred).ToArray(); break; }
-                case 2: { solutions = onepack.G.GetTriplesWithSubject(subj).Where(t => t.Obj == obj).ToArray(); break; }
-                case 3: { solutions = onepack.G.GetTriplesWithSubject(subj).ToArray(); break; }
-                case 4: { solutions = onepack.G.GetTriplesWithPredicateObject(pred, obj).ToArray(); break; }
-                case 5: { solutions = onepack.G.GetTriplesWithPredicate(pred).ToArray(); break; }
-                case 6: { solutions = onepack.G.GetTriplesWithObject(obj).ToArray(); break; }
+                case 0:
+                    {
+                        bool ok = onepack.G.Contains(S, P, O);
+                        solutions = ok ? new Triple[] { new Triple(S, O, P) } : new Triple[0];
+                        break;
+                    }
+                case 1: { solutions = onepack.G.GetTriplesWithSubjectPredicate(S, P).ToArray(); break; }
+                case 2: { solutions = onepack.G.GetTriplesWithSubject(S).Where(t => t.Obj == obj).ToArray(); break; }
+                case 3: { solutions = onepack.G.GetTriplesWithSubject(S).ToArray(); break; }
+                case 4: { solutions = onepack.G.GetTriplesWithPredicateObject(P, O).ToArray(); break; }
+                case 5: { solutions = onepack.G.GetTriplesWithPredicate(P).ToArray(); break; }
+                case 6: { solutions = onepack.G.GetTriplesWithObject(O).ToArray(); break; }
                 case 7: { solutions = onepack.G.GetTriples().ToArray(); break; }
             }
-            if (solutions.Length == 0) return Enumerable.Empty<TPack>();
+            //if (solutions.Length == 0) return Enumerable.Empty<TPack>(); // Само так и получится
             // Контекст (пустые)
             bool[] isEmpty = null;
             if (solutions.Length > 1)
@@ -100,22 +106,20 @@ namespace GoTripleStore
             // триплета в solutions.
             ObjectVariants[] row = onepack.row;
             bool notfirst = false;
-            var packFlow = solutions
-                .Select(t =>
+            foreach (var t in solutions)
+            {
+                // Восстановление контекста если не первый
+                if (notfirst)
                 {
-                    // Восстановление контекста если не первый
-                    if (notfirst)
-                    {
-                        for (int i = 0; i < row.Length; i++) if (isEmpty[i]) row[i] = null;
-                    }
-                    notfirst = true;
-                    // Запись вычисленных полей
-                    if ((mask & 4) != 0) onepack.Set(subj, t.Subj);
-                    if ((mask & 2) != 0) onepack.Set(pred, t.Pred);
-                    if ((mask & 1) != 0) onepack.Set(obj, t.Obj);
-                    return new TPack(row, onepack.G);
-                });
-            return packFlow; //Enumerable.Empty<TPack>();
+                    for (int i = 0; i < row.Length; i++) if (isEmpty[i]) row[i] = null;
+                }
+                notfirst = true;
+                // Запись вычисленных полей
+                if ((mask & 4) != 0) onepack.Set(subj, t.Subj);
+                if ((mask & 2) != 0) onepack.Set(pred, t.Pred);
+                if ((mask & 1) != 0) onepack.Set(obj, t.Obj);
+                yield return new TPack(row, onepack.G);
+            }
         }
     }
 }

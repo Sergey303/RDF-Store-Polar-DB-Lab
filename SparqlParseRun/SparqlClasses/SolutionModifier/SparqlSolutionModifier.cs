@@ -30,9 +30,9 @@ namespace SparqlParseRun.SparqlClasses.SolutionModifier
                 Order = sparqlSolutionModifierOrder.Order;
         }
 
-        internal void Add(SparqlSolutionModifierHaving sparqlSolutionModifierHaving)
+        internal void Add(SparqlSolutionModifierHaving sparqlSolutionModifierHaving, RdfQuery11Translator q)
         {
-            Having = sparqlSolutionModifierHaving.Having;
+            Having = enumerable => sparqlSolutionModifierHaving.Having(enumerable,q);
         }
 
         internal void Add(SparqlSolutionModifierGroup sparqlSolutionModifierGroup)

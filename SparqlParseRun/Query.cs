@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using RDFCommon;
 using SparqlParseRun.SparqlClasses.GraphPattern;
 using SparqlParseRun.SparqlClasses.Query;
@@ -12,20 +13,22 @@ namespace SparqlParseRun
     {
         internal SparqlGraphPattern sparqlWhere;
         internal readonly SparqlResultSet ResultSet;
-        protected RdfQuery11Translator Q;
+        protected RdfQuery11Translator q;
         protected SparqlSolutionModifier sparqlSolutionModifier;
 
         public SparqlQuery(RdfQuery11Translator q)
         {
-            Q = q;
+            this.q = q;
             ResultSet=new SparqlResultSet(q);
         }
 
 
         public virtual SparqlResultSet Run(IStore store)
         {
-            Q.Store = store;
-            ResultSet.Variables = Q.Variables;
+            q.Store = store;
+            ResultSet.Variables = q.Variables;
+            ResultSet.Results = Enumerable.Repeat(new SparqlResult(q), 1);
+
             ResultSet.Results = sparqlWhere.Run(ResultSet.Results);
          
             if (sparqlSolutionModifier != null)

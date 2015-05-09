@@ -29,7 +29,7 @@ namespace RDFCommon.OVns
   
         public override ObjectVariants GetUri(string uri)
         {
-            uri = uri.ToLowerInvariant();
+           
             int code=coding_table.GetCodeByString(uri);
             if (code == -1)
                 return new OV_iri(uri);
@@ -38,13 +38,13 @@ namespace RDFCommon.OVns
 
         public override ObjectVariants AddIri(string iri)
         {
-            return new OV_iriint(coding_table.Add(iri.ToLowerInvariant()), coding_table.GetStringByCode); ;
+            return new OV_iriint(coding_table.Add(iri), coding_table.GetStringByCode); ;
         }
 
 
         public override ObjectVariants CreateLiteralOtherType(string p, string typeUriNode)
         {
-            return new OV_typedint(p, coding_table.Add(typeUriNode.ToLowerInvariant()), coding_table.GetStringByCode);
+            return new OV_typedint(p, coding_table.Add(typeUriNode), coding_table.GetStringByCode);
         }
 
        

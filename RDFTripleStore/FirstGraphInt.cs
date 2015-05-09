@@ -9,6 +9,7 @@ using RDFCommon.Interfaces;
 using RDFCommon.OVns;
 using RDFTurtleParser;
 using Task15UniversalIndex;
+using IGraph = RDFCommon.IGraph;
 
 namespace RDFTripleStore
 {

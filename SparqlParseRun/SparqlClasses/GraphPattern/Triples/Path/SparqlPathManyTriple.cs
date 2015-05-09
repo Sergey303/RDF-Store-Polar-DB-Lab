@@ -128,7 +128,7 @@ namespace SparqlParseRun.SparqlClasses.GraphPattern.Triples.Path
                     else
                     {
                         bothVariablesChache = predicatePath.CreateTriple(sVariableNode, oVariableNode, q)
-                            .Aggregate(Enumerable.Repeat(new SparqlResult(), 1),
+                            .Aggregate(Enumerable.Repeat(new SparqlResult(q), 1),
                                 (enumerable, triple) => triple.Run(enumerable))
                             .Select(r => new KeyValuePair<ObjectVariants, ObjectVariants>(r[sVariableNode], r[oVariableNode]))
                             .ToArray();
@@ -349,7 +349,7 @@ namespace SparqlParseRun.SparqlClasses.GraphPattern.Triples.Path
 
         private IEnumerable<SparqlResult> RunTriple(ObjectVariants subject, ObjectVariants objct)
         {                                     
-                return predicatePath.CreateTriple(subject, objct, q).Aggregate(Enumerable.Repeat(new SparqlResult(), 1),
+                return predicatePath.CreateTriple(subject, objct, q).Aggregate(Enumerable.Repeat(new SparqlResult(q), 1),
                     (enumerable, triple) => triple.Run(enumerable));
            
         }

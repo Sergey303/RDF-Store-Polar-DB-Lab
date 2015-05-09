@@ -31,12 +31,12 @@ namespace RDFCommon
         {  
             var match = PrefixNSSlpit.Match(p);
             var prefix = match.Groups[1].Value;
-            var localName = match.Groups[2].Value.ToLowerInvariant();
+            var localName = match.Groups[2].Value;
             return new PrefixLocalName(prefix, localName);
         }
                 public static NamespaceLocalName SplitUri(string p)
                 {
-                    p = p.ToLowerInvariant();
+                    
             var rsi = p.LastIndexOf('\\');
             var lsi = p.LastIndexOf('/');
             var ssi = p.LastIndexOf('#');
@@ -80,12 +80,12 @@ namespace RDFCommon
 
         public void SetBase(string p)
         {
-            baseUri = p.ToLowerInvariant();
+            baseUri = p;
         }
 
         public void AddPrefix(string prefix, string ns)
         {
-            ns = ns.Substring(1, ns.Length - 2).ToLowerInvariant();
+            ns = ns.Substring(1, ns.Length - 2);
             prefix2Namspace.Add(prefix, ns);
             namspace2Prefix.Add(ns, prefix);
         }

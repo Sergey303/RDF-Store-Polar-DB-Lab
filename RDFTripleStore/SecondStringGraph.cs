@@ -7,6 +7,7 @@ using RDFCommon.Interfaces;
 using RDFCommon.OVns;
 using RDFTripleStore;
 using RDFTurtleParser;
+using IGraph = RDFCommon.IGraph;
 
 namespace TestingNs
 {

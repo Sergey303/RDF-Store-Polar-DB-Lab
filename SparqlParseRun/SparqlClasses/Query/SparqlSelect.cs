@@ -23,81 +23,54 @@ namespace SparqlParseRun.SparqlClasses.Query
         }
 
 
-        public IEnumerable<SparqlResult> Run(IEnumerable<SparqlResult> variableBindings, SparqlResultSet resultSet = null)
+        public IEnumerable<SparqlResult> Run(IEnumerable<SparqlResult> variableBindings, SparqlResultSet resultSet)
         {
-            var bindings = variableBindings as SparqlResult[] ?? variableBindings.ToArray();
-            if (bindings.Length == 0) return bindings;
+            List<VariableNode> selected=null;
+
             if (isAll)
             {
-              
-                foreach (var sparqlResult in bindings)
-                {
-                    sparqlResult.RemoveBlanks();
-                }
+                selected = resultSet.Variables.Values.Where(v => !(v is SparqlBlankNode)).ToList();
+
             }
             else
             {
-                if (resultSet != null)
-                    resultSet.Variables.Clear();
-                SparqlResult[] newList = bindings.Select(result => new SparqlResult()).ToArray();
-                foreach (var v in this)
+                selected = new List<VariableNode>();
+                foreach (IVariableNode variable in this)
                 {
-                    var expressionAsVariable = v as SparqlExpressionAsVariable;
-                    var variableNode = (v as VariableNode);
-                    if (expressionAsVariable != null)
+                    var expr = variable as SparqlExpressionAsVariable;
+                    if (expr != null)
                     {
-                        if (resultSet != null)
-                            resultSet.Variables.Add(expressionAsVariable.variableNode.VariableName,
-                                expressionAsVariable.variableNode);
-                        if (!(bindings.First() is SpraqlGroupOfResults) &&
-                            expressionAsVariable.sparqlExpression.IsAggragate)
-                        {
-                            bindings = new SparqlResult[] {new SpraqlGroupOfResults() {Group = bindings}};
-                            newList = new SparqlResult[] {new SpraqlGroupOfResults() {Group = newList}};
-                        }
-
-                        for (int i = 0; i < newList.Length; i++)
-                        {
-                            var newVariable = expressionAsVariable.RunExpressionCreateBind(bindings[i]);
-                            newList[i].Add(expressionAsVariable.variableNode, newVariable);
-                            bindings[i].Add(expressionAsVariable.variableNode, newVariable);
-                        }
+                        variableBindings = expr.Run(variableBindings);
+                        selected.Add(expr.variableNode);
                     }
-                    else if (variableNode != null)
-                    {
-                        if (resultSet != null)
-                            resultSet.Variables.Add(variableNode.VariableName, variableNode);
-                        for (int i = 0; i < newList.Length; i++)
-                            if (bindings[i].ContainsKey(variableNode))
-                                newList[i].Add(variableNode, bindings[i][variableNode]);
-                    }
-                    else
-                        throw new ArgumentNullException("variableNode");
+                    else selected.Add((VariableNode) variable);
                 }
-
-                bindings = newList;
             }
+            variableBindings = variableBindings.Select(result =>
+                {
+                    result.SeletSelection(selected);
+                    return result;
+                });
             if (IsDistinct)
-                bindings = bindings.Distinct(new BindingsComparer()).ToArray();
+                variableBindings = variableBindings.Distinct(new BindingsComparer());
             if (IsReduced)
-            {
-                var counts = new Dictionary<SparqlResult, int>();
-                foreach (var variableBinding in bindings)
-                    if (counts.ContainsKey(variableBinding)) counts[variableBinding]++;
-                    else counts.Add(variableBinding, 1);
-                bindings = Reduce(counts).ToArray();
-            }
+                variableBindings = Reduce(variableBindings);
 
-            return bindings;
+            return variableBindings;
         }
 
-        private static IEnumerable<SparqlResult> Reduce(Dictionary<SparqlResult, int> counts)
+        private static IEnumerable<SparqlResult> Reduce(IEnumerable<SparqlResult> results)
         {
-            foreach (var count in counts)
+            var duplicated=new Dictionary<SparqlResult, bool>();
+            foreach (var res in results)
             {
-                yield return count.Key;
-                if (count.Value > 1)
-                    yield return count.Key;
+                if (duplicated.ContainsKey(res))
+                {
+                    if(duplicated[res]) continue;
+                    duplicated[res] = true;
+                }
+                else duplicated.Add(res, false);
+                yield return res;
             }
         }
 
@@ -114,10 +87,7 @@ namespace SparqlParseRun.SparqlClasses.Query
             {
                 unchecked
                 {
-                    int sum = 0;
-                    obj.GetAll((var, value) => 
-                        sum +=(int) Math.Pow(value.GetHashCode(), 2));
-                    return sum;
+                    return obj.GetHashCode();
                 }
             }
         }

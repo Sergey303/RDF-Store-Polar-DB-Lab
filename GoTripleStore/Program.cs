@@ -12,7 +12,7 @@ namespace GoTripleStore
 {
     public class Program
     {
-        public static void Main()
+        public static void Main2()
         {
             string Source_data_folder_path = System.IO.File.ReadAllLines("../../../config.ini")
                 .Where(line => line.StartsWith("#source_data_folder_path"))

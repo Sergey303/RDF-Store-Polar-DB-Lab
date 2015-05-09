@@ -32,7 +32,7 @@ namespace SparqlParseRun.SparqlClasses.Expressions
                 };
                    return;
             }  else
-                if (Equals(sparqlUriNode, SpecialTypesClass.Bool))
+                if (Equals(sparqlUriNode, SpecialTypesClass.Double))
                 {
                     Func = result =>
                     {
@@ -46,7 +46,7 @@ namespace SparqlParseRun.SparqlClasses.Expressions
                     return;
                 }
                 else
-                    if (Equals(sparqlUriNode, SpecialTypesClass.Bool))
+                    if (Equals(sparqlUriNode, SpecialTypesClass.Float))
                     {
                         Func = result =>
                         {
@@ -60,7 +60,7 @@ namespace SparqlParseRun.SparqlClasses.Expressions
                         return;
                     }
                     else
-                        if (Equals(sparqlUriNode, SpecialTypesClass.Bool))
+                        if (Equals(sparqlUriNode, SpecialTypesClass.Decimal))
                         {
                             Func = result =>
                             {
@@ -74,7 +74,7 @@ namespace SparqlParseRun.SparqlClasses.Expressions
                             return;
                         }
                         else
-                            if (Equals(sparqlUriNode, SpecialTypesClass.Bool))
+                            if (Equals(sparqlUriNode, SpecialTypesClass.Int))
                             {
                                 Func = result =>
                                 {
@@ -88,7 +88,7 @@ namespace SparqlParseRun.SparqlClasses.Expressions
                                 return;
                             }
                             else
-                                if (Equals(sparqlUriNode, SpecialTypesClass.Bool))
+                                if (Equals(sparqlUriNode, SpecialTypesClass.DateTime))
                                 {
                                     Func = result =>
                                     {
@@ -102,7 +102,7 @@ namespace SparqlParseRun.SparqlClasses.Expressions
                                     };
                                     return;
                                 }
-                                else if (Equals(sparqlUriNode, SpecialTypesClass.Bool))
+                                else if (Equals(sparqlUriNode, SpecialTypesClass.String))
                                 {
                                     Func = result => new OV_string(sparqlArgs[0].Func(result).Content.ToString());
                                     return;

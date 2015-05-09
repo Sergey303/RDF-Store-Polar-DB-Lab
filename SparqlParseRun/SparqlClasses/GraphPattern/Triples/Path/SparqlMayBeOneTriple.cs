@@ -26,8 +26,7 @@ namespace SparqlParseRun.SparqlClasses.GraphPattern.Triples.Path
         {
             var firstVar = sNode as VariableNode;
             var secondVar = oNode as VariableNode;
-            SparqlVariableBinding firstVarValue;
-            SparqlVariableBinding secondVarValue;
+        
             ObjectVariants s = null, o = null;
            IEnumerable<SparqlResult> bindings = variableBindings as SparqlResult[] ?? variableBindings.ToArray();
             foreach (var variableBinding in bindings)

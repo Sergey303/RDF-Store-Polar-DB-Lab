@@ -44,8 +44,13 @@ namespace SparqlParseRun.SparqlClasses.GraphPattern.Triples
 
         public virtual IEnumerable<SparqlResult> Run(IEnumerable<SparqlResult> variableBindings)
         {
-            var sparqlResults = variableBindings.SelectMany(CreateBindings).ToArray();
-            return sparqlResults;
+            foreach (SparqlResult result in variableBindings)
+            {
+                var backup = result.Backup();
+                foreach (SparqlResult binding in CreateBindings(result))
+                    yield return binding;
+                result.Restore(backup);
+            }
         }
 
         public SparqlGraphPatternType PatternType { get{return SparqlGraphPatternType.SparqlTriple;} }

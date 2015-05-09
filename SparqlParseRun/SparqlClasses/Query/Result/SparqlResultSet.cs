@@ -33,7 +33,6 @@ namespace SparqlParseRun.SparqlClasses.Query.Result
         public SparqlResultSet(RdfQuery11Translator q)
         {
             this.q = q;
-            Results = new List<SparqlResult>() {new SparqlResult(q.Variables.Count)};
         }
 
         public XElement ToXml()
@@ -48,7 +47,7 @@ namespace SparqlParseRun.SparqlClasses.Query.Result
                         new XElement(xn + "results",
                             Results.Select(result =>
                                 new XElement(xn + "result",
-                                    result.GetAll((var, value)=> 
+                                    result.GetSelected((var, value)=> 
                                         new XElement(xn + "binding",    
                                             new XAttribute(xn + "name", var.VariableName),
                                             BindingToXml(xn, value)))))));
@@ -71,7 +70,7 @@ namespace SparqlParseRun.SparqlClasses.Query.Result
 
         private XElement BindingToXml(XNamespace xn, ObjectVariants b)
         {
-            if (b is ObjectVariants)
+            if (b is IIriNode)
             {
                 return new XElement(xn + "uri", ((ObjectVariants)b).Content);
             }     
@@ -135,7 +134,7 @@ namespace SparqlParseRun.SparqlClasses.Query.Result
                      string.Format(@"{{ {0}, ""results"": {{ ""bindings"" : [{1}] }} }}", headVars,
                          string.Join("," + Environment.NewLine, Results.Select(result => string.Format("{{{0}}}",
                              string.Join("," + Environment.NewLine,
-                                 result.GetAll((var, value) =>
+                                 result.GetSelected((var, value) =>
                                      string.Format("\"{0}\" : {1}", var.VariableName,
                                          value.ToJson())))))) );
                 case ResultType.Describe:

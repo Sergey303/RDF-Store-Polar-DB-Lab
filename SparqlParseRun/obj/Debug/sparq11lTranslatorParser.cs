@@ -1425,7 +1425,7 @@ public partial class sparq11lTranslatorParser : Parser {
 			if (_la==HAVING) {
 				{
 				State = 442; _localctx._havingClause = havingClause();
-				_localctx.value.Add(_localctx._havingClause.value);
+				_localctx.value.Add(_localctx._havingClause.value, q);
 				}
 			}
 
@@ -3349,7 +3349,7 @@ public partial class sparq11lTranslatorParser : Parser {
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
-			_localctx.value = new SparqlUpdateModify();
+			_localctx.value = new SparqlUpdateModify(q);
 			State = 710;
 			_la = _input.La(1);
 			if (_la==WITH) {
@@ -5247,7 +5247,7 @@ public partial class sparq11lTranslatorParser : Parser {
 			{
 			State = 1004; Match(MINUS);
 			State = 1005; _localctx._groupGraphPattern = groupGraphPattern();
-			_localctx.value = new SparqlMinusGraphPattern(_localctx._groupGraphPattern.value);
+			_localctx.value = new SparqlMinusGraphPattern(_localctx._groupGraphPattern.value, q);
 			}
 		}
 		catch (RecognitionException re) {

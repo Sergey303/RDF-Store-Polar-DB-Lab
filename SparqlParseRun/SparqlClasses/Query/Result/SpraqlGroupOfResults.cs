@@ -9,17 +9,18 @@ namespace SparqlParseRun.SparqlClasses.Query.Result
     {
         public IEnumerable<SparqlResult> Group;
 
-        public SpraqlGroupOfResults(VariableNode variable, ObjectVariants value)
+        public SpraqlGroupOfResults(VariableNode variable, ObjectVariants value, RdfQuery11Translator q) : base(q)
         {
             Add(variable, value);
         }
 
-        public SpraqlGroupOfResults()
+        public SpraqlGroupOfResults(RdfQuery11Translator q) : base(q)
         {
           
         }
 
-        public SpraqlGroupOfResults(IEnumerable<VariableNode> variables, List<ObjectVariants> values)
+        public SpraqlGroupOfResults(IEnumerable<VariableNode> variables, List<ObjectVariants> values, RdfQuery11Translator q)
+            : base(q)
         {
             int i = 0;
             var valuesArray = values.ToArray();

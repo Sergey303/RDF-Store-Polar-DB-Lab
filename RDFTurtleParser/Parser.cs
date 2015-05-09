@@ -156,14 +156,14 @@ private readonly Prologue prologue = new Prologue();
 		Expect(2);
 		string pn=t.val; 
 		Expect(1);
-		prologue.AddPrefix(pn, t.val.ToLower()); 
+		prologue.AddPrefix(pn, t.val); 
 		Expect(14);
 	}
 
 	void Base() {
 		Expect(16);
 		Expect(1);
-		prologue.SetBase(t.val.ToLower()); 
+		prologue.SetBase(t.val); 
 		Expect(14);
 	}
 

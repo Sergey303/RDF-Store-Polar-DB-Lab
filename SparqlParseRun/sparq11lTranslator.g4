@@ -67,7 +67,7 @@ datasetClause : FROM ( defaultGraphClause | namedGraphClause )	 ;
  sourceSelector returns [ObjectVariants value] : iri  {$value=$iri.value;};
 
  whereClause returns [SparqlGraphPattern value] : WHERE? groupGraphPattern {$value=$groupGraphPattern.value; };
- solutionModifier returns [SparqlSolutionModifier value]: {$value=new SparqlSolutionModifier();} ( groupClause {$value.Add($groupClause.value);} )? (havingClause {$value.Add($havingClause.value);})? (orderClause {$value.Add($orderClause.value);})? (limitOffsetClauses {$value.Add($limitOffsetClauses.value);} )? ;
+ solutionModifier returns [SparqlSolutionModifier value]: {$value=new SparqlSolutionModifier();} ( groupClause {$value.Add($groupClause.value);} )? (havingClause {$value.Add($havingClause.value, q);})? (orderClause {$value.Add($orderClause.value);})? (limitOffsetClauses {$value.Add($limitOffsetClauses.value);} )? ;
  groupClause returns [SparqlSolutionModifierGroup value] : GROUP BY {$value=new SparqlSolutionModifierGroup(q);} 
  ( groupCondition  { $value.Add($groupCondition.value);})+;
  groupCondition returns [SparqlGroupConstraint value] : builtInCall {$value=new SparqlGroupConstraint($builtInCall.value);}
@@ -110,7 +110,7 @@ datasetClause : FROM ( defaultGraphClause | namedGraphClause )	 ;
  insertData returns [SparqlUpdateInsertData value]: INSERT DATA quadData { $value=new SparqlUpdateInsertData($quadData.value);};
  deleteData returns [SparqlUpdateDeleteData value]: DELETE DATA quadData { $value=new SparqlUpdateDeleteData($quadData.value);};
  deleteWhere returns [SparqlUpdateModify value]: DELETE WHERE quadPattern {$value=new SparqlUpdateModify($quadPattern.value);};
- modify returns [SparqlUpdateModify value]: {$value=new SparqlUpdateModify();} 
+ modify returns [SparqlUpdateModify value]: {$value=new SparqlUpdateModify(q);} 
  ( WITH iri { q.ActiveGraphs.Add($iri.value); $value.SetWith($iri.value);}  )? 
  ( deleteClause { $value.SetDelete($deleteClause.value); } 
 	(insertClause {$value.SetInsert($insertClause.value);} )? 
@@ -154,7 +154,7 @@ WHERE groupGraphPattern { $value.SetWhere($groupGraphPattern.value); };
  inlineDataOneVar returns [SparqlInlineVariable value] : var { $value=new SparqlInlineVariable($var.value);} '{' (dataBlockValue { $value.Add($dataBlockValue.value);})* '}';
  inlineDataFull  returns [SparqlInline value] : {$value=new SparqlInline();} ( NIL | '(' (var {$value.AddVar($var.value);} )* ')' ) '{' ( '(' (dataBlockValue {$value.AddValue($dataBlockValue.value);})* {$value.NextListOfVarBindings();} ')' | NIL  )* '}';
  dataBlockValue returns [ObjectVariants value] : iri {$value=$iri.value;} | blankNode {$value=$blankNode.value;} |	rDFLiteral {$value=$rDFLiteral.value;} |	numericLiteral {$value=$numericLiteral.value;} |	booleanLiteral {$value=$booleanLiteral.value;} |	UNDEF {$value=new SparqlUnDefinedNode();};
- minusGraphPattern  returns [SparqlMinusGraphPattern value]: MINUS groupGraphPattern  {$value=new SparqlMinusGraphPattern($groupGraphPattern.value);};
+ minusGraphPattern  returns [SparqlMinusGraphPattern value]: MINUS groupGraphPattern  {$value=new SparqlMinusGraphPattern($groupGraphPattern.value, q);};
  groupOrUnionGraphPattern returns [SparqlUnionGraphPattern value ] : groupGraphPattern  {$value = new SparqlUnionGraphPattern($groupGraphPattern.value);} ( UNION groupGraphPattern  {$value.Add($groupGraphPattern.value);} )*;
  filter returns [SparqlFilter value]: FILTER constraint {$value=new SparqlFilter($constraint.value);} ;
  constraint returns [SparqlExpression value]: brackettedExpression {$value=$brackettedExpression.value;}
