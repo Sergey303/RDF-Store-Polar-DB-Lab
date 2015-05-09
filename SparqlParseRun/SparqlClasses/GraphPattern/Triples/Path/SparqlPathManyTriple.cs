@@ -63,7 +63,7 @@ namespace SparqlParseRun.SparqlClasses.GraphPattern.Triples.Path
                             if (fromVariable == null)
                                 fromVariable = GetAllSConnections(Subject);
                             foreach (var node in fromVariable)
-                                yield return new SparqlResult(binding, node, oVariableNode);
+                                yield return binding.Add(node, oVariableNode);
                         }
                     }
                 }
@@ -86,7 +86,7 @@ namespace SparqlParseRun.SparqlClasses.GraphPattern.Triples.Path
                             if (fromVariable == null)
                                 fromVariable = GetAllOConnections(Object);
                             foreach (var node in fromVariable)
-                                yield return new SparqlResult(binding, node, oVariableNode);
+                                yield return binding.Add(node, oVariableNode);
                         }
                     }
                 }
@@ -111,14 +111,14 @@ namespace SparqlParseRun.SparqlClasses.GraphPattern.Triples.Path
                                 else
                                 {
                                     foreach (var node in  GetAllSConnections(s))
-                                        yield return new SparqlResult(binding, node, oVariableNode);
+                                        yield return binding.Add( node, oVariableNode);
                                 }
                             }
 
                             else if (o != null)
                             {
                                 foreach (var node in  GetAllOConnections(o))
-                                    yield return new SparqlResult(binding, node, sVariableNode);
+                                    yield return binding.Add(node, sVariableNode);
                             }
                             else // both unknowns
                             {
@@ -146,11 +146,11 @@ namespace SparqlParseRun.SparqlClasses.GraphPattern.Triples.Path
                                 else
                                 {
                                     foreach (var node in GetAllSConnectionsFromCache(s))
-                                        yield return new SparqlResult(binding, node, oVariableNode);
+                                        yield return binding.Add(node, oVariableNode);
                                 }
                             else if (o!=null)
                                 foreach (var node in GetAllOConnectionsFromCache(o))
-                                    yield return new SparqlResult(binding, node, sVariableNode);
+                                    yield return binding.Add(node, sVariableNode);
                             else // both unknowns
                             {
                                 if (bothVariablesCacheBySubject == null)
@@ -168,7 +168,7 @@ namespace SparqlParseRun.SparqlClasses.GraphPattern.Triples.Path
                                 foreach (var sbj in bothVariablesCacheBySubject.Keys)
                                     foreach (var node in GetAllSConnectionsFromCache(sbj))
                                         yield return
-                                            new SparqlResult(binding, sbj, sVariableNode, node, oVariableNode);
+                                            binding.Add(sbj, sVariableNode, node, oVariableNode);
                             }}
                     }
                 }

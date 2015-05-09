@@ -28,9 +28,13 @@ namespace SparqlParseRun.SparqlClasses.InlineValues
                     if (this.Contains(exists)) yield return result; //TODO test
                 }
                 else
+                {
+                    var backupMask = result.BackupMask();
                     foreach (var newvariableBinding in this)
                         yield return
-                            new SparqlResult(result, newvariableBinding, variableNode);
+                            result.Add(newvariableBinding, variableNode);
+                    result.Restore(backupMask);
+                }
             }
         }
 

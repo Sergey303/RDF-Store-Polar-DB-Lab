@@ -21,7 +21,7 @@ namespace SparqlParseRun.SparqlClasses.GraphPattern.Triples
         {
                 return store
                     .GetTriplesWithSubjectPredicate(subjNode, predicateNode)
-                    .Select(node => new SparqlResult(variablesBindings, node, obj));
+                    .Select(node =>variablesBindings.Add( node, obj));
         }
 
         // from merged named graphs
@@ -32,11 +32,11 @@ namespace SparqlParseRun.SparqlClasses.GraphPattern.Triples
                 return  variableDataSet.SelectMany(g => store
                 .NamedGraphs
                 .GetObject(subjNode, predicateNode, g)
-                .Select(o => new SparqlResult(variablesBindings, o, obj, g, variableDataSet.Variable)));
+                .Select(o =>variablesBindings.Add( o, obj, g, variableDataSet.Variable)));
             else return store
                 .NamedGraphs
                 .GetTriplesWithSubjectPredicate(subjNode, predicateNode,
-                    ((o, g) => new SparqlResult(variablesBindings, o, obj, g, variableDataSet.Variable)));
+                    ((o, g) =>variablesBindings.Add( o, obj, g, variableDataSet.Variable)));
                 // if graphVariable is null, ctor check this.
         }
 
@@ -46,7 +46,7 @@ namespace SparqlParseRun.SparqlClasses.GraphPattern.Triples
             return graphs.SelectMany(graph => store
                 .NamedGraphs
                 .GetObject(subjNode, predicateNode, graph) // if graphs is empty, Gets All named graphs
-                .Select(o => new SparqlResult(variablesBindings, o, obj)));
+                .Select(o =>variablesBindings.Add( o, obj)));
         }
 
 
@@ -54,7 +54,7 @@ namespace SparqlParseRun.SparqlClasses.GraphPattern.Triples
         {
             return store
                 .GetTriplesWithPredicateObject(predicateNode, objectNode)
-                .Select(node => new SparqlResult(variablesBindings, node, subj));
+                .Select(node =>variablesBindings.Add( node, subj));
 
             // from merged named graphs
         }
@@ -67,7 +67,7 @@ namespace SparqlParseRun.SparqlClasses.GraphPattern.Triples
                  store.NamedGraphs
                 .GetSubject(predicateNode, objectNode, g)
                 // if graphs is empty, Gets All named graphs
-                .Select(node =>new SparqlResult(variablesBindings, node, subj)));
+                .Select(node => variablesBindings.Add(node, subj)));
                 // if graphVariable is null, ctor check this.
         }
 
@@ -78,19 +78,19 @@ namespace SparqlParseRun.SparqlClasses.GraphPattern.Triples
                 return variableDataSet.SelectMany(g => store
                 .NamedGraphs
                 .GetSubject(predicateNode, objectNode, g)
-                .Select(s => new SparqlResult(variablesBindings, s, subj, g, variableDataSet.Variable)));
+                .Select(s =>variablesBindings.Add( s, subj, g, variableDataSet.Variable)));
             else 
             return store
                 .NamedGraphs
                 .GetTriplesWithPredicateObject(predicateNode, objectNode,
-                    (s, g) => new SparqlResult(variablesBindings, s, subj, g, variableDataSet.Variable));
+                    (s, g) =>variablesBindings.Add( s, subj, g, variableDataSet.Variable));
         }
 
         public IEnumerable<SparqlResult> SpO( VariableNode sVar, ObjectVariants predicate, VariableNode oVar, SparqlResult variablesBindings)
         {
             return store
                 .GetTriplesWithPredicate(predicate, (s,o)=>
-                new SparqlResult(variablesBindings, s, sVar, o, oVar));
+               variablesBindings.Add( s, sVar, o, oVar));
         }
 
         public IEnumerable<SparqlResult> SpOGraphs(VariableNode sVar, ObjectVariants predicate, VariableNode oVar, SparqlResult variablesBindings, DataSet graphs)
@@ -99,7 +99,7 @@ namespace SparqlParseRun.SparqlClasses.GraphPattern.Triples
                 store
                     .NamedGraphs
                     .GetTriplesWithPredicateFromGraph(predicate, graph,
-                        (s, o) => new SparqlResult(variablesBindings, s, sVar, o, oVar)));
+                        (s, o) =>variablesBindings.Add( s, sVar, o, oVar)));
         }
 
         public IEnumerable<SparqlResult> SpOVarGraphs(VariableNode sVar, ObjectVariants predicate, VariableNode oVar, SparqlResult variablesBindings, VariableDataSet graphs)
@@ -108,10 +108,10 @@ namespace SparqlParseRun.SparqlClasses.GraphPattern.Triples
                 return
                     graphs.SelectMany(g =>
                         store.NamedGraphs.GetTriplesWithPredicateFromGraph(predicate, g, (s, o) =>
-                            new SparqlResult(variablesBindings, s, sVar, o, oVar, g, graphs.Variable)));
+                           variablesBindings.Add( s, sVar, o, oVar, g, graphs.Variable)));
             else
                 return store.NamedGraphs.GetTriplesWithPredicate(predicate, (s, o, g) =>
-                    new SparqlResult(variablesBindings, s, sVar, o, oVar, g, graphs.Variable));
+                   variablesBindings.Add( s, sVar, o, oVar, g, graphs.Variable));
         }
 
 
@@ -119,7 +119,7 @@ namespace SparqlParseRun.SparqlClasses.GraphPattern.Triples
         {
             return store
                 .GetTriplesWithSubjectObject(subj, obj)
-                .Select(newObj => new SparqlResult(variablesBindings, newObj, pred));
+                .Select(newObj =>variablesBindings.Add( newObj, pred));
 
         }
 
@@ -129,7 +129,7 @@ namespace SparqlParseRun.SparqlClasses.GraphPattern.Triples
                 store
                     .NamedGraphs
                     .GetPredicate(subj, obj, graph)
-                    .Select(p => new SparqlResult(variablesBindings, p, pred)));
+                    .Select(p =>variablesBindings.Add( p, pred)));
         }
 
         public IEnumerable<SparqlResult> sPoVarGraphs( ObjectVariants subj, VariableNode pred, ObjectVariants obj, SparqlResult variablesBindings, VariableDataSet variableDataSet)
@@ -137,11 +137,11 @@ namespace SparqlParseRun.SparqlClasses.GraphPattern.Triples
             if (variableDataSet.Any())
                 return variableDataSet.SelectMany(g =>
                     store.NamedGraphs.GetPredicate(subj, obj, g)
-                        .Select(p => new SparqlResult(variablesBindings, p, pred, g, variableDataSet.Variable)));
+                        .Select(p =>variablesBindings.Add( p, pred, g, variableDataSet.Variable)));
             else   return store
                 .NamedGraphs
                 .GetTriplesWithSubjectObject(subj, obj, (p, g) =>
-                    new SparqlResult(variablesBindings, p, pred, g, variableDataSet.Variable));
+                   variablesBindings.Add( p, pred, g, variableDataSet.Variable));
         }
 
 
@@ -149,7 +149,7 @@ namespace SparqlParseRun.SparqlClasses.GraphPattern.Triples
         {
             return store
                 .GetTriplesWithSubject(subj, (p, o) =>
-                    new SparqlResult(variablesBindings, p, pred, o, obj));
+                   variablesBindings.Add( p, pred, o, obj));
         }
 
         public IEnumerable<SparqlResult> sPOGraphs( ObjectVariants subj, VariableNode pred,
@@ -158,7 +158,7 @@ namespace SparqlParseRun.SparqlClasses.GraphPattern.Triples
             return graphs.SelectMany(g => store
                 .NamedGraphs
                 .GetTriplesWithSubjectFromGraph(subj, g, (p, o) =>
-                    new SparqlResult(variablesBindings, p, pred, o, obj)));
+                   variablesBindings.Add( p, pred, o, obj)));
         }
 
         public IEnumerable<SparqlResult> sPOVarGraphs( ObjectVariants subj, VariableNode pred,
@@ -169,19 +169,19 @@ namespace SparqlParseRun.SparqlClasses.GraphPattern.Triples
                     store
                         .NamedGraphs
                         .GetTriplesWithSubjectFromGraph(subj, g, (p, o) =>
-                            new SparqlResult(variablesBindings, p, pred, o, obj, g, variableDataSet.Variable))); 
+                           variablesBindings.Add( p, pred, o, obj, g, variableDataSet.Variable))); 
             else
                 return store
                     .NamedGraphs
                     .GetTriplesWithSubject(subj, (p, o, g) =>
-                        new SparqlResult(variablesBindings,   p, pred, o, obj, g, variableDataSet.Variable)); 
+                       variablesBindings.Add(   p, pred, o, obj, g, variableDataSet.Variable)); 
         }
 
         public IEnumerable<SparqlResult> SPo( VariableNode subj, VariableNode predicate, ObjectVariants obj, SparqlResult variablesBindings)
         {
             return store
                 .GetTriplesWithObject(obj, (s, p) =>
-                    new SparqlResult(variablesBindings, p, predicate, s, subj));
+                   variablesBindings.Add( p, predicate, s, subj));
         }
 
         public IEnumerable<SparqlResult> SPoGraphs( VariableNode subj, VariableNode pred,
@@ -191,7 +191,7 @@ namespace SparqlParseRun.SparqlClasses.GraphPattern.Triples
                 store
                     .NamedGraphs
                     .GetTriplesWithObjectFromGraph(obj, g, (s, p) =>
-                        new SparqlResult(variablesBindings, p, pred, s, subj)));
+                       variablesBindings.Add( p, pred, s, subj)));
         }
 
         public IEnumerable<SparqlResult> SPoVarGraphs( VariableNode subj, VariableNode pred,
@@ -202,11 +202,11 @@ namespace SparqlParseRun.SparqlClasses.GraphPattern.Triples
                     store
                         .NamedGraphs
                         .GetTriplesWithObjectFromGraph(obj, g, (s, p) =>
-                            new SparqlResult(variablesBindings, p, pred, s, subj, g, variableDataSet.Variable)));
+                           variablesBindings.Add( p, pred, s, subj, g, variableDataSet.Variable)));
             return store
                 .NamedGraphs
                 .GetTriplesWithObject(obj, (s, p, g) =>
-                    new SparqlResult(variablesBindings, p, pred, s, subj, g, variableDataSet.Variable));
+                   variablesBindings.Add( p, pred, s, subj, g, variableDataSet.Variable));
         }
 
 
@@ -214,7 +214,7 @@ namespace SparqlParseRun.SparqlClasses.GraphPattern.Triples
         {
             return store
                 .GetTriples((s, p, o)
-                    => new SparqlResult(variablesBindings, s, subj, p, predicate, o, obj));
+                    =>variablesBindings.Add( s, subj, p, predicate, o, obj));
         }
 
         public IEnumerable<SparqlResult> SPOGraphs(VariableNode subj, VariableNode predicate, VariableNode obj, SparqlResult variablesBindings, DataSet graphs)
@@ -222,7 +222,7 @@ namespace SparqlParseRun.SparqlClasses.GraphPattern.Triples
             return graphs.SelectMany(g =>
                 store.NamedGraphs
                     .GetTriplesFromGraph(g, (s, p, o) =>
-                        new SparqlResult(variablesBindings, s, subj, p, predicate, o, obj)));
+                       variablesBindings.Add( s, subj, p, predicate, o, obj)));
         }
 
         public IEnumerable<SparqlResult> SPOVarGraphs( VariableNode subj, VariableNode predicate, VariableNode obj, SparqlResult variablesBindings, VariableDataSet variableDataSet)
@@ -232,12 +232,12 @@ namespace SparqlParseRun.SparqlClasses.GraphPattern.Triples
                     store
                         .NamedGraphs
                         .GetTriplesFromGraph(g, (s, p, o) =>
-                            new SparqlResult(variablesBindings, s, subj, p, predicate, o, obj, g,
+                           variablesBindings.Add( s, subj, p, predicate, o, obj, g,
                                 variableDataSet.Variable)));
             return store
                 .NamedGraphs
                 .GetAll((s, p, o, g) =>
-                    new SparqlResult(variablesBindings, s, subj, p, predicate, o, obj, g,
+                   variablesBindings.Add( s, subj, p, predicate, o, obj, g,
                         variableDataSet.Variable));
         }
 
@@ -256,7 +256,7 @@ namespace SparqlParseRun.SparqlClasses.GraphPattern.Triples
             return (graphs.Any()
                 ? graphs.Where(g => store.NamedGraphs.Contains(subjectNode, predicateNode, objectNode, g))
                 : store.NamedGraphs.GetGraph(subjectNode, predicateNode, objectNode))
-                    .Select(g => new SparqlResult(variablesBindings, g, graphs.Variable));
+                    .Select(g =>variablesBindings.Add( g, graphs.Variable));
         }
 
         public IEnumerable<SparqlResult> spo(ObjectVariants subjectNode, ObjectVariants predicateNode, ObjectVariants objNode, SparqlResult variablesBindings)

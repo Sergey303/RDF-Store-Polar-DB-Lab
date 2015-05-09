@@ -42,13 +42,13 @@ namespace SparqlParseRun.SparqlClasses.GraphPattern.Triples.Path
                     {
                         if (s.Equals(o)) yield return variableBinding;
                     }  else
-                     yield return new SparqlResult(variableBinding,s, secondVar);
+                     yield return variableBinding.Add(s, secondVar);
                 }
-                else if (isOKnowns) yield return new SparqlResult(variableBinding, o, firstVar);
+                else if (isOKnowns) yield return variableBinding.Add(o, firstVar);
                 else
                     foreach (var subjectNode in q.Store.GetAllSubjects())
                     {
-                       yield return new SparqlResult(variableBinding, subjectNode, firstVar, subjectNode, secondVar);
+                       yield return variableBinding.Add(subjectNode, firstVar, subjectNode, secondVar);
                     }
             }
             foreach (var tr in triples.Aggregate(bindings, (current, sparqlGraphPattern) => sparqlGraphPattern.Run(current)))
