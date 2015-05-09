@@ -46,7 +46,7 @@ namespace SparqlParseRun.SparqlClasses.GraphPattern.Triples
         {
             foreach (SparqlResult result in variableBindings)
             {
-                var backup = result.Backup();
+                var backup = result.BackupMask();
                 foreach (SparqlResult binding in CreateBindings(result))
                     yield return binding;
                 result.Restore(backup);

@@ -310,7 +310,7 @@ private readonly Prologue prologue = new Prologue();
 		if (la.kind == 5 || la.kind == 26) {
 			if (la.kind == 5) {
 				Get();
-				value=new OV_langstring(str, t.val); 
+				value=new OV_langstring(str.Trim('"', '\''), t.val); 
 			} else {
 				Get();
 				string literalType; 
@@ -318,7 +318,7 @@ private readonly Prologue prologue = new Prologue();
 				value = ng.CreateLiteralNode(str, literalType); 
 			}
 		}
-		if(value==null) value=new OV_string(str); 
+		if(value==null) value=new OV_string(str.Trim('"', '\'')); 
 	}
 
 	void Numericliteral(out ObjectVariants value) {

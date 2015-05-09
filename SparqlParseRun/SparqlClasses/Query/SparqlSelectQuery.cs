@@ -37,7 +37,7 @@ namespace SparqlParseRun.SparqlClasses.Query
             
             if (sparqlSolutionModifier != null )
                 ResultSet.Results = sparqlSolutionModifier.Run(ResultSet.Results, ResultSet);
-
+          
             ResultSet.ResultType = ResultType.Select;
             return ResultSet;
         }

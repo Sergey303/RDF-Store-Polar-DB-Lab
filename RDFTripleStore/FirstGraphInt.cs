@@ -353,7 +353,7 @@ namespace RDFTripleStore
         {
             table.Clear();
             Build(new TripleGeneratorBufferedParallel(path, "g"));
-            //    table.Fill(ReadTripleStringsFromTurtle.LoadGraph(path).Select(tr => new object[] { tr.Subject.ToLower(), tr.Predicate.ToLower(), tr.Object.ToWritable() }));
+            
         }
 
         protected void FromTurtle(Stream baseStream)

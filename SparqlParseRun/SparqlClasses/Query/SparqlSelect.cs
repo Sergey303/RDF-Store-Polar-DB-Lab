@@ -79,8 +79,7 @@ namespace SparqlParseRun.SparqlClasses.Query
             public bool Equals(SparqlResult x, SparqlResult y)
             {
                 //if (x.Count != y.Count) return false;
-                SparqlVariableBinding v2;
-                return x.TestAll((var, value) => y[var].Equals(x[var]));
+                return x.TestAll((var, value) => value == null || value.Equals(y[var]));
             }
 
             public int GetHashCode(SparqlResult obj)

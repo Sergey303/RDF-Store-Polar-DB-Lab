@@ -13,25 +13,21 @@ namespace SparqlParseRun.SparqlClasses.Query.Result
      //   private readonly Dictionary<VariableNode, ObjectVariants> row;
         
 
-        public SparqlResult(SparqlResult old, ObjectVariants newObj, VariableNode variable)
-        {
-           
-     
-            
-            rowArray = old.rowArray;
+        public SparqlResult Add(ObjectVariants newObj, VariableNode variable)
+        {   
             rowArray[variable.Index] = newObj;
+            return this;
         }
-        public SparqlResult(SparqlResult old, ObjectVariants newObj1, VariableNode variable1, ObjectVariants newObj2, VariableNode variable2)
+        public SparqlResult Add(ObjectVariants newObj1, VariableNode variable1, ObjectVariants newObj2, VariableNode variable2)
         {
-       
-            rowArray = old.rowArray;
             rowArray[variable1.Index] = newObj1;
-            rowArray[variable2.Index] = newObj2; 
-
+            rowArray[variable2.Index] = newObj2;
+            return this;
         }
 
         public SparqlResult(RdfQuery11Translator q)
-        {                                        
+        {
+            this.q = q;                    
             rowArray = new ObjectVariants[q.Variables.Count];
         }
 
@@ -75,20 +71,29 @@ namespace SparqlParseRun.SparqlClasses.Query.Result
         {
             unchecked
             {
-                return rowArray.Sum(value=>(int)Math.Pow(value.GetHashCode(), 2));
+                int sum = 0;
+                foreach (ObjectVariants value in rowArray)
+                    sum += value == null ? 1 : (int) Math.Pow(value.GetHashCode(), 2);
+                return sum;
             }
         }
         private readonly ObjectVariants[] rowArray;
 
-        public SparqlResult(SparqlResult old, ObjectVariants newObj1, VariableNode variable1, ObjectVariants newObj2, VariableNode variable2, ObjectVariants newObj3, VariableNode variable3)
+        public SparqlResult Add(ObjectVariants newObj1, VariableNode variable1, ObjectVariants newObj2, VariableNode variable2, ObjectVariants newObj3, VariableNode variable3)
         {
-            
+            rowArray[variable1.Index] = newObj1;
+            rowArray[variable2.Index] = newObj2;
+            rowArray[variable3.Index] = newObj3;
+            return this;
         }
 
-        public SparqlResult(SparqlResult old, ObjectVariants newObj1, VariableNode variable1, ObjectVariants newObj2, VariableNode variable2, ObjectVariants newObj3, VariableNode variable3, ObjectVariants arg4, VariableNode variable4)
+        public SparqlResult Add(ObjectVariants newObj1, VariableNode variable1, ObjectVariants newObj2, VariableNode variable2, ObjectVariants newObj3, VariableNode variable3, ObjectVariants arg4, VariableNode variable4)
         {
-            
-            throw new NotImplementedException();
+            rowArray[variable1.Index] = newObj1;
+            rowArray[variable2.Index] = newObj2;
+            rowArray[variable3.Index] = newObj3;
+            rowArray[variable4.Index] = arg4;
+            return this;
         }
 
         public SparqlResult(IEnumerable<SparqlVariableBinding> old)
@@ -120,15 +125,22 @@ namespace SparqlParseRun.SparqlClasses.Query.Result
 
         public IEnumerable<T> GetSelected<T>(Func<VariableNode, ObjectVariants, T> selector)
         {
-            return selected.Select(v => selector(v, rowArray[v.Index]));
+            return selected.Where(v=>rowArray[v.Index]!=null).Select(v => selector(v, rowArray[v.Index]));
         }
 
        // private readonly Dictionary<string, VariableNode> Variables;
 
         private List<VariableNode> selected;
-        private RdfQuery11Translator q;
-         //public IEnumerator<SparqlResult> Branching() 
-        public bool[] Backup()
+        private readonly RdfQuery11Translator q;
+
+        private SparqlResult(ObjectVariants[] copy, RdfQuery11Translator q)
+        {
+        this.q = q;
+            rowArray = copy;
+        }
+
+        //public IEnumerator<SparqlResult> Branching() 
+        public bool[] BackupMask()
         {
             return rowArray.Select(v => v != null).ToArray();
         }
@@ -140,6 +152,14 @@ namespace SparqlParseRun.SparqlClasses.Query.Result
                 if(backup[i]) continue;
                 rowArray[i] = null;
             }
+        }
+
+
+        public SparqlResult Clone()
+        {
+            ObjectVariants[] copy=new ObjectVariants[rowArray.Length];
+            rowArray.CopyTo(copy,0);
+            return new SparqlResult(copy, q);
         }
     }
 }

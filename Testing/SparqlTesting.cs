@@ -87,8 +87,8 @@ WHERE {
             SecondStringSore sparqlStore = new SecondStringSore("../../../Databases/");
             if (load)
                 sparqlStore.ReloadFrom(Config.Source_data_folder_path + millions + ".ttl");
-            //   RunBerlinsWithConstants(sparqlStore, millions);
-            RunBerlinsParameters(sparqlStore, millions);
+            // RunBerlinsWithConstants(sparqlStore, millions);
+              RunBerlinsParameters(sparqlStore, millions);
         }
 
         public static void RunBerlinsParameters(SecondStringSore ts, int millions)
@@ -134,7 +134,7 @@ WHERE {
 
                     totalparseMS[i] += (DateTime.Now - st).Ticks / 10000L;
                     var st1 = DateTime.Now;
-                    var sparqlResultSet = sparqlQuery.Run(ts);
+                    var sparqlResultSet = sparqlQuery.Run(ts).ToJson();
                     totalrun[i] += (DateTime.Now - st1).Ticks / 10000L;
                     var totalMilliseconds = (DateTime.Now - st).Ticks / 10000L;
 
@@ -183,6 +183,7 @@ WHERE {
 
                 var totalMilliseconds = (DateTime.Now - st).Ticks / 10000L;
                 results[i - 1] += totalMilliseconds;
+              
                 File.WriteAllText(Path.ChangeExtension(file, ".json"), sparqlResultSet.ToJson());
                 //.Save(Path.ChangeExtension(file.FullName,".json"));
             }
