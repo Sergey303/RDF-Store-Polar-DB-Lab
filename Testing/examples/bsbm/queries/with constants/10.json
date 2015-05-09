@@ -2,4 +2,4 @@
 "?price",
 "?vendor",
 "?deliveryDays",
-"?date" ] }, "results": { "bindings" : [] } }
+"?date" ] }, "results": { "bindings" : [{}] } }

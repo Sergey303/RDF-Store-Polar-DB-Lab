@@ -15,7 +15,7 @@ namespace SparqlParseRun.SparqlClasses.Query.Result
 
         public SparqlResult(SparqlResult old, ObjectVariants newObj, VariableNode variable)
         {
-           
+            q = old.q;
      
             
             rowArray = old.rowArray;
@@ -23,7 +23,8 @@ namespace SparqlParseRun.SparqlClasses.Query.Result
         }
         public SparqlResult(SparqlResult old, ObjectVariants newObj1, VariableNode variable1, ObjectVariants newObj2, VariableNode variable2)
         {
-       
+            q = old.q;
+
             rowArray = old.rowArray;
             rowArray[variable1.Index] = newObj1;
             rowArray[variable2.Index] = newObj2; 
@@ -31,7 +32,8 @@ namespace SparqlParseRun.SparqlClasses.Query.Result
         }
 
         public SparqlResult(RdfQuery11Translator q)
-        {                                        
+        {
+            this.q = q;                    
             rowArray = new ObjectVariants[q.Variables.Count];
         }
 
@@ -75,20 +77,28 @@ namespace SparqlParseRun.SparqlClasses.Query.Result
         {
             unchecked
             {
-                return rowArray.Sum(value=>(int)Math.Pow(value.GetHashCode(), 2));
+                return rowArray.Sum(value=>value==null ? 1 : (int)Math.Pow(value.GetHashCode(), 2));
             }
         }
         private readonly ObjectVariants[] rowArray;
 
         public SparqlResult(SparqlResult old, ObjectVariants newObj1, VariableNode variable1, ObjectVariants newObj2, VariableNode variable2, ObjectVariants newObj3, VariableNode variable3)
         {
-            
+            q = old.q;
+            rowArray = old.rowArray;
+            rowArray[variable1.Index] = newObj1;
+            rowArray[variable2.Index] = newObj2;
+            rowArray[variable3.Index] = newObj3; 
         }
 
         public SparqlResult(SparqlResult old, ObjectVariants newObj1, VariableNode variable1, ObjectVariants newObj2, VariableNode variable2, ObjectVariants newObj3, VariableNode variable3, ObjectVariants arg4, VariableNode variable4)
         {
-            
-            throw new NotImplementedException();
+            q = old.q;
+            rowArray = old.rowArray;
+            rowArray[variable1.Index] = newObj1;
+            rowArray[variable2.Index] = newObj2;
+            rowArray[variable3.Index] = newObj3;
+            rowArray[variable4.Index] = arg4; 
         }
 
         public SparqlResult(IEnumerable<SparqlVariableBinding> old)
@@ -120,13 +130,13 @@ namespace SparqlParseRun.SparqlClasses.Query.Result
 
         public IEnumerable<T> GetSelected<T>(Func<VariableNode, ObjectVariants, T> selector)
         {
-            return selected.Select(v => selector(v, rowArray[v.Index]));
+            return selected.Where(v=>rowArray[v.Index]!=null).Select(v => selector(v, rowArray[v.Index]));
         }
 
        // private readonly Dictionary<string, VariableNode> Variables;
 
         private List<VariableNode> selected;
-        private RdfQuery11Translator q;
+        private readonly RdfQuery11Translator q;
 
         private SparqlResult(ObjectVariants[] copy)
         {

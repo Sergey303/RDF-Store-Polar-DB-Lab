@@ -137,6 +137,8 @@ namespace SparqlParseRun.SparqlClasses.Query.Result
             {
                 return "{ \"type\" : \"bnode\", \"value\" : \"" + b + "\" }";
             }
+            else if (b == null)
+                return "";
             else
             {
                 throw new ArgumentOutOfRangeException();

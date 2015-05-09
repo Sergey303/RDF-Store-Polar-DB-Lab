@@ -2,4 +2,13 @@
 "?label",
 "?p1",
 "?p3",
-"?testVar" ] }, "results": { "bindings" : [] } }
+"?testVar" ] }, "results": { "bindings" : [{},
+{},
+{},
+{},
+{},
+{},
+{},
+{},
+{},
+{}] } }

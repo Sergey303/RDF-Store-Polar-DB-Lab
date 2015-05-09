@@ -115,7 +115,7 @@ namespace RDFCommon
         public const string String = "http://www.w3.org/2001/XMLSchema#string";
         public const string Bool = "http://www.w3.org/2001/XMLSchema#boolean";
         public const string Decimal = "http://www.w3.org/2001/XMLSchema#decimal";
-        public const string Integer = "http://www.w3.org/2001/XMLSchema#integr";
+        public const string Integer = "http://www.w3.org/2001/XMLSchema#integer";
 
         public const string Float = "http://www.w3.org/2001/XMLSchema#float";
         public const string Double = "http://www.w3.org/2001/XMLSchema#double";
