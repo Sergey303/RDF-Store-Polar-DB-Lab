@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using SparqlParseRun.SparqlClasses.Query;
 using SparqlParseRun.SparqlClasses.Query.Result;
 
@@ -52,7 +53,7 @@ namespace SparqlParseRun.SparqlClasses.SolutionModifier
                 results = Having(results);
 
             if (Order != null)
-                results = Order(results);
+                results = Order(results.Select(r=>r.Clone()));
 
             if (Select != null)
                 results = Select.Run(results, sparqlResultSet);

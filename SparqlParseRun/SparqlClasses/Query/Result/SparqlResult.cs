@@ -77,7 +77,10 @@ namespace SparqlParseRun.SparqlClasses.Query.Result
         {
             unchecked
             {
-                return rowArray.Sum(value=>value==null ? 1 : (int)Math.Pow(value.GetHashCode(), 2));
+                int sum = 0;
+                foreach (ObjectVariants value in rowArray)
+                    sum += value == null ? 1 : (int) Math.Pow(value.GetHashCode(), 2);
+                return sum;
             }
         }
         private readonly ObjectVariants[] rowArray;
@@ -138,8 +141,9 @@ namespace SparqlParseRun.SparqlClasses.Query.Result
         private List<VariableNode> selected;
         private readonly RdfQuery11Translator q;
 
-        private SparqlResult(ObjectVariants[] copy)
+        private SparqlResult(ObjectVariants[] copy, RdfQuery11Translator q)
         {
+        this.q = q;
             rowArray = copy;
         }
 
@@ -163,7 +167,7 @@ namespace SparqlParseRun.SparqlClasses.Query.Result
         {
             ObjectVariants[] copy=new ObjectVariants[rowArray.Length];
             rowArray.CopyTo(copy,0);
-            return new SparqlResult(copy);
+            return new SparqlResult(copy, q);
         }
     }
 }
