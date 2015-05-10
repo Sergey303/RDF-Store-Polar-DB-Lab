@@ -10,7 +10,7 @@ namespace SparqlParseRun.SparqlClasses.GraphPattern.Triples
     public  class SparqlTripletsStoreCalls : ISparqlTripletsStoreCalls
     {
         private IStore store;
-
+        
         public SparqlTripletsStoreCalls(IStore store)
         {
             this.store = store;
@@ -52,11 +52,10 @@ namespace SparqlParseRun.SparqlClasses.GraphPattern.Triples
 
         public IEnumerable<SparqlResult> Spo( VariableNode subj, ObjectVariants predicateNode, ObjectVariants objectNode, SparqlResult variablesBindings)
         {
-            return store
+              return store
                 .GetTriplesWithPredicateObject(predicateNode, objectNode)
                 .Select(node =>variablesBindings.Add( node, subj));
 
-            // from merged named graphs
         }
 
 

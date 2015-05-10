@@ -1,7 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Web.UI;
 using RDFCommon;
 using RDFCommon.OVns;
 using SparqlParseRun.SparqlClasses.GraphPattern.Triples.Node;
@@ -14,24 +12,23 @@ namespace SparqlParseRun.SparqlClasses.GraphPattern.Triples
         public ObjectVariants Subject { get; private set; }
         public ObjectVariants Predicate { get; private set; }
         public ObjectVariants Object { get; private set; }
-        protected readonly DataSet graphs;
-        private bool isSKnown = true;
-        private bool isPKnown = true;
-        private bool isOKnown = true;
-   
-        protected readonly VariableNode sVariableNode;
+        private DataSet graphs;
+        private bool isGKnown;
+
+        private readonly VariableNode sVariableNode;
         private readonly VariableNode pVariableNode;
-        protected readonly VariableNode oVariableNode;
+        private readonly VariableNode oVariableNode;
         private readonly VariableDataSet variableDataSet;
-        protected readonly RdfQuery11Translator q;
+        private readonly RdfQuery11Translator q;
+        private readonly bool isDefaultGraph;
 
 
         public SparqlTriple(ObjectVariants subj, ObjectVariants pred, ObjectVariants  obj, RdfQuery11Translator q)
         {
             this.q = q;
-            Subject = (ObjectVariants) subj;
-            Predicate = (ObjectVariants) pred;
-            Object = (ObjectVariants) obj;
+            Subject = subj;
+            Predicate = pred;
+            Object = obj;
             //if(!(subj is ObjectVariants)) throw new ArgumentException();
             graphs = q.ActiveGraphs;
              //this.Graph = graph;
@@ -39,6 +36,8 @@ namespace SparqlParseRun.SparqlClasses.GraphPattern.Triples
             pVariableNode = pred as VariableNode;
             oVariableNode = obj as VariableNode;
             variableDataSet = (q.ActiveGraphs as VariableDataSet);
+            isDefaultGraph = variableDataSet==null && graphs.Count == 0;
+
         }
 
 
@@ -57,219 +56,127 @@ namespace SparqlParseRun.SparqlClasses.GraphPattern.Triples
 
         private IEnumerable<SparqlResult> CreateBindings(SparqlResult variableBinding)
         {
+            Subject = sVariableNode != null ? variableBinding[sVariableNode] : Subject;
+            Predicate = pVariableNode != null ? variableBinding[pVariableNode] : Predicate;   
+            Object = oVariableNode != null ? variableBinding[oVariableNode] : Object;
 
-            ObjectVariants sValue = null;
-            ObjectVariants pValue = null;
-            ObjectVariants oValue = null;
-            TryGetSpoVariablesValues(variableBinding, out sValue, out pValue, out oValue);
-
-
-            if (variableDataSet == null)
-                if (graphs.Count == 0) return SetVariablesValues(variableBinding, sValue, pValue, oValue); //todo
-                else return SetVariablesValuesFromGraphs(variableBinding, sValue, pValue, oValue, graphs);
-            else
+            if (!isDefaultGraph && variableDataSet != null)
             {
-                ObjectVariants varGraphValue = variableBinding[variableDataSet.Variable];
-                if (varGraphValue != null)
-                    return SetVariablesValuesFromGraphs(variableBinding, sValue, pValue, oValue,
-                        new DataSet() {varGraphValue});
-                else return SetVariablesValuesVarGraphs(variableBinding, sValue, pValue, oValue);
+                var graphFromVar = variableBinding[variableDataSet.Variable];
+                graphs = graphFromVar != null ? new DataSet() {graphFromVar} : null;
+                isGKnown = graphs != null;
             }
+            else isGKnown = true;
+
+            int @case = ((Subject != null ? 0 : 1) << 2) | ((Predicate != null ? 0 : 1) << 1) | (Object != null ? 0 : 1);
+            if (!isDefaultGraph)
+                @case |= 1 << (isGKnown ? 3 : 4);
+            return SetVariablesValues(variableBinding, (StoreCallCase) @case);
+
         }
 
-      
-                                       
-        private IEnumerable<SparqlResult> SetVariablesValues(SparqlResult variableBinding, ObjectVariants sValue, ObjectVariants pValue, ObjectVariants oValue)
+        private enum StoreCallCase
         {
-            if (!isSKnown)
-                if (!isPKnown)
-                    if (!isOKnown)
-                        return
-                            q.StoreCalls.SPO(sVariableNode, pVariableNode, oVariableNode,
-                                variableBinding);
-                    else
-                        return
-                            q.StoreCalls.SPo(sVariableNode, pVariableNode, oValue,
-                                variableBinding);
-                else
-            if (!isOKnown)
-
-                return
-                    q.StoreCalls.SpO(sVariableNode, pValue, oVariableNode,
-                        variableBinding);
-
-                else
-            return
-                q.StoreCalls.Spo(sVariableNode, pValue, oValue,
-                    variableBinding);
-            else
-            {
-                if (!isPKnown)
-                    if (!isOKnown)
-                        return
-                            q.StoreCalls.sPO(sValue, pVariableNode, oVariableNode,
-                                variableBinding);
-                    else
-                return
-                    q.StoreCalls.sPo(sValue, pVariableNode, oValue,
-                        variableBinding);
-                           
-                else
-                {
-                    if (!isOKnown)
-                        
-                        return
-                            q.StoreCalls.spO(sValue, pValue, oVariableNode,
-                                variableBinding);
-                    else
-                        return q.StoreCalls.spo(sValue, pValue, oValue, variableBinding);
-                }
-            }
+            spo=0, spO=1, sPo=2, sPO= 3, Spo=4, SpO=5, SPo=6, SPO=7  ,
+            gspo = 8, gspO = 9, gsPo = 10, gsPO = 11, gSpo = 12, gSpO = 13, gSPo = 14, gSPO = 15,
+            Gspo = 16, GspO = 17, GsPo = 18, GsPO = 19, GSpo = 20, GSpO = 21, GSPo = 22, GSPO = 23,
         }
 
-        private IEnumerable<SparqlResult> SetVariablesValuesFromGraphs(SparqlResult variableBinding, ObjectVariants sValue, ObjectVariants pValue, ObjectVariants oValue, DataSet namedGraphs)
+
+        private IEnumerable<SparqlResult> SetVariablesValues(SparqlResult variableBinding, StoreCallCase @case)
         {
-            if (!isSKnown)
-                if (!isPKnown)
-                    if (!isOKnown)
-                        return
-                            q.StoreCalls.SPOGraphs(sVariableNode, pVariableNode, oVariableNode,
-                                variableBinding, namedGraphs);
-                    else
-                        return
-                            q.StoreCalls.SPoGraphs(sVariableNode, pVariableNode, oValue,
-                                variableBinding, namedGraphs);
-                else if (!isOKnown)
-
-                    return
-                        q.StoreCalls.SpOGraphs(sVariableNode, pValue, oVariableNode,
-                            variableBinding, namedGraphs);
-
-                else
-                    return
-                        q.StoreCalls.SpoGraphs(sVariableNode, pValue, oValue,
-                            variableBinding, namedGraphs);
-            else
+            switch (@case)
             {
-                if (!isPKnown)
-                    if (!isOKnown)
-                        return
-                            q.StoreCalls.sPOGraphs(sValue, pVariableNode, oVariableNode,
-                                variableBinding, namedGraphs);
-                    else
-                        return
-                            q.StoreCalls.sPoGraphs(sValue, pVariableNode, oValue,
-                                variableBinding, namedGraphs);
-                else
-                {
-                    if (!isOKnown)
-                        return
-                            q.StoreCalls.spOGraphs(sValue, pValue, oVariableNode,
-                                variableBinding, namedGraphs);
-
-                    else
-                        return q.StoreCalls.spoGraphs(sValue, pValue, oValue, variableBinding, namedGraphs);
-                }
+                case StoreCallCase.spo:
+                    return q.StoreCalls.spo(Subject, Predicate, Object, variableBinding);
+                case StoreCallCase.spO:
+                    return q.StoreCalls.spO(Subject, Predicate, oVariableNode,  variableBinding);
+                case StoreCallCase.sPo:
+                    return q.StoreCalls.sPo(Subject, pVariableNode, Object,  variableBinding);
+                case StoreCallCase.sPO:
+                    return q.StoreCalls.sPO(Subject, pVariableNode, oVariableNode, variableBinding);
+                case StoreCallCase.Spo:
+                    return q.StoreCalls.Spo(sVariableNode, Predicate, Object, variableBinding);
+                case StoreCallCase.SpO:
+                    return q.StoreCalls.SpO(sVariableNode, Predicate, oVariableNode, variableBinding);
+                case StoreCallCase.SPo:
+                    return q.StoreCalls.SPo(sVariableNode, pVariableNode, Object, variableBinding);
+                case StoreCallCase.SPO:
+                    return q.StoreCalls.SPO(sVariableNode, pVariableNode, oVariableNode, variableBinding);
+                
+                case StoreCallCase.gspo:
+                    return q.StoreCalls.spoGraphs(Subject, Predicate, Object, variableBinding, graphs);
+                case StoreCallCase.gspO:
+                    return q.StoreCalls.spOGraphs(Subject, Predicate, oVariableNode, variableBinding, graphs);
+                case StoreCallCase.gsPo:
+                    return q.StoreCalls.sPoGraphs(Subject, pVariableNode, Object, variableBinding, graphs);
+                case StoreCallCase.gsPO:
+                    return q.StoreCalls.sPOGraphs(Subject, pVariableNode, oVariableNode, variableBinding, graphs);
+                case StoreCallCase.gSpo:
+                    return q.StoreCalls.SpoGraphs(sVariableNode, Predicate, Object, variableBinding, graphs);
+                case StoreCallCase.gSpO:
+                    return q.StoreCalls.SpOGraphs(sVariableNode, Predicate, oVariableNode, variableBinding, graphs);
+                case StoreCallCase.gSPo:
+                    return q.StoreCalls.SPoGraphs(sVariableNode, pVariableNode, Object, variableBinding, graphs);
+                case StoreCallCase.gSPO:
+                    return q.StoreCalls.SPOGraphs(sVariableNode, pVariableNode, oVariableNode, variableBinding, graphs);                                                                               
+                
+                case StoreCallCase.Gspo:
+                    return q.StoreCalls.spoVarGraphs(Subject, Predicate, Object, variableBinding, variableDataSet);
+                case StoreCallCase.GspO:
+                    return q.StoreCalls.spOVarGraphs(Subject, Predicate, oVariableNode, variableBinding, variableDataSet);
+                case StoreCallCase.GsPo:
+                    return q.StoreCalls.sPoVarGraphs(Subject, pVariableNode, Object, variableBinding, variableDataSet);
+                case StoreCallCase.GsPO:
+                    return q.StoreCalls.sPOVarGraphs(Subject, pVariableNode, oVariableNode, variableBinding, variableDataSet);
+                case StoreCallCase.GSpo:
+                    return q.StoreCalls.SpoVarGraphs(sVariableNode, Predicate, Object, variableBinding, variableDataSet);
+                case StoreCallCase.GSpO:
+                    return q.StoreCalls.SpOVarGraphs(sVariableNode, Predicate, oVariableNode, variableBinding, variableDataSet);
+                case StoreCallCase.GSPo:
+                    return q.StoreCalls.SPoVarGraphs(sVariableNode, pVariableNode, Object, variableBinding, variableDataSet);
+                case StoreCallCase.GSPO:
+                    return q.StoreCalls.SPOVarGraphs(sVariableNode, pVariableNode, oVariableNode, variableBinding, variableDataSet);
+                default:
+                    throw new ArgumentOutOfRangeException("case");
             }
+          
         }
 
-        private IEnumerable<SparqlResult> SetVariablesValuesVarGraphs(SparqlResult variableBinding,  ObjectVariants sValue, ObjectVariants pValue, ObjectVariants oValue)
+        public void Substitution(SparqlResult variableBinding,
+            Action<ObjectVariants, ObjectVariants, ObjectVariants> actTriple, string name = null)
         {
-            if (!isSKnown)
-                if (!isPKnown)
-                    if (!isOKnown)
-                        return
-                            q.StoreCalls.SPOVarGraphs(sVariableNode, pVariableNode, oVariableNode,
-                                variableBinding, variableDataSet);
-                    else
-                        return
-                            q.StoreCalls.SPoVarGraphs(sVariableNode, pVariableNode, oValue,
-                                variableBinding, variableDataSet);
-                else if (!isOKnown)
+           var subject = sVariableNode is IBlankNode
+                ? q.Store.NodeGenerator.CreateBlankNode(sVariableNode.Content, name)
+                : (sVariableNode != null ? variableBinding[sVariableNode] : Subject);
 
-                    return
-                        q.StoreCalls.SpOVarGraphs(sVariableNode, pValue, oVariableNode,
-                            variableBinding, variableDataSet);
+            var predicate = pVariableNode != null ? variableBinding[pVariableNode] : Predicate;
 
-                else
-                    return
-                        q.StoreCalls.SpoVarGraphs(sVariableNode, pValue, oValue,
-                            variableBinding, variableDataSet);
-            else
-            {
-                if (!isPKnown)
-                    if (!isOKnown)
-                        return
-                            q.StoreCalls.sPOVarGraphs(sValue, pVariableNode, oVariableNode,
-                                variableBinding, variableDataSet);
-                    else
-                        return
-                            q.StoreCalls.sPoVarGraphs(sValue, pVariableNode, oValue,
-                                variableBinding, variableDataSet);
-                else
-                {
-                    if (!isOKnown)
-                        return
-                            q.StoreCalls.spOVarGraphs(sValue, pValue, oVariableNode,
-                                variableBinding, variableDataSet);
-                    else
-                    {
-                        return
-                            q.StoreCalls.spoVarGraphs(sValue, pValue, oValue, variableBinding, variableDataSet);
-                    }
-                }
-            }
-        }
-
-        private void TryGetSpoVariablesValues(SparqlResult variableBinding, out ObjectVariants sValue,
-            out ObjectVariants pValue,
-            out ObjectVariants oValue)
-        {   
-            sValue = sVariableNode != null ? variableBinding[sVariableNode] : Subject;
-            pValue = pVariableNode != null ? variableBinding[pVariableNode] : Predicate;   
-            oValue = oVariableNode != null ? variableBinding[oVariableNode] : Object;
-
-            isSKnown = sValue != null;
-            isPKnown = pValue != null;
-            isOKnown = oValue != null;
-        }
-
-        public void Substitution(SparqlResult variableBinding, Action<ObjectVariants, ObjectVariants, ObjectVariants> actTriple, string name = null)
-        {                          
-           ObjectVariants sValue;
-           ObjectVariants pValue;
-           ObjectVariants oValue;
-           TryGetSpoVariablesValues(variableBinding, out sValue, out pValue, out oValue);
-           if (!isSKnown && sVariableNode is IBlankNode) sValue =q.Store.NodeGenerator.CreateBlankNode((sVariableNode).Content, name);
-           if (!isOKnown && oVariableNode is IBlankNode) oValue = q.Store.NodeGenerator.CreateBlankNode((oVariableNode).Content, name);
-          // if (!isPKnown && pVariableNode is IBlankNode) pValue = ((SparqlBlankNode)pVariableNode).RdfBlankNode;
-          // if ((isSKnown || sVariableNode is SparqlBlankNode) && (isPKnown || pVariableNode is SparqlBlankNode) && (isOKnown || oVariableNode is SparqlBlankNode))
-       actTriple(sValue, pValue, oValue);
-         //  throw new Exception();
+           var @object = oVariableNode is IBlankNode
+                ? q.Store.NodeGenerator.CreateBlankNode(oVariableNode.Content, name)
+                : (oVariableNode != null ? variableBinding[oVariableNode] : Object);
+            actTriple(subject, predicate, @object);
         }
 
         public void Substitution(SparqlResult variableBinding, ObjectVariants g,
             Action<ObjectVariants, ObjectVariants, ObjectVariants, ObjectVariants> actQuard)
-        {                 
-            ObjectVariants sValue;
-            ObjectVariants pValue;
-            ObjectVariants oValue;
+        {
+            var subject = sVariableNode is IBlankNode
+                ? q.Store.NodeGenerator.CreateBlankNode((sVariableNode).Content, ((IIriNode) g).UriString)
+                : (sVariableNode != null ? variableBinding[sVariableNode] : Subject);
+            var predicate = pVariableNode != null ? variableBinding[pVariableNode] : Predicate;
+          var @object = !(Object != null) && oVariableNode is IBlankNode
+                ? q.Store.NodeGenerator.CreateBlankNode((oVariableNode).Content, ((IIriNode) g).UriString)
+                : (oVariableNode != null ? variableBinding[oVariableNode] : Object);   
 
-            TryGetSpoVariablesValues(variableBinding, out sValue, out pValue, out oValue);
-                 
-            if (!isSKnown && sVariableNode is IBlankNode) 
-                sValue = q.Store.NodeGenerator.CreateBlankNode((sVariableNode).Content, ((IIriNode)g).UriString );
-            if (!isOKnown && oVariableNode is IBlankNode) 
-                oValue = q.Store.NodeGenerator.CreateBlankNode((oVariableNode).Content, ((IIriNode)g).UriString);
-            
-            actQuard(g, sValue, pValue, oValue);  
+          actQuard(g, subject, predicate, @object);  
         }
 
         public void Substitution(SparqlResult variableBinding, VariableNode gVariableNode,
             Action<ObjectVariants, ObjectVariants, ObjectVariants, ObjectVariants> actQuard)
         {
             ObjectVariants g;
-            g = variableBinding[pVariableNode];
+            g = variableBinding[gVariableNode];
             if (g == null)
                 throw new Exception("graph hasn't value");
 

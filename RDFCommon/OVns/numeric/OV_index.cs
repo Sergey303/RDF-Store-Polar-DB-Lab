@@ -2,7 +2,7 @@
 
 namespace RDFCommon.OVns
 {
-    public class OV_index : ObjectVariants, ILiteralNode, INumLiteral
+    public class OV_index : ObjectVariants
     {
         public readonly int value;
 
@@ -36,7 +36,7 @@ namespace RDFCommon.OVns
                 return false;
             }
 
-            return value == ((OV_int)obj).value;
+            return value == ((OV_index)obj).value;
 
         }
 
@@ -52,7 +52,7 @@ namespace RDFCommon.OVns
         public override dynamic Content { get { return value; } }
         public override ObjectVariants Change(Func<dynamic, dynamic> changing)
         {
-            return new OV_int(changing(value));
+            return new OV_index(changing(value));
         }
 
         public string DataType { get { return SpecialTypesClass.Integer; } }
@@ -64,7 +64,7 @@ namespace RDFCommon.OVns
         {
             int baseComp = base.CompareTo(obj);
             if (baseComp != 0) return baseComp;
-            var otherTyped = (OV_int)obj;
+            var otherTyped = (OV_index)obj;
             return value.CompareTo(otherTyped.value);
         }
     }

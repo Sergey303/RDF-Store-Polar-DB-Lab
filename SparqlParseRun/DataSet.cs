@@ -3,7 +3,7 @@ using RDFCommon.OVns;
 
 namespace SparqlParseRun
 {
-    public class DataSet : List<ObjectVariants>
+    public class DataSet : HashSet<ObjectVariants>
     {
         public DataSet(IEnumerable<ObjectVariants> gs)
             :base(gs)

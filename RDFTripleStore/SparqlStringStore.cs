@@ -38,7 +38,7 @@ namespace TestingNs
 
         private SparqlResultSet Run(SparqlQuery queryContext)
         {
-            return queryContext.Run(this);
+             return queryContext.Run(this);
         }
 
         public SparqlQuery Parse(string query)

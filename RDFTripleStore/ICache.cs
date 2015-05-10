@@ -1,12 +1,9 @@
 using System;
 using System.Collections.Generic;
 
-namespace SparqlParseRun.SparqlClasses.GraphPattern.Triples
+namespace RDFTripleStore
 {
-    internal interface ICache
-    {
-    }
-    class Cache<TKey, TValue> : ICache
+    class Cache<TKey, TValue>
     {
         Dictionary<TKey, TValue> cacheDictionary = new Dictionary<TKey, TValue>();
         Func<TKey, TValue> getValue;
@@ -22,7 +19,7 @@ namespace SparqlParseRun.SparqlClasses.GraphPattern.Triples
             if (cacheDictionary.TryGetValue(key, out value)) return value;
             if (cacheDictionary.Keys.Count > 1000 * 1000 * 1000)
                 cacheDictionary.Clear();
-            cacheDictionary.Add(key, getValue(key));
+            cacheDictionary.Add(key,value= getValue(key));
             return value;
         }
 
@@ -36,7 +33,7 @@ namespace SparqlParseRun.SparqlClasses.GraphPattern.Triples
             cacheDictionary.Add(k, v);
         }
     }
-    class Cache<TKey1, TKey2, TValue> : ICache
+    class Cache<TKey1, TKey2, TValue>
     {
         Dictionary<KeyValuePair<TKey1, TKey2>, TValue> cacheDictionary = new Dictionary<KeyValuePair<TKey1, TKey2>, TValue>();
         Func<TKey1, TKey2, TValue> getValue;
@@ -53,7 +50,7 @@ namespace SparqlParseRun.SparqlClasses.GraphPattern.Triples
             if (cacheDictionary.TryGetValue(key, out value)) return value;
             if (cacheDictionary.Keys.Count > 1000 * 1000 * 1000)
                 cacheDictionary.Clear();
-            cacheDictionary.Add(key, getValue(k1, k2));
+            cacheDictionary.Add(key, value= getValue(k1, k2));
             return value;
         }
 
@@ -69,7 +66,7 @@ namespace SparqlParseRun.SparqlClasses.GraphPattern.Triples
             return cacheDictionary.ContainsKey(key);
         }
     }
-    class Cache<TKey1, TKey2, TKey3, TValue> : ICache
+    class Cache<TKey1, TKey2, TKey3, TValue> 
     {
         Dictionary<Tuple<TKey1, TKey2, TKey3>, TValue> cacheDictionary = new Dictionary<Tuple<TKey1, TKey2, TKey3>, TValue>();
         Func<TKey1, TKey2, TKey3, TValue> getValue;
@@ -86,7 +83,7 @@ namespace SparqlParseRun.SparqlClasses.GraphPattern.Triples
             if (cacheDictionary.TryGetValue(key, out value)) return value;
             if (cacheDictionary.Keys.Count > 1000 * 1000 * 1000)
                 cacheDictionary.Clear();
-            cacheDictionary.Add(key, getValue(k1, k2, k3));
+            cacheDictionary.Add(key, value= getValue(k1, k2, k3));
             return value;
         }
 
@@ -102,7 +99,7 @@ namespace SparqlParseRun.SparqlClasses.GraphPattern.Triples
             return cacheDictionary.ContainsKey(key);
         }
     }
-    class Cache<TKey1, TKey2, TKey3, TKey4, TValue> : ICache
+    class Cache<TKey1, TKey2, TKey3, TKey4, TValue>
     {
         Dictionary<Tuple<TKey1, TKey2, TKey3, TKey4>, TValue> cacheDictionary = new Dictionary<Tuple<TKey1, TKey2, TKey3, TKey4>, TValue>();
         Func<TKey1, TKey2, TKey3, TKey4, TValue> getValue;
@@ -119,7 +116,7 @@ namespace SparqlParseRun.SparqlClasses.GraphPattern.Triples
             if (cacheDictionary.TryGetValue(key, out value)) return value;
             if (cacheDictionary.Keys.Count > 1000 * 1000 * 1000)
                 cacheDictionary.Clear();
-            cacheDictionary.Add(key, getValue(k1, k2, k3, k4));
+            cacheDictionary.Add(key, value=getValue(k1, k2, k3, k4));
             return value;
         }
 

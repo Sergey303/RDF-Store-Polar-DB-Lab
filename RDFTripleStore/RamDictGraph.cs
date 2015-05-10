@@ -12,7 +12,7 @@ namespace RDFTripleStore
     {
         private INodeGenerator ng=new NodeGenerator();
         private Dictionary<ObjectVariants,
-            KeyValuePair<Dictionary<string, ObjectVariants>, Dictionary<string, HashSet<string>>>> triples = new Dictionary<ObjectVariants, KeyValuePair<Dictionary<string, ObjectVariants>, Dictionary<string, HashSet<string>>>>(); 
+            KeyValuePair<Dictionary<ObjectVariants, ObjectVariants>, Dictionary<ObjectVariants, HashSet<ObjectVariants>>>> triples = new Dictionary<ObjectVariants, KeyValuePair<Dictionary<ObjectVariants, ObjectVariants>, Dictionary<ObjectVariants, HashSet<ObjectVariants>>>>(); 
         public string Name { get { return "g"; } }
 
         public INodeGenerator NodeGenerator
@@ -27,7 +27,7 @@ namespace RDFTripleStore
 
         public IEnumerable<T> GetTriplesWithObject<T>(ObjectVariants o, Func<ObjectVariants, ObjectVariants, T> createResult)
         {
-            KeyValuePair<Dictionary<string, ObjectVariants>, Dictionary<string, HashSet<string>>> finded;
+            KeyValuePair<Dictionary<ObjectVariants, ObjectVariants>, Dictionary<ObjectVariants, HashSet<ObjectVariants>>> finded;
             if (triples.TryGetValue(o, out finded)) return Enumerable.Empty<T>();
             return null;
         }

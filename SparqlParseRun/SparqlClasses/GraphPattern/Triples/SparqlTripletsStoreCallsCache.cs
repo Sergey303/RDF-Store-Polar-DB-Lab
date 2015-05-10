@@ -65,7 +65,7 @@ namespace SparqlParseRun.SparqlClasses.GraphPattern.Triples
                 });
 
             sPOCache = new Cache<ObjectVariants, IEnumerable<Triple<ObjectVariants,ObjectVariants,ObjectVariants>>>(s => { 
-                                                                             var triplesWithSubject = store.GetTriplesWithSubject(s).ToArray();
+                                                                             var triplesWithSubject = store.GetTriplesWithSubject(s,
                                                                              foreach (var pg in triplesWithSubject.GroupBy(t => t.Predicate))
                                                                                  spOCache.Add(s, pg.Key,
                                                                                      pg.Select(t => t.Object));
