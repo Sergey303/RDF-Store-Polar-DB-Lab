@@ -124,7 +124,7 @@ namespace TestingNs
 
         public bool Contains(ObjectVariants subject, ObjectVariants predicate, ObjectVariants obj)
         {
-            return base.Contains((object)subject.Content, (object)predicate.Content, obj);
+            return spo.Get(subject,predicate, obj);
         }
 
         public void Delete(ObjectVariants s, ObjectVariants p, ObjectVariants o)

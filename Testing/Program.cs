@@ -17,8 +17,8 @@
 
 
             ///dataFromProducer1:Product12 - конкретное значение параметра в запросе %productXYZ%
-          //  SparqlTesting.TestQuery(sq, false, 1);
-            SparqlTesting.BSBm(1, false);
+          //  SparqlTesting.TestQuery(_queryString, false, 1);
+           SparqlTesting.BSBm(1, false);
 
         }
         private static string sq = @"SELECT  ?prodFeature
@@ -49,5 +49,14 @@ WHERE {
 ORDER BY ?productLabel
 LIMIT 5
 ";
+        private static readonly string _queryString = @"PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX bsbm: <http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/vocabulary/>
+
+SELECT ?product ?label
+WHERE {
+    ?product rdf:type bsbm:Product .
+	?product rdfs:label ?label .
+	FILTER regex(?label, ""^s"")}";
     }
 }

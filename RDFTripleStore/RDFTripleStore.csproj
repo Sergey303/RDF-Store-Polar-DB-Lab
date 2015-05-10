@@ -53,6 +53,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="FirstGraphInt.cs" />
+    <Compile Include="InterpretMeasure.cs" />
+    <Compile Include="CacheMeasure.cs" />
     <Compile Include="SecondStringGraphCached.cs" />
     <Compile Include="ICache.cs" />
     <Compile Include="RamDictGraph.cs" />
