@@ -90,6 +90,27 @@ WHERE {
               RunBerlinsWithConstants(sparqlStore, millions);
           //   RunBerlinsParameters(sparqlStore, millions);
         }
+        public static void InterpretMeas(int millions, bool load)
+        {
+            SecondStringSore sparqlStore = new SecondStringSore("../../../Databases/");
+            if (load)
+                sparqlStore.ReloadFrom(Config.Source_data_folder_path + millions + ".ttl");
+           sparqlStore.TrainingMode = true;
+   
+
+            Console.WriteLine("bsbm with constants train");
+            RunBerlinsParameters(sparqlStore, millions);
+        
+            sparqlStore.TrainingMode = false;
+            
+            Console.WriteLine("bsbm with constants from history");
+            RunBerlinsParameters(sparqlStore, millions);
+            //     File.WriteAllText(string.Format(@"..\..\examples\bsbm\queries\with constants\{0}.json", i), json);
+
+
+
+
+        }
 
         public static void RunBerlinsParameters(SecondStringSore ts, int millions)
         {

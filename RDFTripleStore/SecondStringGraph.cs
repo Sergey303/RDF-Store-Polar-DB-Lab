@@ -30,7 +30,7 @@ namespace TestingNs
             //throw new NotImplementedException();
         }
 
-        public IEnumerable<T> GetTriplesWithObject<T>(ObjectVariants o, Func<ObjectVariants, ObjectVariants, T> createResult)
+        public virtual IEnumerable<T> GetTriplesWithObject<T>(ObjectVariants o, Func<ObjectVariants, ObjectVariants, T> createResult)
         {
             return base.GetTriplesWithObject(o)
                 .Select(base.Dereference)
@@ -39,7 +39,7 @@ namespace TestingNs
                 ;
         }
 
-        public IEnumerable<T> GetTriplesWithPredicate<T>(ObjectVariants p, Func<ObjectVariants, ObjectVariants, T> createResult)
+        public virtual IEnumerable<T> GetTriplesWithPredicate<T>(ObjectVariants p, Func<ObjectVariants, ObjectVariants, T> createResult)
         {
             return base.GetTriplesWithPredicate(((IIriNode)p).UriString)
              //   .ReadWritableTriples()
@@ -49,7 +49,7 @@ namespace TestingNs
 
         }
 
-        public IEnumerable<T> GetTriplesWithSubject<T>(ObjectVariants s, Func<ObjectVariants, ObjectVariants, T> createResult)
+        public virtual IEnumerable<T> GetTriplesWithSubject<T>(ObjectVariants s, Func<ObjectVariants, ObjectVariants, T> createResult)
         {
             return base.GetTriplesWithSubject(((IIriNode)s).UriString)
                 //ReadWritableTriples()
@@ -59,7 +59,7 @@ namespace TestingNs
 
         }
 
-        public IEnumerable<ObjectVariants> GetTriplesWithSubjectPredicate(ObjectVariants subj, ObjectVariants pred)
+        public virtual IEnumerable<ObjectVariants> GetTriplesWithSubjectPredicate(ObjectVariants subj, ObjectVariants pred)
         {
             return base.GetTriplesWithSubjectPredicate(((IIriNode)subj).UriString, ((IIriNode)pred).UriString)
               //  .ReadWritableTriples()
@@ -78,7 +78,7 @@ namespace TestingNs
                   .Select(row => new  OV_iri(DecodeIRI(row[1])));
         }
 
-        public IEnumerable<ObjectVariants> GetTriplesWithPredicateObject(ObjectVariants pred, ObjectVariants obj)
+        public virtual IEnumerable<ObjectVariants> GetTriplesWithPredicateObject(ObjectVariants pred, ObjectVariants obj)
         {
          
             return base.GetTriplesWithPredicateObject(((IIriNode)pred).UriString, obj)
@@ -109,7 +109,7 @@ namespace TestingNs
             throw new NotImplementedException();
         }
 
-        public bool Contains(ObjectVariants subject, ObjectVariants predicate, ObjectVariants obj)
+        public virtual bool Contains(ObjectVariants subject, ObjectVariants predicate, ObjectVariants obj)
         {
             return base.Contains((object)subject.Content, (object)predicate.Content, obj);
         }

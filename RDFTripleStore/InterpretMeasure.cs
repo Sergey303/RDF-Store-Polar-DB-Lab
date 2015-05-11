@@ -11,113 +11,95 @@ using IGraph = RDFCommon.IGraph;
 
 namespace TestingNs
 {
-    public class InterpretMeasure : IGraph
+    public class InterpretMeasure : SecondStringGraph, IGraph
     {
-        private SecondStringGraph g;
-        private readonly Queue<bool> spo;
-        private readonly Queue<List<ObjectVariants>> spO;
-        private readonly Queue<List<ObjectVariants>> sPo;
-        private readonly Queue<List<ObjectVariants>> Spo;
-        private readonly Queue<List<KeyValuePair<ObjectVariants, ObjectVariants>>> SPo;
-        private readonly Queue<List<KeyValuePair<ObjectVariants, ObjectVariants>>> SpO;
-        private readonly Queue<List<KeyValuePair<ObjectVariants, ObjectVariants>>> sPO;
+        protected readonly Queue<object> history=new Queue<object>();
 
       public bool TrainingMode { get; set; }
 
-        public InterpretMeasure(SecondStringGraph g)
+        public InterpretMeasure(string path):base(path)
         {
-            this.g = g;
 
-            spo = new Queue<bool>();
-            Spo = new Queue<List<ObjectVariants>>();
-            sPo = new Queue<List<ObjectVariants>>();
-            spO = new Queue<List<ObjectVariants>>();
-            SPo = new Queue<List<KeyValuePair<ObjectVariants, ObjectVariants>>>();
-            SpO = new Queue<List<KeyValuePair<ObjectVariants, ObjectVariants>>>();
-            sPO = new Queue<List<KeyValuePair<ObjectVariants, ObjectVariants>>>();
+        
         }
 
         public string Name { get; private set; }
-        public INodeGenerator NodeGenerator { get { return g.NodeGenerator; } }
+        public INodeGenerator NodeGenerator { get { return base.NodeGenerator; } }
         public void Clear()
         {
             //throw new NotImplementedException();
         }
 
-        public IEnumerable<T> GetTriplesWithObject<T>(ObjectVariants o,
+        public override IEnumerable<T> GetTriplesWithObject<T>(ObjectVariants o,
             Func<ObjectVariants, ObjectVariants, T> createResult)
         {
             if (TrainingMode)
             {
                 var cacheList = new List<KeyValuePair<ObjectVariants, ObjectVariants>>();
-                foreach (var t in g.GetTriplesWithObject(o, (s, p) =>
+                foreach (var t in base.GetTriplesWithObject(o, (s, p) =>
                 {
                     cacheList.Add(new KeyValuePair<ObjectVariants, ObjectVariants>(s, p));
                     return createResult(s, p);
-                }))
+                }).ToArray())
                     yield return t;
-                SPo.Enqueue(cacheList);
+                history.Enqueue(cacheList);
             }
             else
-                foreach (var pair in SPo.Dequeue())
+                foreach (var pair in (List<KeyValuePair<ObjectVariants,ObjectVariants>>)history.Dequeue())
                     yield return createResult(pair.Key, pair.Value);
         }
 
-        public IEnumerable<T> GetTriplesWithPredicate<T>(ObjectVariants p, Func<ObjectVariants, ObjectVariants, T> createResult)
+        public override IEnumerable<T> GetTriplesWithPredicate<T>(ObjectVariants p, Func<ObjectVariants, ObjectVariants, T> createResult)
         {
 
             if (TrainingMode)
             {
                 var cacheList = new List<KeyValuePair<ObjectVariants, ObjectVariants>>();
-                foreach (var t in g.GetTriplesWithPredicate(p, (s, o) =>
+                foreach (var t in base.GetTriplesWithPredicate(p, (s, o) =>
                 {
                     cacheList.Add(new KeyValuePair<ObjectVariants, ObjectVariants>(s, o));
                     return createResult(s, o);
-                }))
+                }).ToArray())
                     yield return t;
-                SpO.Enqueue(cacheList);
+                history.Enqueue(cacheList);
             }
             else
-                foreach (var pair in SpO.Dequeue())
+                foreach (var pair in (List<KeyValuePair<ObjectVariants, ObjectVariants>>)history.Dequeue())
                     yield return createResult(pair.Key, pair.Value);
 
         }
 
-        public IEnumerable<T> GetTriplesWithSubject<T>(ObjectVariants s,
+        public override IEnumerable<T> GetTriplesWithSubject<T>(ObjectVariants s,
             Func<ObjectVariants, ObjectVariants, T> createResult)
         {
             if (TrainingMode)
             {
                 var cacheList = new List<KeyValuePair<ObjectVariants, ObjectVariants>>();
-                foreach (var t in g.GetTriplesWithSubject(s, (p, o) =>
+                foreach (var t in base.GetTriplesWithSubject(s, (p, o) =>
                 {
                     cacheList.Add(new KeyValuePair<ObjectVariants, ObjectVariants>(p, o));
                     return createResult(p, o);
-                }))
+                }).ToArray())
                     yield return t;
-                sPO.Enqueue(cacheList);
+                history.Enqueue(cacheList);
             }
             else
-                foreach (var pair in sPO.Dequeue())
+                foreach (var pair in (List<KeyValuePair<ObjectVariants, ObjectVariants>>)history.Dequeue())
                     yield return createResult(pair.Key, pair.Value);
         }
 
-        public IEnumerable<ObjectVariants> GetTriplesWithSubjectPredicate(ObjectVariants subj, ObjectVariants pred)
+        public override IEnumerable<ObjectVariants> GetTriplesWithSubjectPredicate(ObjectVariants subj, ObjectVariants pred)
         {
             if (TrainingMode)
             {
-                var cacheList = new List<ObjectVariants>();
-                foreach (var o in g.GetTriplesWithSubjectPredicate(subj, pred))
-                {
-                    cacheList.Add(o);
-                   yield return o;
-                }
-                    
-                spO.Enqueue(cacheList);
+                var res = base.GetTriplesWithSubjectPredicate(subj, pred).ToArray();
+
+
+                history.Enqueue(res);
+                return res;
             }
             else
-                foreach (var o in spO.Dequeue())
-                    yield return o;
+                return (ObjectVariants[]) history.Dequeue();
         }
 
         public IEnumerable<ObjectVariants> GetTriplesWithSubjectObject(ObjectVariants subj, ObjectVariants obj)
@@ -126,22 +108,16 @@ namespace TestingNs
        
         }
 
-        public IEnumerable<ObjectVariants> GetTriplesWithPredicateObject(ObjectVariants pred, ObjectVariants obj)
+        public override IEnumerable<ObjectVariants> GetTriplesWithPredicateObject(ObjectVariants pred, ObjectVariants obj)
         {
             if (TrainingMode)
             {
-                var cacheList = new List<ObjectVariants>();
-                foreach (var s in g.GetTriplesWithPredicateObject(pred, obj))
-                {
-                    cacheList.Add(s);
-                    yield return s;
-                }
-
-                Spo.Enqueue(cacheList);
+                var results = base.GetTriplesWithPredicateObject(pred, obj).ToArray();
+                history.Enqueue(results);
+                return results;
             }
             else
-                foreach (var s in Spo.Dequeue())
-                    yield return s;
+                return (ObjectVariants[]) history.Dequeue();
         }
 
         public IEnumerable<T> GetTriples<T>(Func<ObjectVariants, ObjectVariants, ObjectVariants, T> returns)
@@ -159,17 +135,17 @@ namespace TestingNs
             throw new NotImplementedException();
         }
 
-        public bool Contains(ObjectVariants subject, ObjectVariants predicate, ObjectVariants obj)
+        public override bool Contains(ObjectVariants subject, ObjectVariants predicate, ObjectVariants obj)
         {
             if (TrainingMode)
             {
-                var contains = g.Contains(subject, predicate, obj);
+                var contains = base.Contains(subject, predicate, obj);
 
-                spo.Enqueue(contains);
+                history.Enqueue(contains);
                 return contains;
             }
             else
-                return spo.Dequeue();
+                return (bool)history.Dequeue();
         }
 
         public void Delete(ObjectVariants s, ObjectVariants p, ObjectVariants o)
@@ -196,7 +172,7 @@ namespace TestingNs
         public void FromTurtle(string path)
         {
             //table.Clear();
-          g.FromTurtle(path);
+          base.FromTurtle(path);
 
         }
 

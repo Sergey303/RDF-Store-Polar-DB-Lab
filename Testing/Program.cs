@@ -18,7 +18,7 @@
 
             ///dataFromProducer1:Product12 - конкретное значение параметра в запросе %productXYZ%
           //  SparqlTesting.TestQuery(_queryString, false, 1);
-           SparqlTesting.BSBm(1, false);
+            SparqlTesting.InterpretMeas(1, false);
 
         }
         private static string sq = @"SELECT  ?prodFeature
