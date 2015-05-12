@@ -39,6 +39,9 @@
     <Reference Include="PolarDB">
       <HintPath>..\dll\PolarDB.dll</HintPath>
     </Reference>
+    <Reference Include="SparqlParseRun">
+      <HintPath>..\dll\SparqlParseRun.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -46,10 +49,6 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
-    <Reference Include="Task13UniversalIndex, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\UniversalIndex\bin\Debug\Task13UniversalIndex.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="FirstGraphInt.cs" />
@@ -81,10 +80,6 @@
     <ProjectReference Include="..\RDFTurtleParser\RDFTurtleParser.csproj">
       <Project>{bbdc3ba5-1ecd-40b5-b3a3-c6b498e07cd1}</Project>
       <Name>RDFTurtleParser</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\SparqlParseRun\SparqlParseRun.csproj">
-      <Project>{ae8cbedb-a66e-4705-953e-c16793426e89}</Project>
-      <Name>SparqlParseRun</Name>
     </ProjectReference>
     <ProjectReference Include="..\UniversalIndex\UniversalIndex.csproj">
       <Project>{e4ab7a63-7b55-43e9-b1aa-c8e0f8aa87e3}</Project>

@@ -23,7 +23,7 @@ namespace GoTripleStore
                 .Select(tri => new Tuple<string, string, ObjectVariants>(tri.Subject, tri.Predicate, tri.Object));
 
             GaGraphStringBased g = new GaGraphStringBased(path);
-            bool toload = false;
+            bool toload = true;
             if (toload)
             {
                 sw.Restart();
