@@ -1,11 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2013
+# Visual Studio Express 2013 for Web
 VisualStudioVersion = 12.0.31101.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{23C24F4C-8B94-4E99-9F15-FDE693B4A074}"
 	ProjectSection(SolutionItems) = preProject
-		..\config.ini = ..\config.ini
+		config.ini = config.ini
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RDFCommon", "RDFCommon\RDFCommon.csproj", "{7EB60F80-87CA-4645-9E1F-051735195D92}"

@@ -45,6 +45,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="allproducts.cs" />
     <Compile Include="BerlinTests.cs" />
     <Compile Include="GaGraphStringBased.cs" />
     <Compile Include="GoGraphIntBased.cs" />

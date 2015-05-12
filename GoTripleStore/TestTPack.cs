@@ -12,6 +12,18 @@ namespace GoTripleStore
     {
         public static void Main()
         {
+            Random rnd = new Random();
+            string[] arr = Allproducts.Products;
+            HashSet<string> hs = new HashSet<string>();
+            string[] productsXYZ = new string[1000];
+            for (int i = 0; i < productsXYZ.Length; i++)
+            {
+                string s = null;
+                while (hs.Contains(s = arr[rnd.Next(arr.Length - 1)])) ;
+                hs.Add(s);
+                productsXYZ[i] = s;
+            }
+
             string Source_data_folder_path = System.IO.File.ReadAllLines("../../../config.ini")
                 .Where(line => line.StartsWith("#source_data_folder_path"))
                 .Select(line => line.Substring("#source_data_folder_path".Length + 1))
@@ -23,7 +35,7 @@ namespace GoTripleStore
                 .Select(tri => new Tuple<string, string, ObjectVariants>(tri.Subject, tri.Predicate, tri.Object));
 
             GaGraphStringBased g = new GaGraphStringBased(path);
-            bool toload = true;
+            bool toload = false;
             if (toload)
             {
                 sw.Restart();
@@ -53,6 +65,17 @@ namespace GoTripleStore
             cnt = qu.Count();
             sw.Stop();
             Console.WriteLine("query6t ok. cnt={0} duration={1}", cnt, sw.ElapsedMilliseconds);
+
+            sw.Restart();
+            for (int i = 0; i < 100; i++)
+            {
+                qu = Query5p(gra, productsXYZ[i]);
+                cnt = qu.Count();
+            }
+            sw.Stop();
+            Console.WriteLine("query5p ok. cnt={0} duration={1}", cnt, sw.ElapsedMilliseconds);
+
+
 
             //TPackGraph_Diag grad = new TPackGraph_Diag(g);
 
@@ -84,6 +107,39 @@ namespace GoTripleStore
                 .spo(iri1, iri2, _prodFeature)
                 .spo(_produc, iri2, _prodFeature)
                 .Where(pack => ! pack.Get(_produc).Equals(iri1))
+                .spo(_produc, iri3, _productLabel)
+                .spo(iri1, iri4, _origProperty1)
+                .spo(_produc, iri4, _simProperty1)
+                //.Where(pack => 
+                //{
+                //    int sp1 = ((OV_int)pack.Get(_simProperty1)).value;
+                //    int op1 = ((OV_int)pack.Get(_origProperty1)).value;
+                //    return sp1 < (op1 + 120) && sp1 > (op1 - 120);
+                //})
+
+                //.spD("http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/datafromproducer1/product12",
+                //    "http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/vocabulary/productpropertynumeric2",
+                //    _origProperty2)
+                //.spD(_produc, "http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/vocabulary/productpropertynumeric2",
+                //    _simProperty2)
+                //.Where(pack => pack.Vai(_simProperty2) < (pack.Vai(_origProperty2) + 170) &&
+                //    pack.Vai(_simProperty2) > (pack.Vai(_origProperty2) - 170))
+                ;
+            return quer;
+        }
+        public static IEnumerable<TPack> Query5p(IGraph g, string productXYZ)
+        {
+            ObjectVariants[] row = new ObjectVariants[7];
+            ObjectVariants _prodFeature = new OV_index(0), _produc = new OV_index(1), _productLabel = new OV_index(2), _origProperty1 = new OV_index(3), _simProperty1 = new OV_index(4);
+            int _origProperty2 = 5, _simProperty2 = 6;
+            ObjectVariants iri1 = new OV_iri(productXYZ),
+                iri2 = new OV_iri("http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/vocabulary/productFeature"),
+                iri3 = new OV_iri("http://www.w3.org/2000/01/rdf-schema#label"),
+                iri4 = new OV_iri("http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/vocabulary/productPropertyNumeric1");
+            var quer = Enumerable.Repeat<TPack>(new TPack(row, g), 1)
+                .spo(iri1, iri2, _prodFeature)
+                .spo(_produc, iri2, _prodFeature)
+                .Where(pack => !pack.Get(_produc).Equals(iri1))
                 .spo(_produc, iri3, _productLabel)
                 .spo(iri1, iri4, _origProperty1)
                 .spo(_produc, iri4, _simProperty1)
