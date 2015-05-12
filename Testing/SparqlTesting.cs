@@ -393,7 +393,7 @@ WHERE {
                 {
                     qparams=QueryReadParameters(qparams, streamParameters);
                     timer.Start();
-                    _ts.ParseAndRun(qparams).ToJson();
+                    _ts.ParseAndRun(qparams).Results.ToArray();
                     timer.Stop();
                 }
 
