@@ -12,13 +12,17 @@ namespace SparqlParseRun.SparqlClasses.Expressions
 
             IsAggragate = value.IsAggragate;
             IsDistinct = value.IsDistinct;
-            Func = result =>
+            if (value.Const != null)
+                Const = new OV_string(((ILanguageLiteral) value.Const).Lang.Substring(1));
+            else
             {
-                var f = value.Func(result);
-                if (f is ILanguageLiteral)
-                    return new OV_string(((ILanguageLiteral)f).Lang.Substring(1));
-                throw new ArgumentException();
-            };
+                TypedOperator = result => new OV_language(Operator(result));
+                Operator= result => 
+                {
+                    var f = value.TypedOperator(result);
+                        return new OV_string(((ILanguageLiteral) f).Lang.Substring(1));
+                };
+            }
         }
     }
 }

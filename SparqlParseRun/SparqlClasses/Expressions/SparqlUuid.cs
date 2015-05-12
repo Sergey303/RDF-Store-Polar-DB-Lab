@@ -8,7 +8,7 @@ namespace SparqlParseRun.SparqlClasses.Expressions
         public SparqlUuid(INodeGenerator q)
         {                          
           
-            Func = result => q.GetUri("urn:uuid:" + Guid.NewGuid());
+            TypedOperator = result => q.GetUri("urn:uuid:" + Guid.NewGuid());
         }
     }
 }

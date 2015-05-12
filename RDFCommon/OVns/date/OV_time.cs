@@ -30,7 +30,7 @@ namespace RDFCommon.OVns
             get { return value.Ticks; }
         }
 
-        public override dynamic Content
+        public override object Content
         {
             get { return value; }
         }

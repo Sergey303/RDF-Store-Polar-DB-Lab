@@ -43,7 +43,7 @@ namespace RDFCommon.OVns
 
         }
 
-        public override dynamic Content { get { return value; } }
+        public override object Content { get { return value; } }
         public override ObjectVariants Change(Func<dynamic, dynamic> changing)
         {
             return new OV_decimal(changing(value));

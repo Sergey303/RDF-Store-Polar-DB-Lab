@@ -22,9 +22,33 @@ namespace TestingNs
         private readonly HashSet<KeyValuePair<ObjectVariants, ObjectVariants>> hasSO=new HashSet<KeyValuePair<ObjectVariants, ObjectVariants>>();
         private readonly HashSet<KeyValuePair<ObjectVariants, ObjectVariants>> hasPO = new HashSet<KeyValuePair<ObjectVariants, ObjectVariants>>();
         private readonly HashSet<Tuple<ObjectVariants, ObjectVariants, ObjectVariants>> hasSPO = new HashSet<Tuple<ObjectVariants, ObjectVariants, ObjectVariants>>();
-        protected readonly Queue<object> history = new Queue<object>();
+        public readonly Queue<object> history = new Queue<object>();
 
+        private int sCalls, pCalls, oCalls, spCalls, poCalls, spoCalls;
 
+        public string Output()
+        {
+            string s = "";
+            s += "by s caches: " + hasS.Count+Environment.NewLine;
+            s += "by p caches: " + hasP.Count+Environment.NewLine;
+            s += "by o caches: " + hasO.Count+Environment.NewLine;
+            s += "by sp caches: " + hasSP.Count+Environment.NewLine;
+            //s += "by s caches: " + hasSO.Count+Environment.NewLine;
+            s += "by po caches: " + hasPO.Count+Environment.NewLine;
+            s += "by spo caches: " + hasSPO.Count+Environment.NewLine;
+            s += "sum of caches: " + (hasS.Count + hasS.Count + hasO.Count + hasSP.Count + hasPO.Count+hasSPO.Count)+Environment.NewLine;
+            s += Environment.NewLine;
+            s += "s calls: " + sCalls + Environment.NewLine;
+            s += "p calls: " + pCalls + Environment.NewLine;
+            s += "o calls: " + oCalls + Environment.NewLine;
+            s += "sp calls: " + spCalls + Environment.NewLine;
+            s += "po calls: " + poCalls + Environment.NewLine;
+            s += "spo calls: " + spoCalls + Environment.NewLine;
+            s += "sum of calls: " + (sCalls+pCalls+oCalls+spCalls+poCalls+spoCalls) + Environment.NewLine;
+
+            return s;
+        }
+        
 
        
 
@@ -39,6 +63,8 @@ namespace TestingNs
             Func<ObjectVariants, ObjectVariants, T> createResult)
         {
             if (TrainingMode)
+            {
+                oCalls++;
                 if (hasO.Contains(o))
                 {
                     useCache.Enqueue(true);
@@ -57,7 +83,7 @@ namespace TestingNs
                      useCache.Enqueue(false);
                     foreach (var t in base.GetTriplesWithObject(o, createResult))
                         yield return t;
-                }
+                }}
             else
             {
                 if (useCache.Dequeue())
@@ -76,6 +102,7 @@ namespace TestingNs
 
             if (TrainingMode)
             {
+                pCalls++;
                 if (hasP.Contains(p))
                 {
                     useCache.Enqueue(true);
@@ -110,6 +137,7 @@ namespace TestingNs
         {
             if (TrainingMode)
             {
+                sCalls++;
                 if (hasS.Contains(s))
                 {
                     useCache.Enqueue(true);
@@ -144,6 +172,7 @@ namespace TestingNs
         {
             if (TrainingMode)
             {
+                spCalls++;
                 var key = new KeyValuePair<ObjectVariants, ObjectVariants>(subj, pred);
                 if (hasSP.Contains(key))
                 {
@@ -179,6 +208,7 @@ namespace TestingNs
         {
             if (TrainingMode)
             {
+                poCalls++;
                 var key = new KeyValuePair<ObjectVariants, ObjectVariants>(pred, obj);
                 if (hasPO.Contains(key))
                 {
@@ -224,6 +254,7 @@ namespace TestingNs
         {
             if (TrainingMode)
             {
+                spoCalls++;
                 var key = new Tuple<ObjectVariants, ObjectVariants, ObjectVariants>(subject, predicate, obj);
                 if (hasSPO.Contains(key))
                 {

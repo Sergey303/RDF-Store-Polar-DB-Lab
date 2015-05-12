@@ -21,7 +21,7 @@ namespace RDFCommon.OVns
             get { return value.ToFileTime(); }
         }
 
-        public override dynamic Content
+        public override object Content
         {
             get { return value; }
         }

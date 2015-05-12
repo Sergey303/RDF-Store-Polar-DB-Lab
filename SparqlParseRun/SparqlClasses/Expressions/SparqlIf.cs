@@ -9,12 +9,12 @@ namespace SparqlParseRun.SparqlClasses.Expressions
             IsDistinct = conditionExpression1.IsDistinct || sparqlExpression2.IsDistinct || sparqlExpression3.IsDistinct;
             IsAggragate = conditionExpression1.IsAggragate || sparqlExpression2.IsAggragate || sparqlExpression3.IsAggragate;
             //todo SetVariabletype
-            Func = result =>
+            TypedOperator = result =>
             {
-                var condition = conditionExpression1.Func(result).Content;
+                var condition = conditionExpression1.TypedOperator(result).Content;
                 if (condition is bool)
                 {
-                    return condition ? sparqlExpression2.Func(result) : sparqlExpression3.Func(result);
+                    return (bool)condition ? sparqlExpression2.TypedOperator(result) : sparqlExpression3.TypedOperator(result);
                 }   throw new ArgumentException();
             };
         }

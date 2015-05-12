@@ -147,13 +147,13 @@ namespace SparqlParseRun.SparqlClasses.GraphPattern.Triples
             Action<ObjectVariants, ObjectVariants, ObjectVariants> actTriple, string name = null)
         {
            var subject = sVariableNode is IBlankNode
-                ? q.Store.NodeGenerator.CreateBlankNode(sVariableNode.Content, name)
+                ? q.Store.NodeGenerator.CreateBlankNode((string) sVariableNode.Content, name)
                 : (sVariableNode != null ? variableBinding[sVariableNode] : Subject);
 
             var predicate = pVariableNode != null ? variableBinding[pVariableNode] : Predicate;
 
            var @object = oVariableNode is IBlankNode
-                ? q.Store.NodeGenerator.CreateBlankNode(oVariableNode.Content, name)
+                ? q.Store.NodeGenerator.CreateBlankNode((string) oVariableNode.Content, name)
                 : (oVariableNode != null ? variableBinding[oVariableNode] : Object);
             actTriple(subject, predicate, @object);
         }
@@ -162,11 +162,11 @@ namespace SparqlParseRun.SparqlClasses.GraphPattern.Triples
             Action<ObjectVariants, ObjectVariants, ObjectVariants, ObjectVariants> actQuard)
         {
             var subject = sVariableNode is IBlankNode
-                ? q.Store.NodeGenerator.CreateBlankNode((sVariableNode).Content, ((IIriNode) g).UriString)
+                ? q.Store.NodeGenerator.CreateBlankNode((string) (sVariableNode).Content, ((IIriNode) g).UriString)
                 : (sVariableNode != null ? variableBinding[sVariableNode] : Subject);
             var predicate = pVariableNode != null ? variableBinding[pVariableNode] : Predicate;
           var @object = !(Object != null) && oVariableNode is IBlankNode
-                ? q.Store.NodeGenerator.CreateBlankNode((oVariableNode).Content, ((IIriNode) g).UriString)
+                ? q.Store.NodeGenerator.CreateBlankNode((string) (oVariableNode).Content, ((IIriNode) g).UriString)
                 : (oVariableNode != null ? variableBinding[oVariableNode] : Object);   
 
           actQuard(g, subject, predicate, @object);  

@@ -7,13 +7,13 @@ namespace SparqlParseRun.SparqlClasses.Expressions
     {
         public SparqlIriExpression(string sparqlUriNode, INodeGenerator q)
         {
-            var uri = q.GetUri(sparqlUriNode);
-            Func = result => uri;
+            //TypedOperator = result => uri;
+            Const = q.GetUri(sparqlUriNode);
         }
 
         public SparqlIriExpression(ObjectVariants sparqlUriNode)
         {
-            Func = result => sparqlUriNode;
+            Const = sparqlUriNode;
         }
     }
 }

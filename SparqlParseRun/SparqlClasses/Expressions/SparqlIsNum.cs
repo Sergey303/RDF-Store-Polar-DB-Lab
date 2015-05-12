@@ -10,9 +10,9 @@ namespace SparqlParseRun.SparqlClasses.Expressions
 
             IsAggragate = value.IsAggragate;
             IsDistinct = value.IsDistinct;
-          Func = result =>
+          TypedOperator = result =>
             {
-                var f = value.Func(result);
+                var f = value.TypedOperator(result);
                 return new OV_bool(f is INumLiteral);
                     //f is double ||
                     //   f is long ||
