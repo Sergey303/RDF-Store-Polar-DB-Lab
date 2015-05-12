@@ -17,7 +17,7 @@ namespace SparqlParseRun.SparqlClasses.GraphPattern.Triples.Node
             get { throw new NotImplementedException(); }
         }
 
-        public override dynamic Content
+        public override object Content
         {
             get { throw new NotImplementedException(); }
         }

@@ -28,7 +28,7 @@ namespace SparqlParseRun.SparqlClasses.Update
             using (WebClient wc = new WebClient())
             {
                 //  wc.Headers[HttpRequestHeader.ContentType] = "application/sparql-query"; //"query="+ 
-                string gString = wc.DownloadString(((ObjectVariants)from).Content);
+                string gString = wc.DownloadString((string) @from.Content);
                 var graph = (Graph != null)
                     ? store.NamedGraphs.CreateGraph(Graph)
                     : store;

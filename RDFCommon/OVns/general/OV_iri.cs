@@ -60,7 +60,7 @@ namespace RDFCommon.OVns
         }
 
       
-        public override dynamic Content
+        public override object Content
         {
             get { return uriString; }
         }

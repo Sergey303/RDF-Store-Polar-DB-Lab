@@ -37,7 +37,7 @@ namespace SparqlParseRun.SparqlClasses.Query.Result
                     {
                         string prf;
                         string localName;
-                        var ns = GetNsAndLocalName(p.Content, out localName);
+                        var ns = GetNsAndLocalName((string) p.Content, out localName);
                         if (!prefixes.TryGetValue(ns, out prf))
                         {
                             prefixes.Add(ns, prf = "ns" + i++);
@@ -188,7 +188,7 @@ namespace SparqlParseRun.SparqlClasses.Query.Result
                     g.GetTriplesWithSubject(s, (predicate, @object) =>
                     {
                         string p;
-                        NamespaceLocalName ns = Prologue.SplitUri(predicate.Content);
+                        NamespaceLocalName ns = Prologue.SplitUri((string) predicate.Content);
                         //if (!prefixes.TryGetValue(ns.@namespace, out p))
                         //{ 
                         //    RDF.Add);

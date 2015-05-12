@@ -35,7 +35,7 @@ namespace SparqlParseRun.SparqlClasses.GraphPattern
 
         public ObjectVariants RunExpressionCreateBind(SparqlResult variableBinding)
         {
-            return sparqlExpression.Func(variableBinding);
+            return sparqlExpression.TypedOperator(variableBinding);
         }
 
 

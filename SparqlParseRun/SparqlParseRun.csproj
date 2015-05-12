@@ -48,6 +48,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DataSet.cs" />
+    <Compile Include="SparqlClasses\Expressions\SparqlBinaryExpression.cs" />
+    <Compile Include="SparqlClasses\Expressions\SparqlBoolExpression.cs" />
     <Compile Include="SparqlClasses\Expressions\SparqlStringLang.cs" />
     <Compile Include="SparqlClasses\Expressions\SparqlAbs.cs" />
     <Compile Include="SparqlClasses\Expressions\SparqlAndExpression.cs" />
@@ -60,6 +62,7 @@
     <Compile Include="SparqlClasses\Expressions\SparqlDataType.cs" />
     <Compile Include="SparqlClasses\Expressions\SparqlDay.cs" />
     <Compile Include="SparqlClasses\Expressions\SparqlExpression.cs" />
+    <Compile Include="SparqlClasses\Expressions\SparqlUnaryExpression.cs" />
     <Compile Include="SparqlClasses\GraphPattern\ISparqlGraphPattern.cs" />
     <Compile Include="SparqlClasses\GraphPattern\SparqlGraphPattern.cs" />
     <Compile Include="SparqlClasses\GraphPattern\SparqlGraphPatternType.cs" />
@@ -129,7 +132,7 @@
     <Compile Include="SparqlClasses\Expressions\SparqlTz.cs" />
     <Compile Include="SparqlClasses\Expressions\SparqlUcase.cs" />
     <Compile Include="SparqlClasses\Expressions\SparqlUri.cs" />
-    <Compile Include="SparqlClasses\Expressions\SparqlUriExpression.cs" />
+    <Compile Include="SparqlClasses\Expressions\SparqlIriExpression.cs" />
     <Compile Include="SparqlClasses\Expressions\SparqlUuid.cs" />
     <Compile Include="SparqlClasses\Expressions\SparqlYear.cs" />
     <Compile Include="SparqlClasses\SparqlAggregateExpression\SparqlAggregateExpression.cs" />

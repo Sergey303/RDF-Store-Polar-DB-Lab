@@ -13,16 +13,16 @@ namespace SparqlParseRun.SparqlClasses.Expressions
             // TODO: Complete member initialization
             IsAggragate = pattern.IsAggragate || str.IsAggragate;
             IsDistinct = pattern.IsDistinct ||str.IsDistinct;
-           str.SetVariablesTypes(ExpressionType.@stringOrWithLang);
-           pattern.SetVariablesTypes(ExpressionType.@stringOrWithLang);
+           str.SetExprType(ExpressionTypeEnum.@stringOrWithLang);
+           pattern.SetExprType(ExpressionTypeEnum.@stringOrWithLang);
 
-            SetVariablesTypes(ExpressionType.@stringOrWithLang);
+            SetExprType(ExpressionTypeEnum.@stringOrWithLang);
 
             
-            Func = result =>
+            TypedOperator = result =>
             {
-                var patternValue = pattern.Func(result);
-               return str.Func(result).Change(o => StringAfter(o, patternValue.Content));
+                var patternValue = pattern.TypedOperator(result);
+                return str.TypedOperator(result).Change(o => StringAfter(o, (string)patternValue.Content));
             };
           
         }

@@ -1,16 +1,17 @@
 using System;
 using RDFCommon;
+using RDFCommon.OVns;
 
 namespace SparqlParseRun.SparqlClasses.Expressions
 {
-    public class SparqlAbs : SparqlExpression
-    {
+
+    public class SparqlAbs : SparqlUnaryExpression
+    {                                    
         public SparqlAbs(SparqlExpression value)
+            : base(o => Math.Abs(o), value)
         {
-            IsAggragate = value.IsAggragate;
-            IsDistinct = value.IsDistinct;
-            value.SetVariablesTypes(ExpressionType.numeric);
-            Func = result => value.Func(result).Change(o => Math.Abs(o));
+            value.SetExprType(ExpressionTypeEnum.numeric);
+            SetExprType(ExpressionTypeEnum.numeric);
         }
     }
 }

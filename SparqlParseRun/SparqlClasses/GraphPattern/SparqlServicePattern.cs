@@ -80,7 +80,7 @@ namespace SparqlParseRun.SparqlClasses.GraphPattern
                 using (WebClient wc = new WebClient())
                 {
                     wc.Headers[HttpRequestHeader.ContentType] = "application/sparql-query"; //"query="+ 
-                    string HtmlResult = wc.UploadString(uri.Content, query);
+                    string HtmlResult = wc.UploadString((string) uri.Content, query);
 
 
                     var load = XElement.Parse(HtmlResult);

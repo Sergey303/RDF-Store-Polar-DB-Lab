@@ -12,14 +12,14 @@ namespace SparqlParseRun.SparqlClasses.Expressions
         {
              IsAggragate = list.Any(value=> value.IsAggragate);
             IsDistinct = list.Any(value=>  value.IsDistinct);
-            SetVariablesTypes(ExpressionType.stringOrWithLang);
+            SetExprType(ExpressionTypeEnum.stringOrWithLang);
             foreach (var sb in list)
-                sb.SetVariablesTypes(ExpressionType.stringOrWithLang);
-            if (list.Count == 0) Func = r=>new OV_string(string.Empty);
+                sb.SetExprType(ExpressionTypeEnum.stringOrWithLang);
+            if (list.Count == 0) TypedOperator = r=>new OV_string(string.Empty);
             else
-            Func = result =>
+            TypedOperator = result =>
             {
-                var values = list.Select(expression => expression.Func(result)).ToArray();
+                var values = list.Select(expression => expression.TypedOperator(result)).ToArray();
                 if (values.All(o => o is OV_langstring))
                 {
                     var commonLang = ((OV_langstring)values[0]).Lang;

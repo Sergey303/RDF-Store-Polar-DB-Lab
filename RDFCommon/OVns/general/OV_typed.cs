@@ -43,7 +43,7 @@ namespace RDFCommon.OVns
             return unchecked((1277 ^ value.GetHashCode()) * (31 ^ turi.GetHashCode()) *(127*Variant.GetHashCode()));
         }
 
-        public override dynamic Content { get { return value; } }
+        public override object Content { get { return value; } }
         public override ObjectVariants Change(Func<dynamic, dynamic> changing)
         {
             return new OV_typed(changing(value), turi);

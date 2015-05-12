@@ -12,18 +12,19 @@ namespace SparqlParseRun.SparqlClasses.Expressions
         {                    
             IsAggragate = value.IsAggragate;
             IsDistinct = value.IsDistinct;
-            SetVariablesTypes(ExpressionType.@string);
-            value.SetVariablesTypes(ExpressionType.stringOrWithLang);
-            Func = result =>
+            SetExprType(ObjectVariantEnum.Str);
+            value.SetExprType(ExpressionTypeEnum.stringOrWithLang);
+            TypedOperator = result =>
             {
-                var f = value.Func(result).Content;
+                var f = value.TypedOperator(result);
                 if (f is string)
+                    //todo
                 {
-                    return new OV_string(HttpUtility.UrlEncode(f));
+                    //return new OV_string(HttpUtility.UrlEncode(f));
                 }
                 if (f is ILanguageLiteral)
                 {
-                    return new OV_string(HttpUtility.UrlEncode(f.Content));
+                    return new OV_string(HttpUtility.UrlEncode((string) f.Content));
                 }
 
                 throw new ArgumentException();

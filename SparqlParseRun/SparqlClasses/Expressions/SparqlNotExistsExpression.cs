@@ -11,7 +11,7 @@ namespace SparqlParseRun.SparqlClasses
             // TODO: Complete member initialization
             //this.sparqlGraphPattern = sparqlGraphPattern;
             var funcClone = FunkClone;
-            Func = result => funcClone(result).Change(o => !o);
+            TypedOperator = result => funcClone(result).Change(o => !o);
         }
     }
 }
