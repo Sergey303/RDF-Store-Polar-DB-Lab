@@ -1,7 +1,9 @@
 using System;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using RDFCommon;
+using RDFCommon.OVns;
 using RDFTripleStore;
 using SparqlParseRun;
 using SparqlParseRun.SparqlClasses.Query.Result;
@@ -58,6 +60,13 @@ WHERE {
 	FILTER (?simProperty1 < (?origProperty1 + 120) && ?simProperty1 > (?origProperty1 - 120))
      }
 ";
+        public static readonly SecondStringSore _ts = new SecondStringSore("../../../Databases/");
+
+        private static readonly ObjectVariants[]_products = _ts.GetTriplesWithPredicateObject(new OV_iri("http://www.w3.org/1999/02/22-rdf-syntax-ns#type"), 
+            new OV_iri("http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/vocabulary/Product")).ToArray();
+
+        private static readonly int _productCount = _products.Count();
+        private static readonly Random _random = new Random();
 
         public static void TestQuery(string queryString, bool load, int millions)
         {
@@ -353,55 +362,113 @@ WHERE {
                 }
             }
         }
-        //private static void QueryWriteParameters(string parameteredQuery, StreamWriter output, SecondStringSore ts)
-        //{
-        //    var productsCodes = ts.GetTriplesWithPredicateObject(
-        //     (new ov"<http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/vocabulary/Product>"),
-        //        ts.CodePredicateFullName("<http://www.w3.org/1999/02/22-rdf-syntax-ns#type>"));
-        //    var codes = productsCodes as int[] ?? productsCodes.ToArray();
-        //    int productCount = codes.Count();
-        //    var product = ts.DecodeEntityFullName(codes.ElementAt(random.Next(0, productCount)));
-        //    //Millions == 1000 ? 2855260 : Millions == 100 ? 284826 : Millions == 10 ? 284826 : 2785;
-        //    int productFeatureCount =
-        //        Millions == 1000 ? 478840 : Millions == 100 ? 47884 : Millions == 10 ? 47450 : 4745;
-        //    int productTypesCount = Millions == 1000 ? 20110 : Millions == 100 ? 2011 : Millions == 10 ? 1510 : 151;
-        //    //var review = random.Next(1, productCount*10);
-        //    ////var product = random.Next(1, productCount);
-        //    ////var productProducer = product/ProductsPerProducer + 1; 
-        //    //var offer = random.Next(1, productCount*OffersPerProduct);
-        //    //var vendor = offer/OffersPerVendor + 1;
-        //    var offersCodes = ts.GetSubjectByObjPred(
-        //     ts.CodeEntityFullName("<http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/vocabulary/Offer>"),
-        //  ts.CodePredicateFullName("<http://www.w3.org/1999/02/22-rdf-syntax-ns#type>"));
-        //    codes = offersCodes as int[] ?? offersCodes.ToArray();
-        //    var offer = ts.DecodeEntityFullName(codes[random.Next(0, codes.Length)]);
-        //    var reviewsCodes = ts.GetSubjectByObjPred(
-        //   ts.CodeEntityFullName("<http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/vocabulary/Review>"),
-        //   ts.CodePredicateFullName("<http://www.w3.org/1999/02/22-rdf-syntax-ns#type>"));
-        //    codes = reviewsCodes as int[] ?? reviewsCodes.ToArray();
-        //    var review = ts.DecodePredicateFullName(codes[random.Next(0, codes.Length)]);
-        //    if (parameteredQuery.Contains("%ProductType%"))
-        //        output.WriteLine("bsbm-inst:ProductType" + random.Next(1, productTypesCount));
-        //    if (parameteredQuery.Contains("%ProductFeature1%"))
-        //        output.WriteLine("bsbm-inst:ProductFeature" + random.Next(1, productFeatureCount));
-        //    if (parameteredQuery.Contains("%ProductFeature2%"))
-        //        output.WriteLine("bsbm-inst:ProductFeature" + random.Next(1, productFeatureCount));
-        //    if (parameteredQuery.Contains("%ProductFeature3%"))
-        //        output.WriteLine("bsbm-inst:ProductFeature" + random.Next(1, productFeatureCount));
-        //    if (parameteredQuery.Contains("%x%")) output.WriteLine(random.Next(1, 500).ToString());
-        //    if (parameteredQuery.Contains("%y%")) output.WriteLine(random.Next(1, 500).ToString());
-        //    if (parameteredQuery.Contains("%ProductXYZ%"))
-        //        output.WriteLine(product);//"<http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromProducer{0}/Product{1}>",productProducer, product);
-        //    if (parameteredQuery.Contains("%word1%")) output.WriteLine(words[random.Next(0, words.Length)]);
-        //    if (parameteredQuery.Contains("%currentDate%"))
-        //        output.WriteLine("\"" + DateTime.Today.AddYears(-6) + "\"^^<http://www.w3.org/2001/XMLSchema#dateTime>");
-        //    if (parameteredQuery.Contains("%ReviewXYZ%"))
-        //        output.WriteLine(review);//"<http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromRatingSite{0}/Review{1}>",review/10000 + 1, review);
-        //    if (parameteredQuery.Contains("%OfferXYZ%"))
-        //        output.WriteLine(offer);
-        //    //"<http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromVendor{0}/Offer{1}>", vendor, offer);
-        //}
 
-        public static int Millions { get { return 1; }}
+        public static void CreateParameters(int query, int count, int millions)
+        {
+            var paramvaluesFilePath = string.Format(@"..\..\examples\bsbm\queries\parameters\param values for{0}m {1} query.txt", millions, query);
+            var paramvaluesFilePath2 = string.Format(@"..\..\examples\bsbm\queries\parameters\{0}.rq", query);
+            using (StreamWriter streamParameters = new StreamWriter(paramvaluesFilePath, true))
+            using (StreamReader streamQuery = new StreamReader(paramvaluesFilePath2))
+            {
+                string q = streamQuery.ReadToEnd();
+                for (int j = 0; j < count; j++)
+                {
+                    QueryWriteParameters(q, streamParameters);
+                }
+            }
+        }
+
+        public static void RunTestParametred(int iq, int count = 100)
+        {
+            var paramvaluesFilePath =
+                string.Format(@"..\..\examples\bsbm\queries\parameters\param values for{0}m {1} query.txt", 1, iq);
+            var qFile = 
+                string.Format(@"..\..\examples\bsbm\queries\parameters\{0}.rq", iq);
+            using (StreamReader streamParameters = new StreamReader(paramvaluesFilePath))
+            using (StreamReader streamQuery = new StreamReader(qFile))
+            {
+                string qparams = streamQuery.ReadToEnd();
+                Stopwatch timer = new Stopwatch();
+                for (int j = 0; j < count; j++)
+                {
+                    qparams=QueryReadParameters(qparams, streamParameters);
+                    timer.Start();
+                    _ts.ParseAndRun(qparams).ToJson();
+                    timer.Stop();
+                }
+
+                using (StreamWriter r = new StreamWriter(@"..\..\output.txt", true))
+                {
+                    r.WriteLine();
+                    r.WriteLine("one query {0}, {1} times", iq, count);
+                    r.WriteLine("milions " + 1);
+                    r.WriteLine("date time " + DateTime.Now);
+                    r.WriteLine("total ms " + timer.ElapsedMilliseconds);
+                    r.WriteLine("tics per q " + timer.ElapsedTicks/count);
+                    r.WriteLine("qps " + (int)(((double) count)/timer.Elapsed.TotalSeconds));
+                }
+            }
+        }
+
+        private static void QueryWriteParameters(string parameteredQuery, StreamWriter output)
+        {
+            var product = _products.ElementAt(_random.Next(0, _productCount));
+            //Millions == 1000 ? 2855260 : Millions == 100 ? 284826 : Millions == 10 ? 284826 : 2785;
+            //int productFeatureCount;
+            //switch (Millons)
+            //{
+            //    case 1000:
+            //        productFeatureCount = 478840;
+            //        break;
+            //    case 100:
+            //        productFeatureCount = 47884;
+            //        break;
+            //    case 10:
+            //        productFeatureCount = 47450;
+            //        break;
+            //    default:
+            //        productFeatureCount = 4745;
+            //        break;
+            //}
+            //int productTypesCount = Millons == 1000 ? 20110 : Millons == 100 ? 2011 : Millons == 10 ? 1510 : 151;
+            //var review = random.Next(1, productCount*10);
+            ////var product = random.Next(1, productCount);
+            ////var productProducer = product/ProductsPerProducer + 1; 
+            //var offer = random.Next(1, productCount*OffersPerProduct);
+            //var vendor = offer/OffersPerVendor + 1;
+          //  var offersCodes = ts.gettri(
+          //   ts.CodeEntityFullName("<http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/vocabulary/Offer>"),
+          //ts.CodePredicateFullName("<http://www.w3.org/1999/02/22-rdf-syntax-ns#type>"));
+          //  codes = offersCodes as int[] ?? offersCodes.ToArray();
+          //  var offer = ts.DecodeEntityFullName(codes[random.Next(0, codes.Length)]);
+          //  var reviewsCodes = ts.GetSubjectByObjPred(
+          // ts.CodeEntityFullName("<http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/vocabulary/Review>"),
+          // ts.CodePredicateFullName("<http://www.w3.org/1999/02/22-rdf-syntax-ns#type>"));
+          //  codes = reviewsCodes as int[] ?? reviewsCodes.ToArray();
+          //  var review = ts.DecodePredicateFullName(codes[random.Next(0, codes.Length)]);
+            //if (parameteredQuery.Contains("%ProductType%"))
+            //    output.WriteLine("bsbm-inst:ProductType" + random.Next(1, productTypesCount));
+            //if (parameteredQuery.Contains("%ProductFeature1%"))
+            //    output.WriteLine("bsbm-inst:ProductFeature" + random.Next(1, productFeatureCount));
+            //if (parameteredQuery.Contains("%ProductFeature2%"))
+            //    output.WriteLine("bsbm-inst:ProductFeature" + random.Next(1, productFeatureCount));
+            //if (parameteredQuery.Contains("%ProductFeature3%"))
+            //    output.WriteLine("bsbm-inst:ProductFeature" + random.Next(1, productFeatureCount));
+            if (parameteredQuery.Contains("%x%")) output.WriteLine(_random.Next(1, 500).ToString());
+            if (parameteredQuery.Contains("%y%")) output.WriteLine(_random.Next(1, 500).ToString());
+            if (parameteredQuery.Contains("%ProductXYZ%"))
+                output.WriteLine(product);
+            //"<http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromProducer{0}/Product{1}>",productProducer, product);
+            //if (parameteredQuery.Contains("%word1%")) output.WriteLine(words[random.Next(0, words.Length)]);
+            //if (parameteredQuery.Contains("%currentDate%"))
+            //    output.WriteLine("\"" + DateTime.Today.AddYears(-6) + "\"^^<http://www.w3.org/2001/XMLSchema#dateTime>");
+            //if (parameteredQuery.Contains("%ReviewXYZ%"))
+            //    output.WriteLine(review);//"<http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromRatingSite{0}/Review{1}>",review/10000 + 1, review);
+            //if (parameteredQuery.Contains("%OfferXYZ%"))
+            //    output.WriteLine(offer);
+            ////"<http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromVendor{0}/Offer{1}>", vendor, offer);
+        }
+
+        public static int Millons { get { return 1; }}
     }
 }
