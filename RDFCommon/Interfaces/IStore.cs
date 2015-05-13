@@ -1,3 +1,5 @@
+using RDFCommon.Interfaces;
+
 namespace RDFCommon
 {
     public interface IStore : IGraph 
@@ -8,5 +10,7 @@ namespace RDFCommon
 
         void ClearAll();
         IGraph CreateTempGraph();
+        void ReloadFrom(string filePath);
+ 
     }
 }

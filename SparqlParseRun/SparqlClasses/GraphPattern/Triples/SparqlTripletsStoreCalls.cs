@@ -7,7 +7,7 @@ using SparqlParseRun.SparqlClasses.Query.Result;
 
 namespace SparqlParseRun.SparqlClasses.GraphPattern.Triples
 {
-    public  class SparqlTripletsStoreCalls : ISparqlTripletsStoreCalls
+    public  class SparqlTripletsStoreCalls 
     {
         private IStore store;
         

@@ -10,12 +10,13 @@ namespace RDFTripleStore
 {
     class RamDictGraph :IGraph
     {
-        private INodeGenerator ng=new NodeGenerator();
+        private NodeGenerator ng = RDFCommon.OVns.NodeGenerator.Create();
         private Dictionary<ObjectVariants,
-            KeyValuePair<Dictionary<ObjectVariants, ObjectVariants>, Dictionary<ObjectVariants, HashSet<ObjectVariants>>>> triples = new Dictionary<ObjectVariants, KeyValuePair<Dictionary<ObjectVariants, ObjectVariants>, Dictionary<ObjectVariants, HashSet<ObjectVariants>>>>(); 
+            KeyValuePair<Dictionary<ObjectVariants, ObjectVariants>, Dictionary<ObjectVariants, HashSet<ObjectVariants>>>> triples = new Dictionary<ObjectVariants, KeyValuePair<Dictionary<ObjectVariants, ObjectVariants>, Dictionary<ObjectVariants, HashSet<ObjectVariants>>>>();
+
         public string Name { get { return "g"; } }
 
-        public INodeGenerator NodeGenerator
+        public NodeGenerator NodeGenerator
         {
             get { return ng; }          
         }
@@ -93,6 +94,11 @@ namespace RDFTripleStore
         }
 
         public void FromTurtle(string gString)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Warmup()
         {
             throw new NotImplementedException();
         }

@@ -14,7 +14,7 @@ namespace RDFTripleStore
 {
     public class FirstIntStore : FirstIntGraph, IStore
     {
-        public FirstIntStore(string path) : base(path)
+        public FirstIntStore(string path) : base(path)// base(new FirstIntGraph(path))
         {
         }
 
@@ -22,12 +22,8 @@ namespace RDFTripleStore
         {
             ClearAll();
             FromTurtle(fileName);    
-        }
-        public void ReloadFrom(Stream baseStream)
-        {
-            ClearAll();
-          base.FromTurtle(baseStream);    
-        }
+        }              
+     
         public SparqlResultSet ParseAndRun(string query)
         {
             var queryContext = Parse(query);
@@ -36,7 +32,7 @@ namespace RDFTripleStore
 
         private SparqlResultSet Run(SparqlQuery queryContext)
         {
-            return queryContext.Run(this);
+            return queryContext.Run();
         }
 
         public SparqlQuery Parse(string query)

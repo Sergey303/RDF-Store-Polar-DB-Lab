@@ -1,11 +1,12 @@
 ﻿using System;
 using RDFCommon;
+using RDFCommon.OVns;
 
 namespace SparqlParseRun.SparqlClasses.Expressions
 {
     class SparqlUcase :SparqlExpression
     {
-        public SparqlUcase(SparqlExpression value, INodeGenerator q)
+        public SparqlUcase(SparqlExpression value, NodeGenerator q)
         {
 
             IsAggragate = value.IsAggragate;

@@ -91,7 +91,7 @@ namespace RDFCommon
              Nil   ,RdfFirst,  RdfRest, RdfType
             };
         }
-       public SpecialTypesClass(INodeGenerator nodeGenerator)
+       public SpecialTypesClass(NodeGenerator nodeGenerator)
         {
         //    date =nodeGenerator. CreateUriNode(Date);
         //    @string = nodeGenerator.CreateUriNode(String);

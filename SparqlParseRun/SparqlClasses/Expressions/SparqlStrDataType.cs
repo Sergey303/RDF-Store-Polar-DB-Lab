@@ -8,7 +8,7 @@ namespace SparqlParseRun.SparqlClasses.Expressions
     {
      
 
-        public SparqlStrDataType(SparqlExpression sparqlExpression1, SparqlExpression sparqlExpression2, INodeGenerator q)
+        public SparqlStrDataType(SparqlExpression sparqlExpression1, SparqlExpression sparqlExpression2, NodeGenerator q)
         {
             // TODO: Complete member initialization
        

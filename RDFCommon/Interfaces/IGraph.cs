@@ -9,7 +9,7 @@ namespace RDFCommon
     {
         string Name { get; }
 
-        INodeGenerator NodeGenerator { get; }   
+        NodeGenerator NodeGenerator { get; }   
       
         void Clear();
 
@@ -72,5 +72,6 @@ namespace RDFCommon
 
         bool Any();
         void FromTurtle(string gString);
+        void Warmup();
     }
 }

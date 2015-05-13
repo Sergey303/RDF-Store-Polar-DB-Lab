@@ -2,21 +2,18 @@ using System;
 
 namespace RDFCommon.OVns
 {
-    public class NodeGenerator:INodeGenerator
+    public class NodeGenerator
     {
-        public NodeGenerator()
-        {
-            SpecialTypes=new SpecialTypesClass(this);
-        }
-  
+
         
         public virtual ObjectVariants GetUri(string uri)
         {
           return new OV_iri(uri);
         }
 
-        public SpecialTypesClass SpecialTypes { get; protected set; }
-   
+        public SpecialTypesClass SpecialTypes { get; set; }
+
+
         public ObjectVariants CreateBlankNode()
         {
             return
@@ -28,6 +25,13 @@ namespace RDFCommon.OVns
         public virtual ObjectVariants AddIri(string iri)
         {
             return new OV_iri(iri);
+        }
+
+        public static NodeGenerator Create()
+        {
+            var ng = new NodeGenerator();
+            ng.SpecialTypes=new SpecialTypesClass(ng);
+            return ng;
         }
 
         private long BlankNodeGenerateNums()
@@ -86,7 +90,7 @@ namespace RDFCommon.OVns
             }
         }
 
-        public ObjectVariants CreateBlankNode(string blankNodeString, string graph)
+        public ObjectVariants CreateBlankNode(string blankNodeString, string graph=null)
         {
             if (graph != null) blankNodeString = graph + "/" + blankNodeString;
 

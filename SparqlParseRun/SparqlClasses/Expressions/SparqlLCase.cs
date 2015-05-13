@@ -8,7 +8,7 @@ namespace SparqlParseRun.SparqlClasses.Expressions
     {
         private SparqlExpression sparqlExpression;
 
-        public SparqlLCase(SparqlExpression value, INodeGenerator q)
+        public SparqlLCase(SparqlExpression value, NodeGenerator q)
         {
 
             IsAggragate = value.IsAggragate;

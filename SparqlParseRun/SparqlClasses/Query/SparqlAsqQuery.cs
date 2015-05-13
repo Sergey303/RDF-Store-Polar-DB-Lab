@@ -18,9 +18,9 @@ namespace SparqlParseRun.SparqlClasses.Query
             this.sparqlSolutionModifier = sparqlSolutionModifier;
         }
 
-        public override SparqlResultSet Run(IStore store)
+        public override SparqlResultSet Run()
         {
-            base.Run(store);
+            base.Run();
             ResultSet.ResultType = ResultType.Ask;
             return ResultSet;
 

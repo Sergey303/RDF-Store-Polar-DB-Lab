@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using RDFCommon;
+using RDFCommon.Interfaces;
 using SparqlParseRun.SparqlClasses.GraphPattern;
 using SparqlParseRun.SparqlClasses.Query;
 using SparqlParseRun.SparqlClasses.Query.Result;
@@ -9,7 +10,7 @@ using SparqlParseRun.SparqlClasses.SolutionModifier;
 
 namespace SparqlParseRun
 {
-    public abstract class SparqlQuery
+    public abstract class SparqlQuery 
     {
         internal SparqlGraphPattern sparqlWhere;
         internal readonly SparqlResultSet ResultSet;
@@ -23,9 +24,9 @@ namespace SparqlParseRun
         }
 
 
-        public virtual SparqlResultSet Run(IStore store)
+        public virtual SparqlResultSet Run()
         {
-            q.Store = store;
+            
             ResultSet.Variables = q.Variables;
             ResultSet.Results = Enumerable.Repeat(new SparqlResult(q), 1);
 

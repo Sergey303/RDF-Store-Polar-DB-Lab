@@ -1,11 +1,12 @@
 ﻿using System;
 using RDFCommon;
+using RDFCommon.OVns;
 
 namespace SparqlParseRun.SparqlClasses.Expressions
 {
     class SparqlStrBefore : SparqlExpression
     {
-        public SparqlStrBefore(SparqlExpression str, SparqlExpression pattern, INodeGenerator q)
+        public SparqlStrBefore(SparqlExpression str, SparqlExpression pattern, NodeGenerator q)
         {
             IsAggragate = pattern.IsAggragate || str.IsAggragate;
             IsDistinct = pattern.IsDistinct || str.IsDistinct;

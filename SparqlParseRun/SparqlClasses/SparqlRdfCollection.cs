@@ -10,7 +10,7 @@ namespace SparqlParseRun.SparqlClasses
     {
         public List<ObjectVariants> nodes = new List<ObjectVariants>();
 
-        public ObjectVariants GetNode(Action<ObjectVariants, ObjectVariants, ObjectVariants> addTriple, INodeGenerator q)
+        public ObjectVariants GetNode(Action<ObjectVariants, ObjectVariants, ObjectVariants> addTriple, NodeGenerator q)
         {
 
 

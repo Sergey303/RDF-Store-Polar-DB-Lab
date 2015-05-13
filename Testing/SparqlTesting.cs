@@ -3,70 +3,15 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using RDFCommon;
-using RDFCommon.OVns;
-using RDFTripleStore;
 using SparqlParseRun;
+using SparqlParseRun.SparqlClasses;
 using SparqlParseRun.SparqlClasses.Query.Result;
 
 namespace TestingNs
 {
     class SparqlTesting
     {
-        public static void TestSparqlStore(int millions)
-        {
-            SecondStringSore sparqlStore = new SecondStringSore("../../../Databases/");
-            Perfomance.ComputeTime(() =>
-            {
-                sparqlStore.ReloadFrom(Config.Source_data_folder_path + millions + ".ttl");
-            }, "build " + millions + ".ttl ");
-            //   Console.WriteLine(sparqlStore.GetTriplesWithSubject(sparqlStore.NodeGenerator.CreateUriNode("http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromVendor1/")));
-            Perfomance.ComputeTime(() =>
-            {
-                Console.WriteLine(sparqlStore.ParseAndRun(sq).ToJson());
-              
-            }, "run simple" + millions + ".ttl ");
-        }
-
-        private static string sq = @" PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
-PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
-PREFIX bsbm: <http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/vocabulary/>
-PREFIX dataFromProducer1: <http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromProducer1/> 
-
-SELECT ?product
-WHERE { 
-	dataFromProducer1:Product12 bsbm:productFeature ?prodFeature .
-	?product bsbm:productFeature ?prodFeature .
-    FILTER (dataFromProducer1:Product12 != ?product)	
-?product rdfs:label ?productLabel .
-	dataFromProducer1:Product12 bsbm:productPropertyNumeric1 ?origProperty1 .
-	?product bsbm:productPropertyNumeric1 ?simProperty1 .
-#	FILTER (?simProperty1 < (?origProperty1 + 120) && ?simProperty1 > (?origProperty1 - 120))
-     }
-";
-
-        private static string sq5 = @" PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
-PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
-PREFIX bsbm: <http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/vocabulary/>
-PREFIX dataFromProducer1: <http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromProducer1/> 
-
-SELECT DISTINCT ?product
-WHERE { 
-	dataFromProducer1:Product12 bsbm:productFeature ?prodFeature .
-	?product bsbm:productFeature ?prodFeature .
-    FILTER (dataFromProducer1:Product12 != ?product)	
-?product rdfs:label ?productLabel .
-	dataFromProducer1:Product12 bsbm:productPropertyNumeric1 ?origProperty1 .
-	?product bsbm:productPropertyNumeric1 ?simProperty1 .
-	FILTER (?simProperty1 < (?origProperty1 + 120) && ?simProperty1 > (?origProperty1 - 120))
-     }
-";
-        public static readonly SecondStringSore _ts = new SecondStringSore("../../../Databases/");
-
-        private static readonly ObjectVariants[]_products = _ts.GetTriplesWithPredicateObject(new OV_iri("http://www.w3.org/1999/02/22-rdf-syntax-ns#type"), 
-            new OV_iri("http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/vocabulary/Product")).ToArray();
-
-        private static readonly int _productCount = _products.Count();
-        private static readonly Random _random = new Random();
+  
 
         public static void TestQuery(string queryString, bool load, int millions)
         {
@@ -83,7 +28,7 @@ WHERE {
             SparqlQuery query = null;
             Perfomance.ComputeTime(() => query = sparqlStore.Parse(queryString), "parse ");
             SparqlResultSet results = null;
-            Perfomance.ComputeTime(() => results = query.Run(sparqlStore), "run ");
+            Perfomance.ComputeTime(() => results = query.Run(), "run ");
 
          
 
@@ -91,14 +36,7 @@ WHERE {
          //   Console.WriteLine("{0} ", results.ToJson());
         }
 
-        public static void BSBm(int millions, bool load)
-        {
-            SecondStringSore sparqlStore = new SecondStringSore("../../../Databases/");
-            if (load)
-                sparqlStore.ReloadFrom(Config.Source_data_folder_path + millions + ".ttl");
-              RunBerlinsWithConstants(sparqlStore, millions);
-          //   RunBerlinsParameters(sparqlStore, millions);
-        }
+     
         public static void InterpretMeas(int millions, bool load)
         {
             SecondStringSore sparqlStore = new SecondStringSore("../../../Databases/");
@@ -108,7 +46,7 @@ WHERE {
    
 
             Console.WriteLine("bsbm with constants train");
-            RunBerlinsParameters(sparqlStore, millions);
+            RunBerlinsParameters();
 
          // Console.WriteLine("history count " + sparqlStore.history.Count);
            // using (StreamWriter sr = new StreamWriter(@"..\..\output.txt", true))
@@ -123,12 +61,12 @@ WHERE {
 
 
         }
-
-        public static void RunBerlinsParameters(SecondStringSore ts, int millions)
+    
+        public static void RunBerlinsParameters()
         {
-           ts.Warmup();
+            StoreLauncher.Store.Warmup();
             Console.WriteLine("bsbm parametered");
-            var paramvaluesFilePath = string.Format(@"..\..\examples\bsbm\queries\parameters\param values for{0} m.txt", millions);
+            var paramvaluesFilePath = string.Format(@"..\..\examples\bsbm\queries\parameters\param values for{0} m.txt", StoreLauncher.Millions);
             //            using (StreamWriter streamQueryParameters = new StreamWriter(paramvaluesFilePath))
             //                for (int j = 0; j < 1000; j++)
             //                    foreach (var file in fileInfos.Select(info => File.ReadAllText(info.FullName)))
@@ -139,14 +77,14 @@ WHERE {
             {
                 for (int j = 0; j < 500; j++)
                     for (int i = 1; i < 13; i++)
-                        QueryReadParameters(File.ReadAllText(string.Format(@"..\..\examples\bsbm\queries\parameters\{0}.rq", i)),
+                        BSBmParams.QueryReadParameters(File.ReadAllText(string.Format(@"..\..\examples\bsbm\queries\parameters\{0}.rq", i)),
                             streamQueryParameters);
 
-                SubTestRun(ts, streamQueryParameters, 500, millions);
+                SubTestRun(streamQueryParameters, 500);
             }
         }
 
-        private static void SubTestRun(SecondStringSore ts, StreamReader streamQueryParameters, int i1, int millions)
+        private static void SubTestRun( StreamReader streamQueryParameters, int i1)
         {
             long[] results = new long[12];
             double[] minimums = Enumerable.Repeat(double.MaxValue, 12).ToArray();
@@ -160,14 +98,14 @@ WHERE {
                 {
                     string file = string.Format(@"..\..\examples\bsbm\queries\parameters\{0}.rq", i+1);
                     var readAllText = File.ReadAllText(file);
-                    readAllText = QueryReadParameters(readAllText, streamQueryParameters);
+                    readAllText = BSBmParams.QueryReadParameters(readAllText, streamQueryParameters);
 
                     var st = DateTime.Now;
-                    var sparqlQuery = ts.Parse(readAllText);
+                    var sparqlQuery = SparqlQueryParser.Parse(StoreLauncher.Store, readAllText);
 
                     totalparseMS[i] += (DateTime.Now - st).Ticks / 10000L;
                     var st1 = DateTime.Now;
-                    var sparqlResultSet = sparqlQuery.Run(ts).ToJson();
+                    var sparqlResultSet = sparqlQuery.Run().ToJson();
                     totalrun[i] += (DateTime.Now - st1).Ticks / 10000L;
                     var totalMilliseconds = (DateTime.Now - st).Ticks / 10000L;
 
@@ -185,7 +123,7 @@ WHERE {
             }
             using (StreamWriter r = new StreamWriter(@"..\..\output.txt", true))
             {
-                r.WriteLine("milions " + millions);
+                r.WriteLine("milions " + StoreLauncher.Millions);
                 r.WriteLine("date time " + DateTime.Now);
                 r.WriteLine("max memory usage " + maxMemoryUsage);
                 r.WriteLine("average " + string.Join(", ", results.Select(l => l == 0 ? "inf" : (500 * 1000 / l).ToString())));
@@ -220,7 +158,7 @@ WHERE {
 
                 totalparseMS[i] += (DateTime.Now - st).Ticks / 10000L;
                 var st1 = DateTime.Now;
-                var sparqlResultSet = sparqlQuery.Run(ts).ToJson();
+                var sparqlResultSet = sparqlQuery.Run().ToJson();
                 totalrun[i] += (DateTime.Now - st1).Ticks / 10000L;
                 var totalMilliseconds = (DateTime.Now - st).Ticks / 10000L;
 
@@ -255,42 +193,6 @@ WHERE {
             }
         }
 
-        private static string QueryReadParameters(string parameteredQuery, StreamReader input)
-        {
-            if (parameteredQuery.Contains("%ProductType%"))
-                parameteredQuery = parameteredQuery.Replace("%ProductType%", Read(input.ReadLine()) + ">");
-            if (parameteredQuery.Contains("%ProductFeature1%"))
-                parameteredQuery = parameteredQuery.Replace("%ProductFeature1%", Read(input.ReadLine()));
-            if (parameteredQuery.Contains("%ProductFeature2%"))
-                parameteredQuery = parameteredQuery.Replace("%ProductFeature2%", Read(input.ReadLine()));
-            if (parameteredQuery.Contains("%ProductFeature3%"))
-                parameteredQuery = parameteredQuery.Replace("%ProductFeature3%", Read(input.ReadLine()));
-            if (parameteredQuery.Contains("%x%"))
-                parameteredQuery = parameteredQuery.Replace("%x%", input.ReadLine());
-            if (parameteredQuery.Contains("%y%"))
-                parameteredQuery = parameteredQuery.Replace("%y%", input.ReadLine());
-            if (parameteredQuery.Contains("%ProductXYZ%"))
-                parameteredQuery = parameteredQuery.Replace("%ProductXYZ%", "<" + input.ReadLine() + ">");
-            if (parameteredQuery.Contains("%word1%"))
-                parameteredQuery = parameteredQuery.Replace("%word1%", input.ReadLine());
-            if (parameteredQuery.Contains("%currentDate%"))
-                parameteredQuery = parameteredQuery.Replace("%currentDate%", input.ReadLine());
-            if (parameteredQuery.Contains("%ReviewXYZ%"))
-                parameteredQuery = parameteredQuery.Replace("%ReviewXYZ%", "<" + input.ReadLine() + ">");
-            if (parameteredQuery.Contains("%OfferXYZ%"))
-                parameteredQuery = parameteredQuery.Replace("%OfferXYZ%", "<" + input.ReadLine() + ">");
-            return parameteredQuery;
-        }
-
-        private static string Read(string readLine)
-        {
-            if (readLine.StartsWith("http://"))
-                return "<" + readLine + ">";
-            var splitPrefixed = Prologue.SplitPrefixed(readLine);
-            if (splitPrefixed.prefix == "bsbm-inst:")
-                return "<http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/>";
-            return readLine;
-        }
 
         public static void TestExamples()
         {
@@ -350,7 +252,7 @@ WHERE {
                         exampleDir.Name + " " + rqQueryFile.Name + " parse ", true);
 
                     if (sparqlQuery != null)
-                        Perfomance.ComputeTime(() => { sparqlResultSet = sparqlQuery.Run(store); },
+                        Perfomance.ComputeTime(() => { sparqlResultSet = sparqlQuery.Run(); },
                             exampleDir.Name + " " + rqQueryFile.Name + " run ", true);
                     File.WriteAllText(rqQueryFile.FullName + " results of run.txt", sparqlResultSet.ToJson());
                     //    Assert.AreEqual(File.ReadAllText(rqQueryFile.FullName + " expected results.txt"),
@@ -363,20 +265,7 @@ WHERE {
             }
         }
 
-        public static void CreateParameters(int query, int count, int millions)
-        {
-            var paramvaluesFilePath = string.Format(@"..\..\examples\bsbm\queries\parameters\param values for{0}m {1} query.txt", millions, query);
-            var paramvaluesFilePath2 = string.Format(@"..\..\examples\bsbm\queries\parameters\{0}.rq", query);
-            using (StreamWriter streamParameters = new StreamWriter(paramvaluesFilePath, true))
-            using (StreamReader streamQuery = new StreamReader(paramvaluesFilePath2))
-            {
-                string q = streamQuery.ReadToEnd();
-                for (int j = 0; j < count; j++)
-                {
-                    QueryWriteParameters(q, streamParameters);
-                }
-            }
-        }
+      
 
         public static void RunTestParametred(int iq, int count = 100)
         {
@@ -391,9 +280,9 @@ WHERE {
                 Stopwatch timer = new Stopwatch();
                 for (int j = 0; j < count; j++)
                 {
-                   string q =QueryReadParameters(qparams, streamParameters);
+                   string q = BSBmParams.QueryReadParameters(qparams, streamParameters);
                     timer.Start();
-                    _ts.ParseAndRun(q).Results.ToArray();
+                    SparqlQueryParser.Parse(StoreLauncher.Store, q).Run().Results.ToArray();
                     timer.Stop();
                 }
 
@@ -404,73 +293,85 @@ WHERE {
                     r.WriteLine("milions " + 1);
                     r.WriteLine("date time " + DateTime.Now);
                     r.WriteLine("total ms " + timer.ElapsedMilliseconds);
-                    r.WriteLine("tics per q " + timer.ElapsedTicks/count);
-                    r.WriteLine("qps " + (int)(((double) count)/timer.Elapsed.TotalSeconds));
+                    double l = ((double)timer.ElapsedMilliseconds)/count;
+                    r.WriteLine("ms " + l);
+                    
+                    r.WriteLine("qps " + (int)(1000.0/l));
+                    string q = BSBmParams.QueryReadParameters(qparams, streamParameters);
                     r.WriteLine("11 results count: {0}",
-                      _ts.ParseAndRun(QueryReadParameters(qparams, streamParameters)).Results.Count());
+                        SparqlQueryParser.Parse(StoreLauncher.Store, q).Run().Results.Count());
                 }
             }
         }
+        private static string sq51 = @" PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX bsbm: <http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/vocabulary/>
+PREFIX dataFromProducer1: <http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromProducer1/> 
 
-        private static void QueryWriteParameters(string parameteredQuery, StreamWriter output)
-        {
-            var product = _products.ElementAt(_random.Next(0, _productCount));
-            //Millions == 1000 ? 2855260 : Millions == 100 ? 284826 : Millions == 10 ? 284826 : 2785;
-            //int productFeatureCount;
-            //switch (Millons)
-            //{
-            //    case 1000:
-            //        productFeatureCount = 478840;
-            //        break;
-            //    case 100:
-            //        productFeatureCount = 47884;
-            //        break;
-            //    case 10:
-            //        productFeatureCount = 47450;
-            //        break;
-            //    default:
-            //        productFeatureCount = 4745;
-            //        break;
-            //}
-            //int productTypesCount = Millons == 1000 ? 20110 : Millons == 100 ? 2011 : Millons == 10 ? 1510 : 151;
-            //var review = random.Next(1, productCount*10);
-            ////var product = random.Next(1, productCount);
-            ////var productProducer = product/ProductsPerProducer + 1; 
-            //var offer = random.Next(1, productCount*OffersPerProduct);
-            //var vendor = offer/OffersPerVendor + 1;
-          //  var offersCodes = ts.gettri(
-          //   ts.CodeEntityFullName("<http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/vocabulary/Offer>"),
-          //ts.CodePredicateFullName("<http://www.w3.org/1999/02/22-rdf-syntax-ns#type>"));
-          //  codes = offersCodes as int[] ?? offersCodes.ToArray();
-          //  var offer = ts.DecodeEntityFullName(codes[random.Next(0, codes.Length)]);
-          //  var reviewsCodes = ts.GetSubjectByObjPred(
-          // ts.CodeEntityFullName("<http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/vocabulary/Review>"),
-          // ts.CodePredicateFullName("<http://www.w3.org/1999/02/22-rdf-syntax-ns#type>"));
-          //  codes = reviewsCodes as int[] ?? reviewsCodes.ToArray();
-          //  var review = ts.DecodePredicateFullName(codes[random.Next(0, codes.Length)]);
-            //if (parameteredQuery.Contains("%ProductType%"))
-            //    output.WriteLine("bsbm-inst:ProductType" + random.Next(1, productTypesCount));
-            //if (parameteredQuery.Contains("%ProductFeature1%"))
-            //    output.WriteLine("bsbm-inst:ProductFeature" + random.Next(1, productFeatureCount));
-            //if (parameteredQuery.Contains("%ProductFeature2%"))
-            //    output.WriteLine("bsbm-inst:ProductFeature" + random.Next(1, productFeatureCount));
-            //if (parameteredQuery.Contains("%ProductFeature3%"))
-            //    output.WriteLine("bsbm-inst:ProductFeature" + random.Next(1, productFeatureCount));
-            if (parameteredQuery.Contains("%x%")) output.WriteLine(_random.Next(1, 500).ToString());
-            if (parameteredQuery.Contains("%y%")) output.WriteLine(_random.Next(1, 500).ToString());
-            if (parameteredQuery.Contains("%ProductXYZ%"))
-                output.WriteLine(product);
-            //"<http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromProducer{0}/Product{1}>",productProducer, product);
-            //if (parameteredQuery.Contains("%word1%")) output.WriteLine(words[random.Next(0, words.Length)]);
-            //if (parameteredQuery.Contains("%currentDate%"))
-            //    output.WriteLine("\"" + DateTime.Today.AddYears(-6) + "\"^^<http://www.w3.org/2001/XMLSchema#dateTime>");
-            //if (parameteredQuery.Contains("%ReviewXYZ%"))
-            //    output.WriteLine(review);//"<http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromRatingSite{0}/Review{1}>",review/10000 + 1, review);
-            //if (parameteredQuery.Contains("%OfferXYZ%"))
-            //    output.WriteLine(offer);
-            ////"<http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromVendor{0}/Offer{1}>", vendor, offer);
-        }
+SELECT ?product
+WHERE { 
+	dataFromProducer1:Product12 bsbm:productFeature ?prodFeature .
+	?product bsbm:productFeature ?prodFeature .
+    FILTER (dataFromProducer1:Product12 != ?product)	
+?product rdfs:label ?productLabel .
+	dataFromProducer1:Product12 bsbm:productPropertyNumeric1 ?origProperty1 .
+	?product bsbm:productPropertyNumeric1 ?simProperty1 .
+#	FILTER (?simProperty1 < (?origProperty1 + 120) && ?simProperty1 > (?origProperty1 - 120))
+     }
+";
 
-        public static int Millons { get { return 1; }}
+        private static string sq52 = @" PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX bsbm: <http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/vocabulary/>
+PREFIX dataFromProducer1: <http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromProducer1/> 
+
+SELECT DISTINCT ?product
+WHERE { 
+	dataFromProducer1:Product12 bsbm:productFeature ?prodFeature .
+	?product bsbm:productFeature ?prodFeature .
+    FILTER (dataFromProducer1:Product12 != ?product)	
+?product rdfs:label ?productLabel .
+	dataFromProducer1:Product12 bsbm:productPropertyNumeric1 ?origProperty1 .
+	?product bsbm:productPropertyNumeric1 ?simProperty1 .
+	FILTER (?simProperty1 < (?origProperty1 + 120) && ?simProperty1 > (?origProperty1 - 120))
+     }
+";
+        private static string sq = @"SELECT  ?prodFeature
+WHERE { 
+ <http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromProducer1/Product12>  <http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/vocabulary/productFeature> ?prodFeature .
+	?product <http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/vocabulary/productFeature> ?prodFeature .
+}
+";
+
+        private static string sq5 = @"PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX bsbm: <http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/vocabulary/>
+PREFIX dataFromProducer1: <http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromProducer1/> 
+
+SELECT DISTINCT ?product ?productLabel
+WHERE { 
+	dataFromProducer1:Product12 bsbm:productFeature ?prodFeature .
+	?product bsbm:productFeature ?prodFeature .
+    FILTER (dataFromProducer1:Product12 != ?product)	
+	?product rdfs:label ?productLabel .
+	dataFromProducer1:Product12 bsbm:productPropertyNumeric1 ?origProperty1 .
+	?product bsbm:productPropertyNumeric1 ?simProperty1 .
+	FILTER (?simProperty1 < (?origProperty1 + 120) && ?simProperty1 > (?origProperty1 - 120))
+	dataFromProducer1:Product12 bsbm:productPropertyNumeric2 ?origProperty2 .
+	?product bsbm:productPropertyNumeric2 ?simProperty2 .
+	FILTER (?simProperty2 < (?origProperty2 + 170) && ?simProperty2 > (?origProperty2 - 170))
+}
+ORDER BY ?productLabel
+LIMIT 5
+";
+        private static readonly string _queryString = @"PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX bsbm: <http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/vocabulary/>
+
+SELECT ?product ?label
+WHERE {
+    ?product rdf:type bsbm:Product .
+	?product rdfs:label ?label .
+	FILTER regex(?label, ""^s"")}";
     }
 }

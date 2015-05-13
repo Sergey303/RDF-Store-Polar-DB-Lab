@@ -4,13 +4,14 @@ using System.Linq;
 using System.Xml.Linq;
 using RDFCommon;
 using RDFCommon;
+using RDFCommon.Interfaces;
 using RDFCommon.OVns;
 using SparqlParseRun.SparqlClasses.GraphPattern.Triples.Node;
 using SparqlParseRun.SparqlClasses.Update;
 
 namespace SparqlParseRun.SparqlClasses.Query.Result
 {
-    public class SparqlResultSet
+    public class SparqlResultSet 
     {
         private readonly RdfQuery11Translator q;
         public IEnumerable<SparqlResult> Results ;

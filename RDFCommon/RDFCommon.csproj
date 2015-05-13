@@ -47,7 +47,6 @@
     <Compile Include="Interfaces\IGraph.cs" />
     <Compile Include="Interfaces\ILanguageLiteral.cs" />
     <Compile Include="Interfaces\ILiteralNode.cs" />
-    <Compile Include="Interfaces\INodeGenerator.cs" />
     <Compile Include="Interfaces\INumLiteral.cs" />
     <Compile Include="Interfaces\ISpecialGraph.cs" />
     <Compile Include="Interfaces\IStore.cs" />

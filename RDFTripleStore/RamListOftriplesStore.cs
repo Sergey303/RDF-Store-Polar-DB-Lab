@@ -1,5 +1,7 @@
 using RDFCommon;
+using RDFCommon.Interfaces;
 using RDFCommon.OVns;
+using SparqlParseRun.SparqlClasses;
 
 namespace RDFTripleStore
 {
@@ -27,6 +29,16 @@ namespace RDFTripleStore
         public IGraph CreateTempGraph()
         {
             return new RamListOfTriplesGraph();
+        }
+
+        public void ReloadFrom(string filePath)
+        {
+            FromTurtle(filePath);
+        }
+
+        public void Warmup()
+        {
+            throw new System.NotImplementedException();
         }
 
         public void Close()

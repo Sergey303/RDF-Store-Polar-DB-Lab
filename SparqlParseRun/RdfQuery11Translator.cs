@@ -29,7 +29,7 @@ namespace SparqlParseRun
 
      
 
-        public ISparqlTripletsStoreCalls StoreCalls;
+        public SparqlTripletsStoreCalls StoreCalls;
         private IStore store;
 
         public RdfQuery11Translator(IStore store1)

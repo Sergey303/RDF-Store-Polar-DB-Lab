@@ -42,7 +42,7 @@ public class Parser {
 
 public string graphName;
 
-NodeGenerator ng=new NodeGenerator();
+NodeGenerator ng=NodeGenerator.Create();
 
 public Action<string, string, ObjectVariants> ft;
 private readonly Prologue prologue = new Prologue();

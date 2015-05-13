@@ -41,21 +41,21 @@ namespace SparqlParseRun.SparqlClasses.Query
             this.sparqlSolutionModifier = sparqlSolutionModifier;
         }
 
-        public override SparqlResultSet Run(IStore store)
+        public override SparqlResultSet Run()
          {
-            base.Run(store);
-            var rdfInMemoryGraph = store.CreateTempGraph();
+            base.Run();
+            var rdfInMemoryGraph = q.Store.CreateTempGraph();
             if (isAll)
                 foreach (ObjectVariants node in ResultSet.Results.SelectMany(result => q.Variables.Values.Select(v=>result[v])))
                     //.Where(node => node is ObjectVariants).Cast<ObjectVariants>()))
                 {
                     ObjectVariants node1 = node;
-                    foreach (var temp in store.GetTriplesWithSubject(node, (p, o) =>
+                    foreach (var temp in q.Store.GetTriplesWithSubject(node, (p, o) =>
                     {
                         rdfInMemoryGraph.Add(node1, p, o);
                         return true;
                     })) ;
-                    foreach (var temp in store.GetTriplesWithObject(node, (s, p) =>
+                    foreach (var temp in q.Store.GetTriplesWithObject(node, (s, p) =>
                     {
                         rdfInMemoryGraph.Add(s, p, node1);
                         return true;
@@ -70,12 +70,12 @@ namespace SparqlParseRun.SparqlClasses.Query
                         //.Where(node => node is ObjectVariants).Cast<ObjectVariants>()
                 {
                     ObjectVariants node1 = node;
-                    foreach (var temp in store.GetTriplesWithSubject(node, (p, o) =>
+                    foreach (var temp in q.Store.GetTriplesWithSubject(node, (p, o) =>
                     {
                         rdfInMemoryGraph.Add(node1, p, o);
                         return true;
                     })) ;
-                    foreach (var temp in store.GetTriplesWithObject(node, (s, p) =>
+                    foreach (var temp in q.Store.GetTriplesWithObject(node, (s, p) =>
                     {
                         rdfInMemoryGraph.Add(s, p, node1);
                         return true;
@@ -85,12 +85,12 @@ namespace SparqlParseRun.SparqlClasses.Query
 
                     {
                         ObjectVariants node1 = node;
-                        foreach (var temp in store.GetTriplesWithSubject(node, (p, o) =>
+                        foreach (var temp in q.Store.GetTriplesWithSubject(node, (p, o) =>
                         {
                             rdfInMemoryGraph.Add(node1, p, o);
                             return true;
                         })) ;
-                        foreach (var temp in store.GetTriplesWithObject(node, (s, p) =>
+                        foreach (var temp in q.Store.GetTriplesWithObject(node, (s, p) =>
                         {
                             rdfInMemoryGraph.Add(s, p, node1);
                             return true;

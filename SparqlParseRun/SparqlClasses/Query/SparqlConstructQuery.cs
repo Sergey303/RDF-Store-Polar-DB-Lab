@@ -43,10 +43,10 @@ namespace SparqlParseRun.SparqlClasses.Query
             this.sparqlSolutionModifier = sparqlSolutionModifier;
         }
 
-        public override SparqlResultSet Run(IStore store)
+        public override SparqlResultSet Run()
         {
-           base.Run(store);
-            ResultSet.GraphResult = store.CreateTempGraph();
+           base.Run();
+            ResultSet.GraphResult = q.Store.CreateTempGraph();
             foreach (var st in constract.Cast<SparqlTriple>())
                 foreach (var result in  ResultSet.Results)
                     st.Substitution(result, (s, p, o) =>

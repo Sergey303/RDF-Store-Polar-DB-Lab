@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
+﻿using System.IO;
 using RDFCommon;
 using SparqlParseRun;
 using SparqlParseRun.SparqlClasses.Query.Result;
@@ -13,10 +7,11 @@ using Antlr4.Runtime;
 
 namespace TestingNs
 {
-    public class SecondStringSore : SecondStringGraph, IStore
+    public class SecondStringSore : GraphCached, IStore
     {
 
-        public SecondStringSore(string path) : base(path)
+        public SecondStringSore(string path)
+            : base(new SecondStringGraph(path))//: base(new SecondStringGraph(path))
         {
         }
 
@@ -25,6 +20,9 @@ namespace TestingNs
           //  ClearAll();
             FromTurtle(fileName);    
         }
+
+     
+
         public void ReloadFrom(Stream baseStream)
         {
           //  ClearAll();
@@ -39,7 +37,7 @@ namespace TestingNs
 
         private SparqlResultSet Run(SparqlQuery queryContext)
         {
-             return queryContext.Run(this);
+             return queryContext.Run();
         }
 
         public SparqlQuery Parse(string query)

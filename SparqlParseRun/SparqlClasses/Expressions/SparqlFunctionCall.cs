@@ -10,7 +10,7 @@ namespace SparqlParseRun.SparqlClasses.Expressions
    //     private SparqlUriNode sparqlUriNode;
        public SparqlArgs sparqlArgs;
 
-        public SparqlFunctionCall(string sparqlUriNode, SparqlArgs sparqlArgs, INodeGenerator q)
+        public SparqlFunctionCall(string sparqlUriNode, SparqlArgs sparqlArgs, NodeGenerator q)
         {
             // TODO: Complete member initialization
            // this.sparqlUriNode = sparqlUriNode;

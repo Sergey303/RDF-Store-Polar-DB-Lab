@@ -17,12 +17,12 @@ namespace SparqlParseRun.SparqlClasses.Update
 
        
 
-        public override SparqlResultSet Run(IStore store)
+        public override SparqlResultSet Run()
         {
             try
             {
                 foreach (var sparqlUpdate in Updates)
-                    sparqlUpdate.Run(store);
+                    sparqlUpdate.Run(q.Store);
                 ResultSet.UpdateStatus = SparqlUpdateStatus.ok;
                 ResultSet.UpdateMessage ="ok";
                 return ResultSet;

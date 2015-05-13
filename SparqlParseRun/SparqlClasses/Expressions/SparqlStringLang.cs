@@ -7,7 +7,7 @@ namespace SparqlParseRun.SparqlClasses.Expressions
 {
     class SparqlStringLang  :SparqlExpression
     {
-        public SparqlStringLang(SparqlExpression literalExpression, SparqlExpression langExpression, INodeGenerator q)
+        public SparqlStringLang(SparqlExpression literalExpression, SparqlExpression langExpression, NodeGenerator q)
         {
             IsAggragate = langExpression.IsAggragate || literalExpression.IsAggragate;
             IsDistinct = langExpression.IsDistinct || literalExpression.IsDistinct;

@@ -28,9 +28,9 @@ namespace SparqlParseRun.SparqlClasses.Query
             //    sparqlSelect.IsDistinct = false;
         }
 
-        public override SparqlResultSet Run(IStore store)
+        public override SparqlResultSet Run()
         {
-            base.q.Store = store;
+            
             ResultSet.Variables = base.q.Variables;
             ResultSet.Results=Enumerable.Repeat(new SparqlResult(q), 1);
             ResultSet.Results = sparqlWhere.Run(ResultSet.Results);
