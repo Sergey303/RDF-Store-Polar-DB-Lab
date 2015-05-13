@@ -67,7 +67,6 @@
     <Compile Include="SparqlClasses\GraphPattern\SparqlGraphPattern.cs" />
     <Compile Include="SparqlClasses\GraphPattern\SparqlGraphPatternType.cs" />
     <Compile Include="SparqlClasses\GraphPattern\SparqlMinusGraphPattern.cs" />
-    <Compile Include="SparqlClasses\GraphPattern\Triples\ISparqlTripletsStoreCalls.cs" />
     <Compile Include="SparqlClasses\GraphPattern\Triples\SparqlTriple.cs" />
     <Compile Include="SparqlClasses\GraphPattern\Triples\Path\SparqlMayBeOneTriple.cs" />
     <Compile Include="SparqlClasses\GraphPattern\Triples\Path\SparqlPathAlternative.cs" />
