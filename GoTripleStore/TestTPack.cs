@@ -68,7 +68,8 @@ namespace GoTripleStore
 
             sw.Restart();
             ((TPackGraph)gra).StartCount();
-            for (int i = 0; i < 10; i++)
+            //((TPackGraph)gra).StartCache();
+            for (int i = 0; i < 100; i++)
             {
                 qu = Query5p(gra, productsXYZ[i]);
                 cnt = qu.Count();
@@ -167,13 +168,13 @@ namespace GoTripleStore
 
     public class TPackGraph : IGraph
     {
-        private bool tocach = false;
+        private bool tocache = false;
         private int nspo = 0, nSPO = 0, nsPO = 0, nspO = 0, nSpO = 0, nSpo = 0, nSPo = 0;
         public void StartCount() { nspo = 0; nSPO = 0; nsPO = 0; nspO = 0; nSpO = 0; nSpo = 0; nSPo = 0; }
         public void PrintCount() { Console.WriteLine("nspo={0} nSPO={1} nsPO={2} nspO={3} nSpO={4} nSpo={5} nSPo={6};", nspo, nSPO, nsPO, nspO, nSpO, nSpo, nSPo); }
         public void StartCache()
         {
-            tocach = true;
+            tocache = true;
         }
 
         protected IGra<PaEntry> go;
@@ -205,15 +206,28 @@ namespace GoTripleStore
                     return new Triple(new OV_iri((string)va[0]), new OV_iri((string)va[1]), va[2].ToOVariant());
                 });
         }
+        Dictionary<string, Triple[]> cache_sp = new Dictionary<string, Triple[]>();
         public virtual IEnumerable<Triple> GetTriplesWithSubjectPredicate(ObjectVariants subj, ObjectVariants pred)
         {
+            Triple[] res = null;
+            string subjpred = null; 
+            if (tocache)
+            {
+                subjpred = ((OV_iri)subj).Name + "|" + ((OV_iri)pred).Name;
+                if (cache_sp.TryGetValue(subjpred, out res))
+                {
+                    return res;
+                }
+            }
             nspO++;
-            return go.GetTriplesWithSubjectPredicate(((OV_iri)subj).UriString, ((OV_iri)pred).UriString)
+            res = go.GetTriplesWithSubjectPredicate(((OV_iri)subj).UriString, ((OV_iri)pred).UriString)
                 .Select(ent =>
                 {
                     object[] va = go.Dereference(ent);
                     return new Triple(new OV_iri((string)va[0]), new OV_iri((string)va[1]), va[2].ToOVariant());
-                });
+                }).ToArray();
+            if (tocache) cache_sp.Add(subjpred, res);
+            return res;
         }
         public virtual IEnumerable<Triple> GetTriplesWithPredicate(ObjectVariants pred)
         {
@@ -225,15 +239,28 @@ namespace GoTripleStore
                     return new Triple(new OV_iri((string)va[0]), new OV_iri((string)va[1]), va[2].ToOVariant());
                 });
         }
+        private Dictionary<Tuple<ObjectVariants, ObjectVariants>, Triple[]> cache_po = new Dictionary<Tuple<ObjectVariants, ObjectVariants>, Triple[]>();
         public virtual IEnumerable<Triple> GetTriplesWithPredicateObject(ObjectVariants pred, ObjectVariants obj)
         {
+            Triple[] res = null;
+            Tuple<ObjectVariants, ObjectVariants> subjpred = null;
+            if (tocache)
+            {
+                subjpred = new Tuple<ObjectVariants,ObjectVariants>(pred, obj);
+                if (cache_po.TryGetValue(subjpred, out res))
+                {
+                    return res;
+                }
+            }
             nSpo++;
-            return go.GetTriplesWithPredicateObject(((OV_iri)pred).UriString, obj)
+            res = go.GetTriplesWithPredicateObject(((OV_iri)pred).UriString, obj)
                 .Select(ent =>
                 {
                     object[] va = go.Dereference(ent);
                     return new Triple(new OV_iri((string)va[0]), new OV_iri((string)va[1]), va[2].ToOVariant());
-                });
+                }).ToArray();
+            if (tocache) cache_po.Add(subjpred, res);
+            return res;
         }
         public virtual IEnumerable<Triple> GetTriplesWithObject(ObjectVariants obj)
         {
