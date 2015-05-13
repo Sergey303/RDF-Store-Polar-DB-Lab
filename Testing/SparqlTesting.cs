@@ -391,9 +391,9 @@ WHERE {
                 Stopwatch timer = new Stopwatch();
                 for (int j = 0; j < count; j++)
                 {
-                    qparams=QueryReadParameters(qparams, streamParameters);
+                   string q =QueryReadParameters(qparams, streamParameters);
                     timer.Start();
-                    _ts.ParseAndRun(qparams).Results.ToArray();
+                    _ts.ParseAndRun(q).Results.ToArray();
                     timer.Stop();
                 }
 
@@ -406,6 +406,8 @@ WHERE {
                     r.WriteLine("total ms " + timer.ElapsedMilliseconds);
                     r.WriteLine("tics per q " + timer.ElapsedTicks/count);
                     r.WriteLine("qps " + (int)(((double) count)/timer.Elapsed.TotalSeconds));
+                    r.WriteLine("11 results count: {0}",
+                      _ts.ParseAndRun(QueryReadParameters(qparams, streamParameters)).Results.Count());
                 }
             }
         }
