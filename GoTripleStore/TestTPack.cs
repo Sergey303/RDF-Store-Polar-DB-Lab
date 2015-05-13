@@ -12,7 +12,7 @@ namespace GoTripleStore
     {
         public static void Main()
         {
-            Random rnd = new Random();
+            Random rnd = new Random(987654321);
             string[] arr = Allproducts.Products;
             HashSet<string> hs = new HashSet<string>();
             string[] productsXYZ = new string[1000];
@@ -61,14 +61,14 @@ namespace GoTripleStore
             int cnt;
 
             sw.Restart();
-            qu = Query6t(gra);
+            qu = Query5t(gra);
             cnt = qu.Count();
             sw.Stop();
-            Console.WriteLine("query6t ok. cnt={0} duration={1}", cnt, sw.ElapsedMilliseconds);
+            Console.WriteLine("query5t ok. cnt={0} duration={1}", cnt, sw.ElapsedMilliseconds);
 
             sw.Restart();
             ((TPackGraph)gra).StartCount();
-            //((TPackGraph)gra).StartCache();
+            ((TPackGraph)gra).StartCache();
             for (int i = 0; i < 100; i++)
             {
                 qu = Query5p(gra, productsXYZ[i]);
@@ -87,17 +87,17 @@ namespace GoTripleStore
             //qu = Query6t(grad);
             //cnt = qu.Count();
             //sw.Stop();
-            //Console.WriteLine("query6t ok. cnt={0} duration={1}", cnt, sw.ElapsedMilliseconds);
+            //Console.WriteLine("query5t ok. cnt={0} duration={1}", cnt, sw.ElapsedMilliseconds);
 
             //grad.StartUse();
             //sw.Restart();
             //qu = Query6t(grad);
             //cnt = qu.Count();
             //sw.Stop();
-            //Console.WriteLine("query6t ok. cnt={0} duration={1}", cnt, sw.ElapsedMilliseconds);
+            //Console.WriteLine("query5t ok. cnt={0} duration={1}", cnt, sw.ElapsedMilliseconds);
                     
         }
-        public static IEnumerable<TPack> Query6t(IGraph g)
+        public static IEnumerable<TPack> Query5t(IGraph g)
         {
             ObjectVariants[] row = new ObjectVariants[7];
             ObjectVariants _prodFeature = new OV_index(0), _produc = new OV_index(1), _productLabel = new OV_index(2), _origProperty1 = new OV_index(3), _simProperty1 = new OV_index(4);
@@ -135,11 +135,12 @@ namespace GoTripleStore
         {
             ObjectVariants[] row = new ObjectVariants[7];
             ObjectVariants _prodFeature = new OV_index(0), _produc = new OV_index(1), _productLabel = new OV_index(2), _origProperty1 = new OV_index(3), _simProperty1 = new OV_index(4);
-            int _origProperty2 = 5, _simProperty2 = 6;
+            ObjectVariants _origProperty2 = new OV_index(5), _simProperty2 = new OV_index(6);
             ObjectVariants iri1 = new OV_iri(productXYZ),
                 iri2 = new OV_iri("http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/vocabulary/productFeature"),
                 iri3 = new OV_iri("http://www.w3.org/2000/01/rdf-schema#label"),
-                iri4 = new OV_iri("http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/vocabulary/productPropertyNumeric1");
+                iri4 = new OV_iri("http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/vocabulary/productPropertyNumeric1"),
+                iri5 = new OV_iri("http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/vocabulary/productPropertyNumeric2");
             var quer = Enumerable.Repeat<TPack>(new TPack(row, g), 1)
                 .spo(iri1, iri2, _prodFeature)
                 .spo(_produc, iri2, _prodFeature)
@@ -147,20 +148,20 @@ namespace GoTripleStore
                 .spo(_produc, iri3, _productLabel)
                 .spo(iri1, iri4, _origProperty1)
                 .spo(_produc, iri4, _simProperty1)
-                //.Where(pack => 
-                //{
-                //    int sp1 = ((OV_int)pack.Get(_simProperty1)).value;
-                //    int op1 = ((OV_int)pack.Get(_origProperty1)).value;
-                //    return sp1 < (op1 + 120) && sp1 > (op1 - 120);
-                //})
-
-                //.spD("http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/datafromproducer1/product12",
-                //    "http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/vocabulary/productpropertynumeric2",
-                //    _origProperty2)
-                //.spD(_produc, "http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/vocabulary/productpropertynumeric2",
-                //    _simProperty2)
-                //.Where(pack => pack.Vai(_simProperty2) < (pack.Vai(_origProperty2) + 170) &&
-                //    pack.Vai(_simProperty2) > (pack.Vai(_origProperty2) - 170))
+                .Where(pack =>
+                {
+                    int sp1 = ((OV_int)pack.Get(_simProperty1)).value;
+                    int op1 = ((OV_int)pack.Get(_origProperty1)).value;
+                    return sp1 < (op1 + 120) && sp1 > (op1 - 120);
+                })
+                .spo(iri1, iri5, _origProperty2)
+                .spo(_produc, iri5, _simProperty2)
+                .Where(pack =>
+                {
+                    int sp2 = ((OV_int)pack.Get(_simProperty2)).value;
+                    int op2 = ((OV_int)pack.Get(_origProperty2)).value;
+                    return (sp2 < (op2 + 170) && sp2 > (op2 - 170));
+                })
                 ;
             return quer;
         }
