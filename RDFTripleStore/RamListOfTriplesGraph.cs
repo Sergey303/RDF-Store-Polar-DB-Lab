@@ -104,9 +104,14 @@ namespace RDFTripleStore
                             (ObjectVariants) t.Object))));
         }
 
+        public void Warmup()
+        {
+            
+        }
+
 
         public string Name { get; private set; }
-        public INodeGenerator NodeGenerator { get { return this; }}
+        public NodeGenerator NodeGenerator { get { return this; }}
 
         public void Clear()
         {

@@ -7,7 +7,7 @@ namespace SparqlParseRun.SparqlClasses.Expressions
 {
     class SparqlLang  : SparqlExpression
     {
-        public SparqlLang(SparqlExpression value, INodeGenerator q)
+        public SparqlLang(SparqlExpression value, NodeGenerator q)
         {
 
             IsAggragate = value.IsAggragate;

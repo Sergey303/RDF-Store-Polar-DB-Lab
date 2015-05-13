@@ -201,7 +201,7 @@ namespace RDFTripleStore
 
 
         public string Name { get { return "g"; } }
-        public INodeGenerator NodeGenerator { get { return ng; }} 
+        public NodeGenerator NodeGenerator { get { return ng; }} 
 
       
 
@@ -211,7 +211,7 @@ namespace RDFTripleStore
             return o_ind.GetAllByKey(((ObjectVariants)o))
                 .Select(entry => entry.Get())
                 .Cast<object[]>()
-                .Select(row => returns(ReadSubject(row), ReadPredicate(row)));
+                .Select(row => returns(ReadSubject(((object[])row[1])), ReadPredicate(((object[])row[1]))));
         }
 
         private ObjectVariants ReadPredicate(object[] row)
@@ -233,7 +233,7 @@ namespace RDFTripleStore
             return p_ind.GetAllByKey(((OV_iriint) p).code)
                 .Select(entry => entry.Get())
                 .Cast<object[]>()
-                .Select(ent => returns(ReadSubject(ent), ReadObject(ent)));
+                .Select(row => returns(ReadSubject(((object[])row[1])), ReadObject(((object[])row[1]))));
         }
 
         public IEnumerable<T> GetTriplesWithSubject<T>(ObjectVariants s, Func<ObjectVariants, ObjectVariants, T> returns)
@@ -241,7 +241,7 @@ namespace RDFTripleStore
             return s_ind.GetAllByKey(((OV_iriint) s).code)
                 .Select(entry => entry.Get())
                 .Cast<object[]>()
-                .Select(ent => returns(ReadPredicate(ent), ReadSubject(ent)));
+                .Select(row => returns(ReadPredicate(((object[])row[1])), ReadSubject(((object[])row[1]))));
         }
 
         public IEnumerable<ObjectVariants> GetTriplesWithSubjectPredicate(ObjectVariants subject, ObjectVariants predicate)
@@ -250,7 +250,7 @@ namespace RDFTripleStore
             return entities
                  .Select(entry => entry.Get())
                 .Cast<object[]>()
-                .Select(row => row[2].ToOVariant(ng.coding_table.GetStringByCode));
+                .Select(row => ((object[])row[1])[2].ToOVariant(ng.coding_table.GetStringByCode));
         }
 
         public IEnumerable<ObjectVariants> GetTriplesWithSubjectObject(ObjectVariants subject, ObjectVariants obj)
@@ -262,7 +262,7 @@ namespace RDFTripleStore
             return entities
                 .Select(entry => entry.Get())
                 .Cast<object[]>()
-                .Select(row => ng.GetCoded((int)row[1]));
+                .Select(row => ng.GetCoded((int)((object[])row[1])[1]));
         }
 
         public IEnumerable<ObjectVariants> GetTriplesWithPredicateObject(ObjectVariants predicate, ObjectVariants obj)
@@ -274,7 +274,7 @@ namespace RDFTripleStore
             return entities
                   .Select(entry => entry.Get())
                   .Cast<object[]>()
-                  .Select(row => ng.GetCoded((int)row[0]));
+                  .Select(row => ng.GetCoded((int)((object[])row[1])[0]));
         }
 
 
@@ -285,10 +285,7 @@ namespace RDFTripleStore
             var objVar = (((ObjectVariants)obj));
             var key_triple = new SPO_Troyka(ssubj, pred, objVar);
             IEnumerable<PaEntry> entities = spo_ind.GetAllByKey(key_triple);
-            return entities
-                  .Select(entry => entry.Get())
-                  .Cast<object[]>()
-                  .Any();
+            return entities.Any();
         }
         public IEnumerable<T> GetTriples<T>(Func<ObjectVariants,ObjectVariants,ObjectVariants,T>returns )
         {
@@ -354,6 +351,18 @@ namespace RDFTripleStore
             table.Clear();
             Build(new TripleGeneratorBufferedParallel(path, "g"));
             
+        }
+
+        public void Warmup()
+        {
+                  table.Warmup();
+            s_ind.Warmup();
+            sp_ind.Warmup();
+            spo_ind.Warmup();
+            so_ind.Warmup();
+            po_ind.Warmup();
+            p_ind.Warmup();
+            o_ind.Warmup();
         }
 
         protected void FromTurtle(Stream baseStream)

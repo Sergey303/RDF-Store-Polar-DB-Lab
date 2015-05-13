@@ -1,5 +1,6 @@
 ﻿using System;
 using RDFCommon;
+using RDFCommon.OVns;
 
 namespace SparqlParseRun.SparqlClasses.Expressions
 {
@@ -7,7 +8,7 @@ namespace SparqlParseRun.SparqlClasses.Expressions
     {
      
 
-        public SparqlStrAfter(SparqlExpression str, SparqlExpression pattern, INodeGenerator q)
+        public SparqlStrAfter(SparqlExpression str, SparqlExpression pattern, NodeGenerator q)
         {
       
             // TODO: Complete member initialization

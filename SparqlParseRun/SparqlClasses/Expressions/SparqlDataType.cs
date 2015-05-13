@@ -7,7 +7,7 @@ namespace SparqlParseRun.SparqlClasses.Expressions
 {
     public class SparqlDataType : SparqlExpression
     {
-        public SparqlDataType(SparqlExpression value, INodeGenerator q)
+        public SparqlDataType(SparqlExpression value, NodeGenerator q)
         {
             IsAggragate = value.IsAggragate;
             IsDistinct = value.IsDistinct;

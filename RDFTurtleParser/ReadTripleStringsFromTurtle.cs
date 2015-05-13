@@ -8,7 +8,7 @@ namespace RDFTurtleParser
 {
     public static class ReadTripleStringsFromTurtle
     {
-        public static NodeGenerator Generator = new NodeGenerator();
+        public static NodeGenerator Generator = NodeGenerator.Create();
         public static IEnumerable<TripleStrOV> LoadGraph(string datafile)
         {
             int ntriples = 0;

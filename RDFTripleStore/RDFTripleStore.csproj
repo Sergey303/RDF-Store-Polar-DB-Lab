@@ -54,14 +54,14 @@
     <Compile Include="FirstGraphInt.cs" />
     <Compile Include="InterpretMeasure.cs" />
     <Compile Include="CacheMeasure.cs" />
-    <Compile Include="SecondStringGraphCached.cs" />
+    <Compile Include="GraphCached.cs" />
     <Compile Include="ICache.cs" />
     <Compile Include="RamDictGraph.cs" />
     <Compile Include="RamListOfTriplesGraph.cs" />
     <Compile Include="RamListOftriplesStore.cs" />
     <Compile Include="RdfNamedGraphs.cs" />
     <Compile Include="SecondStringGraph.cs" />
-    <Compile Include="SparqlStore.cs">
+    <Compile Include="FirstIntStore.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />

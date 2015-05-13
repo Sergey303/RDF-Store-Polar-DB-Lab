@@ -13,7 +13,7 @@ namespace TestingNs
 {
     public class SecondStringGraph : GaGraphStringBased, IGraph 
     {
-        private readonly NodeGenerator ng = new NodeGenerator();
+        private readonly NodeGenerator ng = RDFCommon.OVns.NodeGenerator.Create();
 
 
         public SecondStringGraph(string path)
@@ -24,7 +24,7 @@ namespace TestingNs
         }
 
         public string Name { get; private set; }
-        public INodeGenerator NodeGenerator { get { return ng; } }
+        public NodeGenerator NodeGenerator { get { return ng; } }
         public void Clear()
         {
             //throw new NotImplementedException();

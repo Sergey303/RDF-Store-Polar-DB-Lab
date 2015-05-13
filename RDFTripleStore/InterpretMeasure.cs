@@ -22,13 +22,7 @@ namespace TestingNs
         
         }
 
-        public string Name { get; private set; }
-        public INodeGenerator NodeGenerator { get { return base.NodeGenerator; } }
-        public void Clear()
-        {
-            //throw new NotImplementedException();
-        }
-
+   
         public override IEnumerable<T> GetTriplesWithObject<T>(ObjectVariants o,
             Func<ObjectVariants, ObjectVariants, T> createResult)
         {

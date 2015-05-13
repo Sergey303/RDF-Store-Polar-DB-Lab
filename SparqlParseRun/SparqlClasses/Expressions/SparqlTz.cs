@@ -7,7 +7,7 @@ namespace SparqlParseRun.SparqlClasses.Expressions
 {
     class SparqlTz : SparqlExpression
     {
-        public SparqlTz(SparqlExpression value, INodeGenerator q)
+        public SparqlTz(SparqlExpression value, NodeGenerator q)
         {
 
             IsAggragate = value.IsAggragate;
