@@ -1,0 +1,364 @@
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using sema2012m;
+
+namespace VirtuosoBigData
+{
+    public class Program
+    {
+        public static void Main(string[] args)
+        {
+            Console.WriteLine("Start");
+            EngineVirtuoso engine = new EngineVirtuoso("HOST=localhost:1550;UID=dba;PWD=dba;Charset=UTF-8;Connection Timeout=500", "g");
+            //var val = engine.Query("SPARQL SELECT ?s FROM <berlin> {?s ?p ?o}");
+            //Console.WriteLine("Result = [{0}]", val.Count());
+
+            DateTime tt0 = DateTime.Now;
+
+            string graph = "berlin100m";
+
+            //LoadGraph(engine, graph, @"D:\Home\FactographDatabases\dataset\dataset1M.ttl");
+            //return;
+
+            //RunTests(engine);
+            RunMany(engine);
+
+            Console.WriteLine("Total duration=" + (DateTime.Now - tt0).Ticks / 10000L); tt0 = DateTime.Now;
+
+        }
+
+        private static void RunTests(EngineVirtuoso engine)
+        {
+            string[] query_files = 
+            {
+                @"D:\Home\FactographDatabases\queries\query1.rq",
+                @"D:\Home\FactographDatabases\queries\query2.rq",
+                @"D:\Home\FactographDatabases\queries\query3.rq",
+                @"D:\Home\FactographDatabases\queries\query4.rq",
+                @"D:\Home\FactographDatabases\queries\query5.rq",
+                @"D:\Home\FactographDatabases\queries\query6.rq",
+                @"D:\Home\FactographDatabases\queries\query7.rq",
+                @"D:\Home\FactographDatabases\queries\query8.rq",
+                @"D:\Home\FactographDatabases\queries\query9.rq",
+                @"D:\Home\FactographDatabases\queries\query10.rq",
+                @"D:\Home\FactographDatabases\queries\query11.rq",
+                @"D:\Home\FactographDatabases\queries\query12.rq",
+            };
+            string[] queries = new string[query_files.Length];
+            for (int i = 0; i < query_files.Length; i++)
+            {
+                System.IO.StreamReader sr = new StreamReader(query_files[i]);
+                queries[i] = "sparql " + sr.ReadToEnd();
+            }
+            int f = 0, t = query_files.Length;
+            DateTime tt0;
+            for (int i = f; i < t; i++)
+            {
+                tt0 = DateTime.Now;
+                string qu = queries[i];
+                //if (i == 5) continue;
+                if (qu.Contains("SELECT "))
+                {
+
+                    //var res = engine.Query(queries[i]).ToArray();
+                    var select_qu = engine.Query(queries[i]);
+                    int limit = 3;
+                    foreach (var v in select_qu)
+                    {
+                        int len = v.Length;
+                        foreach (var ob in v) Console.Write("{0} ", ob);
+                        Console.WriteLine();
+                        limit--;
+                        if (limit <= 0) break;
+                    }
+                    //Console.Write(" {0} ", res.Count());
+                }
+                else
+                {
+                    var res = engine.Execute(queries[i]); // engine.Query(queries[i]).ToArray();
+                }
+                Console.WriteLine("query {0} time = {1}", i + 1, (DateTime.Now - tt0).Ticks / 10000L); tt0 = DateTime.Now;
+            }
+        }
+        private static void RunMany(EngineVirtuoso engine)
+        {
+            //System.IO.StreamReader sr = new StreamReader(@"D:\Home\FactographDatabases\queries\query5param.rq");
+            System.IO.StreamReader sr = new StreamReader(@"D:\Home\FactographDatabases\queries\query5param.rq");
+            string query_param = "sparql " + sr.ReadToEnd();
+            DateTime tt0 = DateTime.Now;
+            //foreach (string prod in Sarr.sarr)
+            //{
+            //    string query_s = query_param.Replace("%ProductXYZ%", "<" + prod + ">");
+            //    var res = engine.Query(query_s).ToArray();
+            //    Console.WriteLine("query {0} time = {1}", res.Count(), (DateTime.Now - tt0).Ticks / 10000L); tt0 = DateTime.Now;
+            //}
+            int n1 = 500, s2 = 500, n2 = 500;
+            string[] sa = Sarr.sarr;
+            for (int i = 0; i<n1; i++) 
+            {
+                string prod = sa[i];
+                string query_s = query_param.Replace("%ProductXYZ%", "<" + prod + ">");
+                var res = engine.Query(query_s).ToArray();
+            }
+            var dur1 = (DateTime.Now - tt0).Ticks / 10000L;
+            Console.WriteLine("1-st test ok. time = {0} number={1} QpS={2}", dur1, n1, (double)(n1 * 1000) / (double)dur1); tt0 = DateTime.Now;
+            tt0 = DateTime.Now;
+            for (int i = 0; i < n2; i++) 
+            {
+                string prod = sa[s2 + i];
+                string query_s = query_param.Replace("%ProductXYZ%", "<" + prod + ">");
+                var res = engine.Query(query_s).ToArray();
+            }
+            var dur = (DateTime.Now - tt0).Ticks / 10000L;
+            Console.WriteLine("test ok. time = {0} number={1} QpS={2}", dur, n2, (double)(n2*1000) / (double)dur); tt0 = DateTime.Now;
+
+        }
+
+        private static void LoadGraph(EngineVirtuoso engine, string graph, string datafile)
+        {
+            BufferForInsertCommand buffer = new BufferForInsertCommand(engine, graph);
+            buffer.InitBuffer();
+
+            engine.Execute("sparql clear graph <"+ graph + ">");
+
+            int ntriples = 0;
+            string subject = null;
+            Dictionary<string, string> namespaces = new Dictionary<string, string>();
+            StreamReader sr = new StreamReader(datafile);
+            int count = 200000000;
+            for (int i = 0; i < count; i++)
+            {
+                string line = sr.ReadLine();
+                if (i % 10000 == 0) { Console.Write("{0} ", i / 10000); }
+                if (line == null) break;
+                if (line == "") continue;
+                if (line[0] == '@')
+                { // namespace
+                    string[] parts = line.Split(' ');
+                    if (parts.Length != 4 || parts[0] != "@prefix" || parts[3] != ".")
+                    {
+                        Console.WriteLine("Err: strange line: " + line);
+                        continue;
+                    }
+                    string pref = parts[1];
+                    string nsname = parts[2];
+                    if (nsname.Length < 3 || nsname[0] != '<' || nsname[nsname.Length - 1] != '>')
+                    {
+                        Console.WriteLine("Err: strange nsname: " + nsname);
+                        continue;
+                    }
+                    nsname = nsname.Substring(1, nsname.Length - 2);
+                    namespaces.Add(pref, nsname);
+                }
+                else if (line[0] != ' ')
+                { // Subject
+                    line = line.Trim();
+                    subject = GetEntity(namespaces, line);
+                    if (subject == null) continue;
+                }
+                else
+                { // Predicate and object
+                    string line1 = line.Trim();
+                    int first_blank = line1.IndexOf(' ');
+                    if (first_blank == -1) { Console.WriteLine("Err in line: " + line); continue; }
+                    string pred_line = line1.Substring(0, first_blank);
+                    string predicate = GetEntity(namespaces, pred_line);
+                    string rest_line = line1.Substring(first_blank + 1).Trim();
+                    // Уберем последний символ
+                    rest_line = rest_line.Substring(0, rest_line.Length - 1).Trim();
+                    bool isPrefixed = true;
+                    if (rest_line[0] == '\"' || rest_line[0] == '<') isPrefixed = false;
+                    string command = "<" + subject + "> <" + predicate + "> ";
+                    if (!isPrefixed)
+                    {
+                        // Тип данных может быть "префиксным"
+                        int pp = rest_line.IndexOf("^^");
+                        if (pp != -1 && rest_line[pp + 2] != '<')
+                        {
+                            string data_part = rest_line.Substring(0, pp + 2);
+                            string qname = rest_line.Substring(pp + 2);
+                            string tp = GetEntity(namespaces, qname);
+                            // Надо бы проверить...
+                            command += data_part + "<" + tp + ">";
+                        }
+                        else
+                        {
+                            command += rest_line;
+                        }
+                    }
+                    else
+                    {
+                        command += "<" + GetEntity(namespaces, rest_line) + "> ";
+                    }
+                    buffer.AddCommandToBuffer(command);
+                    ntriples++;
+                }
+            }
+            buffer.FlushBuffer();
+            Console.WriteLine();
+            Console.WriteLine("ntriples={0}", ntriples);
+        }
+
+        private static string GetEntity(Dictionary<string, string> namespaces, string line)
+        {
+            string subject = null; 
+            int colon = line.IndexOf(':');
+            if (colon == -1) { Console.WriteLine("Err in line: " + line); goto End; }
+            string prefix = line.Substring(0, colon + 1);
+            if (!namespaces.ContainsKey(prefix)) { Console.WriteLine("Err in line: " + line); goto End; }
+            subject = namespaces[prefix] + line.Substring(colon + 1);
+            End: 
+            return subject;
+        }
+        private static string[] sarr = new string[] {
+"http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromProducer1/Product1", 
+"http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromProducer1/Product21", 
+"http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromProducer1/Product41", 
+"http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromProducer2/Product61", 
+"http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromProducer2/Product81", 
+"http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromProducer3/Product101", 
+"http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromProducer3/Product121", 
+"http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromProducer4/Product141", 
+"http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromProducer4/Product161", 
+"http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromProducer5/Product181", 
+"http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromProducer5/Product201", 
+"http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromProducer6/Product221", 
+"http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromProducer6/Product241", 
+"http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromProducer6/Product261", 
+"http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromProducer7/Product281", 
+"http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromProducer7/Product301", 
+"http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromProducer7/Product321", 
+"http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromProducer8/Product341", 
+"http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromProducer8/Product361", 
+"http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromProducer8/Product381", 
+"http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromProducer9/Product401", 
+"http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromProducer9/Product421", 
+"http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromProducer9/Product441", 
+"http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromProducer10/Product461", 
+"http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromProducer11/Product481", 
+"http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromProducer11/Product501", 
+"http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromProducer11/Product521", 
+"http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromProducer12/Product541", 
+"http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromProducer12/Product561", 
+"http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromProducer12/Product581", 
+"http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromProducer13/Product601", 
+"http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromProducer13/Product621", 
+"http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromProducer14/Product641", 
+"http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromProducer14/Product661", 
+"http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromProducer14/Product681", 
+"http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromProducer15/Product701", 
+"http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromProducer15/Product721", 
+"http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromProducer16/Product741", 
+"http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromProducer16/Product761", 
+"http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromProducer16/Product781", 
+"http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromProducer17/Product801", 
+"http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromProducer17/Product821", 
+"http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromProducer18/Product841", 
+"http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromProducer19/Product861", 
+"http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromProducer19/Product881", 
+"http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromProducer20/Product901", 
+"http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromProducer20/Product921", 
+"http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromProducer20/Product941", 
+"http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromProducer21/Product961", 
+"http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromProducer21/Product981", 
+"http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromProducer22/Product1001", 
+"http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromProducer22/Product1021", 
+"http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromProducer22/Product1041", 
+"http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromProducer23/Product1061", 
+"http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromProducer23/Product1081", 
+"http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromProducer23/Product1101", 
+"http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromProducer24/Product1121", 
+"http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromProducer25/Product1141", 
+"http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromProducer25/Product1161", 
+"http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromProducer25/Product1181", 
+"http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromProducer26/Product1201", 
+"http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromProducer26/Product1221", 
+"http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromProducer26/Product1241", 
+"http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromProducer27/Product1261", 
+"http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromProducer27/Product1281", 
+"http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromProducer28/Product1301", 
+"http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromProducer29/Product1321", 
+"http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromProducer29/Product1341", 
+"http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromProducer30/Product1361", 
+"http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromProducer31/Product1381", 
+"http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromProducer31/Product1401", 
+"http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromProducer32/Product1421", 
+"http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromProducer32/Product1441", 
+"http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromProducer32/Product1461", 
+"http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromProducer32/Product1481", 
+"http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromProducer33/Product1501", 
+"http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromProducer33/Product1521", 
+"http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromProducer33/Product1541", 
+"http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromProducer35/Product1561", 
+"http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromProducer35/Product1581", 
+"http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromProducer36/Product1601", 
+"http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromProducer36/Product1621", 
+"http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromProducer37/Product1641", 
+"http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromProducer37/Product1661", 
+"http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromProducer37/Product1681", 
+"http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromProducer37/Product1701", 
+"http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromProducer38/Product1721", 
+"http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromProducer38/Product1741", 
+"http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromProducer39/Product1761", 
+"http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromProducer39/Product1781", 
+"http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromProducer39/Product1801", 
+"http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromProducer39/Product1821", 
+"http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromProducer40/Product1841", 
+"http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromProducer40/Product1861", 
+"http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromProducer41/Product1881", 
+"http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromProducer41/Product1901", 
+"http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromProducer41/Product1921", 
+"http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromProducer41/Product1941", 
+"http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromProducer42/Product1961", 
+"http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromProducer42/Product1981", 
+"http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromProducer42/Product2001", 
+"http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromProducer42/Product2021", 
+"http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromProducer43/Product2041", 
+"http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromProducer43/Product2061", 
+"http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromProducer44/Product2081", 
+"http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromProducer45/Product2101", 
+"http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromProducer45/Product2121", 
+"http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromProducer45/Product2141", 
+"http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromProducer46/Product2161", 
+"http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromProducer47/Product2181", 
+"http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromProducer47/Product2201", 
+"http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromProducer47/Product2221", 
+"http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromProducer48/Product2241", 
+"http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromProducer48/Product2261", 
+"http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromProducer49/Product2281", 
+"http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromProducer49/Product2301", 
+"http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromProducer50/Product2321", 
+"http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromProducer50/Product2341", 
+"http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromProducer50/Product2361", 
+"http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromProducer50/Product2381", 
+"http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromProducer51/Product2401", 
+"http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromProducer51/Product2421", 
+"http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromProducer51/Product2441", 
+"http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromProducer52/Product2461", 
+"http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromProducer53/Product2481", 
+"http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromProducer53/Product2501", 
+"http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromProducer54/Product2521", 
+"http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromProducer54/Product2541", 
+"http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromProducer54/Product2561", 
+"http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromProducer55/Product2581", 
+"http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromProducer55/Product2601", 
+"http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromProducer56/Product2621", 
+"http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromProducer57/Product2641", 
+"http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromProducer58/Product2661", 
+"http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromProducer58/Product2681", 
+"http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromProducer58/Product2701", 
+"http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromProducer59/Product2721", 
+"http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromProducer59/Product2741", 
+"http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromProducer59/Product2761", 
+"http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromProducer60/Product2781", 
+"http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromProducer61/Product2801", 
+"http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromProducer61/Product2821", 
+"http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromProducer61/Product2841", 
+}; 
+
+    }
+}

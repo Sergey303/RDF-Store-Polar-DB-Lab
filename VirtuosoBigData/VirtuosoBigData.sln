@@ -1,0 +1,32 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Express 2012 for Web
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VirtuosoBigData", "VirtuosoBigData.csproj", "{E00A8E14-E91D-48BE-960B-51E8A6EAB210}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EngineVirtuoso", "..\EngineVirtuoso\EngineVirtuoso.csproj", "{B2ADE7A7-62E8-4D40-B0C0-6ACBE252CE07}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "sema2012m", "..\sema2012m\sema2012m.csproj", "{01975281-0445-4C25-9E68-2518BE52D855}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{E00A8E14-E91D-48BE-960B-51E8A6EAB210}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E00A8E14-E91D-48BE-960B-51E8A6EAB210}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E00A8E14-E91D-48BE-960B-51E8A6EAB210}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E00A8E14-E91D-48BE-960B-51E8A6EAB210}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B2ADE7A7-62E8-4D40-B0C0-6ACBE252CE07}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B2ADE7A7-62E8-4D40-B0C0-6ACBE252CE07}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B2ADE7A7-62E8-4D40-B0C0-6ACBE252CE07}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B2ADE7A7-62E8-4D40-B0C0-6ACBE252CE07}.Release|Any CPU.Build.0 = Release|Any CPU
+		{01975281-0445-4C25-9E68-2518BE52D855}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{01975281-0445-4C25-9E68-2518BE52D855}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{01975281-0445-4C25-9E68-2518BE52D855}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{01975281-0445-4C25-9E68-2518BE52D855}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
