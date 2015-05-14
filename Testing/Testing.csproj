@@ -172,6 +172,7 @@
     <None Include="examples\bsbm\queries\parameters\3.rq" />
     <None Include="examples\bsbm\queries\parameters\4.rq" />
     <None Include="examples\bsbm\queries\parameters\5.rq" />
+    <None Include="examples\bsbm\queries\parameters\50.rq" />
     <None Include="examples\bsbm\queries\parameters\6.rq" />
     <None Include="examples\bsbm\queries\parameters\7.rq" />
     <None Include="examples\bsbm\queries\parameters\8.rq" />
