@@ -33,13 +33,12 @@
     <StartupObject />
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="EngineVirtuoso, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>bin\Debug\EngineVirtuoso.dll</HintPath>
+    <Reference Include="EngineVirtuoso">
+      <HintPath>DLLs\EngineVirtuoso.dll</HintPath>
     </Reference>
     <Reference Include="sema2012m, Version=1.0.0.0, Culture=neutral, processorArchitecture=AMD64">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\EngineVirtuoso\bin\Debug\sema2012m.dll</HintPath>
+      <HintPath>DLLs\sema2012m.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -50,7 +49,7 @@
     <Reference Include="System.Xml" />
     <Reference Include="virtado4, Version=4.0.0.0, Culture=neutral, PublicKeyToken=391bf132017ae989, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\EngineVirtuoso\dlls\virtado4.dll</HintPath>
+      <HintPath>DLLs\virtado4.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -60,7 +59,14 @@
     <Compile Include="Sarr.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="DLLs\EngineVirtuoso.dll" />
     <Content Include="Results.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Testing\Testing.csproj">
+      <Project>{17ddd8b8-d2ba-48be-b53f-c366d3467ea3}</Project>
+      <Name>Testing</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

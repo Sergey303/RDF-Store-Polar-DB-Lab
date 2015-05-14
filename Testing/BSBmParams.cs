@@ -6,7 +6,7 @@ using RDFCommon.OVns;
 
 namespace TestingNs
 {
-    class BSBmParams
+    public static class BSBmParams
     {
         private static readonly ObjectVariants[] _products = null;//StoreLauncher.Store.GetTriplesWithPredicateObject(new OV_iri("http://www.w3.org/1999/02/22-rdf-syntax-ns#type"), 
             //new OV_iri("http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/vocabulary/Product")).ToArray();
