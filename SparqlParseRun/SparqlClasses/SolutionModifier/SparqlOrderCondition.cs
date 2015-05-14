@@ -49,7 +49,7 @@ namespace SparqlParseRun.SparqlClasses.SolutionModifier
                     direction = SparqlOrderDirection.Asc;
                     break;
             }
-            getNode = sparqlExpression.TypedOperator;
+            getNode = sparqlExpression.FunkClone;
           
         }
 
@@ -62,14 +62,14 @@ namespace SparqlParseRun.SparqlClasses.SolutionModifier
         public SparqlOrderCondition(SparqlExpression sparqlExpression)
         {
             // TODO: Complete member initialization
-            getNode = sparqlExpression.TypedOperator;
+            getNode = sparqlExpression.Func;
 
         }
 
         public SparqlOrderCondition(SparqlFunctionCall sparqlFunctionCall)
         {
             // TODO: Complete member initialization
-            getNode = sparqlFunctionCall.TypedOperator;
+            getNode = sparqlFunctionCall.Func;
         }
 
         public SparqlOrderCondition(VariableNode variableNode)

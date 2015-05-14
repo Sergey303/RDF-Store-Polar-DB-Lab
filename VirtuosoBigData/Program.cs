@@ -27,7 +27,8 @@ namespace VirtuosoBigData
             //return;
 
             //RunTests(engine);
-            RunMany(engine);
+           // RunMany(engine);
+            RunTestParametred(engine, 50, 1);
 
             Console.WriteLine("Total duration=" + (DateTime.Now - tt0).Ticks / 10000L); tt0 = DateTime.Now;
 
@@ -466,7 +467,7 @@ namespace VirtuosoBigData
                 {
                     string q = BSBmParams.QueryReadParameters(qparams, streamParameters);
                     timer.Start();
-                    engine.Query(q).ToArray();
+                    Console.WriteLine(engine.Query(q).Count());
                     timer.Stop();
                 }
 
@@ -477,8 +478,9 @@ namespace VirtuosoBigData
                     r.WriteLine("milions " + 1);
                     r.WriteLine("date time " + DateTime.Now);
                     r.WriteLine("total ms " + timer.ElapsedMilliseconds);
-                    r.WriteLine("tics per q " + timer.ElapsedTicks / count);
-                    r.WriteLine("qps " + (int)(((double)count) / timer.Elapsed.TotalSeconds));
+                    double l = timer.ElapsedMilliseconds / count;
+                    r.WriteLine("ms на запрос в среденем " + l);
+                    r.WriteLine("qps " + (int)(1000.0/l));
                     r.WriteLine("next results count: {0}",
                         engine.Query(BSBmParams.QueryReadParameters(qparams, streamParameters)).Count());
                 }

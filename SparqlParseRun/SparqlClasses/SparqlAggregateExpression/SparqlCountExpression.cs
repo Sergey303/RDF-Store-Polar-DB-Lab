@@ -10,7 +10,7 @@ namespace SparqlParseRun.SparqlClasses.SparqlAggregateExpression
         public SparqlCountExpression() :base()
         {
             if(isAll)
-                TypedOperator = result =>
+                Func = result =>
                 {
                     if (result is SpraqlGroupOfResults)
                     {
@@ -19,7 +19,7 @@ namespace SparqlParseRun.SparqlClasses.SparqlAggregateExpression
                     else throw new Exception();
                 };
             else
-            TypedOperator = result =>
+                Func = result =>
             {
                 if (result is SpraqlGroupOfResults)
                 {

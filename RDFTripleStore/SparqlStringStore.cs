@@ -7,11 +7,12 @@ using Antlr4.Runtime;
 
 namespace TestingNs
 {
-    public class SecondStringSore : GraphCached, IStore
+    public class SecondStringSore : SecondStringGraph, IStore
     {
 
         public SecondStringSore(string path)
-            : base(new SecondStringGraph(path))//: base(new SecondStringGraph(path))
+            //: base(new SecondStringGraph(path))
+            : base(path)
         {
         }
 

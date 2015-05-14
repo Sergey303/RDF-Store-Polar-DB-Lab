@@ -11,11 +11,11 @@ namespace SparqlParseRun.SparqlClasses.Expressions
         {
             IsAggragate = value.IsAggragate;
             IsDistinct = value.IsDistinct;
-            SetExprType(ObjectVariantEnum.Iri);
-         value.SetExprType(ExpressionTypeEnum.literal);
-            TypedOperator = result =>
+         SetVariablesTypes(ExpressionType.iri);
+         value.SetVariablesTypes(ExpressionType.literal);
+            Func = result =>
             {
-                var r = value.TypedOperator(result);
+                var r = value.Func(result);
                 var literalNode = r as ILiteralNode;
                 if (literalNode != null)
                     return new OV_iri(literalNode.DataType);

@@ -6,53 +6,21 @@ namespace SparqlParseRun.SparqlClasses.Expressions
 {
     public class SparqlLangMatches : SparqlExpression
     {
-        public SparqlLangMatches(SparqlExpression value, SparqlExpression langExpression)
+        public SparqlLangMatches(SparqlExpression value, SparqlExpression sparqlExpression)
         {
-            IsDistinct = value.IsDistinct || langExpression.IsDistinct;
-            IsAggragate = value.IsAggragate || langExpression.IsAggragate;
-            value.SetExprType(ObjectVariantEnum.Str); //todo lang
-            langExpression.SetExprType(ObjectVariantEnum.Str); //todo lang
-            switch (NullablePairExt.Get(value.Const, langExpression.Const))
+            IsDistinct = value.IsDistinct || sparqlExpression.IsDistinct;
+            IsAggragate = value.IsAggragate || sparqlExpression.IsAggragate;
+            value.SetVariablesTypes(ExpressionType.@string); //todo lang
+            sparqlExpression.SetVariablesTypes(ExpressionType.@string); //todo lang
+            Func = result =>
             {
-                case NP.bothNull:  
-                    Operator = result =>
-            {
-                var lang = value.Operator(result);
-                var langRange = langExpression.Operator(result);
-                return Equals(langRange.Content, "*")
+                var lang = value.Func(result);
+                var langRange = sparqlExpression.Func(result);
+                return new OV_bool(Equals(langRange.Content, "*")
                     ? !string.IsNullOrWhiteSpace(langRange.Content)
-                    : Equals(lang, langRange);
+                    : Equals(lang, langRange));
+          
             };
-                    break;
-                case NP.leftNull:
-                    var rlang = langExpression.Const.Content;
-                    Operator = result =>
-                    {
-                        var lang = value.Operator(result);
-                        return Equals(rlang, "*")
-                            ? !string.IsNullOrWhiteSpace(lang)
-                            : Equals(lang, rlang);
-                    };
-                    break;
-                case NP.rigthNull:
-                    var llang = value.Const.Content;
-                    if ((llang).Equals("*"))
-                    Operator = result => !string.IsNullOrWhiteSpace(langExpression.Operator(result));
-                    else 
-                    Operator = result => Equals(llang, langExpression.Operator(result));
-                    break;
-                case NP.bothNotNull:
-                    var ll = value.Const.Content;
-                    var rl = langExpression.Const.Content;
-                    Const = new OV_bool(Equals(rl, "*")
-                            ? !string.IsNullOrWhiteSpace((string)ll)
-                            : Equals(ll, rl));
-                    break;
-                default:
-                    throw new ArgumentOutOfRangeException();
-            }
-            
-            TypedOperator = result =>new OV_bool(Operator(result));
         }
     }
 }

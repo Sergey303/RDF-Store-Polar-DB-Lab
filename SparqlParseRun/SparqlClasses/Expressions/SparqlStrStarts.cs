@@ -12,7 +12,7 @@ namespace SparqlParseRun.SparqlClasses.Expressions
         {
             IsAggragate = pattern.IsAggragate || str.IsAggragate;
             IsDistinct = pattern.IsDistinct || str.IsDistinct;
-            TypedOperator = result => str.TypedOperator(result).Change(o => o.StartsWith(pattern.TypedOperator(result)));
+            Func = result => str.Func(result).Change(o => o.StartsWith(pattern.Func(result)));
         }
     }
 }

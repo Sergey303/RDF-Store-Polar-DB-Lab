@@ -38,9 +38,6 @@
     <Reference Include="PolarDB">
       <HintPath>..\dll\PolarDB.dll</HintPath>
     </Reference>
-    <Reference Include="SparqlParseRun">
-      <HintPath>..\dll\SparqlParseRun.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -401,6 +398,10 @@
     <ProjectReference Include="..\RDFTurtleParser\RDFTurtleParser.csproj">
       <Project>{bbdc3ba5-1ecd-40b5-b3a3-c6b498e07cd1}</Project>
       <Name>RDFTurtleParser</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SparqlParseRun\SparqlParseRun.csproj">
+      <Project>{ae8cbedb-a66e-4705-953e-c16793426e89}</Project>
+      <Name>SparqlParseRun</Name>
     </ProjectReference>
     <ProjectReference Include="..\UniversalIndex\UniversalIndex.csproj">
       <Project>{E4AB7A63-7B55-43E9-B1AA-C8E0F8AA87E3}</Project>

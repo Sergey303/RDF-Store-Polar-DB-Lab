@@ -9,12 +9,12 @@ namespace SparqlParseRun.SparqlClasses.SparqlAggregateExpression
     {
         public SparqlGroupConcatExpression() :base()
         {
-            TypedOperator = result =>
+            Func = result =>
             {
                 var spraqlGroupOfResults = ((SpraqlGroupOfResults) result);
                 try
                 {
-                    return new OV_string(string.Join(Separator, spraqlGroupOfResults.Group.Select(TypedOperator)));
+                    return new OV_string(string.Join(Separator, spraqlGroupOfResults.Group.Select(Func)));
                 }
                 catch
                 {

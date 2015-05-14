@@ -8,7 +8,7 @@ namespace SparqlParseRun.SparqlClasses.Expressions
         {
             IsAggragate = pattern.IsAggragate || str.IsAggragate;
             IsDistinct = pattern.IsDistinct || str.IsDistinct;
-            TypedOperator = result => new OV_bool(str.TypedOperator(result).Equals(pattern.TypedOperator(result))); 
+            Func = result => new OV_bool(str.Func(result).Equals(pattern.Func(result))); 
         }
     }
 }

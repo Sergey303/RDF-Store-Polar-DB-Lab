@@ -11,12 +11,16 @@ namespace SparqlParseRun.SparqlClasses.Expressions
         {
             IsAggragate = langExpression.IsAggragate || literalExpression.IsAggragate;
             IsDistinct = langExpression.IsDistinct || literalExpression.IsDistinct;
-            TypedOperator = result =>
+            Func = result =>
             {
-                string literal = (string) literalExpression.TypedOperator(result).Content;
-                string lang = (string) langExpression.TypedOperator(result).Content;
-
-                return new OV_langstring(literal, lang);
+                var literal = literalExpression.Func(result).Content;
+                var lang = langExpression.Func(result).Content;
+                
+                if (literal is string && lang is string)
+                {
+                    return new OV_langstring(literal, lang);
+                }
+                throw new ArgumentException();
             };
         }
     }

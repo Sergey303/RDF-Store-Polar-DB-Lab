@@ -10,16 +10,16 @@ namespace SparqlParseRun.SparqlClasses.Expressions
         {
             IsAggragate = pattern.IsAggragate || str.IsAggragate;
             IsDistinct = pattern.IsDistinct || str.IsDistinct;
-           str.SetExprType(ExpressionTypeEnum.@stringOrWithLang);
-                pattern.SetExprType(ExpressionTypeEnum.@stringOrWithLang);
+           str.SetVariablesTypes(ExpressionType.@stringOrWithLang);
+                pattern.SetVariablesTypes(ExpressionType.@stringOrWithLang);
 
-                SetExprType(ExpressionTypeEnum.@stringOrWithLang);
+                SetVariablesTypes(ExpressionType.@stringOrWithLang);
 
 
-            TypedOperator = result =>
+            Func = result =>
             {
-                var patternValue = pattern.TypedOperator(result);
-                return str.TypedOperator(result).Change(o => StringBefore(o, (string)patternValue.Content));
+                var patternValue = pattern.Func(result);
+                return str.Func(result).Change(o => StringBefore(o, patternValue.Content));
             };
 
         }

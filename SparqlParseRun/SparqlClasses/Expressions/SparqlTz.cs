@@ -12,9 +12,9 @@ namespace SparqlParseRun.SparqlClasses.Expressions
 
             IsAggragate = value.IsAggragate;
             IsDistinct = value.IsDistinct;
-            TypedOperator = result =>
+            Func = result =>
             {
-                var f = value.TypedOperator(result).Content;
+                var f = value.Func(result).Content;
                 if (f is DateTimeOffset)
                 {
                     return new OV_string(((DateTimeOffset)f).Offset.ToString());

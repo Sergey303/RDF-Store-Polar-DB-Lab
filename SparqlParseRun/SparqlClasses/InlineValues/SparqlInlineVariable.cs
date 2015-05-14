@@ -29,11 +29,11 @@ namespace SparqlParseRun.SparqlClasses.InlineValues
                 }
                 else
                 {
-                    var backupMask = result.BackupMask();
+                   
                     foreach (var newvariableBinding in this)
                         yield return
                             result.Add(newvariableBinding, variableNode);
-                    result.Restore(backupMask);
+                    result[variableNode] = null;
                 }
             }
         }

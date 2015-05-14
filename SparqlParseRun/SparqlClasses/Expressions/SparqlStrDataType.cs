@@ -12,11 +12,13 @@ namespace SparqlParseRun.SparqlClasses.Expressions
         {
             // TODO: Complete member initialization
        
-            TypedOperator = result =>
+            Func = result =>
             {                                                 
-                string str = (string) sparqlExpression1.TypedOperator(result).Content;
-                string type = (string) sparqlExpression2.TypedOperator(result).Content;
-                return q.CreateLiteralNode(str, type);
+                var str = sparqlExpression1.Func(result).Content;
+                var type = sparqlExpression2.Func(result).Content;
+                if (str is string)
+                    return q.CreateLiteralNode(str, type);
+                throw new ArgumentException();
             };
         }
     }

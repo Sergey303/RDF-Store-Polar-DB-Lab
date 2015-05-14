@@ -23,14 +23,14 @@ namespace SparqlParseRun.SparqlClasses.Expressions
            IsDistinct = value.IsDistinct;
 
            startExpression = value;
-           TypedOperator = result => strExpression.TypedOperator(result).Change(o => o.Substring(startExpression.TypedOperator(result).Content));
+           Func = result => strExpression.Func(result).Change(o => o.Substring(startExpression.Func(result).Content));
        }
 
        internal void SetLength(SparqlExpression lengthExpression)
        {
            IsAggragate = lengthExpression.IsAggragate;
            IsDistinct = lengthExpression.IsDistinct;
-           TypedOperator = result => strExpression.TypedOperator(result).Change(o => o.Substring(startExpression.TypedOperator(result).Content, lengthExpression.TypedOperator(result).Content));
+           Func = result => strExpression.Func(result).Change(o => o.Substring(startExpression.Func(result).Content, lengthExpression.Func(result).Content));
            
        }
     }

@@ -7,9 +7,8 @@ namespace SparqlParseRun.SparqlClasses.Expressions
     {
         public SparqlNumLiteralExpression(ObjectVariants sparqlLiteralNode)
         {
-            SetExprType(ExpressionTypeEnum.numeric);
-            Const = sparqlLiteralNode;
-            //TypedOperator = result => sparqlLiteralNode;
+            SetVariablesTypes(ExpressionType.numeric);
+            Func = result => sparqlLiteralNode;
         }
     }
 }

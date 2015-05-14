@@ -8,7 +8,7 @@ namespace SparqlParseRun.SparqlClasses.Expressions
         public SparqlStrUuid()
         {
           
-            TypedOperator = result => new OV_string(Guid.NewGuid().ToString());
+            Func = result => new OV_string(Guid.NewGuid().ToString());
         }
     }
 }

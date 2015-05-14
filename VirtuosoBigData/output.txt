@@ -1,0 +1,30 @@
+
+one query 50, 1 times
+milions 1
+date time 14.05.2015 15:09:30
+total ms 556
+tics per q 2181560
+qps 1
+next results count: 9
+
+one query 50, 1 times
+milions 1
+date time 14.05.2015 15:13:19
+total ms 133
+qps 7,5
+next results count: 9
+
+one query 50, 1 times
+milions 1
+date time 14.05.2015 15:14:33
+total ms 227
+qps 4,4
+next results count: 9
+
+one query 50, 1 times
+milions 1
+date time 14.05.2015 15:59:01
+total ms 220
+ms на запрос в среденем 220
+qps 4
+next results count: 9

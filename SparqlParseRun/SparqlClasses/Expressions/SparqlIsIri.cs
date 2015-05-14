@@ -12,8 +12,8 @@ namespace SparqlParseRun.SparqlClasses.Expressions
 
             IsAggragate = value.IsAggragate;
             IsDistinct = value.IsDistinct;
-             SetExprType(ObjectVariantEnum.Bool);
-            TypedOperator = result => new OV_bool(sparqlExpression.TypedOperator(result) is ObjectVariants);
+             SetVariablesTypes(ExpressionType.@bool);
+            Func = result => new OV_bool(sparqlExpression.Func(result) is ObjectVariants);
 
         }
     }

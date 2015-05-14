@@ -6,13 +6,12 @@ namespace SparqlParseRun.SparqlClasses.Expressions
 {
    public class SparqlBoolLiteralExpression : SparqlExpression  
     {
+      //  private SparqlBoolLiteralNode sparqlLiteralNode;
 
         public SparqlBoolLiteralExpression(ObjectVariants sparqlLiteralNode)
         {
-            Const = sparqlLiteralNode;
+            Func = result => sparqlLiteralNode;
         }
-
-       
-    }
+           }
 
 }

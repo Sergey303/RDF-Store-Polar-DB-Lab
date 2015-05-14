@@ -11,17 +11,17 @@ namespace SparqlParseRun.SparqlClasses.Expressions
         {
             IsAggragate = pattern.IsAggragate || str.IsAggragate;
             IsDistinct = pattern.IsDistinct || str.IsDistinct;
-            SetExprType(ObjectVariantEnum.Bool);
-            str.SetExprType(ExpressionTypeEnum.stringOrWithLang); str.SetExprType(ExpressionTypeEnum.stringOrWithLang);
-            pattern.SetExprType(ExpressionTypeEnum.stringOrWithLang); str.SetExprType(ExpressionTypeEnum.stringOrWithLang);
+            SetVariablesTypes(ExpressionType.@bool);
+            str.SetVariablesTypes(ExpressionType.stringOrWithLang); str.SetVariablesTypes(ExpressionType.stringOrWithLang);
+            pattern.SetVariablesTypes(ExpressionType.stringOrWithLang); str.SetVariablesTypes(ExpressionType.stringOrWithLang);
 
-            TypedOperator = result =>
+            Func = result =>
             {
-                var s = str.TypedOperator(result);
-                var ps = pattern.TypedOperator(result);
+                var s = str.Func(result);
+                var ps = pattern.Func(result);
                 if ((s is OV_langstring && ps is OV_langstring) ||
                     (s is ILanguageLiteral && ps is OV_string) || (s is OV_string && ps is OV_string))
-                    return new OV_bool(((string)s.Content).Contains((string)ps.Content));
+                    return new OV_bool(s.Content.Contains(ps.Content));
                 
                 throw new ArgumentException();
             };

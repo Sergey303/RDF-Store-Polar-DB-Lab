@@ -13,8 +13,8 @@ namespace SparqlParseRun.SparqlClasses
         {
             // TODO: Complete member initialization
             //this.sparqlGraphPattern = sparqlGraphPattern;
-            SetExprType(ObjectVariantEnum.Bool);
-            TypedOperator = variableBinding => new OV_bool(sparqlGraphPattern.Run(Enumerable.Repeat(variableBinding, 1)).Any()); 
+            SetVariablesTypes(ExpressionType.@bool);
+            Func = variableBinding => new OV_bool(sparqlGraphPattern.Run(Enumerable.Repeat(variableBinding, 1)).Any()); 
         }
 
     }

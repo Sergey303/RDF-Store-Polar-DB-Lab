@@ -20,9 +20,11 @@
           //  SparqlTesting.TestQuery(_queryString, false, 1);
          //   SparqlTesting.InterpretMeas(1, false);
          //   SparqlTesting._ts.ReloadFrom(Config.Source_data_folder_path + 1 + ".ttl");
-            SparqlTesting.RunTestParametred(50, 100);
+         SparqlTesting.RunTestParametred(50, 1);
             //SparqlTesting.CreateParameters(5, 1000, 1);  
+            //SparqlTesting.CacheMeasure();
 
+       //     SparqlTesting.InterpretMeas();
 
         }
     

@@ -3,7 +3,6 @@ using System.Linq;
 using System.Security.Cryptography;
 using RDFCommon;
 using System.Text;
-using RDFCommon.OVns;
 
 namespace SparqlParseRun.SparqlClasses.Expressions
 {
@@ -16,9 +15,9 @@ namespace SparqlParseRun.SparqlClasses.Expressions
 
             IsAggragate = value.IsAggragate;
             IsDistinct = value.IsDistinct;
-                 SetExprType(ObjectVariantEnum.Str);
-                 value.SetExprType(ObjectVariantEnum.Str);
-                 TypedOperator = result => value.TypedOperator(result).Change(o => CreateHash(o));
+                 SetVariablesTypes(ExpressionType.@string);
+                 value.SetVariablesTypes(ExpressionType.@string);
+                 Func = result => value.Func(result).Change(o => CreateHash(o));
             
         }
 

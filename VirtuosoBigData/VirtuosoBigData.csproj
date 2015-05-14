@@ -60,6 +60,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="DLLs\EngineVirtuoso.dll" />
+    <Content Include="output.txt" />
     <Content Include="Results.txt" />
   </ItemGroup>
   <ItemGroup>

@@ -9,13 +9,13 @@ namespace SparqlParseRun.SparqlClasses.Expressions
         {
             IsAggragate = value.IsAggragate;
             IsDistinct = value.IsDistinct;
-            value.SetExprType(ExpressionTypeEnum.Date);
-            SetExprType(ObjectVariantEnum.Int);
-            TypedOperator = result =>
+            value.SetVariablesTypes(ExpressionType.withDate);
+            SetVariablesTypes(ExpressionType.@int);
+            Func = result =>
             {
-                var f = value.TypedOperator(result).Content;
-                if (f is DateTimeOffset)
-                    return new OV_int(((DateTimeOffset)f).Hour);
+                var f = value.Func(result).Content;
+                if (f is DateTime)
+                    return new OV_int(((DateTime)f).Hour);
                 throw new ArgumentException();
             };
         }

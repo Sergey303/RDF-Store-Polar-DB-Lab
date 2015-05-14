@@ -7,10 +7,8 @@ namespace SparqlParseRun.SparqlClasses.Expressions
     {
         public SparqlBound(VariableNode value)
         {
-            SetExprType(ObjectVariantEnum.Bool);
-            TypedOperator = result => new OV_bool(result.ContainsKey(value));
+            SetVariablesTypes(ExpressionType.@bool);
+            Func = result => new OV_bool(result.ContainsKey(value));
         }
-
-   
     }
 }

@@ -9,11 +9,11 @@ namespace SparqlParseRun.SparqlClasses.Expressions
         {
             IsAggragate = value.IsAggragate;
             IsDistinct = value.IsDistinct;
-            SetExprType(ObjectVariantEnum.Bool);
+            SetVariablesTypes(ExpressionType.@bool);
 
-            TypedOperator = result =>
+            Func = result =>
             {
-                var func = value.TypedOperator(result);
+                var func = value.Func(result);
                 return new OV_bool(func is ILiteralNode); 
             };
         }

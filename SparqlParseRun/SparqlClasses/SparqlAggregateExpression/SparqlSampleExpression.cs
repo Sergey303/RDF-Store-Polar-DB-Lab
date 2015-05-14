@@ -10,12 +10,12 @@ namespace SparqlParseRun.SparqlClasses.SparqlAggregateExpression
             : base()
         {
             Random random=new Random();
-            TypedOperator = result =>
+            Func = result =>
             {
                     var spraqlGroupOfResults = (result as SpraqlGroupOfResults);
                 if (spraqlGroupOfResults != null)
                     return
-                        Expression.TypedOperator(
+                        Expression.Func(
                             spraqlGroupOfResults.Group.ElementAt(random.Next(spraqlGroupOfResults.Group.Count())));
                 else throw new Exception();
             };

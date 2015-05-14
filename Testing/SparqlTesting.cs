@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -35,25 +36,43 @@ namespace TestingNs
             Console.WriteLine("count "+results.Results.Count());
          //   Console.WriteLine("{0} ", results.ToJson());
         }
-
-     
-        public static void InterpretMeas(int millions, bool load)
+        public static void InterpretMeas()
         {
-            SecondStringSore sparqlStore = new SecondStringSore("../../../Databases/");
-            if (load)
-                sparqlStore.ReloadFrom(Config.Source_data_folder_path + millions + ".ttl");
-         // sparqlStore.TrainingMode = true;
+            var interpretMeasure = ((InterpretMeasure)StoreLauncher.Store);
+            interpretMeasure.TrainingMode = true;
+
+
+            Console.WriteLine(" train");
+            //RunBerlinsParameters();
+            RunTestParametred(50, 1);
+
+            Console.WriteLine("history count " + (interpretMeasure).history.Count);
+            
+            interpretMeasure.TrainingMode = false;
+
+            Console.WriteLine(" from history");
+            RunTestParametred(50, 1);
+        }
+
+        public static void CacheMeasure()
+        {   
+            
+            var cacheMeasure = ((CacheMeasure)StoreLauncher.Store);
+            cacheMeasure.TrainingMode = true;
    
 
             Console.WriteLine("bsbm with constants train");
-            RunBerlinsParameters();
+            //RunBerlinsParameters();
+            RunTestParametred(50, 1);
 
-         // Console.WriteLine("history count " + sparqlStore.history.Count);
-           // using (StreamWriter sr = new StreamWriter(@"..\..\output.txt", true))
-             //   sr.WriteLine(sparqlStore.Output());
-            //sparqlStore.TrainingMode = false;
+            Console.WriteLine("history count " + ((CacheMeasure)StoreLauncher.Store).history.Count);
+            using (StreamWriter sr = new StreamWriter(@"..\..\output.txt", true))
+                sr.WriteLine(cacheMeasure.Output());
+            cacheMeasure.TrainingMode = false;
             
-            //Console.WriteLine("bsbm with constants from history");
+            Console.WriteLine("bsbm with constants from history");
+            RunTestParametred(50, 1);
+            
             //RunBerlinsParameters(sparqlStore, millions);
             //     File.WriteAllText(string.Format(@"..\..\examples\bsbm\queries\with constants\{0}.json", i), json);
 
@@ -267,6 +286,7 @@ namespace TestingNs
 
       
 
+        
         public static void RunTestParametred(int iq, int count = 100)
         {
             var paramvaluesFilePath =
@@ -282,7 +302,8 @@ namespace TestingNs
                 {
                    string q = BSBmParams.QueryReadParameters(qparams, streamParameters);
                     timer.Start();
-                    SparqlQueryParser.Parse(StoreLauncher.Store, q).Run().Results.ToArray();
+                    var sparqlResults = SparqlQueryParser.Parse(StoreLauncher.Store, q).Run();
+                    Console.WriteLine(sparqlResults.Results.Count());
                     timer.Stop();
                 }
 
@@ -298,7 +319,7 @@ namespace TestingNs
                     
                     r.WriteLine("qps " + (int)(1000.0/l));
                     string q = BSBmParams.QueryReadParameters(qparams, streamParameters);
-                    r.WriteLine("11 results count: {0}",
+                    r.WriteLine("next results count: {0}",
                         SparqlQueryParser.Parse(StoreLauncher.Store, q).Run().Results.Count());
                 }
             }
@@ -373,5 +394,7 @@ WHERE {
     ?product rdf:type bsbm:Product .
 	?product rdfs:label ?label .
 	FILTER regex(?label, ""^s"")}";
+
+        
     }
 }

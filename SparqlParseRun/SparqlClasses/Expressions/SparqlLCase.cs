@@ -13,7 +13,7 @@ namespace SparqlParseRun.SparqlClasses.Expressions
 
             IsAggragate = value.IsAggragate;
             IsDistinct = value.IsDistinct;
-            TypedOperator = result => value.TypedOperator(result).Change(o => o.ToLower());
+            Func = result => value.Func(result).Change(o => o.ToLower());
         }
     }
 }

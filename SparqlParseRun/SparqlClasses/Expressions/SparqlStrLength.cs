@@ -8,7 +8,7 @@
             IsAggragate = value.IsAggragate;
             IsDistinct = value.IsDistinct;
 
-            Operator = result => ((string)value.TypedOperator(result).Content).Length;
+            Func = result => value.Func(result).Content.Length;
         }
     }
 }

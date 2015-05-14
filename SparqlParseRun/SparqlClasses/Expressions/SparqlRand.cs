@@ -8,7 +8,7 @@ namespace SparqlParseRun.SparqlClasses.Expressions
         public SparqlRand()
         {
             Random r=new Random();
-            TypedOperator = result => new OV_double(r.NextDouble());
+            Func = result => new OV_double(r.NextDouble());
         }
     }
 }

@@ -8,11 +8,11 @@ namespace SparqlParseRun.SparqlClasses.SparqlAggregateExpression
     {
         public SparqlMaxExpression():base()
         {
-            TypedOperator = result =>
+            Func = result =>
             {
                 if (result is SpraqlGroupOfResults)
                 {
-                    return (result as SpraqlGroupOfResults).Group.Max(sparqlResult => Expression.TypedOperator(sparqlResult));
+                    return (result as SpraqlGroupOfResults).Group.Max(sparqlResult => Expression.Func(sparqlResult));
                 }
                 else throw new Exception();
             };
