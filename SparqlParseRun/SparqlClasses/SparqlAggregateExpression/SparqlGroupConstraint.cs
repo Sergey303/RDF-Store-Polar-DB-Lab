@@ -16,14 +16,14 @@ namespace SparqlParseRun.SparqlClasses.SparqlAggregateExpression
         public SparqlGroupConstraint(SparqlExpression sparqlExpression)
         {
             // TODO: Complete member initialization
-            Constrained = sparqlExpression.Func;
+            Constrained = sparqlExpression.TypedOperator;
             IsDistinct = sparqlExpression.IsDistinct;
         }
 
         public SparqlGroupConstraint(SparqlFunctionCall sparqlFunctionCall)
         {
             // TODO: Complete member initialization
-            Constrained = sparqlFunctionCall.Func;
+            Constrained = sparqlFunctionCall.TypedOperator;
             IsDistinct = sparqlFunctionCall.sparqlArgs.isDistinct;
         }
 

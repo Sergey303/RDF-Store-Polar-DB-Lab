@@ -28,3 +28,167 @@ total ms 220
 ms на запрос в среденем 220
 qps 4
 next results count: 9
+
+one query 50, 1 times
+milions 1
+date time 15.05.2015 15:19:00
+total ms 494
+ms на запрос в среденем 494
+qps 2
+next results count: 9
+
+
+date time 15.05.2015 15:28:50
+q2
+memory usage (bytes) 514240
+run 605
+q1
+memory usage (bytes)418896
+run 234
+q3
+memory usage 369420
+run 225
+q4
+memory usage (bytes)383168
+run 210
+q5
+memory usage (bytes)366784
+run 227
+q6
+memory usage (bytes)689756
+run 119
+q7
+memory usage (bytes)399552
+run 1071
+q8
+memory usage (bytes)377124
+run 700
+q9
+memory usage (bytes)395060
+run 143
+q10
+memory usage (bytes)377604
+run 791
+q11
+memory usage (bytes)370392
+run 83
+q12
+memory usage (bytes)391356
+run 995
+q 50
+memory usage (bytes)366780
+run 196
+
+16.05.2015 17:54:11 +06:00
+q 1
+average 1,17818
+min 0,55
+max 208
+memory 5721600
+16.05.2015 17:54:36 +06:00
+q 2
+average 2,73514
+min 0,32
+max 512
+memory 1972136
+16.05.2015 17:58:22 +06:00
+q 1
+average 1,37776
+qps 725,815816978284
+min 0,54
+max 286
+memory 5721652
+16.05.2015 18:00:36 +06:00
+
+q 1
+average 0,36
+qps 2777,77
+min 0,55
+max 181
+memory 5713408
+______________________________________________________________________________________________________
+
+16.05.2015 18:14:03 +06:00
+q 1
+average 2,88
+qps 347,22
+min 0,56
+max 281
+memory 512132
+16.05.2015 18:14:32 +06:00
+q 2
+average 6,14999999999998
+qps 162,6
+min 1,42
+max 430
+memory 2432120
+16.05.2015 18:15:00 +06:00
+q 3
+average 2,47999999999999
+qps 403,22
+min 0,8
+max 172
+memory 803280
+16.05.2015 18:15:30 +06:00
+q 4
+average 3,56
+qps 280,89
+min 1,48
+max 186
+memory 1701760
+16.05.2015 18:16:00 +06:00
+q 5
+average 12,06
+qps 82,91
+min 0,34
+max 447
+memory 852480
+16.05.2015 18:16:36 +06:00
+q 6
+average 3,71
+qps 269,54
+min 2,02
+max 132
+memory 1087372
+16.05.2015 18:18:04 +06:00
+q 7
+average 23,82
+qps 41,98
+min 0,36
+max 1138
+memory 4132404
+16.05.2015 18:18:31 +06:00
+q 8
+average 8,77999999999996
+qps 113,89
+min 0,54
+max 656
+memory 3755520
+16.05.2015 18:18:59 +06:00
+q 9
+average 2,4
+qps 416,66
+min 0,44
+max 221
+memory 4468224
+16.05.2015 18:19:24 +06:00
+q 10
+average 9,47999999999998
+qps 105,48
+min 0,21
+max 829
+memory 1008480
+16.05.2015 18:19:42 +06:00
+q 11
+average 1,35
+qps 740,74
+min 0,35
+max 82
+memory 1121484
+16.05.2015 18:20:03 +06:00
+q 12
+average 12,09
+qps 82,71
+min 2,38
+max 963
+memory 2190848

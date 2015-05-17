@@ -8,7 +8,6 @@ namespace SparqlParseRun.SparqlClasses.Expressions
     public class SparqlRegexExpression : SparqlExpression
     {
         private SparqlExpression variableExpression;
-        private SparqlExpression patternExpression;
 
         internal void SetVariableExpression(SparqlExpression sparqlExpression)
         {
@@ -17,63 +16,69 @@ namespace SparqlParseRun.SparqlClasses.Expressions
 
         internal void SetRegex(SparqlExpression patternExpression)
         {
-            this.patternExpression = patternExpression;
-            Func = result =>
+            var varConst = variableExpression.Const;
+            var patternConst = patternExpression.Const;
+            Regex regex;
+            if (patternConst != null)
             {
 
-                var pattern = patternExpression.Func(result).Content;
-                if (pattern is string)
-                {   
-                    //regex.Trim('"');
-                    Regex regex;
-                    if (!Regexes.TryGetValue(pattern, out regex))
-                        Regexes.Add(pattern, regex = new Regex(pattern));
-                    var varex = variableExpression.Func(result).Content;
-                       if(varex is string)
-                           return new OV_bool(regex.IsMatch(varex));
-                }
-                throw new ArgumentException();
-            };
+                regex = CreateRegex((string)patternConst.Content);
+                if (varConst != null)
+                    Const = new OV_bool(regex.IsMatch((string)varConst.Content));
+                else
+                    Operator = result => regex.IsMatch(variableExpression.Operator(result));
+            }
+            else if (varConst != null)
+            {
+                Operator = result =>
+                {
+                    var pattern = patternExpression.TypedOperator(result).Content;
+                    regex = CreateRegex((string)pattern);
 
-            //typeof(Regex).GetMethod("IsMatch", new []{typeof(string)}), parameter);
+                    return regex.IsMatch((string)varConst.Content);
+                };
+            }
+            TypedOperator = result => new OV_bool(Operator(result));
+        }
+
+        private Regex CreateRegex(string pattern)
+        {
+            Regex regex;
+
+            if (parameters == null)
+            {
+                if (!Regexes.TryGetValue(pattern, out regex))
+                {
+                    Regexes.Add(pattern, regex = new Regex(pattern));
+
+                }
+            }
+            else
+            {
+                var key = new KeyValuePair<string, RegexOptions>(pattern, ignorePatternWhitespace);
+                if (!RegexesParameters.TryGetValue(key, out regex))
+                    RegexesParameters.Add(key, regex = new Regex(pattern, ignorePatternWhitespace)); 
+            }
+            return regex;
         }
 
         private static readonly Dictionary<string, Regex> Regexes = new Dictionary<string, Regex>();
-        private static readonly Dictionary<KeyValuePair<string, string>, Regex> RegexesParameters = new Dictionary<KeyValuePair<string, string>, Regex>();
+        private static readonly Dictionary<KeyValuePair<string, RegexOptions>, Regex> RegexesParameters = new Dictionary<KeyValuePair<string, RegexOptions>, Regex>();
+        private dynamic parameters;
+        private RegexOptions ignorePatternWhitespace;
 
         internal void SetParameters(SparqlExpression paramsExpression)
         {
-            Func = result =>
-            {
-                var pattern = patternExpression.Func(result).Content;
-                var parameters = paramsExpression.Func(result).Content;
-                var varexp = variableExpression.Func(result).Content;
-                if (varexp is string && pattern is string && parameters is string)
-                {
-                    //regex.Trim('"');
-                    Regex regex;
-                    var keyValuePair = new KeyValuePair<string, string>(pattern, parameters);
-                    if (!RegexesParameters.TryGetValue(keyValuePair, out regex))
-                    {
-                        RegexOptions op = RegexOptions.None;
-                        if (parameters.Contains("s"))
-                            op |= RegexOptions.Singleline;
-                        if (parameters.Contains("m"))
-                            op |= RegexOptions.Multiline;
-                        if (parameters.Contains("i"))
-                            op |= RegexOptions.IgnoreCase;
-                        if (parameters.Contains("x"))
-                            op |= RegexOptions.IgnorePatternWhitespace;
-
-                        RegexesParameters.Add(keyValuePair, regex = new Regex(pattern, op));
-                    }
-                    //if (parameter.Type == typeof (object))
-                    //  parameter = Expression.Call(Expression.Convert(parameter, typeof (ILiteralNode)), "GetString", new Type[0]);
-                    return regex.IsMatch(varexp);
-                }
-                throw new ArgumentException();
-            };
-
+            parameters = paramsExpression.Const.Content;    
+            ignorePatternWhitespace = RegexOptions.None;
+            if (parameters.Contains("s"))
+                ignorePatternWhitespace |= RegexOptions.Singleline;
+            if (parameters.Contains("m"))
+                ignorePatternWhitespace |= RegexOptions.Multiline;
+            if (parameters.Contains("i"))
+                ignorePatternWhitespace |= RegexOptions.IgnoreCase;
+            if (parameters.Contains("x"))
+                ignorePatternWhitespace |= RegexOptions.IgnorePatternWhitespace;
         }
 
     }

@@ -9,7 +9,7 @@ namespace SparqlParseRun.SparqlClasses.Expressions
         public SparqlUuid(NodeGenerator q)
         {                          
           
-            Func = result => q.GetUri("urn:uuid:" + Guid.NewGuid());
+            TypedOperator = result => q.GetUri("urn:uuid:" + Guid.NewGuid());
         }
     }
 }

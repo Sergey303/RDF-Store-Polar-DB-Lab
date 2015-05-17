@@ -54,7 +54,6 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SparqlTesting.cs" />
-    <Compile Include="StoreLauncher.cs" />
     <Compile Include="Testing.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -28,8 +28,8 @@ namespace SparqlParseRun.SparqlClasses.GraphPattern.Triples.Path
                 yield return new SparqlTriple((ObjectVariants) subjectNode, variableNode, (ObjectVariants) objectNode, q);
                 foreach (var pathTranslator in directed)
                 {
-                    var expr = new SparqlVarExpression(variableNode);
-                    expr.NotEquals(null);
+                    SparqlExpression expr = new SparqlVarExpression(variableNode);
+                    expr = SparqlExpression.NotEquals(expr, new SparqlIriExpression(pathTranslator.predicate));
                     yield return new SparqlFilter(expr);
                 }
             }
@@ -43,8 +43,8 @@ namespace SparqlParseRun.SparqlClasses.GraphPattern.Triples.Path
                 yield return new SparqlTriple((ObjectVariants) objectNode, variableNode, (ObjectVariants) subjectNode, q);
                 foreach (var pathTranslator in inversed)
                 {
-                    var expr = new SparqlVarExpression(variableNode);
-                    expr.NotEquals(null);
+                    SparqlExpression expr = new SparqlVarExpression(variableNode);
+                  expr=  SparqlExpression.NotEquals(expr,new SparqlIriExpression(pathTranslator.predicate));
                     yield return new SparqlFilter(expr);
                 }
             }

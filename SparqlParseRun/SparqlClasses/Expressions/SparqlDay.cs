@@ -12,11 +12,11 @@ namespace SparqlParseRun.SparqlClasses.Expressions
 
             IsAggragate = value.IsAggragate;
             IsDistinct = value.IsDistinct;
-            value.SetVariablesTypes(ExpressionType.withDate);
-            SetVariablesTypes(ExpressionType.@int);
-            Func = result =>
+            value.SetExprType(ExpressionTypeEnum.Date);
+            SetExprType(ObjectVariantEnum.Int);
+            TypedOperator = result =>
             {
-                var f = value.Func(result).Content;
+                var f = value.TypedOperator(result).Content;
                 if (f is DateTime)
                     return new OV_int(((DateTime)f).Day);
                 if (f is DateTimeOffset)

@@ -29,7 +29,7 @@ namespace RDFCommon.OVns
         }
 
 
-        public abstract dynamic Content { get; }
+        public abstract object Content { get; }
         public abstract ObjectVariants Change(Func<dynamic, dynamic> changing);
 
     }

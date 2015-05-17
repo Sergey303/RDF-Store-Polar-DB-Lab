@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using RDFCommon;
 using SparqlParseRun;
 using SparqlParseRun.SparqlClasses.Query.Result;
@@ -7,12 +8,12 @@ using Antlr4.Runtime;
 
 namespace TestingNs
 {
-    public class SecondStringSore : SecondStringGraph, IStore
+    public class SecondStringSore : InterpretMeasure, IStore //CacheMeasure  GraphCached
     {
 
         public SecondStringSore(string path)
-            //: base(new SecondStringGraph(path))
-            : base(path)
+                   //        : base(new SecondStringGraph(path)) 
+         :   base(path)
         {
         }
 
@@ -63,6 +64,11 @@ namespace TestingNs
            return new RamListOfTriplesGraph("temp");
         }
 
-       
+
+
+
+
+
+        
     }
 }

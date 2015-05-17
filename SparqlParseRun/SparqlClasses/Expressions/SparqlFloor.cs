@@ -11,9 +11,9 @@ namespace SparqlParseRun.SparqlClasses.Expressions
             IsAggragate = value.IsAggragate;
             IsDistinct = value.IsDistinct;
           
-            Func = result =>
+            TypedOperator = result =>
             {
-                var val = value.Func(result);
+                var val = value.TypedOperator(result);
                 dynamic content = val.Content;
                 if (content is decimal || content is double)
                     return val.Change(d => Math.Floor(d));

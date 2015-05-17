@@ -232,12 +232,13 @@ WHERE groupGraphPattern { $value.SetWhere($groupGraphPattern.value); };
  expression returns [SparqlExpression value] : conditionalAndExpression { $value=$conditionalAndExpression.value; } ( '||' r= conditionalAndExpression {$value=new SparqlOrExpression($value, $r.value);} )*;
 
  conditionalAndExpression returns [SparqlExpression value] :  relationalExpression { $value=$relationalExpression.value; } ( '&&' r= relationalExpression {$value=new SparqlAndExpression($value, $r.value);} )*;
- relationalExpression returns [SparqlExpression value] :  numericExpression { $value=$numericExpression.value; }  ( '=' r=numericExpression {$value.EqualsExpression($r.value,q);}
-  | '!=' r=numericExpression {$value=$value.NotEquals($r.value);}
-  | '<' r=numericExpression {$value=$value.Smaller($r.value);}
-  | '>' r=numericExpression {$value=$value.Greather($r.value);}
-  | '<=' r=numericExpression {$value=$value.SmallerOrEquals($r.value);}
-  | '>=' r=numericExpression {$value=$value.GreatherOrEquals($r.value);}
+ relationalExpression returns [SparqlExpression value] :  numericExpression { $value=$numericExpression.value; }  
+ ( '=' r=numericExpression {$value=SparqlExpression.EqualsExpression($value, $r.value,q);}
+  | '!=' r=numericExpression {$value=SparqlExpression.NotEquals($value, $r.value);}
+  | '<' r=numericExpression {$value=SparqlExpression.Smaller($value, $r.value);}
+  | '>' r=numericExpression {$value=SparqlExpression.Greather($value, $r.value);}
+  | '<=' r=numericExpression {$value=SparqlExpression.SmallerOrEquals($value, $r.value);}
+  | '>=' r=numericExpression {$value=SparqlExpression.GreatherOrEquals($value, $r.value);}
   | IN expressionList {$value=$value.InCollection($expressionList.value);}
   | NOT IN expressionList {$value=$value.NotInCollection($expressionList.value);} )?;
  numericExpression returns [SparqlExpression value] : multiplicativeExpression { $value=$multiplicativeExpression.value; } 
@@ -316,7 +317,7 @@ WHERE groupGraphPattern { $value.SetWhere($groupGraphPattern.value); };
 |	regexExpression { $value=$regexExpression.value; }
 |	existsFunc 	 { $value=$existsFunc.value; }
 |	notExistsFunc { $value=$notExistsFunc.value; };
- regexExpression returns [SparqlRegexExpression value] : (REGEX  ) {$value=new SparqlRegexExpression();}  '(' v = expression {$value.SetVariableExpression($v.value);} ',' regex = expression {$value.SetRegex($regex.value);} ( ',' parameters = expression {$value.SetParameters($parameters.value);} )? ')';
+ regexExpression returns [SparqlRegexExpression value] : REGEX  {$value=new SparqlRegexExpression();}  '(' v = expression {$value.SetVariableExpression($v.value);} ',' regex = expression ( ',' parameters = expression {$value.SetParameters($parameters.value);} )? ')' {$value.SetRegex($regex.value);};
  substringExpression returns [SparqlSubstringExpression value] :  SUBSTR {$value=new SparqlSubstringExpression();} '(' lit= expression {$value.SetString($lit.value);} ',' startExp = expression {$value.SetStartPosition($startExp.value);} ( ',' length= expression {$value.SetLength($length.value);} )? ')';
  strReplaceExpression returns [SparqlReplaceStrExpression value] : REPLACE {$value=new SparqlReplaceStrExpression();} '(' lit = expression  {$value.SetString($lit.value);} ',' pattern = expression  {$value.SetPattern($lit.value);}',' replacement = expression {$value.SetReplacement($replacement.value);} ( ',' parameters= expression {$value.SetParameters($parameters.value);} )? ')';
  existsFunc returns [SparqlExistsExpression value] : EXISTS groupGraphPattern {$value=new SparqlExistsExpression($groupGraphPattern.value);};

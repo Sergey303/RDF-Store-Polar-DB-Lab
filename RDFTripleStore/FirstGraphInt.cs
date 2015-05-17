@@ -370,5 +370,17 @@ namespace RDFTripleStore
             table.Clear();
             Build(new TripleGeneratorBufferedParallel(baseStream, "g"));
         }
+
+        public void Dispose()
+        {
+            table.Dispose();
+            s_ind.Dispose();
+            sp_ind.Dispose();
+            spo_ind.Dispose();
+            so_ind.Dispose();
+            po_ind.Dispose();
+            p_ind.Dispose();
+            o_ind.Dispose();
+        }
     }
 }

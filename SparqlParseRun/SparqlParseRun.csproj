@@ -48,7 +48,13 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DataSet.cs" />
-    <Compile Include="SparqlClasses\Expressions\SparqlIri.cs" />
+    <Compile Include="SparqlClasses\Expressions\SparqlBinaryExpression.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="SparqlClasses\Expressions\SparqlBoolExpression.cs" />
+    <Compile Include="SparqlClasses\Expressions\SparqlIriExpression.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="SparqlClasses\Expressions\SparqlStringLang.cs" />
     <Compile Include="SparqlClasses\Expressions\SparqlAbs.cs" />
     <Compile Include="SparqlClasses\Expressions\SparqlAndExpression.cs" />
@@ -61,7 +67,9 @@
     <Compile Include="SparqlClasses\Expressions\SparqlDataType.cs" />
     <Compile Include="SparqlClasses\Expressions\SparqlDay.cs" />
     <Compile Include="SparqlClasses\Expressions\SparqlExpression.cs" />
-    <Compile Include="SparqlClasses\Expressions\SparqlUriExpression.cs" />
+    <Compile Include="SparqlClasses\Expressions\SparqlUnaryExpression.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="SparqlClasses\GraphPattern\ISparqlGraphPattern.cs" />
     <Compile Include="SparqlClasses\GraphPattern\SparqlGraphPattern.cs" />
     <Compile Include="SparqlClasses\GraphPattern\SparqlGraphPatternType.cs" />

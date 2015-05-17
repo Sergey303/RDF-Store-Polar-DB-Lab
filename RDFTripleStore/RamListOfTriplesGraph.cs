@@ -131,8 +131,9 @@ namespace RDFTripleStore
         //}
 
 
-        
-
- 
+        public void Dispose()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

@@ -1,19 +1,32 @@
-﻿using System;
+﻿using RDFCommon.OVns;
 
 namespace SparqlParseRun.SparqlClasses.Expressions
 {
-    class SparqlAndExpression : SparqlExpression
+    public class SparqlAndExpression : SparqlBinaryExpression
     {
-        public SparqlAndExpression(SparqlExpression l, SparqlExpression r)
-        {
-            IsDistinct = l.IsDistinct || r.IsDistinct;
-            IsAggragate = l.IsAggragate || r.IsAggragate;
+      
 
-            l.SetVariablesTypes(ExpressionType.@bool); 
-            r.SetVariablesTypes(ExpressionType.@bool);
-            SetVariablesTypes(ExpressionType.@bool);
-          
-            Func = result => l.Func(result).Change(ll => ll && r.Func(result).Content);   
+
+        public SparqlAndExpression(SparqlExpression l, SparqlExpression r)
+            : base(l, r, (o, o1) => (bool)o && (bool)o1)
+        {      
+            l.SetExprType(ObjectVariantEnum.Bool); 
+            r.SetExprType(ObjectVariantEnum.Bool);
+            SetExprType(ObjectVariantEnum.Bool);        
         }
+
+     
     }
+    /// <summary>
+    /// Nullable Pair
+    /// </summary>
+    public  enum NP{ bothNull, leftNull, rigthNull, bothNotNull}
+
+    public static class NullablePairExt
+{
+        public static NP Get(object left, object right)
+        {
+            return (NP)(((left != null ? 1 : 0) << 1) | (right != null ? 1 : 0));
+        }
+}
 }

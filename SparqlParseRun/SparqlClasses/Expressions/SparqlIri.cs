@@ -1,5 +1,5 @@
 ﻿using System;
-using RDFCommon;
+
 using RDFCommon.OVns;
 
 namespace SparqlParseRun.SparqlClasses.Expressions
@@ -14,10 +14,10 @@ namespace SparqlParseRun.SparqlClasses.Expressions
          Func = result =>
             {
                 var f = value.Func(result);
-                if (f is IIriNode)
+                if (f is IUriNode)
                     return f;
                 if(f is ILiteralNode)      //TODO
-                    return new OV_iri(f.Content);
+                    return q.CreateUriNode(f.Content);
                 throw new ArgumentException();  
             }; 
         }

@@ -9,11 +9,11 @@ namespace SparqlParseRun.SparqlClasses.SparqlAggregateExpression
         public SparqlMinExpression()
             : base()
         {
-            Func = result =>
+            TypedOperator = result =>
             {
                 if (result is SpraqlGroupOfResults)
                 {
-                    return (result as SpraqlGroupOfResults).Group.Min(sparqlResult => Expression.Func(sparqlResult));
+                    return (result as SpraqlGroupOfResults).Group.Min(sparqlResult => Expression.TypedOperator(sparqlResult));
                 }
                 else throw new Exception();
             };

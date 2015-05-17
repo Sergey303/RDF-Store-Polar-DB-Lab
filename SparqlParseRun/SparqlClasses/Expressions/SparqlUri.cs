@@ -11,7 +11,9 @@ namespace SparqlParseRun.SparqlClasses.Expressions
         {
             IsAggragate = value.IsAggragate;
             IsDistinct = value.IsDistinct;
-            Func = result => new OV_iri(q.prolog.GetFromString(value.Func(result).Content)); 
+            Operator = result => q.prolog.GetFromString((string) value.TypedOperator(result).Content);
+            SetExprType(ObjectVariantEnum.Iri);
+            TypedOperator = result => new OV_iri(q.prolog.GetFromString((string) value.TypedOperator(result).Content)); 
         }
     }
 }

@@ -19,7 +19,7 @@ namespace GoTripleStore
                 .Select(line => line.Substring("#source_data_folder_path".Length + 1))
                 .First();
             System.Diagnostics.Stopwatch sw = new System.Diagnostics.Stopwatch();
-            string path = "../../../Databases/";
+            string path = "../../../Databases/string based/";
             Console.WriteLine("Start GoTripleStore coding triples (GaGraphStringBased).");
             string subj77 = "http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromProducer1/Product12";
             var query = ReadTripleStringsFromTurtle.LoadGraph(Source_data_folder_path + "1.ttl")
@@ -45,7 +45,7 @@ namespace GoTripleStore
             }
             else
             { // разогрев
-                //g.Warmup();
+                g.Warmup();
             }
 
             {

@@ -15,7 +15,7 @@ namespace SparqlParseRun.SparqlClasses.Expressions
 
             IsAggragate = value.IsAggragate;
             IsDistinct = value.IsDistinct;
-            Func = result => value.Func(result).Change(o => CreateHash(o));
+            TypedOperator = result => value.TypedOperator(result).Change(o => CreateHash(o));
 
         }
 

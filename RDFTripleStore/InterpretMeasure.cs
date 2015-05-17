@@ -13,7 +13,8 @@ namespace TestingNs
 {
     public class InterpretMeasure : SecondStringGraph, IGraph
     {
-        public readonly Queue<object> history=new Queue<object>();
+        public readonly Queue<object> history = new Queue<object>();
+      
 
       public bool TrainingMode { get; set; }
         public InterpretMeasure(string path):base(path)

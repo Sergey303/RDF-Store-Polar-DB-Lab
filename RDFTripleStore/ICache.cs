@@ -35,7 +35,7 @@ namespace RDFTripleStore
     }
     class Cache<TKey1, TKey2, TValue>
     {
-        Dictionary<KeyValuePair<TKey1, TKey2>, TValue> cacheDictionary = new Dictionary<KeyValuePair<TKey1, TKey2>, TValue>();
+        Dictionary<TKey1, Dictionary<TKey2, TValue>> cacheDictionary = new Dictionary<TKey1, Dictionary<TKey2, TValue>>();
         Func<TKey1, TKey2, TValue> getValue;
 
         public Cache(Func<TKey1, TKey2, TValue> getValue)
@@ -46,25 +46,29 @@ namespace RDFTripleStore
         public TValue Get(TKey1 k1, TKey2 k2)
         {
             TValue value;
-            KeyValuePair<TKey1, TKey2> key = new KeyValuePair<TKey1, TKey2>(k1, k2);
-            if (cacheDictionary.TryGetValue(key, out value)) return value;
-            if (cacheDictionary.Keys.Count > 1000 * 1000 * 1000)
-                cacheDictionary.Clear();
-            cacheDictionary.Add(key, value= getValue(k1, k2));
+            Dictionary<TKey2, TValue> d2;
+            if (!cacheDictionary.TryGetValue(k1, out d2))
+                cacheDictionary.Add(k1, new Dictionary<TKey2, TValue>() {{k2, value = getValue(k1, k2)}});
+            else
+            {
+                if (!d2.TryGetValue(k2, out value))
+                    d2.Add(k2, value = getValue(k1, k2));
+                return value;
+            }
             return value;
         }
 
-        public void Add(TKey1 k1, TKey2 k2, TValue v)
-        {
-            var key = new KeyValuePair<TKey1, TKey2>(k1, k2);
-            if (cacheDictionary.ContainsKey(key)) return;
-            cacheDictionary.Add(key, v);
-        }
-        public bool Contains(TKey1 k1, TKey2 k2)
-        {
-            KeyValuePair<TKey1, TKey2> key = new KeyValuePair<TKey1, TKey2>(k1, k2);
-            return cacheDictionary.ContainsKey(key);
-        }
+        //public void Add(TKey1 k1, TKey2 k2, TValue v)
+        //{
+        //    var key = new KeyValuePair<TKey1, TKey2>(k1, k2);
+        //    if (cacheDictionary.ContainsKey(key)) return;
+        //    cacheDictionary.Add(key, v);
+        //}
+        //public bool Contains(TKey1 k1, TKey2 k2)
+        //{
+        //    KeyValuePair<TKey1, TKey2> key = new KeyValuePair<TKey1, TKey2>(k1, k2);
+        //    return cacheDictionary.ContainsKey(key);
+        //}
     }
     class Cache<TKey1, TKey2, TKey3, TValue> 
     {
