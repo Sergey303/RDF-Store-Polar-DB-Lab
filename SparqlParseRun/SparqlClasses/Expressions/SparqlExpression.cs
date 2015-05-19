@@ -9,13 +9,13 @@ namespace SparqlParseRun.SparqlClasses.Expressions
     public abstract class SparqlExpression
     {
         public Func<SparqlResult, ObjectVariants> TypedOperator;
-        public Func<SparqlResult, dynamic> Operator;
+        private Func<SparqlResult, dynamic> @operator;
         public bool IsAggragate;
         public bool IsDistinct;
         private ExpressionTypeEnum typeEnum;
         private ObjectVariantEnum? realType;
         private ObjectVariants @constconst;
-
+          
 
         internal static SparqlExpression EqualsExpression(SparqlExpression l, SparqlExpression r, RdfQuery11Translator q)
         {
@@ -41,7 +41,7 @@ namespace SparqlParseRun.SparqlClasses.Expressions
 
         public static SparqlExpression Smaller(SparqlExpression l, SparqlExpression r)
         {
-            var sparqlBinaryExpression = new SparqlBinaryExpression(l, r, (o, o1) => ((IComparable)o).CompareTo(o1) < 0 );
+            var sparqlBinaryExpression = new SparqlBinaryExpression(l, r, (o, o1) => ((IComparable) o).CompareTo(o1) == -1);
             l.SyncTypes(r);
             sparqlBinaryExpression.SetExprType(ObjectVariantEnum.Bool);
             return sparqlBinaryExpression;
@@ -58,21 +58,21 @@ namespace SparqlParseRun.SparqlClasses.Expressions
             //    if (l.RealType == ObjectVariantEnum.Date|| r.RealType == ObjectVariantEnum.Date)
             //    @operator = (o, o1) => (DateTimeOffset)o > (DateTimeOffset)o1;
             //else                                                          throw new NotImplementedException();
-            var sparqlBinaryExpression = new SparqlBinaryExpression(l, r, (o, o1) => ((IComparable)o).CompareTo(o1) > 0);
+            var sparqlBinaryExpression = new SparqlBinaryExpression(l, r, (o, o1) => ((IComparable)o).CompareTo(o1) ==1);
             sparqlBinaryExpression.SetExprType(ObjectVariantEnum.Bool);
             return sparqlBinaryExpression;
         }
 
         internal static SparqlExpression SmallerOrEquals(SparqlExpression l, SparqlExpression r)
         {
-            var sparqlBinaryExpression = new SparqlBinaryExpression(l, r, (o, o1) => ((IComparable)o).CompareTo(o1) <= 0);
+            var sparqlBinaryExpression = new SparqlBinaryExpression(l, r, (o, o1) => ((IComparable)o).CompareTo(o1) != 1);
             sparqlBinaryExpression.SetExprType(ObjectVariantEnum.Bool);
             return sparqlBinaryExpression;
         }
 
         public static SparqlExpression GreatherOrEquals(SparqlExpression l, SparqlExpression r)
         {
-            var sparqlBinaryExpression = new SparqlBinaryExpression(l, r, (o, o1) => ((IComparable)o).CompareTo(o1) >=0 );
+            var sparqlBinaryExpression = new SparqlBinaryExpression(l, r, (o, o1) => ((IComparable)o).CompareTo(o1) !=-1 );
             sparqlBinaryExpression.SetExprType(ObjectVariantEnum.Bool);
             return sparqlBinaryExpression;
         }
@@ -82,8 +82,8 @@ namespace SparqlParseRun.SparqlClasses.Expressions
             var inCollection = new SparqlBoolExpression(
                 result =>
                 {
-                    var o = Operator(result);
-                    return collection.Any(element => element.Operator(result).Equals(o));
+                    var o = @operator(result);
+                    return collection.Any(element => element.@operator(result).Equals(o));
                 })
             {
                 IsAggragate = IsAggragate || collection.Any(element => element.IsAggragate),
@@ -105,8 +105,8 @@ namespace SparqlParseRun.SparqlClasses.Expressions
             var notInCollection = new SparqlBoolExpression(
                 result =>
                 {
-                    var o = Operator(result);
-                    return collection.All(element => !element.Operator(result).Equals(o));
+                    var o = @operator(result);
+                    return collection.All(element => !element.@operator(result).Equals(o));
                 })
             {
                 IsAggragate = IsAggragate || collection.Any(element => element.IsAggragate),
@@ -190,7 +190,7 @@ namespace SparqlParseRun.SparqlClasses.Expressions
 
         internal bool Test(SparqlResult result)
         {
-            return (bool)Operator(result);
+            return (bool)@operator(result);
         }
 
         public Func<SparqlResult, ObjectVariants> FunkClone
@@ -207,7 +207,7 @@ namespace SparqlParseRun.SparqlClasses.Expressions
             set
             {
                 @constconst = value;
-                realType = constconst.Variant;
+            //    realType = constconst.Variant;
             }
         }
 
@@ -221,6 +221,12 @@ namespace SparqlParseRun.SparqlClasses.Expressions
             {
                 realType = value;
             }
+        }
+
+        public Func<SparqlResult, dynamic> Operator
+        {
+            get { return @operator; }
+            set { @operator = value; }
         }
 
         public void SetExprType(ObjectVariantEnum variant)

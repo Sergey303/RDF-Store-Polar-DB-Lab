@@ -16,17 +16,17 @@ namespace SparqlParseRun.SparqlClasses.Expressions
             switch (NullablePairExt.Get(lc, rc))
             {
                 case NP.bothNull:
-                    Operator = result => @operator(r.Operator(result), l.Operator(result));
+                    Operator = result => @operator(l.Operator(result), r.Operator(result));
                     TypedOperator = result => r.TypedOperator(result).Change(rr => @operator(l.Operator(result), rr));
                     break;
                 case NP.leftNull:
                     c = rc.Content;
-                    Operator = result => @operator(c, l.Operator(result));
+                    Operator = result => @operator(l.Operator(result), c);
                     TypedOperator = result => l.TypedOperator(result).Change(ll => @operator(ll, c));
                     break;
                 case NP.rigthNull:
                     c = lc.Content;
-                    Operator = result => @operator(r.Operator(result), c);
+                    Operator = result => @operator(c, r.Operator(result));
                     TypedOperator = result => r.TypedOperator(result).Change(rr => @operator(c, rr));
                     break;
                 case NP.bothNotNull:

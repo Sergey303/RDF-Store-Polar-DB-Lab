@@ -25,10 +25,7 @@ namespace TestingNs
 
         public string Name { get; private set; }
         public NodeGenerator NodeGenerator { get { return ng; } }
-        public void Clear()
-        {
-            //throw new NotImplementedException();
-        }
+       
 
         public virtual IEnumerable<T> GetTriplesWithObject<T>(ObjectVariants o, Func<ObjectVariants, ObjectVariants, T> createResult)
         {
@@ -36,7 +33,7 @@ namespace TestingNs
                 .Select(base.Dereference)
                 //.ReadWritableTriples()
                 .Select(row => createResult(new OV_iri(DecodeIRI(row[0])), new OV_iri((DecodeIRI(row[1])))))
-                ;
+               .ToArray();
         }
 
         public virtual IEnumerable<T> GetTriplesWithPredicate<T>(ObjectVariants p, Func<ObjectVariants, ObjectVariants, T> createResult)
@@ -45,7 +42,7 @@ namespace TestingNs
              //   .ReadWritableTriples()
                 .Select(base.Dereference)
                 .Select(row => createResult(new OV_iri(DecodeIRI(row[0])), DecodeOV(row[2])))
-                            ;
+                  .ToArray();
 
         }
 
@@ -55,7 +52,7 @@ namespace TestingNs
                 //ReadWritableTriples()
                 .Select(base.Dereference)
                 .Select(row => createResult(new OV_iri(DecodeIRI(row[1])), DecodeOV(row[2])))
-                                ;
+                 .ToArray();
 
         }
 
@@ -65,7 +62,7 @@ namespace TestingNs
               //  .ReadWritableTriples()
                 .Select(base.Dereference)
                 .Select(row => DecodeOV(row[2]))
-                                ;
+                .ToArray();
 
         }
 
@@ -75,7 +72,7 @@ namespace TestingNs
             return base.GetTriplesWithSubjectPredicate(((IIriNode)subj).UriString, obj)
                   //.ReadWritableTriples()
                 .Select(base.Dereference)
-                  .Select(row => new  OV_iri(DecodeIRI(row[1])));
+                  .Select(row => new OV_iri(DecodeIRI(row[1]))).ToArray();
         }
 
         public virtual IEnumerable<ObjectVariants> GetTriplesWithPredicateObject(ObjectVariants pred, ObjectVariants obj)
@@ -85,7 +82,7 @@ namespace TestingNs
                // .ReadWritableTriples()
                  .Select(base.Dereference)
                 .Select(row => new OV_iri(DecodeIRI(row[0])))
-                               ;
+                 .ToArray();
 
         }
 

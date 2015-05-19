@@ -1,12 +1,12 @@
 ﻿using System;
-using RdfCommon;
-using RdfCommon.Literals;
+
+using RDFCommon.OVns;
 
 namespace SparqlParseRun.SparqlClasses.Expressions
 {
     class SparqlIri : SparqlExpression
     {
-        public SparqlIri(SparqlExpression value, INodeGenerator q)
+        public SparqlIri(SparqlExpression value, NodeGenerator q)
         {
 
             IsAggragate = value.IsAggragate;

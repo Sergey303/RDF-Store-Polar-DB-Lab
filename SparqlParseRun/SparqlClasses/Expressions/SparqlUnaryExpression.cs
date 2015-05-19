@@ -19,7 +19,7 @@ namespace SparqlParseRun.SparqlClasses.Expressions
             if (childConst != null) Const = childConst.Change(@operator);
             else
             {
-                Operator = @operator;
+                Operator = result => @operator(child.Operator(result));
                 TypedOperator = result => child.TypedOperator(result).Change(@operator);
             }
         }

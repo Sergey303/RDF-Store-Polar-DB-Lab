@@ -23,7 +23,7 @@ namespace RDFTripleStore
             this.@base = @base;
 
             spo = new Cache<ObjectVariants, ObjectVariants, ObjectVariants, bool>(
-                Contains);
+                @base.Contains);
             spO = new Cache<ObjectVariants, ObjectVariants, IEnumerable<ObjectVariants>>(@base.GetTriplesWithSubjectPredicate);
             sPo = new Cache<ObjectVariants, ObjectVariants, IEnumerable<ObjectVariants>>(@base.GetTriplesWithSubjectObject);
             Spo = new Cache<ObjectVariants, ObjectVariants, IEnumerable<ObjectVariants>>(@base.GetTriplesWithPredicateObject);
@@ -47,18 +47,19 @@ namespace RDFTripleStore
 
         public IEnumerable<T> GetTriplesWithObject<T>(ObjectVariants o, Func<ObjectVariants, ObjectVariants, T> createResult)
         {
-            return SPo.Get(o).Select(pair => createResult(pair.Key, pair.Value));
+            return @base.GetTriplesWithObject(o, createResult); //SPo.Get(o).Select(pair => createResult(pair.Key, pair.Value));
         }
 
         public IEnumerable<T> GetTriplesWithPredicate<T>(ObjectVariants p, Func<ObjectVariants, ObjectVariants, T> createResult)
         {
-            return SpO.Get(p).Select(pair => createResult(pair.Key, pair.Value));
+            return @base.GetTriplesWithPredicate(p, createResult); //SpO.Get(p).Select(pair => createResult(pair.Key, pair.Value));
 
         }
 
         public IEnumerable<T> GetTriplesWithSubject<T>(ObjectVariants s, Func<ObjectVariants, ObjectVariants, T> createResult)
         {
-            return sPO.Get(s).Select(pair => createResult(pair.Key, pair.Value));
+            return @base.GetTriplesWithSubject(s, createResult);
+                //sPO.Get(s).Select(pair => createResult(pair.Key, pair.Value));
         }
 
         public IEnumerable<ObjectVariants> GetTriplesWithSubjectPredicate(ObjectVariants subj, ObjectVariants pred)
@@ -74,7 +75,7 @@ namespace RDFTripleStore
 
         public IEnumerable<ObjectVariants> GetTriplesWithPredicateObject(ObjectVariants pred, ObjectVariants obj)
         {
-            return Spo.Get(pred, obj);
+            return @base.GetTriplesWithPredicateObject(pred,obj);//Spo.Get(pred, obj);
         }
 
         public IEnumerable<T> GetTriples<T>(Func<ObjectVariants, ObjectVariants, ObjectVariants, T> returns)
@@ -94,7 +95,7 @@ namespace RDFTripleStore
 
         public bool Contains(ObjectVariants subject, ObjectVariants predicate, ObjectVariants obj)
         {
-            return spo.Get(subject,predicate, obj);
+            return @base.Contains(subject, predicate, obj); //spo.Get(subject,predicate, obj);
         }
 
         public void Delete(ObjectVariants s, ObjectVariants p, ObjectVariants o)
@@ -129,9 +130,11 @@ namespace RDFTripleStore
             Warmup();
         }
 
-        protected void Warmup()
+        public void Warmup()
         {
             @base.Warmup();
         }
+
+       
     }
 }

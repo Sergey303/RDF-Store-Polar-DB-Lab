@@ -16,33 +16,46 @@ namespace SparqlParseRun.SparqlClasses.Expressions
            // this.sparqlUriNode = sparqlUriNode;
             this.sparqlArgs = sparqlArgs;
             IsDistinct = sparqlArgs.isDistinct;   //todo
+            SparqlExpression arg = this.sparqlArgs[0];
             if (Equals(sparqlUriNode, SpecialTypesClass.Bool))
             {
-              TypedOperator= result =>
+                Func<object, bool> f = o =>
                 {
-                    ObjectVariants ov = (this.sparqlArgs[0].TypedOperator(result));
-                    dynamic o = ov.Content;
                     if (o is string)
-                        return new OV_bool(bool.Parse(o)); ;
+                        return bool.Parse((string)o);
                     if (o is double || o is int || o is float || o is decimal)
-                        return new OV_bool(((double)o) != 0.0d); 
+                        return Math.Abs(Convert.ToDouble(o)) > 0;
                     if (o is bool)
-                        return ov;
+                        return (bool)o;
                     throw new ArgumentException();
                 };
+                if (arg.Const != null)
+                    Const = new OV_bool(f(arg.Const.Content));
+                else
+                {
+                    Operator = result => f(arg.Operator(result));
+                    //todo
+                }
                    return;
             }  else
                 if (Equals(sparqlUriNode, SpecialTypesClass.Double))
                 {
-                    TypedOperator = result =>
+
+                    Func<object, double> f = o =>
                     {
-                        dynamic o = (this.sparqlArgs[0].TypedOperator(result)).Content;
-                        if (o is string)
-                            return new OV_double(double.Parse(o.Replace(".", ",")));
+                            if (o is string)
+                                return double.Parse(((string)o).Replace(".", ","));
                         if (o is double || o is int || o is float || o is decimal)
-                            return new OV_double(Convert.ToDouble(o));
+                            return (Convert.ToDouble(o));
                         throw new ArgumentException();
                     };
+                    if (arg.Const != null)
+                        Const = new OV_double(f(arg.Const.Content));
+                    else
+                    {
+                        Operator = result => f(arg.Operator(result));
+                        //todo
+                    }
                     return;
                 }
                 else
@@ -50,7 +63,7 @@ namespace SparqlParseRun.SparqlClasses.Expressions
                     {
                         TypedOperator = result =>
                         {
-                            dynamic o = (this.sparqlArgs[0].TypedOperator(result)).Content;
+                            dynamic o = (arg.TypedOperator(result)).Content;
                             if (o is string)
                                  return new OV_float(float.Parse(o.Replace(".", ",")));
                             if (o is double || o is int || o is float || o is decimal)
@@ -64,7 +77,7 @@ namespace SparqlParseRun.SparqlClasses.Expressions
                         {
                             TypedOperator = result =>
                             {
-                                dynamic o = (this.sparqlArgs[0].TypedOperator(result)).Content;
+                                dynamic o = (arg.TypedOperator(result)).Content;
                                 if (o is string)
                                     return new OV_decimal((decimal.Parse(o.Replace(".", ","))));
                                 if (o is double || o is int || o is float || o is decimal)
@@ -78,7 +91,7 @@ namespace SparqlParseRun.SparqlClasses.Expressions
                             {
                                 TypedOperator = result =>
                                 {
-                                    dynamic o = (this.sparqlArgs[0].TypedOperator(result)).Content;
+                                    dynamic o = (arg.TypedOperator(result)).Content;
                                     if (o is string)
                                         return new OV_int((int.Parse(o)));
                                     if (o is double || o is int || o is float || o is decimal)
@@ -92,7 +105,7 @@ namespace SparqlParseRun.SparqlClasses.Expressions
                                 {
                                     TypedOperator = result =>
                                     {
-                                        ObjectVariants ov = (this.sparqlArgs[0].TypedOperator(result));
+                                        ObjectVariants ov = (arg.TypedOperator(result));
                                         dynamic o = ov.Content;
                                         if (o is string)
                                             return new OV_dateTime(DateTime.Parse(o));

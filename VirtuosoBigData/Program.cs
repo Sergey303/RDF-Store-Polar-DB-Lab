@@ -27,10 +27,63 @@ namespace VirtuosoBigData
             //return;
 
             //RunTests(engine);
-            RunMany(engine);
-
+           // RunMany(engine);
+       //     RunBerlinsWithConstants(engine);
+//            ViruosoBSBmParameters(engine);
+            OneParametred(engine, 12, 100);
             Console.WriteLine("Total duration=" + (DateTime.Now - tt0).Ticks / 10000L); tt0 = DateTime.Now;
 
+        }
+
+        public static void RunBerlinsWithConstants(EngineVirtuoso Store)
+        {
+            double[] memoryUsage = new double[50];
+            long[] totalrun = new long[50];
+            Console.WriteLine("bsbm with constants");
+            var timer = new Stopwatch();
+
+          //  for (
+            int i =49;
+            //i < 12; i++)
+            {
+                string file = string.Format(@"..\..\..\Testing\examples\bsbm\queries\with constants\{0}.rq", i + 1);
+                var qu = "sparql " + File.ReadAllText(file);
+                GC.Collect();
+
+                if (qu.Contains("SELECT "))
+                {
+
+                    timer.Restart();
+
+                    var select_qu = Store.Query(qu);
+                    foreach (var objectse in select_qu)
+                    {
+
+                    }
+
+                    timer.Stop();
+                }
+                else
+                {
+                    timer.Restart();
+                    Store.Execute(qu);
+                    timer.Stop();
+                }
+                totalrun[i] += timer.ElapsedMilliseconds > 10
+                        ? timer.ElapsedMilliseconds
+                        :( (int) (timer.ElapsedTicks/10000)*100)/100;
+                    memoryUsage[i] = GC.GetTotalMemory(false);
+                    //results[i]=
+              
+            }
+            using (StreamWriter r = new StreamWriter(@"..\..\output.txt", true))
+                {
+                    r.WriteLine("date time " + DateTime.Now);
+                    r.WriteLine("memory usage (bytes)" + string.Join(", ", memoryUsage));
+                    r.WriteLine("run " + string.Join(", ", totalrun));
+                    r.WriteLine("total run " + totalrun.Sum()); 
+                }                
+          
         }
 
         private static void RunTests(EngineVirtuoso engine)
@@ -371,9 +424,8 @@ namespace VirtuosoBigData
             int i = 0;
 
             int Millions=1;
-            var paramvaluesFilePath = string.Format(@"..\..\..\Testing\examples\bsbm\queries\parameters\param values for{0} m.txt", Millions);
 
-            using (StreamReader streamQueryParameters = new StreamReader(paramvaluesFilePath))
+            using (StreamReader streamQueryParameters = new StreamReader(string.Format(@"..\..\..\Testing\examples\bsbm\queries\parameters\param values for{0} m.txt", Millions)))
             {
                 int j;
                 for (j = 0; j < 500; j++)
@@ -402,30 +454,10 @@ namespace VirtuosoBigData
                     }
                 for (j = 0; j < 500; j++)
                 {
-                    i = 0;
+                    
                     for (i =0 ; i < 12; i++)
                     {
-                        var file = new FileInfo(string.Format(@"..\..\..\Testing\examples\bsbm\queries\parameters\{0}.rq", i + 1));
-                    
-                   
-                        var readAllText = File.ReadAllText(file.FullName);
-                        readAllText = "sparql " +  BSBmParams.QueryReadParameters(readAllText, streamQueryParameters);
-                        readAllText = readAllText.Replace("18.04.2008 0:00:00", DateTime.Parse("18.04.2008 0:00:00").ToString("s"));
-
-                  Stopwatch timer=new Stopwatch();
-                        if (readAllText.Contains("SELECT "))
-                        {
-                            timer.Restart();
-                            var res = engine.Query(readAllText).ToArray();
-                            timer.Stop();
-                        }
-                        else
-                        {
-                            timer.Restart();
-                            var res = engine.Execute(readAllText); // engine.Query(queries[i]).ToArray();
-                            timer.Stop();
-                        }
-                        var totalMilliseconds = timer.ElapsedMilliseconds;
+                        var totalMilliseconds = 0;//OneParametred(engine, i, TODO);
                         if (minimums[i] > totalMilliseconds)
                             minimums[i] = totalMilliseconds;
                         if (maximums[i] < totalMilliseconds)
@@ -451,6 +483,52 @@ namespace VirtuosoBigData
             Console.WriteLine("minimums " + string.Join(", ", minimums));
             Console.WriteLine("maximums " + string.Join(", ", maximums));
         }
+
+        private static void OneParametred(EngineVirtuoso engine, int i, int count)
+        {
+            using (StreamReader streamQueryParameters = new StreamReader(string.Format(
+                @"..\..\..\Testing\examples\bsbm\queries\parameters\param values for{0}m {1} query.txt", 1, i)))
+            {
+                var file =
+                    new FileInfo(string.Format(@"..\..\..\Testing\examples\bsbm\queries\parameters\{0}.rq", i));
+                var parametred = "sparql " + File.ReadAllText(file.FullName);
+                double min=int.MaxValue, max=-1, average=0;
+                for (int j = 0; j < count; j++)
+                {
+                    var consted = BSBmParams.QueryReadNewParameters(parametred, streamQueryParameters);
+                    consted = consted.Replace("16.05.2008 0:00:00", DateTime.Parse("16.04.2008 0:00:00").ToString("s"));
+
+                    Stopwatch timer = new Stopwatch();
+                    if (consted.Contains("SELECT "))
+                    {
+                        timer.Restart();
+                        var res = engine.Query(consted).ToArray();
+                        timer.Stop();
+                    }
+                    else
+                    {
+                        timer.Restart();
+                        var res = engine.Execute(consted); // engine.Query(queries[i]).ToArray();
+                        timer.Stop();
+                    }
+                    double time = SparqlTesting.GetTimeWthLast2Digits(timer);
+                    average+= (double)((int)(100 * time/count))/100;
+                    if (time > max) max = time;
+                    if (min > time) min = time;
+                }
+                using (StreamWriter r = new StreamWriter(@"..\..\output.txt", true))
+                {
+                    r.WriteLine(DateTimeOffset.Now);
+                    r.WriteLine("q "+i);
+                    r.WriteLine("average " + average);
+                    r.WriteLine("qps " + ((double)((int)(100000 / average))/100));
+                    r.WriteLine("min " + min);
+                    r.WriteLine("max " + max);
+                    r.WriteLine("memory "+GC.GetTotalMemory(false));
+                }
+            }
+        }
+
         public static void RunTestParametred(EngineVirtuoso engine, int iq = 5, int count = 100)
         {
             var paramvaluesFilePath =
@@ -466,7 +544,7 @@ namespace VirtuosoBigData
                 {
                     string q = BSBmParams.QueryReadParameters(qparams, streamParameters);
                     timer.Start();
-                    engine.Query(q).ToArray();
+                    Console.WriteLine(engine.Query(q).Count());
                     timer.Stop();
                 }
 
@@ -477,8 +555,9 @@ namespace VirtuosoBigData
                     r.WriteLine("milions " + 1);
                     r.WriteLine("date time " + DateTime.Now);
                     r.WriteLine("total ms " + timer.ElapsedMilliseconds);
-                    r.WriteLine("tics per q " + timer.ElapsedTicks / count);
-                    r.WriteLine("qps " + (int)(((double)count) / timer.Elapsed.TotalSeconds));
+                    double l = timer.ElapsedMilliseconds / count;
+                    r.WriteLine("ms на запрос в среденем " + l);
+                    r.WriteLine("qps " + (int)(1000.0/l));
                     r.WriteLine("next results count: {0}",
                         engine.Query(BSBmParams.QueryReadParameters(qparams, streamParameters)).Count());
                 }

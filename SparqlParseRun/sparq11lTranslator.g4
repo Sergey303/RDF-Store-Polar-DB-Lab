@@ -232,7 +232,8 @@ WHERE groupGraphPattern { $value.SetWhere($groupGraphPattern.value); };
  expression returns [SparqlExpression value] : conditionalAndExpression { $value=$conditionalAndExpression.value; } ( '||' r= conditionalAndExpression {$value=new SparqlOrExpression($value, $r.value);} )*;
 
  conditionalAndExpression returns [SparqlExpression value] :  relationalExpression { $value=$relationalExpression.value; } ( '&&' r= relationalExpression {$value=new SparqlAndExpression($value, $r.value);} )*;
- relationalExpression returns [SparqlExpression value] :  numericExpression { $value=$numericExpression.value; }  ( '=' r=numericExpression {$value=SparqlExpression.EqualsExpression($value, $r.value,q);}
+ relationalExpression returns [SparqlExpression value] :  numericExpression { $value=$numericExpression.value; }  
+ ( '=' r=numericExpression {$value=SparqlExpression.EqualsExpression($value, $r.value,q);}
   | '!=' r=numericExpression {$value=SparqlExpression.NotEquals($value, $r.value);}
   | '<' r=numericExpression {$value=SparqlExpression.Smaller($value, $r.value);}
   | '>' r=numericExpression {$value=SparqlExpression.Greather($value, $r.value);}
