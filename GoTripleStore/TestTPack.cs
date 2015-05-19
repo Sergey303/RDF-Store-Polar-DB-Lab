@@ -58,20 +58,27 @@ namespace GoTripleStore
             Console.WriteLine("n={0}", n);
 
             IEnumerable<TPack> qu;
-            int cnt;
+            int cnt = -1;
 
             sw.Restart();
-            qu = Query5t(gra);
-            cnt = qu.Count();
+            //qu = Query5t(gra);
+            for (int i = 0; i < 10; i++)
+            {
+                qu = Query1t(gra);
+                cnt = qu.Count();
+            }
             sw.Stop();
             Console.WriteLine("query5t ok. cnt={0} duration={1}", cnt, sw.ElapsedMilliseconds);
+
+            //return;
 
             sw.Restart();
             ((TPackGraph)gra).StartCount();
             ((TPackGraph)gra).StartCache();
             for (int i = 0; i < 100; i++)
             {
-                qu = Query5p(gra, productsXYZ[i]);
+                //qu = Query5p(gra, productsXYZ[i]);
+                qu = Query2p(gra, productsXYZ[i]);
                 cnt = qu.Count();
             }
             ((TPackGraph)gra).PrintCount();
@@ -162,6 +169,65 @@ namespace GoTripleStore
                     int op2 = ((OV_int)pack.Get(_origProperty2)).value;
                     return (sp2 < (op2 + 170) && sp2 > (op2 - 170));
                 })
+                ;
+            return quer;
+        }
+        public static IEnumerable<TPack> Query1t(IGraph g)
+        {
+            ObjectVariants[] row = new ObjectVariants[3];
+            ObjectVariants _product = new OV_index(0), _label = new OV_index(1), _value1 = new OV_index(2);
+            ObjectVariants bsbm_productFeature = new OV_iri("http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/vocabulary/productFeature"),
+                bsbm_inst_ProductFeature19 = new OV_iri("http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/ProductFeature19"),
+                bsbm_inst_ProductFeature8 = new OV_iri("http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/ProductFeature8"),
+                bsbm_inst_ProductType1 = new OV_iri("http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/ProductType1"),
+                a = new OV_iri("http://www.w3.org/1999/02/22-rdf-syntax-ns#type"),
+                label = new OV_iri("http://www.w3.org/2000/01/rdf-schema#label"),
+                iri4 = new OV_iri("http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/vocabulary/productPropertyNumeric1");
+            var quer = Enumerable.Repeat<TPack>(new TPack(row, g), 1)
+                .spo(_product, bsbm_productFeature, bsbm_inst_ProductFeature19)
+                .spo(_product, bsbm_productFeature, bsbm_inst_ProductFeature8)
+                .spo(_product, a, bsbm_inst_ProductType1)
+                .spo(_product, iri4, _value1)
+                .spo(_product, label, _label)
+                .Where(pack => ((OV_int)pack.Get(_value1)).value > 10)
+                ;
+            return quer;
+        }
+        public static IEnumerable<TPack> Query2p(IGraph g, string productXYZ)
+        {
+            ObjectVariants[] row = new ObjectVariants[11];
+            ObjectVariants _label = new OV_index(0), _comment = new OV_index(1), _p = new OV_index(2), _producer = new OV_index(3), _f = new OV_index(4);
+            ObjectVariants _productFeature = new OV_index(5);
+            ObjectVariants _protertyTextual1 = new OV_index(6);
+            ObjectVariants _protertyTextual2 = new OV_index(7);
+            ObjectVariants _protertyTextual3 = new OV_index(8);
+            ObjectVariants _protertyNumeric1 = new OV_index(9);
+            ObjectVariants _protertyNumeric2 = new OV_index(10);
+            ObjectVariants XYZ = new OV_iri(productXYZ),
+                pF = new OV_iri("http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/vocabulary/productFeature"),
+                label = new OV_iri("http://www.w3.org/2000/01/rdf-schema#label"),
+                comment = new OV_iri("http://www.w3.org/2000/01/rdf-schema#comment"),
+                producer = new OV_iri("http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/vocabulary/producer"),
+                publisher = new OV_iri("http://purl.org/dc/elements/1.1/publisher"),
+                t1 = new OV_iri("http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/vocabulary/productPropertyTextual1"),
+                t2 = new OV_iri("http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/vocabulary/productPropertyTextual1"),
+                t3 = new OV_iri("http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/vocabulary/productPropertyTextual1"),
+                n1 = new OV_iri("http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/vocabulary/productPropertyNumeric1"),
+                n2 = new OV_iri("http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/vocabulary/productPropertyNumeric1");
+            var quer = Enumerable.Repeat<TPack>(new TPack(row, g), 1)
+                .spo(XYZ, label, _label)
+                .spo(XYZ, comment, _comment)
+                .spo(XYZ, producer, _p)
+                .spo(_p, label, _producer)
+                .spo(XYZ, publisher, _p)
+                .spo(XYZ, pF, _f)
+                .spo(_f, label, _productFeature)
+                .spo(XYZ, t1, _protertyTextual1)
+                .spo(XYZ, t2, _protertyTextual2)
+                .spo(XYZ, t3, _protertyTextual3)
+                .spo(XYZ, n1, _protertyNumeric1)
+                .spo(XYZ, n2, _protertyNumeric2)
+                // Еще опционы должны быть
                 ;
             return quer;
         }
