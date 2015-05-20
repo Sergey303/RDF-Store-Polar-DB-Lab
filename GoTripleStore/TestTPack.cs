@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -60,9 +61,35 @@ namespace GoTripleStore
             IEnumerable<TPack> qu;
             int cnt = -1;
 
+            List<object[]> test_pars = new List<object[]>();
+            TextReader tr = new StreamReader(Source_data_folder_path + "param values for1m 1 query.txt");
+            string ln = null;
+            while ((ln = tr.ReadLine()) != null)
+            {
+                string tp = ln;
+                string pf1 = tr.ReadLine();
+                string pf2 = tr.ReadLine();
+                ln = tr.ReadLine();
+                int x = Int32.Parse(ln);
+                test_pars.Add(new object[] { tp, pf1, pf2, x });
+            }
+
+            cnt = 0;
+            sw.Restart();
+            for (int i = 0; i < 100; i++)
+            {
+                object[] pp = test_pars[i];
+                qu = Query1p(gra, (string)pp[0], (string)pp[1], (string)pp[2], (int)pp[3]);
+                cnt += qu.Count();
+            }
+            sw.Stop();
+            Console.WriteLine("query1p ok. cnt={0} duration={1}", cnt, sw.ElapsedMilliseconds);
+
+            return;
+
             sw.Restart();
             //qu = Query5t(gra);
-            for (int i = 0; i < 10; i++)
+            for (int i = 0; i < 100; i++)
             {
                 qu = Query1t(gra);
                 cnt = qu.Count();
@@ -74,7 +101,7 @@ namespace GoTripleStore
 
             sw.Restart();
             ((TPackGraph)gra).StartCount();
-            ((TPackGraph)gra).StartCache();
+            //((TPackGraph)gra).StartCache();
             for (int i = 0; i < 100; i++)
             {
                 //qu = Query5p(gra, productsXYZ[i]);
@@ -190,6 +217,27 @@ namespace GoTripleStore
                 .spo(_product, iri4, _value1)
                 .spo(_product, label, _label)
                 .Where(pack => ((OV_int)pack.Get(_value1)).value > 10)
+                ;
+            return quer;
+        }
+        public static IEnumerable<TPack> Query1p(IGraph g, string tp, string pf1, string pf2, int x)
+        {
+            ObjectVariants[] row = new ObjectVariants[3];
+            ObjectVariants _product = new OV_index(0), _label = new OV_index(1), _value1 = new OV_index(2);
+            ObjectVariants bsbm_productFeature = new OV_iri("http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/vocabulary/productFeature"),
+                bsbm_inst_ProductFeature19 = new OV_iri(pf1),
+                bsbm_inst_ProductFeature8 = new OV_iri(pf2),
+                bsbm_inst_ProductType1 = new OV_iri(tp),
+                a = new OV_iri("http://www.w3.org/1999/02/22-rdf-syntax-ns#type"),
+                label = new OV_iri("http://www.w3.org/2000/01/rdf-schema#label"),
+                iri4 = new OV_iri("http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/vocabulary/productPropertyNumeric1");
+            var quer = Enumerable.Repeat<TPack>(new TPack(row, g), 1)
+                .spo(_product, bsbm_productFeature, bsbm_inst_ProductFeature19)
+                .spo(_product, bsbm_productFeature, bsbm_inst_ProductFeature8)
+                .spo(_product, a, bsbm_inst_ProductType1)
+                .spo(_product, iri4, _value1)
+                .spo(_product, label, _label)
+                .Where(pack => ((OV_int)pack.Get(_value1)).value > x)
                 ;
             return quer;
         }
