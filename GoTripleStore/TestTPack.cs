@@ -11,7 +11,7 @@ namespace GoTripleStore
 {
     class TestTPack
     {
-        public static void Main()
+        public static void MainTTP()
         {
             Random rnd = new Random(987654321);
             string[] arr = Allproducts.Products;
