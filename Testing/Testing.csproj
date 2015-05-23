@@ -55,6 +55,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SparqlTesting.cs" />
     <Compile Include="Testing.cs" />
+    <Compile Include="TestingPhotoPersons.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
