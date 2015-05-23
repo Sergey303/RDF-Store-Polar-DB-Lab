@@ -30,7 +30,6 @@ namespace SparqlParseRun.SparqlClasses.Query
 
         public override SparqlResultSet Run()
         {
-            
             ResultSet.Variables = base.q.Variables;
             ResultSet.Results=Enumerable.Repeat(new SparqlResult(q), 1);
             ResultSet.Results = sparqlWhere.Run(ResultSet.Results);

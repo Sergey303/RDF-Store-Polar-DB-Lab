@@ -8,10 +8,10 @@ using Antlr4.Runtime;
 
 namespace TestingNs
 {
-    public class SecondStringSore : InterpretMeasure, IStore //CacheMeasure  GraphCached
+    public class SecondStringStore : SecondStringGraph , IStore //CacheMeasure  GraphCached   InterpretMeasure
     {
 
-        public SecondStringSore(string path)
+        public SecondStringStore(string path)
                    //        : base(new SecondStringGraph(path)) 
          :   base(path)
         {

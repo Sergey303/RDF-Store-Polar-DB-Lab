@@ -16,7 +16,7 @@ namespace TestingNs
 
         public static void TestQuery(string queryString, bool load, int millions)
         {
-            SecondStringSore sparqlStore = new SecondStringSore("../../../Databases/");
+            SecondStringStore sparqlStore = new SecondStringStore("../../../Databases/");
             if (load)
             Perfomance.ComputeTime(() =>
             {
@@ -198,7 +198,7 @@ namespace TestingNs
             Console.WriteLine("bsbm with constants");
                 var timer = new Stopwatch();
           //  using (
-            var Store = new SecondStringSore("../../../Databases/string based/");
+            var Store = new SecondStringStore("../../../Databases/string based/");
             {
                 Store.ReloadFrom(Config.Source_data_folder_path+"1.ttl");
                 SparqlQueryParser.Parse(Store, sq5);
@@ -258,7 +258,7 @@ namespace TestingNs
         public static void TestExamples()
         {
             DirectoryInfo examplesRoot = new DirectoryInfo(@"..\..\examples");
-            var store = new SecondStringSore("../../../Databases/");
+            var store = new SecondStringStore("../../../Databases/");
             foreach (var exampleDir in examplesRoot.GetDirectories())
                 //  var exampleDir = new DirectoryInfo(@"..\..\examples\bsbm");
             {
@@ -298,7 +298,7 @@ namespace TestingNs
             }
         }
 
-        private static void RunOneExample(DirectoryInfo exampleDir, SecondStringSore store)
+        private static void RunOneExample(DirectoryInfo exampleDir, SecondStringStore store)
         {
             foreach (var rqQueryFile in exampleDir.GetFiles("*.rq"))
             {

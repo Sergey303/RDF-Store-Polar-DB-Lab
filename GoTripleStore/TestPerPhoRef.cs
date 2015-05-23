@@ -16,7 +16,7 @@ namespace GoTripleStore
             string path = "../../../Databases/";
             Console.WriteLine("Start GoTripleStore TestPerPhoRef.");
 
-            int npersons = 400000;
+            int npersons = 40000;
 
             // Сначала коннектимся к базе данных
             GaGraphStringBased g = new GaGraphStringBased(path);

@@ -125,7 +125,8 @@ namespace SparqlParseRun.SparqlClasses.Query.Result
 
         public IEnumerable<T> GetSelected<T>(Func<VariableNode, ObjectVariants, T> selector)
         {
-            return selected.Where(v=>rowArray[v.Index]!=null).Select(v => selector(v, rowArray[v.Index]));
+            return selected.Where(v=>rowArray[v.Index]!=null)
+                .Select(v => selector(v, rowArray[v.Index]));
         }
 
        // private readonly Dictionary<string, VariableNode> Variables;
