@@ -20,7 +20,7 @@ namespace GoTripleStore
 
             // Сначала коннектимся к базе данных
             GaGraphStringBased g = new GaGraphStringBased(path);
-            bool toload = true;
+            bool toload = false;
             if (toload)
             { // Загружаем данные
                 sw.Restart();

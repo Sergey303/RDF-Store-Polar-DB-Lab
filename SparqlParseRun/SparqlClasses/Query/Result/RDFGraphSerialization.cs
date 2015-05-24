@@ -150,11 +150,19 @@ namespace SparqlParseRun.SparqlClasses.Query.Result
             return
                 string.Join("." + Environment.NewLine,
                     g.GetAllSubjects().Select(s =>
-                        string.Format("{0} {1}", s,
-                        string.Join(";" + Environment.NewLine,
-                            g.GetTriplesWithSubject(s, Tuple.Create).GroupBy(po => po.Item1).Select(pGroup =>
-                                string.Format("{0} {1}", pGroup.Key,
-                                    string.Join("," + Environment.NewLine, pGroup.Select(t => t.Item2))))))));
+                        string.Format(@"<{0}> 
+            {1}", s,
+                        string.Join(";" + Environment.NewLine+"          ",
+                            g.GetTriplesWithSubject(s, Tuple.Create)
+                            .GroupBy(po => po.Item1).Select(pGroup =>
+                                string.Format("<{0}> {1}", pGroup.Key,
+                                    string.Join("," + Environment.NewLine + "                                              ", 
+                                    pGroup.Select(t =>
+                                    {
+                                        if (t.Item2.Variant == ObjectVariantEnum.Iri)
+                                            return "<" + t.Item2 + ">";
+                                        else return "\"" + t.Item2 + "\"^^<" + ((ILiteralNode) t.Item2).DataType + ">";
+                                    }))))))));
         }
 
         public static void FromXml(this IGraph g, XElement x)

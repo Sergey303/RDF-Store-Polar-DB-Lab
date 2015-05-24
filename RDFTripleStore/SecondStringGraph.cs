@@ -33,7 +33,7 @@ namespace TestingNs
                 .Select(base.Dereference)
                 //.ReadWritableTriples()
                 .Select(row => createResult(new OV_iri(DecodeIRI(row[0])), new OV_iri((DecodeIRI(row[1])))))
-               .ToArray();
+               ;
         }
 
         public virtual IEnumerable<T> GetTriplesWithPredicate<T>(ObjectVariants p, Func<ObjectVariants, ObjectVariants, T> createResult)
@@ -42,7 +42,7 @@ namespace TestingNs
              //   .ReadWritableTriples()
                 .Select(base.Dereference)
                 .Select(row => createResult(new OV_iri(DecodeIRI(row[0])), DecodeOV(row[2])))
-                  .ToArray();
+                  ;
 
         }
 
@@ -51,8 +51,9 @@ namespace TestingNs
             return base.GetTriplesWithSubject(((IIriNode)s).UriString)
                 //ReadWritableTriples()
                 .Select(base.Dereference)
+                
                 .Select(row => createResult(new OV_iri(DecodeIRI(row[1])), DecodeOV(row[2])))
-                 .ToArray();
+                 ;
 
         }
 
@@ -62,7 +63,7 @@ namespace TestingNs
               //  .ReadWritableTriples()
                 .Select(base.Dereference)
                 .Select(row => DecodeOV(row[2]))
-                .ToArray();
+                ;
 
         }
 
@@ -72,7 +73,7 @@ namespace TestingNs
             return base.GetTriplesWithSubjectPredicate(((IIriNode)subj).UriString, obj)
                   //.ReadWritableTriples()
                 .Select(base.Dereference)
-                  .Select(row => new OV_iri(DecodeIRI(row[1]))).ToArray();
+                  .Select(row => new OV_iri(DecodeIRI(row[1])));
         }
 
         public virtual IEnumerable<ObjectVariants> GetTriplesWithPredicateObject(ObjectVariants pred, ObjectVariants obj)
@@ -82,7 +83,7 @@ namespace TestingNs
                // .ReadWritableTriples()
                  .Select(base.Dereference)
                 .Select(row => new OV_iri(DecodeIRI(row[0])))
-                 .ToArray();
+                 ;
 
         }
 
@@ -118,7 +119,12 @@ namespace TestingNs
 
         public IEnumerable<ObjectVariants> GetAllSubjects()
         {
-            throw new NotImplementedException();
+            return base.GetTriples()
+                .Select(base.Dereference)
+                .Select(row => row[0])
+                .Select(DecodeIRI)
+                .Distinct()
+                .Select(s => new OV_iri(s));
         }
 
         public long GetTriplesCount()
