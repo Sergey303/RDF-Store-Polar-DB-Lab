@@ -54,8 +54,10 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RPack.cs" />
+    <Compile Include="Standard3TabsInt.cs" />
     <Compile Include="TestDataGenerator.cs" />
     <Compile Include="TestPerPhoRef.cs" />
+    <Compile Include="TestStandard.cs" />
     <Compile Include="TestTPack.cs" />
     <Compile Include="TPack.cs" />
     <Compile Include="TripleStore.cs" />
