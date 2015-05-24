@@ -16,11 +16,11 @@ namespace GoTripleStore
             string path = "../../../Databases/";
             Console.WriteLine("Start GoTripleStore TestPerPhoRef.");
 
-            int npersons = 40000;
+            int npersons = 400000;
 
             // Сначала коннектимся к базе данных
             GaGraphStringBased g = new GaGraphStringBased(path);
-            bool toload = true;
+            bool toload = false;
             if (toload)
             { // Загружаем данные
                 sw.Restart();
