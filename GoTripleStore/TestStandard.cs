@@ -14,7 +14,7 @@ namespace GoTripleStore
             Random rnd = new Random();
             int cnt = -1;
             Standard3TabsInt tabs = new Standard3TabsInt(path);
-            int npersons = 400000;
+            int npersons = 4000000;
             bool toload = true;
             if (toload)
             {
