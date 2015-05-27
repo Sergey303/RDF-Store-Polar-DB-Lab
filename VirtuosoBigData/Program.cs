@@ -55,7 +55,7 @@ namespace VirtuosoBigData
 
         private static void Reload(AdapterVirtuoso store)
         {
-            Perfomance.ComputeTime(() =>
+            Performance.ComputeTime(() =>
             {
                 store.Load(TestingPhotoPersons.data.Generate().SelectMany(ele =>
                 {

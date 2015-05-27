@@ -58,7 +58,7 @@ namespace TestingNs
        {     
            //SparqlQuery sparqlQuery = SparqlQueryParser.Parse(store, QGetPerson3123Info());
            //Console.WriteLine(sparqlQuery.Run().ToJson());  
-           Perfomance.ComputeTime(() =>
+           Performance.ComputeTime(() =>
            {
                for (int i = 0; i < 1000; i++)
                {
@@ -66,7 +66,7 @@ namespace TestingNs
                }
            }, "1000 sPO ok. duration=", true);
 
-           Perfomance.ComputeTime(() =>
+           Performance.ComputeTime(() =>
            {
                for (int i = 0; i < 1000; i++)
                {
@@ -75,7 +75,7 @@ namespace TestingNs
            }, string.Format("1000 spO ok. duration="), true);
 
        
-           Perfomance.ComputeTime(() =>
+           Performance.ComputeTime(() =>
            {                                 
                for (int i = 0; i < 1000; i++)
                {
@@ -84,7 +84,7 @@ namespace TestingNs
                }
            }, "1000 spo ok duration=", true);
 
-           Perfomance.ComputeTime(() =>
+           Performance.ComputeTime(() =>
            {
                for (int i = 0; i < 100; i++)
                {

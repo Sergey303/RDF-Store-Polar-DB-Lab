@@ -20,7 +20,7 @@ namespace TestingNs
             using (StreamWriter perfomance = new StreamWriter("../../Perfomance.txt"))
                 perfomance.WriteLine(TestingPhotoPersons.Npersons);
             if(true)
-            Perfomance.ComputeTime(() => Reload(store), "load " + TestingPhotoPersons.Npersons + " ", true);
+            Performance.ComputeTime(() => Reload(store), "load " + TestingPhotoPersons.Npersons + " ", true);
             TestingPhotoPersons.Run((q) =>
             {
                 var sparqlQuery = SparqlQueryParser.Parse(store, q);

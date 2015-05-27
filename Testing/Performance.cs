@@ -4,7 +4,7 @@ using System.IO;
 
 namespace TestingNs
 {
-    public static class Perfomance
+    public static class Performance
     {
         private static Stopwatch timer = new Stopwatch();
 
@@ -14,7 +14,7 @@ namespace TestingNs
         /// <param name="action">тестируемый метод</param>
         /// <param name="mesage"></param>
         /// <param name="outputFile">if true, write result at file</param>
-        public static void ComputeTime(this Action action, string mesage, bool outputFile = false, string pathOutputFile=@"..\..\Perfomance.txt")
+        public static void ComputeTime(this Action action, string mesage, bool outputFile = false, string pathOutputFile=@"..\..\Performance.txt")
         {
             timer.Restart();
             action.Invoke();

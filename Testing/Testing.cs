@@ -21,7 +21,7 @@ namespace TestingNs
         /// <param name="millions">в данных пока предполагаются варианты: 1, 10, 100, 1000</param>
         public static void TestReadTtl(this IGraph<Triple<string, string, ObjectVariants>> graph, int millions)
         {
-            Perfomance.ComputeTime(() =>
+            Performance.ComputeTime(() =>
                 graph.Build(
                     ReadTripleStringsFromTurtle.LoadGraph(
                         Config.Source_data_folder_path + millions + ".ttl")), "build " + millions + ".ttl ", true);
@@ -34,7 +34,7 @@ namespace TestingNs
         /// <param name="turtleFileName"> путь к внешнему файлу ttl</param>
         public static void TestReadTtl(this IGraph<Triple<string, string, ObjectVariants>> graph, string turtleFileName)
         {
-            Perfomance.ComputeTime(() =>
+            Performance.ComputeTime(() =>
                 graph.Build(
                     ReadTripleStringsFromTurtle.LoadGraph(turtleFileName)),
                 "build " + turtleFileName + " ", true);
@@ -50,7 +50,7 @@ namespace TestingNs
         public static void TestReadTtl_Cocor(this IGraph<Triple<string, string, ObjectVariants>> graph, int millions)
         {
 
-            Perfomance.ComputeTime(() =>
+            Performance.ComputeTime(() =>
             {
                 var generator = new TripleGeneratorBufferedParallel(Config.Source_data_folder_path + millions + ".ttl", "g");
                 graph.Build(generator);
@@ -89,7 +89,7 @@ namespace TestingNs
         /// <param name="turtleFileName"> путь к внешнему файлу ttl</param>
         public static void TestReadTtl_Cocor(this IGraph<Triple<string, string, ObjectVariants>> graph, string turtleFileName)
         {
-            Perfomance.ComputeTime(() =>
+            Performance.ComputeTime(() =>
                 graph.Build(new TripleGeneratorBufferedParallel(turtleFileName,"g")),
                 "build " + turtleFileName + " ", true);
         }
@@ -109,11 +109,11 @@ namespace TestingNs
         {
             var all = graph.Search();
             Triple<string, string, ObjectVariants>[] ts100 = null;
-            Perfomance.ComputeTime(() =>
+            Performance.ComputeTime(() =>
             {
                 ts100 = all.Take(100).ToArray();
             }, "get first's 100 triples ", true);
-            Perfomance.ComputeTime(() =>
+            Performance.ComputeTime(() =>
             {
                 foreach (var t in ts100)
                 {
@@ -122,7 +122,7 @@ namespace TestingNs
 
                 }
             }, "search by object as subject from first's 100 triples ", true);
-            Perfomance.ComputeTime(() =>
+            Performance.ComputeTime(() =>
             {
                 foreach (var t in ts100)
                 {
@@ -130,7 +130,7 @@ namespace TestingNs
 
                 }
             }, "search by predicate from first's 100 triples ", true);
-            Perfomance.ComputeTime(() =>
+            Performance.ComputeTime(() =>
             {
                 foreach (var t in ts100)
                 {
