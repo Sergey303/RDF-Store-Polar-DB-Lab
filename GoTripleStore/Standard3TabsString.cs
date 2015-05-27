@@ -95,6 +95,7 @@ namespace GoTripleStore
             };
         }
         public void Clear() { tab_person.Clear(); tab_photo_doc.Clear(); tab_reflection.Clear(); }
+        public void Warmup() { tab_person.Warmup(); tab_photo_doc.Warmup(); tab_reflection.Warmup(); }
         public void Build(IEnumerable<XElement> records)
         {
             this.Clear();

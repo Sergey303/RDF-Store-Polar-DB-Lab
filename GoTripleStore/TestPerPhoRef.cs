@@ -10,13 +10,13 @@ namespace GoTripleStore
 {
     public class TestPerPhoRef
     {
-        public static void Main5()
+        public static void Main() //Main5()
         {
             System.Diagnostics.Stopwatch sw = new System.Diagnostics.Stopwatch();
             string path = "../../../Databases/";
             Console.WriteLine("Start GoTripleStore TestPerPhoRef.");
 
-            int npersons = 400000;
+            int npersons = 40000;
 
             // Сначала коннектимся к базе данных
             GaGraphStringBased g = new GaGraphStringBased(path);
@@ -107,7 +107,7 @@ namespace GoTripleStore
             Console.WriteLine("1000 spO ok cnt={0}. duration={1}", cnt, sw.ElapsedMilliseconds);
 
             sw.Restart();
-            for (int i = 0; i < 100; i++)
+            for (int i = 0; i < 1000; i++)
             {
                 var qu3 = g.GetTriplesWithPredicateObject("reflected",
                     new OV_iri("person" + rnd.Next(npersons - 1)))
@@ -130,7 +130,7 @@ namespace GoTripleStore
                 cnt = qu3.Count();
             }
             sw.Stop();
-            Console.WriteLine("100 portraits ok cnt={0}. duration={1}", cnt, sw.ElapsedMilliseconds);
+            Console.WriteLine("1000 portraits ok cnt={0}. duration={1}", cnt, sw.ElapsedMilliseconds);
 
         }
     }

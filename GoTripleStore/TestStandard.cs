@@ -7,7 +7,7 @@ namespace GoTripleStore
 {
     public class TestStandard
     {
-        public static void Main() // Main7()
+        public static void Main7() // Main7()
         {
             string path = "../../../Databases/";
             System.Diagnostics.Stopwatch sw = new System.Diagnostics.Stopwatch();
@@ -15,7 +15,7 @@ namespace GoTripleStore
             int cnt = -1;
             Standard3TabsString tabs = new Standard3TabsString(path);
             int npersons = 40000;
-            bool toload = false;
+            bool toload = true;
             if (toload)
             {
                 sw.Restart();
@@ -24,6 +24,7 @@ namespace GoTripleStore
                 sw.Stop();
                 Console.WriteLine("Load ok. duration={0}", sw.ElapsedMilliseconds);
             }
+            else { tabs.Warmup(); }
             sw.Restart();
             for (int i = 0; i < 1000; i++)
             {
@@ -47,13 +48,13 @@ namespace GoTripleStore
             Console.WriteLine("1000 photo_docs ok. duration={0}", sw.ElapsedMilliseconds);
 
             sw.Restart();
-            for (int i = 0; i < 100; i++)
+            for (int i = 0; i < 1000; i++)
             {
                 int code = rnd.Next(2 * npersons - 1);
                 cnt = tabs.GetReflectionsByReflected(code.ToString()).Count();
             }
             sw.Stop();
-            Console.WriteLine("100 portraits ok. duration={0}", sw.ElapsedMilliseconds);
+            Console.WriteLine("1000 portraits ok. duration={0}", sw.ElapsedMilliseconds);
         }
         public static void Main6() // Main6()
         {
@@ -62,7 +63,7 @@ namespace GoTripleStore
             Random rnd = new Random();
             int cnt = -1;
             Standard3TabsInt tabs = new Standard3TabsInt(path);
-            int npersons = 400000;
+            int npersons = 40000;
             bool toload = true;
             if (toload)
             {
@@ -96,13 +97,13 @@ namespace GoTripleStore
             Console.WriteLine("1000 photo_docs ok. duration={0}", sw.ElapsedMilliseconds);
 
             sw.Restart();
-            for (int i = 0; i < 100; i++)
+            for (int i = 0; i < 1000; i++)
             {
                 int code = rnd.Next(2 * npersons - 1);
                 cnt = tabs.GetReflectionsByReflected(code).Count();
             }
             sw.Stop();
-            Console.WriteLine("100 portraits ok. duration={0}", sw.ElapsedMilliseconds);
+            Console.WriteLine("1000 portraits ok. duration={0}", sw.ElapsedMilliseconds);
         }
     }
 }
