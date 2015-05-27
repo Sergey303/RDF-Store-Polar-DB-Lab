@@ -21,7 +21,7 @@ namespace VirtuosoBigData
          //   EngineVirtuoso engine = new EngineVirtuoso("HOST=localhost:1550;UID=dba;PWD=dba;Charset=UTF-8;Connection Timeout=500", "g");
           
             System.Diagnostics.Stopwatch sw = new System.Diagnostics.Stopwatch();
-            AdapterVirtuoso engine = new AdapterVirtuoso("HOST=localhost:1550;UID=dba;PWD=dba;Charset=UTF-8", "g"); // "http://fogid.net/"
+            AdapterVirtuoso engine = new AdapterVirtuoso("HOST=localhost:1550;UID=dba;PWD=dba;Charset=UTF-8", "http://fogid.net/"); 
 
 
             TestingPhotoPersons.Npersons = 40*1000;
