@@ -34,6 +34,9 @@
     <StartupObject />
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="PolarDB">
+      <HintPath>..\dll\PolarDB.dll</HintPath>
+    </Reference>
     <Reference Include="SparqlParseRun">
       <HintPath>..\dll\SparqlParseRun.dll</HintPath>
     </Reference>
@@ -68,10 +71,6 @@
     <Content Include="Experiments.txt" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\PolarDB\PolarDB.csproj">
-      <Project>{907bb4af-fbc9-4a1e-8f80-194af9337aa4}</Project>
-      <Name>PolarDB</Name>
-    </ProjectReference>
     <ProjectReference Include="..\RDFCommon\RDFCommon.csproj">
       <Project>{7eb60f80-87ca-4645-9e1f-051735195d92}</Project>
       <Name>RDFCommon</Name>

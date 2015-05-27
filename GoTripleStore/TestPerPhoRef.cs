@@ -10,7 +10,7 @@ namespace GoTripleStore
 {
     public class TestPerPhoRef
     {
-        public static void Main5()
+        public static void Main() // Main5()
         {
             System.Diagnostics.Stopwatch sw = new System.Diagnostics.Stopwatch();
             string path = "../../../Databases/";

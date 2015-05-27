@@ -7,14 +7,14 @@ namespace GoTripleStore
 {
     public class TestStandard
     {
-        public static void Main()
+        public static void Main6() // Main6()
         {
             string path = "../../../Databases/";
             System.Diagnostics.Stopwatch sw = new System.Diagnostics.Stopwatch();
             Random rnd = new Random();
             int cnt = -1;
             Standard3TabsInt tabs = new Standard3TabsInt(path);
-            int npersons = 4000000;
+            int npersons = 400000;
             bool toload = true;
             if (toload)
             {
