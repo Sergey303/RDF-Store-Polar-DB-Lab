@@ -20,7 +20,7 @@ namespace RDFTurtleParser
 
         public TripleGeneratorBufferedParallel(string path, string graphName, int maxBuffer = 1000)
         {
-            tg = new TripleGeneratorBuffered(path, graphName, maxBuffer);
+            tg = new TripleGeneratorBuffered(path, graphName, maxBuffer);   
         }
 
         public TripleGeneratorBufferedParallel(Stream baseStream, string graphName, int maxBuffer = 1000)
@@ -30,7 +30,7 @@ namespace RDFTurtleParser
         }
 
         /// <summary>
-        ///  запускаеи чтение с помощью TripleGeneratorBuffered в отдельном потоке.
+        ///  запускает чтение с помощью TripleGeneratorBuffered в отдельном потоке.
         /// синхронизация буферов с помощью очереди.  
        /// </summary>
         /// <param name="onGenerate"> в основном потоке вынимает из очереди порции и выполняет onGenerate</param>

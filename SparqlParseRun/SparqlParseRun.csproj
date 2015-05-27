@@ -48,6 +48,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DataSet.cs" />
+    <Compile Include="obj\Debug\sparq11lTranslatorBaseListener.cs" />
+    <Compile Include="obj\Debug\sparq11lTranslatorBaseVisitor.cs" />
+    <Compile Include="obj\Debug\sparq11lTranslatorLexer.cs" />
+    <Compile Include="obj\Debug\sparq11lTranslatorListener.cs" />
+    <Compile Include="obj\Debug\sparq11lTranslatorParser.cs" />
+    <Compile Include="obj\Debug\sparq11lTranslatorVisitor.cs" />
     <Compile Include="SparqlClasses\Expressions\SparqlBinaryExpression.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -158,12 +164,6 @@
     <Compile Include="SparqlClasses\GraphPattern\SparqlServicePattern.cs" />
     <Compile Include="SparqlClasses\Expressions\SparqlSubstringExpression.cs" />
     <Compile Include="SparqlClasses\GraphPattern\Triples\Node\SparqlUnDefinedNode.cs" />
-    <Compile Include="obj\Debug\sparq11lTranslatorBaseListener.cs" />
-    <Compile Include="obj\Debug\sparq11lTranslatorBaseVisitor.cs" />
-    <Compile Include="obj\Debug\sparq11lTranslatorLexer.cs" />
-    <Compile Include="obj\Debug\sparq11lTranslatorListener.cs" />
-    <Compile Include="obj\Debug\sparq11lTranslatorParser.cs" />
-    <Compile Include="obj\Debug\sparq11lTranslatorVisitor.cs" />
     <Compile Include="SparqlClasses\Expressions\SparqlBoolLiteralExpression.cs" />
     <Compile Include="SparqlClasses\Expressions\SparqlContains.cs" />
     <Compile Include="SparqlClasses\Expressions\SparqlEncodeForUri.cs" />

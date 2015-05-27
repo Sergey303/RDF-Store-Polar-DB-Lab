@@ -14,28 +14,7 @@ namespace TestingNs
     {
   
 
-        public static void TestQuery(string queryString, bool load, int millions)
-        {
-            SecondStringStore sparqlStore = new SecondStringStore("../../../Databases/");
-            if (load)
-            Perfomance.ComputeTime(() =>
-            {
-                sparqlStore.ReloadFrom(Config.Source_data_folder_path + millions + ".ttl");
-            }, "build " + millions + ".ttl ");
-
-            
-            
-
-            SparqlQuery query = null;
-            Perfomance.ComputeTime(() => query = sparqlStore.Parse(queryString), "parse ");
-            SparqlResultSet results = null;
-            Perfomance.ComputeTime(() => results = query.Run(), "run ");
-
-         
-
-            Console.WriteLine("count "+results.Results.Count());
-         //   Console.WriteLine("{0} ", results.ToJson());
-        }
+     
         public static void InterpretMeas<T>(T Store, int i) where T:InterpretMeasure,IStore
         {
             Store.TrainingMode = true;
@@ -255,76 +234,7 @@ namespace TestingNs
         }
 
 
-        public static void TestExamples()
-        {
-            DirectoryInfo examplesRoot = new DirectoryInfo(@"..\..\examples");
-            var store = new SecondStringStore("../../../Databases/");
-            foreach (var exampleDir in examplesRoot.GetDirectories())
-                //  var exampleDir = new DirectoryInfo(@"..\..\examples\bsbm");
-            {
-                Console.WriteLine("example: " + exampleDir.Name);
-
-                var ttlDatabase = exampleDir.GetFiles("*.ttl").FirstOrDefault();
-                if (ttlDatabase == null) continue;
-                using (StreamReader reader = new StreamReader(ttlDatabase.FullName))
-                    store.ReloadFrom(reader.ReadToEnd());//store.ReloadFrom(reader.BaseStream);
-
-                var nameGraphsDir = new DirectoryInfo(Path.Combine(exampleDir.FullName, "named graphs"));
-                if (nameGraphsDir.Exists)
-                {
-                    if (store.NamedGraphs == null) Console.WriteLine("named graphs disabled");
-                    else
-                    {
-                        foreach (var namedGraphFile in nameGraphsDir.GetFiles())
-                            using (StreamReader reader = new StreamReader(namedGraphFile.FullName))
-                            {
-                                var readLine = reader.ReadLine();
-                                if (readLine == null) continue;
-                                var headComment = readLine.Trim();
-                                if (!headComment.StartsWith("#")) continue;
-                                headComment = headComment.Substring(1);
-                                Uri uri;
-                                if (!Uri.TryCreate(headComment, UriKind.Absolute, out uri)) continue;
-                                var graph =
-                                    store.NamedGraphs.CreateGraph(
-                                        Prologue.SplitUri(uri.AbsoluteUri).FullName);
-                                graph.FromTurtle(reader.ReadToEnd());
-                            }
-                        RunOneExample(exampleDir, store);
-                    }
-                }
-                else RunOneExample(exampleDir, store);
-                //  store.ClearAll();
-            }
-        }
-
-        private static void RunOneExample(DirectoryInfo exampleDir, SecondStringStore store)
-        {
-            foreach (var rqQueryFile in exampleDir.GetFiles("*.rq"))
-            {
-                Console.WriteLine("query file: " + rqQueryFile);
-                SparqlResultSet sparqlResultSet = null;
-                //  try
-                var query = rqQueryFile.OpenText().ReadToEnd();
-
-                SparqlQuery sparqlQuery = null;
-                {
-                    Perfomance.ComputeTime(() => { sparqlQuery = store.Parse(query); },
-                        exampleDir.Name + " " + rqQueryFile.Name + " parse ", true);
-
-                    if (sparqlQuery != null)
-                        Perfomance.ComputeTime(() => { sparqlResultSet = sparqlQuery.Run(); },
-                            exampleDir.Name + " " + rqQueryFile.Name + " run ", true);
-                    File.WriteAllText(rqQueryFile.FullName + " results of run.txt", sparqlResultSet.ToJson());
-                    //    Assert.AreEqual(File.ReadAllText(rqQueryFile.FullName + " expected results.txt"),
-                    //      File.ReadAllText(outputFile));
-                }
-                //  catch (Exception e)
-                {
-                    // Assert.(e.Message);
-                }
-            }
-        }
+     
 
 
 

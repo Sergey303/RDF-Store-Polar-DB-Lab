@@ -5,10 +5,7 @@
  */
 
 grammar sparq11lTranslator;
-options
-{
-	language = CSharp2;
-}
+options	{ 	language = CSharp2; }
 @parser::namespace { SparqlParseRun }
 @lexer::namespace  { SparqlParseRun }
 @header{
@@ -101,7 +98,7 @@ datasetClause : FROM ( defaultGraphClause | namedGraphClause )	 ;
  | deleteWhere {$value=$deleteWhere.value;}
  | modify {$value=$modify.value;};
  load returns [SparqlUpdateLoad value]: LOAD {$value=new SparqlUpdateLoad();} (SILENT {$value.Silent();} )? iri {$value.SetIri($iri.value);} ( INTO graphRef {$value.Into($graphRef.value);} )?;
- clear returns [SparqlUpdateClear value]: 'CLEAR' {$value=new SparqlUpdateClear();} (SILENT{$value.Silent();} )? graphRefAll {$value.Graph =$graphRefAll.value;};
+ clear returns [SparqlUpdateClear value]: CLEAR {$value=new SparqlUpdateClear();} (SILENT{$value.Silent();} )? graphRefAll {$value.Graph =$graphRefAll.value;};
  drop returns [SparqlUpdateDrop value]: DROP {$value=new SparqlUpdateDrop();} (SILENT{$value.Silent();} )? graphRefAll {$value.Graph =$graphRefAll.value;};
  create returns [SparqlUpdateCreate value] : CREATE  {$value=new SparqlUpdateCreate();} (SILENT{$value.Silent();} )? graphRef {$value.Graph=$graphRef.value;};
  add returns [SparqlUpdateAdd value]: ADD {$value=new SparqlUpdateAdd();} (SILENT{$value.Silent();} )? g1 = graphOrDefault TO g2 = graphOrDefault {$value.From =$g1.value; $value.To =$g2.value;};

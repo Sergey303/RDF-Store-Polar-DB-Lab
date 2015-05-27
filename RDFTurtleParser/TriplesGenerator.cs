@@ -10,23 +10,15 @@ namespace RDFTurtleParser
     {
         private readonly Parser parser;
 
-        public TriplesGenerator(string path, string graphName)
+        public TriplesGenerator(string path)
         {
-            parser = new Parser(
-                new Scanner(path))
-            {
-                graphName = graphName
-            };
+            parser = new Parser(new Scanner(path));
             
         }
 
-        public TriplesGenerator(Stream baseStream, string graphName)
+        public TriplesGenerator(Stream baseStream)
         {
-            parser = new Parser(
-                 new Scanner(baseStream))
-            {
-                graphName = graphName
-            };
+            parser = new Parser(new Scanner(baseStream));
         }
 
 

@@ -4,14 +4,15 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using OpenLink.Data.Virtuoso;
+using VirtuosoTest;
 
 namespace VirtuosoBigData
 {
     public class BufferForInsertCommand
     {
-        private sema2012m.EngineVirtuoso engine;
+        private AdapterVirtuoso engine;
         private string graph;
-        public BufferForInsertCommand(sema2012m.EngineVirtuoso engine, string graph)
+        public BufferForInsertCommand(AdapterVirtuoso engine, string graph)
         {
             this.engine = engine;
             this.graph = graph;

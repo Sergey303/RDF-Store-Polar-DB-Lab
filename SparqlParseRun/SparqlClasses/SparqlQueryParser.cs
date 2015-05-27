@@ -8,14 +8,13 @@ namespace SparqlParseRun.SparqlClasses
     {
         public static SparqlQuery Parse(IStore store, string sparqlString)
         {
-
             ICharStream input = new AntlrInputStream(sparqlString);
 
             var lexer = new sparq11lTranslatorLexer(input);
 
-            var commonTokenStream = new CommonTokenStream(lexer);
+            CommonTokenStream commonTokenStream = new CommonTokenStream(lexer);
 
-            var sparqlParser = new sparq11lTranslatorParser(commonTokenStream)  { q= new RdfQuery11Translator(store)};
+            var sparqlParser = new sparq11lTranslatorParser(commonTokenStream) { q = new RdfQuery11Translator(store) };
 
 
 
