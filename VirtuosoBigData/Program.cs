@@ -24,7 +24,7 @@ namespace VirtuosoBigData
             AdapterVirtuoso engine = new AdapterVirtuoso("HOST=localhost:1550;UID=dba;PWD=dba;Charset=UTF-8", "g"); // "http://fogid.net/"
 
 
-            
+            TestingPhotoPersons.Npersons = 40*1000;
             if(false) Reload(engine);
             
          
