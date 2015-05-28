@@ -86,11 +86,11 @@ namespace TestingNs
 
            Performance.ComputeTime(() =>
            {
-               for (int i = 0; i < 100; i++)
+               for (int i = 0; i < 1000; i++)
                {
                    runQueryReturnCount(QGetPersonPhotoNames());
                }
-           }, string.Format("100 portraits ok. duration="), true);
+           }, string.Format("1000 portraits ok. duration="), true);
          
        }
     }

@@ -28,6 +28,7 @@ namespace VirtuosoTest
             //var db = connection.Database;
             command.CommandType = System.Data.CommandType.Text;
             command.CommandText = sparql;
+            command.CommandTimeout = 15000;
             int val = command.ExecuteNonQuery();
             connection.Close();
             return val;

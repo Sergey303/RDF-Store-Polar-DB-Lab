@@ -13,7 +13,7 @@ namespace TestingNs
     {
         private static void Main(string[] args)
         {
-            TestingPhotoPersons.Npersons = 40*1000;
+            TestingPhotoPersons.Npersons = 1000*1000;
             string path = "../../../Databases/string based/" + TestingPhotoPersons.Npersons/1000+"/";
             if (!Directory.Exists(path)) Directory.CreateDirectory(path);
             SecondStringStore store = new SecondStringStore(path);

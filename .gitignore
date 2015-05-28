@@ -193,3 +193,6 @@ ModelManifest.xml
 /Databases/*.pac
 /Databases/*.pac
 /Testing/output.txt
+/Testing/Performance.txt
+/Testing/Perfomance.txt
+/VirtuosoBigData/Performance.txt
