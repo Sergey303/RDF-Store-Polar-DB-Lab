@@ -154,6 +154,52 @@ namespace Task15UniversalIndex
                 return entry1;
             });
         }
+        public IEnumerable<PaEntry> GetAllByKey2(long start, long number, Tkey key)
+        {
+            if (Table == null || Table.Count() == 0) return Enumerable.Empty<PaEntry>();
+            PaEntry entry = Table.Element(0);
+            PaEntry entry1 = entry;
+            int hkey = HalfProducer(key);
+
+            var entries = index_cell.Root.ElementValues(start, number)
+                .Cast<object[]>()
+                .TakeWhile(va => (int)va[0] > hkey)
+                .Where(va => (int)va[0] == hkey)
+                .Select(va => { long off = (long)va[1]; entry.offset = off; return entry; })
+                .Where(va =>
+                {
+                    var ka = KeyProducer(entry.Get());
+                    return ka.CompareTo(key) == 0;
+                });
+            return entries;
+        }
+        public IEnumerable<PaEntry> GetAllByKeyScan(long start, long number, Tkey key)
+        {
+            if (Table == null || Table.Count() == 0) return Enumerable.Empty<PaEntry>();
+            int hkey = HalfProducer(key);
+            var cand_offs = index_cell.Root.ElementValues(start, number)
+                .Where(ob =>
+                {
+                    object[] pa = (object[])ob;
+                    int hk = (int)pa[0];
+                    if (hk == hkey) return true;
+                    else return false;
+                })
+                .Select(ob => (long)((object[])ob)[1])
+                .ToArray();
+            if (cand_offs.Count() == 0) return Enumerable.Empty<PaEntry>();
+            PaEntry entry = Table.Element(0);
+            return cand_offs
+                .Select(off => { entry.offset = off; return entry; })
+                .Where(en =>
+                {
+                    object[] pa = (object[])en.Get();
+                    if ((bool)pa[0] == false && KeyProducer(pa).CompareTo(key) == 0) return true;
+                    return false;
+                })
+                //.Select(en => en.Field(1))
+                ;
+        }
 
         public IEnumerable<PaEntry> GetAllByKey(Tkey key)
         {
@@ -161,7 +207,8 @@ namespace Task15UniversalIndex
             {
                 Diapason dia = Scale.GetDiapason(HalfProducer(key));
                 if (dia.numb == 0) return Enumerable.Empty<PaEntry>();
-                else return GetAllByKey(dia.start, dia.numb, key);
+                //else if (dia.numb < 70) return GetAllByKeyScan(dia.start, dia.numb, key);
+                else return GetAllByKey2(dia.start, dia.numb, key);
             }
             return GetAllByKey(0, index_cell.Root.Count(), key);
         }

@@ -26,6 +26,14 @@ namespace Task15UniversalIndex
             }
             table_cell.Flush();
         }
+        public void Add(IEnumerable<object> values)
+        {
+            foreach (var el in values)
+            {
+                object v = new object[] { false, el };
+                table_cell.Root.AppendElement(v);
+            }
+        }
         public void Warmup() { foreach (var v in table_cell.Root.ElementValues()); }
         List<IIndexCommon> indexes = new List<IIndexCommon>();
         // По имеющейса опорной таблице и коннекторам индексов (в списке indexes), (заново) построить индексы 

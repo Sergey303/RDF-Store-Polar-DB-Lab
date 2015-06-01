@@ -318,4 +318,56 @@ GaGraphStringBased 633, 603, 617 мс.
  Вывод: времена распределяются равномерно и обосновано. Серьезных возможностей ускорить выполнение такого запроса 
  не видно. 
 
+ 20150529 13:29
+ Я все думаю о разнице результатов между "табличными" решениями и "триплетными". 
 
+ Я сейчас на домашнем компьютере. Попробую сопоставить два вида вычисления. 
+
+ Сначала триплетный вариант GaGrapgStringBased (программа в TestPerPhoRef)
+
+ Зафиксируем ряд результатов: Все вычисления по 1000, времена в мс.
+ sPO - 370, 382, 381
+ spO - 71, 74, 73
+ spo - 68, 71, 70
+ Por - 1521, 1558, 1511
+
+ Теперь попробую лучший вариант Standard3TabsInt
+
+ persons - 59, 58, 79, 65
+ docs - 44, 47, 47, 45
+ Por - 206, 217, 262, 210
+
+ Теперь разобъю на части расчет портрета
+             var query = index_reflected.GetAllByKey(code) // 43 мс
+                .Select(ent => ((object[])ent.Get())[1])   // +26 (69)
+                .Select(re => (int)((object[])re)[2])      // + 9 (78)
+                .Select(c => this.GetPhoto_docByCode(c))   // +137 (215)
+                ;
+
+ Теперь попробую сравнение с Standard3TabsString
+
+ persons - 81, 85, 100, 90
+ docs - 67, 66, 64, 69
+ Por - 399, 357, 327, 363
+
+ Итак, лучший вариант в 7 раз быстрее, строковый - в 4 раза быстрее триплетного
+ Между собой они отличаются чуть больше, чем в полтора раза...
+ 
+ Теперь еще раз посмотрю на триплетный вариант. Еще раз отпрофилирую главную
+ процедуру формирования портрета
+        var qu3 = g.GetTriplesWithPredicateObject("reflected",
+            new OV_iri("person" + rnd.Next(npersons - 1)))                  // +520 (520)
+            .Select(ent => (string)((object[])g.Dereference(ent))[0])       // +43 (581)
+            .SelectMany(s => g.GetTriplesWithSubjectPredicate(s, "in_doc")) // +401 (982)
+            .Select(en =>
+            {
+                var tri_o = g.Dereference(en);
+                var o = tri_o[2].ToOVariant();
+                return ((OV_iri)o).Name;
+            })                                                              // +51 (1033)
+            .SelectMany(s => g.GetTriplesWithSubjectPredicate(s, "name"))   // +388 (1421)
+            .Select(en => g.Dereference(en))                                // +62 (1483)
+            ;
+
+ 
+  

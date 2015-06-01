@@ -10,7 +10,70 @@ namespace GoTripleStore
 {
     public class TestPerPhoRef
     {
-        public static void Main() //Main5()
+        public static void Main() // Main8()
+        {
+            string path = "../../../Databases/";
+            System.Diagnostics.Stopwatch sw = new System.Diagnostics.Stopwatch();
+            Random rnd = new Random();
+            int cnt = -1;
+            TripleSetInt ttab = new TripleSetInt(path);
+            int npersons = 40000;
+            bool toload = false;
+            if (toload)
+            {
+                sw.Restart();
+                TestDataGenerator generator = new TestDataGenerator(npersons, 2378459);
+                ttab.Build(generator.Generate().SelectMany(ele => 
+                {
+                    string id = ele.Name + ele.Attribute("id").Value;
+                    var seq = Enumerable.Repeat<Tuple<string,string,ObjectVariants>>(
+                        new Tuple<string,string,ObjectVariants>(id, "http://www.w3.org/1999/02/22-rdf-syntax-ns#type", new OV_iri(ele.Name.LocalName)), 1)
+                        .Concat(ele.Elements().Select(subele => 
+                        {
+                            XAttribute ratt = subele.Attribute("ref");
+                            Tuple<string,string,ObjectVariants> triple = null;
+                            if (ratt != null)
+                            {
+                                string r = (subele.Name == "reflected" ? "person" : "photo_doc") +
+                                    ratt.Value;
+                                triple = new Tuple<string, string, ObjectVariants>(id, subele.Name.LocalName, new OV_iri(r));
+                            }
+                            else
+                            {
+                                string value = subele.Value; // Нужны языки и другие варианты!
+                                bool possiblenumber = string.IsNullOrEmpty(value) ? false : true;
+                                if (possiblenumber)
+                                {
+                                    char c = value[0];
+                                    if (char.IsDigit(c) || c == '-') { } else possiblenumber = false;
+                                }
+                                triple = new Tuple<string, string, ObjectVariants>(id, subele.Name.LocalName,
+                                     possiblenumber ? (ObjectVariants)new OV_int(int.Parse(value)) : (ObjectVariants)new OV_string(value));
+                            }
+                            return triple;
+                        }));
+                    return seq;
+                }));
+                sw.Stop();
+                Console.WriteLine("Load ok. duration={0}", sw.ElapsedMilliseconds);
+            }
+            else { ttab.Warmup(); }
+            
+            int ic = ttab.Code("person3322");
+            Console.WriteLine("{0}", ic);
+            string s = ttab.Decode(ic);
+            Console.WriteLine("{0}", s);
+
+            sw.Restart();
+            for (int i = 0; i < 10000; i++)
+            {
+                ic = ttab.Code("person" + rnd.Next(npersons - 1));
+                //ic = ttab.Code("person9999");
+            }
+            sw.Stop();
+            Console.WriteLine("10000 Code ok. duration={0}", sw.ElapsedMilliseconds);
+        }
+        public static void Main5() //Main5()
         {
             System.Diagnostics.Stopwatch sw = new System.Diagnostics.Stopwatch();
             string path = "../../../Databases/";
@@ -104,23 +167,23 @@ namespace GoTripleStore
                 if (!exists) throw new Exception("438723");
             }
             sw.Stop();
-            Console.WriteLine("1000 spO ok cnt={0}. duration={1}", cnt, sw.ElapsedMilliseconds);
+            Console.WriteLine("1000 spo ok cnt={0}. duration={1}", cnt, sw.ElapsedMilliseconds);
 
             sw.Restart();
             for (int i = 0; i < 1000; i++)
             {
                 var qu3 = g.GetTriplesWithPredicateObject("reflected",
                     new OV_iri("person" + rnd.Next(npersons - 1)))
-                    .Select(ent => (string)((object[])g.Dereference(ent))[0])
-                    .SelectMany(s => g.GetTriplesWithSubjectPredicate(s, "in_doc"))
-                    .Select(en =>
-                    {
-                        var tri_o = g.Dereference(en);
-                        var o = tri_o[2].ToOVariant();
-                        return ((OV_iri)o).Name;
-                    })
-                    .SelectMany(s => g.GetTriplesWithSubjectPredicate(s, "name"))
-                    .Select(en => g.Dereference(en))
+                    //.Select(ent => (string)((object[])g.Dereference(ent))[0])
+                    //.SelectMany(s => g.GetTriplesWithSubjectPredicate(s, "in_doc"))
+                    //.Select(en =>
+                    //{
+                    //    var tri_o = g.Dereference(en);
+                    //    var o = tri_o[2].ToOVariant();
+                    //    return ((OV_iri)o).Name;
+                    //})
+                    //.SelectMany(s => g.GetTriplesWithSubjectPredicate(s, "name"))
+                    //.Select(en => g.Dereference(en))
                     ;
                 //foreach (var en in qu3)
                 //{

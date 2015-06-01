@@ -45,6 +45,7 @@ namespace Task15UniversalIndex
                 HalfProducer = key => key.GetHashCode()
             };
             s_index_array.Scale = new ScaleCell(path + "dyna_index_str_half") { IndexCell = s_index_array.IndexCell };
+            //s_index_array.Scale = new ScaleMemory() { IndexCell = s_index_array.IndexCell };
             s_index = new IndexDynamic<string, IndexHalfkeyImmutable<string>>(true)
             {
                 Table = table,

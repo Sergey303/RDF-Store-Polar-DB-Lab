@@ -19,7 +19,7 @@ namespace Task15UniversalIndex
         private long[] starts;
         public void Build()
         {
-            if (n == 0) Build(index_cell.Root.Count()/64);
+            if (n == 0) Build(index_cell.Root.Count()/32);
             else Build(n);
         }
         public void Build(long n)
