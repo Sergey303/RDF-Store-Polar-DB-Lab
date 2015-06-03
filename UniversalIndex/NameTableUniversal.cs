@@ -58,12 +58,10 @@ namespace Task15UniversalIndex
         public void Clear() 
         { 
             table.Clear(); 
-            //next_code = 0; 
         }
         public void Fill(IEnumerable<string> different_strings) 
         {
             table.Fill(different_strings.Select((s, i) => new object[] { i, s }));
-            //next_code = (int)table.Count();
         }
         public void BuildIndexes()
         {
