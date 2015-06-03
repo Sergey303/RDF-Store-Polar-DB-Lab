@@ -181,8 +181,7 @@ namespace Task15UniversalIndex
                 {
                     var ka = KeyProducer(entry.Get());
                     return ka.CompareTo(key) == 0;
-                })
-                .ToArray();
+                });
             return entries;
         }
 
