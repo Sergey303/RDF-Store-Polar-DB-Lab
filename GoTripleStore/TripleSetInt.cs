@@ -11,6 +11,7 @@ namespace GoTripleStore
     {
         private NameTableUniversal nametable;
         private TableView table;
+        private IndexCascading<int> ps_index;
         public TripleSetInt(string path)
         {
             PType tp_triple = new PTypeRecord(
@@ -19,6 +20,12 @@ namespace GoTripleStore
                 new NamedType("obj", ObjectVariantsPolarType.ObjectVariantPolarType));
             nametable = new NameTableUniversal(path);
             table = new TableView(path + "triples", tp_triple);
+            ps_index = new IndexCascading<int>(path + "ps") 
+            {
+                Table = table,
+                Key1Producer = ob => (int)((object[])((object[])ob)[1])[1],
+                Key2Producer = ob => (int)((object[])((object[])ob)[1])[0]
+            };
         }
         public int Code(string s) { return nametable.GetCodeByString(s); }
         public string Decode(int c) { return nametable.GetStringByCode(c); }
@@ -50,6 +57,7 @@ namespace GoTripleStore
             }
             table.TableCell.Flush();
             nametable.BuildScale();
+            table.BuildIndexes();
             Console.WriteLine("table fill ok.");
         }
 
