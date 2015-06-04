@@ -11,6 +11,7 @@ namespace GoTripleStore
     {
         private NameTableUniversal nametable;
         private TableView table;
+        public TableView Table { get { return table; } }
         private IndexCascading<int> ps_index;
         public TripleSetInt(string path)
         {
@@ -20,7 +21,7 @@ namespace GoTripleStore
                 new NamedType("obj", ObjectVariantsPolarType.ObjectVariantPolarType));
             nametable = new NameTableUniversal(path);
             table = new TableView(path + "triples", tp_triple);
-            ps_index = new IndexCascading<int>(path + "ps") 
+            ps_index = new IndexCascading<int>(path + "ps_index") 
             {
                 Table = table,
                 Key1Producer = ob => (int)((object[])((object[])ob)[1])[1],
@@ -57,7 +58,8 @@ namespace GoTripleStore
             }
             table.TableCell.Flush();
             nametable.BuildScale();
-            table.BuildIndexes();
+            //table.BuildIndexes();
+            ps_index.Build();
             Console.WriteLine("table fill ok.");
         }
 
@@ -91,6 +93,11 @@ namespace GoTripleStore
                 }
 
             }));
+        }
+        public IEnumerable<PaEntry> GetTriplesByPredicateSubject(int pred, int subj)
+        {
+            var qu = ps_index.GetAllByKeys(pred, subj);
+            return qu;
         }
     }
 }

@@ -60,18 +60,34 @@ namespace GoTripleStore
             else { ttab.Warmup(); }
             
             int ic = ttab.Code("person3322");
-            Console.WriteLine("{0}", ic);
+            Console.WriteLine("person3322={0}", ic);
             string s = ttab.Decode(ic);
             Console.WriteLine("{0}", s);
 
-            sw.Restart();
-            for (int i = 0; i < 10000; i++)
+            int iname = ttab.Code("name");
+            Console.WriteLine("name={0}", iname);
+            string s2 = ttab.Decode(iname);
+            Console.WriteLine("{0}", s2);
+
+            //// Измерение скорости кодирования
+            //sw.Restart();
+            //for (int i = 0; i < 10000; i++) { ic = ttab.Code("person" + rnd.Next(npersons - 1)); }
+            //sw.Stop();
+            //Console.WriteLine("10000 Code ok. duration={0}", sw.ElapsedMilliseconds);
+
+            var query = ttab.GetTriplesByPredicateSubject(iname, ic);
+            Console.WriteLine("{0}", query.Count());
+
+            foreach (var ent in ttab.Table.Elements())
             {
-                ic = ttab.Code("person" + rnd.Next(npersons - 1));
-                //ic = ttab.Code("person9999");
+                var pv = ent.GetValue();
+                object[] rec = (object[])((object[])pv.Value)[1];
+                int isubj = (int)rec[0];
+                int ipred = (int)rec[1];
+                if (isubj == ic && ipred == iname) Console.WriteLine("Found");
             }
-            sw.Stop();
-            Console.WriteLine("10000 Code ok. duration={0}", sw.ElapsedMilliseconds);
+            
+
         }
         public static void Main5() //Main5()
         {

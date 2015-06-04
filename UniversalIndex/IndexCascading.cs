@@ -32,19 +32,34 @@ namespace Task15UniversalIndex
             });
             index_cell.Flush();
         }
-        internal class TwoKeys : IComparable
+        public IEnumerable<PaEntry> GetAllByKeys(int key1, Tkey key2)
+        {
+            TwoKeys tk = new TwoKeys(key1, key2);
+            if (Table.Count() == 0) return Enumerable.Empty<PaEntry>();
+            PaEntry entry = Table.Element(0);
+            var query = index_cell.Root.BinarySearchAll(ent =>
+            {
+                long off = (long)ent.Get();
+                entry.offset = off;
+                object ob = entry.Get();
+                //TwoKeys keys = new TwoKeys(Key1Producer(ob), Key2Producer(ob));
+                //return keys.CompareTo(tk);
+                int cmp = Key1Producer(ob).CompareTo(key1);
+                return cmp;
+            });
+            return query;
+        }
+        internal class TwoKeys : IComparable 
         {
             public int Key1 { get { return this.key1; } }
             public Tkey Key2 { get { return this.key2; } }
             private int key1;
             private Tkey key2;
-            TwoKeys(int key1, Tkey key2) 
+            internal TwoKeys(int key1, Tkey key2)
             {
                 this.key1 = key1;
                 this.key2 = key2;
             }
-
-
             public int CompareTo(object obj)
             {
                 TwoKeys tk = (TwoKeys)obj;

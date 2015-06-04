@@ -26,6 +26,7 @@ namespace Task15UniversalIndex
             }
             table_cell.Flush();
         }
+        public IEnumerable<PaEntry> Elements() { return table_cell.Root.Elements(); }
         public void Add(IEnumerable<object> values)
         {
             foreach (var el in values)
