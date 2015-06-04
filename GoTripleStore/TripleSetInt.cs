@@ -94,6 +94,11 @@ namespace GoTripleStore
 
             }));
         }
+        public IEnumerable<PaEntry> GetTriples()
+        {
+            var qu = ps_index.GetAll();
+            return qu;
+        }
         public IEnumerable<PaEntry> GetTriplesByPredicateSubject(int pred, int subj)
         {
             var qu = ps_index.GetAllByKeys(pred, subj);

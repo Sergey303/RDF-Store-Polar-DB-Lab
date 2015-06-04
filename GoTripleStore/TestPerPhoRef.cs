@@ -19,6 +19,7 @@ namespace GoTripleStore
             TripleSetInt ttab = new TripleSetInt(path);
             int npersons = 40000;
             bool toload = false;
+            //toload = true;
             if (toload)
             {
                 sw.Restart();
@@ -78,16 +79,16 @@ namespace GoTripleStore
             var query = ttab.GetTriplesByPredicateSubject(iname, ic);
             Console.WriteLine("{0}", query.Count());
 
-            foreach (var ent in ttab.Table.Elements())
-            {
-                var pv = ent.GetValue();
-                object[] rec = (object[])((object[])pv.Value)[1];
-                int isubj = (int)rec[0];
-                int ipred = (int)rec[1];
-                if (isubj == ic && ipred == iname) Console.WriteLine("Found");
+            // Измерение времени поиска по заданным предикату и субъекту
+            sw.Restart();
+            for (int i = 0; i < 10000; i++) 
+            { 
+                ic = ttab.Code("person" + rnd.Next(npersons - 1));
+                var names = ttab.GetTriplesByPredicateSubject(iname, ic);
+                if (names.Count() != 1) Console.WriteLine("NOT ONE NAME: {0}", names.Count());
             }
-            
-
+            sw.Stop();
+            Console.WriteLine("10000 person names ok. duration={0}", sw.ElapsedMilliseconds);
         }
         public static void Main5() //Main5()
         {

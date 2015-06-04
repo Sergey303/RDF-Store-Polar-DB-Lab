@@ -31,10 +31,30 @@ namespace Task15UniversalIndex
                 return true;
             });
             index_cell.Flush();
+            PaEntry entry = Table.Element(0);
+            index_cell.Root.SortByKey(o =>
+            {
+                long off = (long)o;
+                entry.offset = off;
+                object ob = entry.Get();
+                int k1 = Key1Producer(ob);
+                Tkey k2 = Key2Producer(ob);
+                return new TwoKeys(k1, k2);
+            });
+        }
+        public IEnumerable<PaEntry> GetAll()
+        {
+            PaEntry entry = Table.Element(0);
+            return index_cell.Root.Elements()
+                .Select(ent =>
+                {
+                    long off = (long)ent.Get();
+                    entry.offset = off;
+                    return entry;
+                });
         }
         public IEnumerable<PaEntry> GetAllByKeys(int key1, Tkey key2)
         {
-            TwoKeys tk = new TwoKeys(key1, key2);
             if (Table.Count() == 0) return Enumerable.Empty<PaEntry>();
             PaEntry entry = Table.Element(0);
             var query = index_cell.Root.BinarySearchAll(ent =>
@@ -42,9 +62,8 @@ namespace Task15UniversalIndex
                 long off = (long)ent.Get();
                 entry.offset = off;
                 object ob = entry.Get();
-                //TwoKeys keys = new TwoKeys(Key1Producer(ob), Key2Producer(ob));
-                //return keys.CompareTo(tk);
                 int cmp = Key1Producer(ob).CompareTo(key1);
+                if (cmp == 0) cmp = Key2Producer(ob).CompareTo(key2);
                 return cmp;
             });
             return query;
