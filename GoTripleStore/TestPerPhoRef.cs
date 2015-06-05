@@ -79,6 +79,8 @@ namespace GoTripleStore
             var query = ttab.GetTriplesByPredicateSubject(iname, ic);
             Console.WriteLine("{0}", query.Count());
 
+            return;
+
             // Измерение времени поиска по заданным предикату и субъекту
             sw.Restart();
             for (int i = 0; i < 10000; i++) 
