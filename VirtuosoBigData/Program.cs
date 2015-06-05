@@ -25,7 +25,7 @@ namespace VirtuosoBigData
 
 
             TestingPhotoPersons.Npersons = 40*1000;
-            if(false) Reload(engine);
+            if(true) Reload(engine);
             
          
             foreach (var row in engine.Query("sparql "+TestingPhotoPersons.QGetPerson3123Info()))

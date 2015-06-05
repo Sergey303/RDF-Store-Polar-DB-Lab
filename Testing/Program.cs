@@ -19,7 +19,7 @@ namespace TestingNs
             SecondStringStore store = new SecondStringStore(path);
             using (StreamWriter perfomance = new StreamWriter("../../Perfomance.txt"))
                 perfomance.WriteLine(TestingPhotoPersons.Npersons);
-            if(true)
+            if(false)
             Performance.ComputeTime(() => Reload(store), "load " + TestingPhotoPersons.Npersons + " ", true);
             TestingPhotoPersons.Run((q) =>
             {

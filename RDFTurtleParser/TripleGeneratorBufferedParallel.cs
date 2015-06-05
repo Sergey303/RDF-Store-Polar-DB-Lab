@@ -16,11 +16,13 @@ namespace RDFTurtleParser
     /// </summary>
     public class TripleGeneratorBufferedParallel : IGenerator<List<TripleStrOV>>
     {
+        private readonly int maxQueue;
         private TripleGeneratorBuffered tg;
 
-        public TripleGeneratorBufferedParallel(string path, string graphName, int maxBuffer = 1000)
+        public TripleGeneratorBufferedParallel(string path, string graphName, int maxBuffer = 1000, int maxQueue = 1000*1000)
         {
-            tg = new TripleGeneratorBuffered(path, graphName, maxBuffer);   
+            this.maxQueue = maxQueue;
+            tg = new TripleGeneratorBuffered(path, graphName, maxBuffer);
         }
 
         public TripleGeneratorBufferedParallel(Stream baseStream, string graphName, int maxBuffer = 1000)
@@ -41,20 +43,24 @@ namespace RDFTurtleParser
             var thread = new Thread(() =>
                 tg.Start(b =>
                 {
+                    int count;
                     lock (queue)
+                        count = queue.Count;
+                    while (count == maxQueue)
                     {
-                        queue.Enqueue(b);
+                        Thread.Sleep(10);
+                        lock (queue)
+                            count = queue.Count;
                     }
-
+                    lock (queue)
+                        queue.Enqueue(b);
                 }));
             thread.Start();
             while (true)
             {
                 int count;
                 lock (queue)
-                {
                     count = queue.Count;
-                }
                 if (count == 0)
                 {
                     if (!thread.IsAlive) break;
@@ -64,9 +70,7 @@ namespace RDFTurtleParser
                 {
                     List<TripleStrOV> buffer;
                     lock (queue)
-                    {
                         buffer = queue.Dequeue();
-                    }
                     onGenerate(buffer);
                 }
 
