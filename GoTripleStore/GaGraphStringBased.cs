@@ -493,7 +493,7 @@ namespace GoTripleStore
             var query = po_ind.GetAllByKey(new DuplePOu()
             {
                 tuple = new Tuple<string, ObjectVariants>(pred, obj)
-            }).Select(en => en.Field(1)).ToArray();
+            }).Select(en => en.Field(1)); //.ToArray();
             //var query = po_index.GetAllByKey(new DuplePO() // вариант с полуключем
             //{
             //    tuple = new Tuple<string, ObjectVariants>(pred, obj)

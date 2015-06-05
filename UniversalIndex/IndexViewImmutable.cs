@@ -29,7 +29,7 @@ namespace Task15UniversalIndex
             if (KeyProducer == null) throw new Exception("Err: KeyProducer not defined");
             Table.Scan((offset, o) =>
             {
-                var key = KeyProducer(o);
+                //var key = KeyProducer(o);
                 index_cell.Root.AppendElement(offset);
                 return true;
             });

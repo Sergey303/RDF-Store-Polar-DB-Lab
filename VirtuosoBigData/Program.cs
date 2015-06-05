@@ -21,11 +21,11 @@ namespace VirtuosoBigData
          //   EngineVirtuoso engine = new EngineVirtuoso("HOST=localhost:1550;UID=dba;PWD=dba;Charset=UTF-8;Connection Timeout=500", "g");
           
             System.Diagnostics.Stopwatch sw = new System.Diagnostics.Stopwatch();
-            AdapterVirtuoso engine = new AdapterVirtuoso("HOST=localhost:1550;UID=dba;PWD=dba;Charset=UTF-8", "http://fogid.net/"); 
+            AdapterVirtuoso engine = new AdapterVirtuoso("HOST=localhost:1550;UID=dba;PWD=dba;Charset=UTF-8;Connection Timeout=5000;", "g"); // "http://fogid.net/"
 
 
-            TestingPhotoPersons.Npersons = 40*1000;
-            if(true) Reload(engine);
+            TestingPhotoPersons.Npersons = 1000*1000;
+            //if(true) Reload(engine);
             
          
             foreach (var row in engine.Query("sparql "+TestingPhotoPersons.QGetPerson3123Info()))

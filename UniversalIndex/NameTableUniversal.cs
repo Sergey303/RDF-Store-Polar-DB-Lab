@@ -45,6 +45,7 @@ namespace Task15UniversalIndex
                 HalfProducer = key => key.GetHashCode()
             };
             s_index_array.Scale = new ScaleCell(path + "dyna_index_str_half") { IndexCell = s_index_array.IndexCell };
+            //s_index_array.Scale = new ScaleMemory() { IndexCell = s_index_array.IndexCell };
             s_index = new IndexDynamic<string, IndexHalfkeyImmutable<string>>(true)
             {
                 Table = table,
@@ -57,12 +58,10 @@ namespace Task15UniversalIndex
         public void Clear() 
         { 
             table.Clear(); 
-            //next_code = 0; 
         }
         public void Fill(IEnumerable<string> different_strings) 
         {
             table.Fill(different_strings.Select((s, i) => new object[] { i, s }));
-            //next_code = (int)table.Count();
         }
         public void BuildIndexes()
         {

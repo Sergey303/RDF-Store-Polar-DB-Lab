@@ -132,6 +132,17 @@ namespace Task15UniversalIndex
 
         public void Warmup() { foreach (var v in index_cell.Root.ElementValues()); if (Scale != null) Scale.Warmup(); }
 
+        public IEnumerable<PaEntry> GetAllByKey(Tkey key)
+        {
+            if (Scale != null)
+            {
+                Diapason dia = Scale.GetDiapason(HalfProducer(key));
+                if (dia.numb == 0) return Enumerable.Empty<PaEntry>();
+                else if (dia.numb < 200) return GetAllByKey2(dia.start, dia.numb, key);
+                else return GetAllByKey(dia.start, dia.numb, key);
+            }
+            return GetAllByKey(0, index_cell.Root.Count(), key);
+        }
         public IEnumerable<PaEntry> GetAllByKey(long start, long number, Tkey key)
         {
             if (Table == null || Table.Count() == 0) return Enumerable.Empty<PaEntry>();
@@ -147,25 +158,33 @@ namespace Task15UniversalIndex
                 long off = (long)pair[1];
                 entry.offset = off;
                 return ((IComparable)KeyProducer((object[])entry.Get())).CompareTo(key);
-            });
+            }).ToArray();
             return candidates.Select(ent =>
             {
                 entry1.offset = (long)ent.Field(1).Get();
                 return entry1;
             });
         }
-
-        public IEnumerable<PaEntry> GetAllByKey(Tkey key)
+        public IEnumerable<PaEntry> GetAllByKey2(long start, long number, Tkey key)
         {
-            if (Scale != null)
-            {
-                Diapason dia = Scale.GetDiapason(HalfProducer(key));
-                if (dia.numb == 0) return Enumerable.Empty<PaEntry>();
-                else return GetAllByKey(dia.start, dia.numb, key);
-            }
-            return GetAllByKey(0, index_cell.Root.Count(), key);
+            if (Table == null || Table.Count() == 0) return Enumerable.Empty<PaEntry>();
+            PaEntry entry = Table.Element(0);
+            PaEntry entry1 = entry;
+            int hkey = HalfProducer(key);
+
+            var entries = index_cell.Root.ElementValues(start, number)
+                .Cast<object[]>()
+                .TakeWhile(va => (int)va[0] <= hkey)
+                .Where(va => (int)va[0] == hkey)
+                .Select(va => { long off = (long)va[1]; entry.offset = off; return entry; })
+                .Where(va =>
+                {
+                    var ka = KeyProducer(entry.Get());
+                    return ka.CompareTo(key) == 0;
+                });
+            return entries;
         }
+
         public long Count() { return index_cell.Root.Count(); }
-        //public void Close() { index_cell.Close(); }
     }
 }

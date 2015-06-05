@@ -64,7 +64,7 @@ namespace GoTripleStore
             int cnt = -1;
             Standard3TabsInt tabs = new Standard3TabsInt(path);
             int npersons = 40000;
-            bool toload = true;
+            bool toload = false;
             if (toload)
             {
                 sw.Restart();

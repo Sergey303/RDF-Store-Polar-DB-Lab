@@ -142,12 +142,13 @@ namespace GoTripleStore
         /// По заданному коду персоны, выдет множество отношений, в которых код присутствует на соответстующем месте. 
         /// </summary>
         /// <param name="code"></param>
-        public IEnumerable<object[]> GetReflectionsByReflected(int code)
+        public IEnumerable<object> GetReflectionsByReflected(int code)
         {
             var query = index_reflected.GetAllByKey(code)
                 .Select(ent => ((object[])ent.Get())[1])
                 .Select(re => (int)((object[])re)[2])
                 .Select(c => this.GetPhoto_docByCode(c))
+                //.Select(ee => (object)ee)
                 ;
             return query;
         }
