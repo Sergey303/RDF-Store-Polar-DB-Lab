@@ -11,12 +11,15 @@ namespace Task15UniversalIndex
         private PaCell index_cell;
         public PaCell IndexCell { get { return index_cell; } }
         private PaCell groups_index;
+        private Dictionary<int, Diapason> gr_dic = null;
         public IndexCascading(string path_name)
         {
             index_cell = new PaCell(new PTypeSequence(new PType(PTypeEnumeration.longinteger)),
                 path_name + "_2.pac", false);
             groups_index = new PaCell(new PTypeSequence(new PType(PTypeEnumeration.integer)),
                 path_name + "_g.pac", false);
+            if (!groups_index.IsEmpty) CreateGroupDictionary();
+
         }
         public Func<object, int> Key1Producer { get; set; }
         public Func<object, Tkey> Key2Producer { get; set; }
@@ -58,6 +61,27 @@ namespace Task15UniversalIndex
                 }
             }
             groups_index.Flush();
+            CreateGroupDictionary();
+        }
+        private void CreateGroupDictionary() 
+        {
+            gr_dic = new Dictionary<int, Diapason>();
+            PaEntry entry = Table.Element(0);
+            long start0 = -1;
+            long start = -1;
+            int key = -1;
+            foreach (int ind in groups_index.Root.ElementValues()) 
+            {
+                start = ind;
+                long off = (long)index_cell.Root.Element(ind).Get();
+                entry.offset = off;
+                if (key != -1)
+                {
+                    gr_dic.Add(key, new Diapason() { start = start0, numb = start - start0 });
+                }
+                key = Key1Producer(entry.Get());
+                start0 = start;
+            }
         }
         public IEnumerable<PaEntry> GetAll()
         {
@@ -73,36 +97,9 @@ namespace Task15UniversalIndex
         // Если не найден, то будет Diapason.Empty
         public Diapason GetDiapasonByKey1(int key1)
         {
-            if (Table.Count() == 0) return Diapason.Empty;
-            PaEntry entry = Table.Element(0);
-            PaEntry gr_ent0 = groups_index.Root.Element(0);
-            int gr_el_size = gr_ent0.Type.HeadSize; // размер элементов массива групп
-            long gr_off0 = gr_ent0.offset; // оффсет нулевого элемента массива групп
-            // Вычисление диапазона
-            //PaEntry gr_entry = groups_index.Root.BinarySearchFirst(ent =>
-            //{
-            //    int sta = (int)ent.Get();
-            //    long off = (long)index_cell.Root.Element(sta).Get();
-            //    object ob = entry.Get();
-            //    int cmp = Key1Producer(ob).CompareTo(key1);
-            //    return cmp;
-            //});
-            PaEntry gr_entry = PaEntry.Empty;
-            for (int nd = 0; nd < groups_index.Root.Count(); nd++)
-            {
-                PaEntry ent = groups_index.Root.Element(nd);
-
-                int k1 = Key1Producer(
-            }
-            if (gr_entry.IsEmpty) return Diapason.Empty; // Видимо нет первого ключа
-            int ind = (int)((gr_entry.offset - gr_off0) / gr_el_size);
-            int nextind = ind++;
-            int start = (int)gr_entry.Get();
-            int nextstart = (long)nextind < groups_index.Root.Count() ?
-                (int)groups_index.Root.Element(nextind).Get() :
-                (int)index_cell.Root.Count();
-            int number = nextstart - start;
-            return new Diapason() { start = start, numb = number };
+            Diapason dia;
+            if (gr_dic.TryGetValue(key1, out dia)) return dia;
+            else return Diapason.Empty;
         }
         public IEnumerable<PaEntry> GetAllByKeys(int key1, Tkey key2)
         {
