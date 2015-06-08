@@ -44,7 +44,7 @@ namespace Task15UniversalIndex
                 KeyProducer = pair => (string)((object[])(((object[])pair)[1]))[1],
                 HalfProducer = key => key.GetHashCode()
             };
-            s_index_array.Scale = new ScaleCell(path + "dyna_index_str_half") { IndexCell = s_index_array.IndexCell };
+            //s_index_array.Scale = new ScaleCell(path + "dyna_index_str_half") { IndexCell = s_index_array.IndexCell };
             //s_index_array.Scale = new ScaleMemory() { IndexCell = s_index_array.IndexCell };
             s_index = new IndexDynamic<string, IndexHalfkeyImmutable<string>>(true)
             {
@@ -71,7 +71,7 @@ namespace Task15UniversalIndex
         }
         public void BuildScale()
         {
-            s_index_array.Scale.Build();
+            if (s_index_array.Scale != null) s_index_array.Scale.Build();
         }
         // Проверяет и, если надо, добавляет. Выдает код.
         //private int next_code;

@@ -15,11 +15,11 @@ namespace GoTripleStore
             string path = "../../../Databases/";
             System.Diagnostics.Stopwatch sw = new System.Diagnostics.Stopwatch();
             Random rnd = new Random();
-            int cnt = -1;
             TripleSetInt ttab = new TripleSetInt(path);
-            int npersons = 40000;
+            int npersons = 400;
+
             bool toload = false;
-            //toload = true;
+            toload = true;
             if (toload)
             {
                 sw.Restart();
@@ -58,7 +58,7 @@ namespace GoTripleStore
                 sw.Stop();
                 Console.WriteLine("Load ok. duration={0}", sw.ElapsedMilliseconds);
             }
-            else { ttab.Warmup(); }
+            else { ttab.Warmup(); ttab.Start(); }
             
             int ic = ttab.Code("person3322");
             Console.WriteLine("person3322={0}", ic);
@@ -76,21 +76,32 @@ namespace GoTripleStore
             //sw.Stop();
             //Console.WriteLine("10000 Code ok. duration={0}", sw.ElapsedMilliseconds);
 
-            var query = ttab.GetTriplesByPredicateSubject(iname, ic);
-            Console.WriteLine("{0}", query.Count());
-
-            return;
+            var query = ttab.GetTriplesWithPredicateSubject(iname, ic);
+            foreach (PaEntry ent in query)
+            {
+                var pv = ent.GetValue();
+                Console.WriteLine("{0}", pv.Type.Interpret(pv.Value));
+            }
 
             // Измерение времени поиска по заданным предикату и субъекту
             sw.Restart();
             for (int i = 0; i < 10000; i++) 
             { 
                 ic = ttab.Code("person" + rnd.Next(npersons - 1));
-                var names = ttab.GetTriplesByPredicateSubject(iname, ic);
+                var names = ttab.GetTriplesWithPredicateSubject(iname, ic);
                 if (names.Count() != 1) Console.WriteLine("NOT ONE NAME: {0}", names.Count());
             }
             sw.Stop();
             Console.WriteLine("10000 person names ok. duration={0}", sw.ElapsedMilliseconds);
+
+                //var qu3 = g.GetTriplesWithPredicateObject("reflected",
+                //    new OV_iri("person" + rnd.Next(npersons - 1)))
+
+            int ireflected = ttab.Code("reflected");
+            //int iperson = ttab.Code("person" + rnd.Next(npersons - 1));
+            var qu3 = ttab.GetTriplesWithPredicateObject(ireflected, new OV_iriint(ic, null));
+            Console.WriteLine(qu3.Count());
+
         }
         public static void Main5() //Main5()
         {
