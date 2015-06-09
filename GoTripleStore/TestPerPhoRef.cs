@@ -16,10 +16,10 @@ namespace GoTripleStore
             System.Diagnostics.Stopwatch sw = new System.Diagnostics.Stopwatch();
             Random rnd = new Random();
             TripleSetInt ttab = new TripleSetInt(path);
-            int npersons = 400;
+            int npersons = 40000;
 
             bool toload = false;
-            toload = true;
+            //toload = true;
             if (toload)
             {
                 sw.Restart();
@@ -101,6 +101,32 @@ namespace GoTripleStore
             //int iperson = ttab.Code("person" + rnd.Next(npersons - 1));
             var qu3 = ttab.GetTriplesWithPredicateObject(ireflected, new OV_iriint(ic, null));
             Console.WriteLine(qu3.Count());
+
+            int sum = 0;
+            int in_doc = ttab.Code("in_doc");
+            TripleSetInt g = ttab;
+            sw.Restart();
+            for (int i = 0; i < 10000; i++)
+            {
+                string id = "person" + rnd.Next(npersons - 1);
+                int iid = ttab.Code(id);
+                ObjectVariants ov = new OV_iriint(iid, null);
+                var qu4 = g.GetTriplesWithPredicateObject(ireflected, ov)
+                    .Select(ent => (int)((object[])g.Dereference(ent))[0])
+                    .SelectMany(c => g.GetTriplesWithPredicateSubject(in_doc, c))
+                    .Select(en =>
+                    {
+                        var tri_o = (object[])g.Dereference(en);
+                        int o = (int)((object[])tri_o[2])[1];
+                        return o;
+                    })
+                    .SelectMany(c => g.GetTriplesWithPredicateSubject(iname, c))
+                    .Select(en => g.Dereference(en))
+                    ;
+                sum += qu4.Count();
+            }
+            sw.Stop();
+            Console.WriteLine("10000 person inv relations ok. duration={0} sum={1}", sw.ElapsedMilliseconds, sum);
 
         }
         public static void Main5() //Main5()

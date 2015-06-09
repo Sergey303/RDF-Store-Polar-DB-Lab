@@ -293,7 +293,6 @@ GaGraphStringBased 633, 603, 617 мс.
 ============ Sparql наш!
 40 тыс. персон. Загрузка 90 сек. Файлы БД 103 Мб. 1000 портретов 760, 732, 736, 724 мс.
 400 тыс. персон. Загрузка 1063 сек. Файлы БД 1.2 Гб. 1000 портретов 804 мс.
-  1 млн. персон Загрузка 266 сек., Файлы БД 438 Мб., 100 портретов 22 мс.
 
 ============ Virtuoso
 40 тыс. персон. Загрузка 103 сек. Файлы БД 90 Мб. 1000 портретов 505 мс. Без загрузки 454, 444, 457
@@ -369,5 +368,38 @@ GaGraphStringBased 633, 603, 617 мс.
             .Select(en => g.Dereference(en))                                // +62 (1483)
             ;
 
+20150609 08:10
+Перепропуск старых тестов дал неожиданное отклонение. Было:
+Standard3TabsInt 86, 91 мс.
+Standard3TabsString 135 мс.
+Стало для 10 тыс.:
+Standard3TabsInt 917 мс.
+Standard3TabsString 1700 мс.
+
+хотя первый результат похож...
+
+Первая часть преображвания 
+index_reflected.GetAllByKey(code)
+выполнялась 165 мс. (10000 кодов)
+
+Профилирование:
+var query = index_reflected.GetAllByKey(code) //165
+    .Select(ent => ((object[])ent.Get())[1]) //269
+    .Select(re => (int)((object[])re)[2]) //294
+    .Select(c => this.GetPhoto_docByCode(c)) //861
  
+НА РАБОЧЕМ КОМПЬЮТЕРЕ
+
+Standard3TabsInt:
+10K persons 199 ms
+10K photo_docs 178 ms
+10K portraits 867 ms
+
+TripleSetInt
+10K person names 605, 677 ms
+10K portraits 4669, 4665 ms
+
+- в 4-5 раз медленнее...
+
+
   

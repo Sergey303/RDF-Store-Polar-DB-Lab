@@ -34,7 +34,7 @@ namespace GoTripleStore
                 Table = table,
                 Key1Producer = ob => (int)((object[])((object[])ob)[1])[1],
                 Key2Producer = ob => ((object[])((object[])ob)[1])[2].ToOVariant(),
-                Half2Producer = ov => ov.Variant.GetHashCode()
+                Half2Producer = ov => ov.GetHashCode()
             };
         }
         public void Start() 
@@ -69,7 +69,7 @@ namespace GoTripleStore
                     buff.Clear();
                 }
             }
-            ProcessPortion(buff);
+            if (buff.Count > 0) ProcessPortion(buff);
             table.TableCell.Flush();
 
             nametable.BuildScale();
@@ -137,5 +137,6 @@ namespace GoTripleStore
             var qu = po_index.GetAllByKeys(pred, obj);
             return qu;
         }
+        public object Dereference(PaEntry ent) { return ((object[])ent.Get())[1]; }
     }
 }

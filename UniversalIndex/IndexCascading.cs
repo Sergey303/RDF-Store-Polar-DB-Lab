@@ -11,7 +11,7 @@ namespace Task15UniversalIndex
         private PaCell index_cell;
         public PaCell IndexCell { get { return index_cell; } }
         private PaCell groups_index;
-        private bool usekey = true;
+        //private bool usekey = true;
         public IndexCascading(string path_name)
         {
             PType tp_record = new PTypeRecord(
@@ -127,7 +127,7 @@ namespace Task15UniversalIndex
                 start0 = start;
             }
             sta = start0;
-            num = groups_index.Root.Count() - start0;
+            num = index_cell.Root.Count() - start0;
             nscale = num / 32;
             ScaleInMemory sim0 = new ScaleInMemory(index_cell.Root, sta, num, ob => (int)((object[])ob)[2], (int)nscale);
             sim0.Build();
@@ -146,13 +146,16 @@ namespace Task15UniversalIndex
                     return entry;
                 });
         }
-        //// Если не найден, то будет Diapason.Empty
-        //private Diapason GetDiapasonByKey1(int key1)
-        //{
-        //    Diapason dia;
-        //    if (gr_dic.TryGetValue(key1, out dia)) return dia;
-        //    else return Diapason.Empty;
-        //}
+        // Если не найден, то будет Diapason.Empty
+        private Diapason GetDiapasonByKey1(int key1)
+        {
+            Tuple<Diapason, ScaleInMemory> tup;
+            if (gr_discale.TryGetValue(key1, out tup))
+            {
+                return tup.Item1;
+            }
+            else return Diapason.Empty;
+        }
         private Diapason GetLocalDiapason(int key1, Tkey key2)
         {
             Tuple<Diapason, ScaleInMemory> tup;
@@ -195,25 +198,25 @@ namespace Task15UniversalIndex
                 return entry;
             });
         }
-        internal class TwoKeys : IComparable 
-        {
-            public int Key1 { get { return this.key1; } }
-            public Tkey Key2 { get { return this.key2; } }
-            private int key1;
-            private Tkey key2;
-            internal TwoKeys(int key1, Tkey key2)
-            {
-                this.key1 = key1;
-                this.key2 = key2;
-            }
-            public int CompareTo(object obj)
-            {
-                TwoKeys tk = (TwoKeys)obj;
-                int cmp = key1.CompareTo(tk.Key1);
-                if (cmp == 0) cmp = key2.CompareTo(tk.Key2);
-                return cmp;
-            }
-        }
+        //internal class TwoKeys : IComparable 
+        //{
+        //    public int Key1 { get { return this.key1; } }
+        //    public Tkey Key2 { get { return this.key2; } }
+        //    private int key1;
+        //    private Tkey key2;
+        //    internal TwoKeys(int key1, Tkey key2)
+        //    {
+        //        this.key1 = key1;
+        //        this.key2 = key2;
+        //    }
+        //    public int CompareTo(object obj)
+        //    {
+        //        TwoKeys tk = (TwoKeys)obj;
+        //        int cmp = key1.CompareTo(tk.Key1);
+        //        if (cmp == 0) cmp = key2.CompareTo(tk.Key2);
+        //        return cmp;
+        //    }
+        //}
         internal class GroupElement : IComparable
         {
             public int Key1 { get { return this.key1; } }
@@ -227,6 +230,20 @@ namespace Task15UniversalIndex
                 this.hkey2 = hkey2;
                 this.GetKey2 = getkey2;
             }
+            private bool key2exists = false;
+            private Tkey key2;
+            private Tkey Key2 
+            {
+                get 
+                {
+                    if (!key2exists)
+                    {
+                        key2exists = true;
+                        key2 = GetKey2();
+                    }
+                    return key2;
+                }
+            }
             public int CompareTo(object obj)
             {
                 GroupElement rec = (GroupElement)obj;
@@ -234,8 +251,9 @@ namespace Task15UniversalIndex
                 if (cmp != 0) return cmp;
                 cmp = hkey2.CompareTo(rec.HKey2);
                 if (cmp != 0) return cmp;
-                Tkey key2 = GetKey2();
-                cmp = key2.CompareTo(rec.GetKey2());
+                //Tkey key2 = GetKey2();
+                //cmp = key2.CompareTo(rec.GetKey2());
+                cmp = Key2.CompareTo(rec.Key2); 
                 return cmp;
             }
         }

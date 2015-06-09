@@ -15,7 +15,8 @@ namespace GoTripleStore
             int cnt = -1;
             Standard3TabsString tabs = new Standard3TabsString(path);
             int npersons = 40000;
-            bool toload = true;
+            bool toload = false;
+            //toload = true;
             if (toload)
             {
                 sw.Restart();
@@ -48,13 +49,13 @@ namespace GoTripleStore
             Console.WriteLine("1000 photo_docs ok. duration={0}", sw.ElapsedMilliseconds);
 
             sw.Restart();
-            for (int i = 0; i < 1000; i++)
+            for (int i = 0; i < 10000; i++)
             {
                 int code = rnd.Next(2 * npersons - 1);
                 cnt = tabs.GetReflectionsByReflected(code.ToString()).Count();
             }
             sw.Stop();
-            Console.WriteLine("1000 portraits ok. duration={0}", sw.ElapsedMilliseconds);
+            Console.WriteLine("10000 portraits ok. duration={0}", sw.ElapsedMilliseconds);
         }
         public static void Main6() // Main6()
         {
@@ -64,7 +65,8 @@ namespace GoTripleStore
             int cnt = -1;
             Standard3TabsInt tabs = new Standard3TabsInt(path);
             int npersons = 40000;
-            bool toload = true;
+            bool toload = false;
+            //toload = true;
             if (toload)
             {
                 sw.Restart();
@@ -75,16 +77,16 @@ namespace GoTripleStore
             }
 
             sw.Restart();
-            for (int i = 0; i < 1000; i++)
+            for (int i = 0; i < 10000; i++)
             {
                 int code = rnd.Next(npersons - 1);
                 object[] v = tabs.GetPersonByCode(code);
             }
             sw.Stop();
-            Console.WriteLine("1000 persons ok. duration={0}", sw.ElapsedMilliseconds);
+            Console.WriteLine("10000 persons ok. duration={0}", sw.ElapsedMilliseconds);
 
             sw.Restart();
-            for (int i = 0; i < 1000; i++)
+            for (int i = 0; i < 10000; i++)
             {
                 int code = rnd.Next(2*npersons - 1);
                 object[] v = tabs.GetPhoto_docByCode(code);
@@ -94,16 +96,16 @@ namespace GoTripleStore
                 }
             }
             sw.Stop();
-            Console.WriteLine("1000 photo_docs ok. duration={0}", sw.ElapsedMilliseconds);
+            Console.WriteLine("10000 photo_docs ok. duration={0}", sw.ElapsedMilliseconds);
 
             sw.Restart();
-            for (int i = 0; i < 1000; i++)
+            for (int i = 0; i < 10000; i++)
             {
                 int code = rnd.Next(2 * npersons - 1);
                 cnt = tabs.GetReflectionsByReflected(code).Count();
             }
             sw.Stop();
-            Console.WriteLine("1000 portraits ok. duration={0}", sw.ElapsedMilliseconds);
+            Console.WriteLine("10000 portraits ok. duration={0}", sw.ElapsedMilliseconds);
         }
     }
 }
