@@ -166,6 +166,58 @@ namespace Task15UniversalIndex
             }
             else return Diapason.Empty;
         }
+
+        // ============ Тестирование и эксперименты ===========
+        //public IEnumerable<PaEntry> GetAllByKeysTest(int key1, Tkey key2)
+        //{
+        //    //Diapason dia = GetDiapasonByKey1(key1);
+        //    Diapason dia = GetLocalDiapason(key1, key2);
+        //    return GetAllInDiap(dia, key2);
+        //}
+        public IEnumerable<object> GetAllByKeysTest(int key1, Tkey key2)
+        {
+            //Diapason dia = GetDiapasonByKey1(key1);
+            Diapason dia = GetLocalDiapason(key1, key2);
+            return GetAllInDiapTest(dia, key2);
+        }
+        public IEnumerable<object> GetAllInDiapTest(Diapason dia, Tkey key2)
+        {
+            if (dia.IsEmpty()) return Enumerable.Empty<object>();
+            int hkey = Half2Producer(key2);
+            PaEntry entry = Table.Element(0);
+            var query1 = index_cell.Root.BinarySearchAll(dia.start, dia.numb, ent =>
+            {
+                object[] va = (object[])ent.Get();
+                int hk = (int)va[2];
+                int cmp = hk.CompareTo(hkey);
+                //if (cmp != 0) return cmp;
+                //long off = (long)va[0];
+                //entry.offset = off;
+                //object ob = entry.Get();
+                //cmp = Key2Producer(ob).CompareTo(key2);
+                return cmp;
+            }).Select(ent => ent.Get())
+                .Where(va => (int)((object[])va)[2] == hkey);
+            ;
+            var query2 = index_cell.Root.ElementValues(dia.start, dia.numb)
+                .Where(va => (int)((object[])va)[2] == hkey);
+            IEnumerable<object> query = dia.numb > 30 ? query1 : query2;
+
+            return query
+                .Select(va =>
+                {
+                    long off = (long)((object[])va)[0];
+                    entry.offset = off;
+                    return entry.Get();
+                })
+                .Where(two => !(bool)((object[])two)[0] && Key2Producer(two).CompareTo(key2) == 0)
+                .Select(two => ((object[])((object[])two)[1]));
+                ;
+
+        }
+
+        // ============ Конец ==============
+
         public IEnumerable<PaEntry> GetAllByKeys(int key1, Tkey key2)
         {
             //Diapason dia = GetDiapasonByKey1(key1);
@@ -189,7 +241,7 @@ namespace Task15UniversalIndex
                 cmp = Key2Producer(ob).CompareTo(key2);
                 return cmp;
             })
-            .ToArray()
+            //.ToArray()
             ;
             return query.Select(ent =>
             {

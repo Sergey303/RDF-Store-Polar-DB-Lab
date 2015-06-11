@@ -111,7 +111,15 @@ namespace GoTripleStore
                 string id = "person" + rnd.Next(npersons - 1);
                 int iid = ttab.Code(id);
                 ObjectVariants ov = new OV_iriint(iid, null);
-                var qu4 = g.GetTriplesWithPredicateObject(ireflected, ov)
+                
+                var qu4 = g.GetTriplesWithPredicateObjectTest(ireflected, ov)
+                    .Select(ob => (int)((object[])ob)[0])
+                    .SelectMany(c => g.GetTriplesWithPredicateSubjectTest(in_doc, (int)c))
+                    .Select(ob => ((object[])((object[])ob)[2])[1])
+                    .SelectMany(c => g.GetTriplesWithPredicateSubject(iname, (int)c))
+                    //.Select(en => g.Dereference(en))
+                    ;
+                var qu5 = g.GetTriplesWithPredicateObject(ireflected, ov)
                     .Select(ent => (int)((object[])g.Dereference(ent))[0])
                     .SelectMany(c => g.GetTriplesWithPredicateSubject(in_doc, c))
                     .Select(en =>
@@ -123,7 +131,7 @@ namespace GoTripleStore
                     .SelectMany(c => g.GetTriplesWithPredicateSubject(iname, c))
                     .Select(en => g.Dereference(en))
                     ;
-                sum += qu4.Count();
+                sum += qu5.Count();
             }
             sw.Stop();
             Console.WriteLine("10000 person inv relations ok. duration={0} sum={1}", sw.ElapsedMilliseconds, sum);

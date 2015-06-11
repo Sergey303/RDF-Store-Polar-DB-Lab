@@ -137,6 +137,16 @@ namespace GoTripleStore
             var qu = po_index.GetAllByKeys(pred, obj);
             return qu;
         }
+        public IEnumerable<object> GetTriplesWithPredicateSubjectTest(int pred, int subj)
+        {
+            var qu = ps_index.GetAllByKeysTest(pred, subj); ;
+            return qu;
+        }
+        public IEnumerable<object> GetTriplesWithPredicateObjectTest(int pred, ObjectVariants obj)
+        {
+            var qu = po_index.GetAllByKeysTest(pred, obj);
+            return qu;
+        }
         public object Dereference(PaEntry ent) { return ((object[])ent.Get())[1]; }
     }
 }
