@@ -71,7 +71,7 @@ namespace Task15UniversalIndex
         }
         public void BuildScale()
         {
-            s_index_array.Scale.Build();
+            if (s_index_array.Scale != null) s_index_array.Scale.Build();
         }
         // Проверяет и, если надо, добавляет. Выдает код.
         //private int next_code;

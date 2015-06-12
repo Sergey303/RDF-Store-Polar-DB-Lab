@@ -15,9 +15,10 @@ namespace GoTripleStore
             string path = "../../../Databases/";
             System.Diagnostics.Stopwatch sw = new System.Diagnostics.Stopwatch();
             Random rnd = new Random();
-            int cnt = -1;
             TripleSetInt ttab = new TripleSetInt(path);
             int npersons = 40000;
+            PaEntry.bufferBytes = 200000000;
+
             bool toload = false;
             //toload = true;
             if (toload)
@@ -58,7 +59,7 @@ namespace GoTripleStore
                 sw.Stop();
                 Console.WriteLine("Load ok. duration={0}", sw.ElapsedMilliseconds);
             }
-            else { ttab.Warmup(); }
+            else { ttab.Warmup(); ttab.Start(); }
             
             int ic = ttab.Code("person3322");
             Console.WriteLine("person3322={0}", ic);
@@ -76,21 +77,66 @@ namespace GoTripleStore
             //sw.Stop();
             //Console.WriteLine("10000 Code ok. duration={0}", sw.ElapsedMilliseconds);
 
-            var query = ttab.GetTriplesByPredicateSubject(iname, ic);
-            Console.WriteLine("{0}", query.Count());
-
-            return;
+            var query = ttab.GetTriplesWithPredicateSubject(iname, ic);
+            foreach (PaEntry ent in query)
+            {
+                var pv = ent.GetValue();
+                Console.WriteLine("{0}", pv.Type.Interpret(pv.Value));
+            }
 
             // Измерение времени поиска по заданным предикату и субъекту
             sw.Restart();
             for (int i = 0; i < 10000; i++) 
             { 
                 ic = ttab.Code("person" + rnd.Next(npersons - 1));
-                var names = ttab.GetTriplesByPredicateSubject(iname, ic);
+                var names = ttab.GetTriplesWithPredicateSubject(iname, ic);
                 if (names.Count() != 1) Console.WriteLine("NOT ONE NAME: {0}", names.Count());
             }
             sw.Stop();
             Console.WriteLine("10000 person names ok. duration={0}", sw.ElapsedMilliseconds);
+
+                //var qu3 = g.GetTriplesWithPredicateObject("reflected",
+                //    new OV_iri("person" + rnd.Next(npersons - 1)))
+
+            int ireflected = ttab.Code("reflected");
+            //int iperson = ttab.Code("person" + rnd.Next(npersons - 1));
+            var qu3 = ttab.GetTriplesWithPredicateObject(ireflected, new OV_iriint(ic, null));
+            Console.WriteLine(qu3.Count());
+
+            int sum = 0;
+            int in_doc = ttab.Code("in_doc");
+            TripleSetInt g = ttab;
+            sw.Restart();
+            for (int i = 0; i < 10000; i++)
+            {
+                string id = "person" + rnd.Next(npersons - 1);
+                int iid = ttab.Code(id);
+                ObjectVariants ov = new OV_iriint(iid, null);
+                
+                var qu4 = g.GetTriplesWithPredicateObjectTest(ireflected, ov)
+                    .Select(ob => (int)((object[])ob)[0])
+                    .SelectMany(c => g.GetTriplesWithPredicateSubjectTest(in_doc, (int)c))
+                    .Select(ob => ((object[])((object[])ob)[2])[1])
+                    .SelectMany(c => g.GetTriplesWithPredicateSubject(iname, (int)c))
+                    //.Select(en => g.Dereference(en))
+                    ;
+                var qu5 = g.GetTriplesWithPredicateObject(ireflected, ov)
+                    .Select(ent => (int)((object[])g.Dereference(ent))[0])
+                    .SelectMany(c => g.GetTriplesWithPredicateSubject(in_doc, c))
+                    .Select(en =>
+                    {
+                        var tri_o = (object[])g.Dereference(en);
+                        int o = (int)((object[])tri_o[2])[1];
+                        return o;
+                    })
+                    .SelectMany(c => g.GetTriplesWithPredicateSubject(iname, c))
+                    .Select(en => g.Dereference(en))
+                    ;
+                sum += qu4.Count();
+            }
+            sw.Stop();
+            Console.WriteLine("10000 person inv relations ok. duration={0} sum={1}", sw.ElapsedMilliseconds, sum);
+
         }
         public static void Main5() //Main5()
         {
