@@ -8,8 +8,8 @@ namespace SparqlParseRun.SparqlClasses.Expressions
         public SparqlCeil(SparqlExpression value)
             : base(o => Math.Ceiling(o), value)
         {
-            value.SetExprType(ExpressionTypeEnum.numeric);
-            SetExprType(ExpressionTypeEnum.numeric);        
+        //    value.SetExprType(ExpressionTypeEnum.numeric);
+         //   SetExprType(ExpressionTypeEnum.numeric);        
         }
 
     }

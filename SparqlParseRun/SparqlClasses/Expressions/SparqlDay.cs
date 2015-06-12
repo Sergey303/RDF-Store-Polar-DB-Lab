@@ -5,24 +5,25 @@ namespace SparqlParseRun.SparqlClasses.Expressions
 {
     class SparqlDay : SparqlExpression
     {
-        private SparqlExpression sparqlExpression;
-
         public SparqlDay(SparqlExpression value)
+            : base(value.AggregateLevel)
         {
-
-            IsAggragate = value.IsAggragate;
-            IsDistinct = value.IsDistinct;
-            value.SetExprType(ExpressionTypeEnum.Date);
-            SetExprType(ObjectVariantEnum.Int);
-            TypedOperator = result =>
+            if (value.Const != null)
+                Const = new OV_int(GetDay(value.Const.Content));
+            else
             {
-                var f = value.TypedOperator(result).Content;
-                if (f is DateTime)
-                    return new OV_int(((DateTime)f).Day);
-                if (f is DateTimeOffset)
-                    return new OV_int(((DateTimeOffset)f).Day);
-                throw new ArgumentException();
-            };
+                Operator = result => GetDay(value.Operator(result));
+                TypedOperator = result => new OV_int(Operator(result));
+            }
+        }
+
+        private int GetDay(dynamic o)
+        {
+            if (o is DateTime)
+                return ((DateTime)o).Day;
+            if (o is DateTimeOffset)
+                return ((DateTimeOffset)o).Day;
+            throw new ArgumentException();
         }
     }
 }

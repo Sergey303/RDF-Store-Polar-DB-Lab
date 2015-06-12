@@ -8,20 +8,68 @@ namespace SparqlParseRun.SparqlClasses.Expressions
 {
     public abstract class SparqlExpression
     {
-        public Func<SparqlResult, ObjectVariants> TypedOperator;
-        private Func<SparqlResult, dynamic> @operator;
-        public bool IsAggragate;
-        public bool IsDistinct;
-        private ExpressionTypeEnum typeEnum;
-        private ObjectVariantEnum? realType;
-        private ObjectVariants @constconst;
-          
 
-        internal static SparqlExpression EqualsExpression(SparqlExpression l, SparqlExpression r, RdfQuery11Translator q)
+        public Func<SparqlResult, ObjectVariants> TypedOperator;
+
+        private Func<SparqlResult, dynamic> @operator;
+        // private ExpressionTypeEnum typeEnum;
+        private ObjectVariants @constconst;
+        public VariableDependenceGroupLevel AggregateLevel;
+
+        public enum VariableDependenceGroupLevel
+        {
+            Const=0,
+            UndependableFunc,
+             SimpleVariable,
+            Group,
+            GroupOfGroups
+        }
+
+        public SparqlExpression()
+        {
+            AggregateLevel=VariableDependenceGroupLevel.Const;
+        }
+        public SparqlExpression(VariableDependenceGroupLevel aggregateLevel)
+        {
+            AggregateLevel = aggregateLevel;
+        }
+
+        public static VariableDependenceGroupLevel SetAggregateLevel(params VariableDependenceGroupLevel[] groupLevels)
+        {
+           var gg = groupLevels.Any(level => level == VariableDependenceGroupLevel.GroupOfGroups);
+           var g = groupLevels.Any(level => level == VariableDependenceGroupLevel.Group);
+           var s = groupLevels.Any(level => level == VariableDependenceGroupLevel.SimpleVariable);
+           var u = groupLevels.Any(level => level == VariableDependenceGroupLevel.UndependableFunc);
+           if (gg)
+           {
+               if(g || s)
+                   throw new Exception("variable aggregation level");
+               return  VariableDependenceGroupLevel.GroupOfGroups;
+           }
+           if (g)
+           {
+               if (s)
+                   throw new Exception("variable aggregation level");
+               return VariableDependenceGroupLevel.Group;
+               
+           }
+           if (s)
+           {
+               return VariableDependenceGroupLevel.SimpleVariable; 
+           }
+           if (u)
+           {
+               return VariableDependenceGroupLevel.UndependableFunc;
+               
+           }
+           return VariableDependenceGroupLevel.Const;
+
+        }
+        internal static SparqlExpression EqualsExpression(SparqlExpression l, SparqlExpression r)
         {
             var sparqlBinaryExpression = new SparqlBinaryExpression(l, r, (o, o1) => o.Equals(o1));
             l.SyncTypes(r);
-            sparqlBinaryExpression.SetExprType(ObjectVariantEnum.Bool);
+          //  sparqlBinaryExpression.SetExprType(ObjectVariantEnum.Bool);
             return sparqlBinaryExpression;
         }
 
@@ -30,7 +78,7 @@ namespace SparqlParseRun.SparqlClasses.Expressions
         {
             var sparqlBinaryExpression = new SparqlBinaryExpression(l, r, (o, o1) => ! o.Equals(o1));
             l.SyncTypes(r);
-            sparqlBinaryExpression.SetExprType(ObjectVariantEnum.Bool);
+          //  sparqlBinaryExpression.SetExprType(ObjectVariantEnum.Bool);
             return sparqlBinaryExpression;
         }
 
@@ -43,7 +91,7 @@ namespace SparqlParseRun.SparqlClasses.Expressions
         {
             var sparqlBinaryExpression = new SparqlBinaryExpression(l, r, (o, o1) => ((IComparable) o).CompareTo(o1) == -1);
             l.SyncTypes(r);
-            sparqlBinaryExpression.SetExprType(ObjectVariantEnum.Bool);
+         //   sparqlBinaryExpression.SetExprType(ObjectVariantEnum.Bool);
             return sparqlBinaryExpression;
         }
         
@@ -59,73 +107,39 @@ namespace SparqlParseRun.SparqlClasses.Expressions
             //    @operator = (o, o1) => (DateTimeOffset)o > (DateTimeOffset)o1;
             //else                                                          throw new NotImplementedException();
             var sparqlBinaryExpression = new SparqlBinaryExpression(l, r, (o, o1) => ((IComparable)o).CompareTo(o1) ==1);
-            sparqlBinaryExpression.SetExprType(ObjectVariantEnum.Bool);
+       //     sparqlBinaryExpression.SetExprType(ObjectVariantEnum.Bool);
             return sparqlBinaryExpression;
         }
 
         internal static SparqlExpression SmallerOrEquals(SparqlExpression l, SparqlExpression r)
         {
             var sparqlBinaryExpression = new SparqlBinaryExpression(l, r, (o, o1) => ((IComparable)o).CompareTo(o1) != 1);
-            sparqlBinaryExpression.SetExprType(ObjectVariantEnum.Bool);
+          //  sparqlBinaryExpression.SetExprType(ObjectVariantEnum.Bool);
             return sparqlBinaryExpression;
         }
 
         public static SparqlExpression GreatherOrEquals(SparqlExpression l, SparqlExpression r)
         {
             var sparqlBinaryExpression = new SparqlBinaryExpression(l, r, (o, o1) => ((IComparable)o).CompareTo(o1) !=-1 );
-            sparqlBinaryExpression.SetExprType(ObjectVariantEnum.Bool);
+         //   sparqlBinaryExpression.SetExprType(ObjectVariantEnum.Bool);
             return sparqlBinaryExpression;
         }
 
         internal SparqlExpression InCollection(List<SparqlExpression> collection)
         {
-            var inCollection = new SparqlBoolExpression(
-                result =>
-                {
-                    var o = @operator(result);
-                    return collection.Any(element => element.@operator(result).Equals(o));
-                })
-            {
-                IsAggragate = IsAggragate || collection.Any(element => element.IsAggragate),
-                IsDistinct = IsDistinct || collection.Any(element => element.IsDistinct),
-            };
-            if (Const != null)
-            {
-                var cConsts = collection.Select(expression => expression.Const).ToArray();
-                if (cConsts.Contains(Const))
-                    inCollection.Const = new OV_bool(true);
-                else if (cConsts.All(c => c != null)) inCollection.Const = new OV_bool(false);
-                else inCollection.Const = null;
-            }
-            return inCollection;
+            return new SparqlInCollectionExpression(this, collection);
         }
 
         internal SparqlExpression NotInCollection(List<SparqlExpression> collection)
         {
-            var notInCollection = new SparqlBoolExpression(
-                result =>
-                {
-                    var o = @operator(result);
-                    return collection.All(element => !element.@operator(result).Equals(o));
-                })
-            {
-                IsAggragate = IsAggragate || collection.Any(element => element.IsAggragate),
-                IsDistinct = IsDistinct || collection.Any(element => element.IsDistinct),
-            };
-            if (Const != null)
-            {
-                var cConsts = collection.Select(expression => expression.Const).ToArray();
-                if (cConsts.Contains(Const))
-                    notInCollection.Const = new OV_bool(false);
-                else if (cConsts.All(c => c != null)) notInCollection.Const = new OV_bool(true);
-                else notInCollection.Const = null;
-            }
+            var notInCollection = InCollection(collection);
+            
             return notInCollection;
         }
 
         public static SparqlExpression operator +(SparqlExpression l, SparqlExpression r)
         {
-            l.SetExprType(ExpressionTypeEnum.numeric);
+        //    l.SetExprType(ExpressionTypeEnum.numeric);
             var sparqlBinaryExpression = new SparqlBinaryExpression(l, r, (o, o1) =>
             {
                 if(o is int)
@@ -134,13 +148,13 @@ namespace SparqlParseRun.SparqlClasses.Expressions
                     return (decimal)o + (decimal)o1;
                 throw new Exception();
             });
-            sparqlBinaryExpression.SetExprType(l);            
+            //  sparqlBinaryExpression.SetExprType(l);            
             return sparqlBinaryExpression;
         }
 
         public static SparqlExpression operator -(SparqlExpression l, SparqlExpression r)
         {
-            l.SetExprType(ExpressionTypeEnum.numeric);
+           // l.SetExprType(ExpressionTypeEnum.numeric);
             var sparqlBinaryExpression = new SparqlBinaryExpression(l, r, (o, o1) =>
             {
                 if (o is int)
@@ -149,42 +163,42 @@ namespace SparqlParseRun.SparqlClasses.Expressions
                     return (decimal)o - (decimal)o1;
                 throw new Exception();
             });
-            sparqlBinaryExpression.SetExprType(l);
+       //     sparqlBinaryExpression.SetExprType(l);
             return sparqlBinaryExpression;
         }
 
         public static SparqlExpression operator *(SparqlExpression l, SparqlExpression r)
         {
-            l.SetExprType(ExpressionTypeEnum.numeric);
+         //   l.SetExprType(ExpressionTypeEnum.numeric);
             var sparqlBinaryExpression = new SparqlBinaryExpression(l, r, (o, o1) => (int)o * (int)o1);
-            sparqlBinaryExpression.SetExprType(l);
+         //   sparqlBinaryExpression.SetExprType(l);
             return sparqlBinaryExpression;   
         }
 
         public static SparqlExpression operator /(SparqlExpression l, SparqlExpression r)
         {
-            l.SetExprType(ExpressionTypeEnum.numeric);
+          //  l.SetExprType(ExpressionTypeEnum.numeric);
             //but xsd:decimal if both operands are xsd:integeк
 
             var sparqlBinaryExpression = new SparqlBinaryExpression(l, r, (o, o1) => (int)o / (int)o1);
-            sparqlBinaryExpression.SetExprType(l);
+          //  sparqlBinaryExpression.SetExprType(l);
             return sparqlBinaryExpression;
         }
 
         public static SparqlExpression operator !(SparqlExpression e)
         {
-            e.SetExprType(ObjectVariantEnum.@Bool);
+        //    e.SetExprType(ObjectVariantEnum.@Bool);
             var opLogicalNot = new SparqlUnaryExpression(o => !o, e);
-            opLogicalNot.SetExprType(ObjectVariantEnum.Bool);
+            //opLogicalNot.SetExprType(ObjectVariantEnum.Bool);
 
             return opLogicalNot;
         }
 
         public static SparqlExpression operator -(SparqlExpression e)
         {
-            e.SetExprType(ExpressionTypeEnum.numeric);
+         //   e.SetExprType(ExpressionTypeEnum.numeric);
             var uminus = new SparqlUnaryExpression(o => -o, e);
-            uminus.SetExprType(e);
+       //     uminus.SetExprType(e);
             return uminus;
         }
 
@@ -193,13 +207,13 @@ namespace SparqlParseRun.SparqlClasses.Expressions
             return (bool)@operator(result);
         }
 
-        public Func<SparqlResult, ObjectVariants> FunkClone
-        {
-            get
-            {
-                return (Func<SparqlResult, ObjectVariants>)TypedOperator.Clone();
-            }
-        }
+        //public Func<SparqlResult, ObjectVariants> FunkClone
+        //{
+        //    get
+        //    {
+        //        return (Func<SparqlResult, ObjectVariants>)TypedOperator.Clone();
+        //    }
+        //}
 
         public ObjectVariants Const
         {
@@ -211,51 +225,39 @@ namespace SparqlParseRun.SparqlClasses.Expressions
             }
         }
 
-        public ObjectVariantEnum? RealType
-        {
-            get
-            {   
-                return realType;
-            }
-            set
-            {
-                realType = value;
-            }
-        }
-
         public Func<SparqlResult, dynamic> Operator
         {
             get { return @operator; }
             set { @operator = value; }
         }
 
-        public void SetExprType(ObjectVariantEnum variant)
-        {
-            RealType = variant;
-        }
-        public void SetExprType(ExpressionTypeEnum typeEnum)
-        {
-            this.typeEnum = typeEnum;
-        }
-        private void SetExprType(SparqlExpression variant)
-        {
+       // public void SetExprType(ObjectVariantEnum variant)
+       // {
+       //     RealType = variant;
+       // }
+       // public void SetExprType(ExpressionTypeEnum typeEnum)
+       // {
+       //     this.typeEnum = typeEnum;
+       // }
+       // private void SetExprType(SparqlExpression variant)
+       // {
 
-        }                                       
+       // }                                       
 
-        private ExpressionTypeClass exprTypeObj;
+       // private ExpressionTypeClass exprTypeObj;
 
-       public class ExpressionTypeClass
-       {
-           private ExpressionTypeEnum generalType;
-           public ObjectVariantEnum listType;
-       }        
-        public enum ExpressionTypeEnum
-        {
-             numeric, 
-            stringOrWithLang,
-            literal,
-            Date,
-        }
+       //public class ExpressionTypeClass
+       //{
+       //    private ExpressionTypeEnum generalType;
+       //    public ObjectVariantEnum listType;
+       //}        
+       // public enum ExpressionTypeEnum
+       // {
+       //      numeric, 
+       //     stringOrWithLang,
+       //     literal,
+       //     Date,
+       // }
 
     }
 }

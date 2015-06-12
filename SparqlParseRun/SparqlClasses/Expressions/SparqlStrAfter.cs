@@ -5,26 +5,39 @@ using RDFCommon.OVns;
 namespace SparqlParseRun.SparqlClasses.Expressions
 {
     class SparqlStrAfter : SparqlExpression
-    {
-     
-
-        public SparqlStrAfter(SparqlExpression str, SparqlExpression pattern, NodeGenerator q)
+    {         
+        public SparqlStrAfter(SparqlExpression str, SparqlExpression pattern)
         {
       
             // TODO: Complete member initialization
-            IsAggragate = pattern.IsAggragate || str.IsAggragate;
-            IsDistinct = pattern.IsDistinct ||str.IsDistinct;
-           str.SetExprType(ExpressionTypeEnum.@stringOrWithLang);
-           pattern.SetExprType(ExpressionTypeEnum.@stringOrWithLang);
+            //str.SetExprType(ExpressionTypeEnum.@stringOrWithLang);
+           //pattern.SetExprType(ExpressionTypeEnum.@stringOrWithLang);
 
-            SetExprType(ExpressionTypeEnum.@stringOrWithLang);
-
-            
-            TypedOperator = result =>
+           // SetExprType(ExpressionTypeEnum.@stringOrWithLang);
+            switch (NullablePairExt.Get(str.Const, pattern.Const))
             {
-                var patternValue = pattern.TypedOperator(result);
-                return str.TypedOperator(result).Change(o => StringAfter(o, (string)patternValue.Content));
-            };
+                case NP.bothNull:
+                    Operator = result => StringAfter(str.Operator(result), pattern.Operator(result));
+                    AggregateLevel = SetAggregateLevel(str.AggregateLevel, pattern.AggregateLevel);
+                    TypedOperator = result => str.TypedOperator(result).Change(o => StringAfter(o, (string)pattern.TypedOperator(result).Content));
+                    break;
+                case NP.leftNull:
+                    Operator = result => StringAfter(str.Operator(result), (string) pattern.Const.Content);
+                    TypedOperator = result => pattern.Const.Change(o => StringAfter(str.Operator(result), o));
+                    AggregateLevel = str.AggregateLevel;
+                    break;
+                case NP.rigthNull:
+                    Operator = result => StringAfter((string) str.Const.Content, pattern.Operator(result));
+                    TypedOperator = result => str.Const.Change(o => StringAfter(o, (string)pattern.Operator(result).Content));
+                    AggregateLevel = pattern.AggregateLevel;
+                    break;
+                case NP.bothNotNull:
+                    Const = new OV_bool(StringAfter((string) str.Const.Content, (string) pattern.Const.Content));
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+            
           
         }
 

@@ -1,32 +1,51 @@
-﻿using RDFCommon.OVns;
+﻿using System;
+using RDFCommon.OVns;
 
 namespace SparqlParseRun.SparqlClasses.Expressions
 {
-    public class SparqlAndExpression : SparqlBinaryExpression
+    public class SparqlAndExpression : SparqlExpression
     {
       
 
 
         public SparqlAndExpression(SparqlExpression l, SparqlExpression r)
-            : base(l, r, (o, o1) => (bool)o && (bool)o1)
         {      
-            l.SetExprType(ObjectVariantEnum.Bool); 
-            r.SetExprType(ObjectVariantEnum.Bool);
-            SetExprType(ObjectVariantEnum.Bool);        
+            //l.SetExprType(ObjectVariantEnum.Bool); 
+            //r.SetExprType(ObjectVariantEnum.Bool);
+            //SetExprType(ObjectVariantEnum.Bool);      
+            switch (NullablePairExt.Get(l, r))
+            {
+                case NP.bothNull:
+                    Operator = res => l.Operator(res) && r.Operator(res);
+                    break;
+                case NP.leftNull:
+                    if (!(bool)l.Const.Content)
+                        Const = new OV_bool(false);
+                    else
+                    {
+                        Operator = r.Operator;
+                        AggregateLevel = r.AggregateLevel;
+                    }
+                    break;
+                case NP.rigthNull:
+                    if (!(bool)r.Const.Content)
+                        Const = new OV_bool(false);
+                    else
+                    {
+                        Operator = l.Operator;
+                        AggregateLevel = l.AggregateLevel;
+                    }
+                    break;
+                case NP.bothNotNull:
+                    Const = new OV_bool((bool)l.Const.Content && (bool)r.Const.Content);
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+            TypedOperator = result => new OV_bool(Operator(result));
         }
 
      
     }
-    /// <summary>
-    /// Nullable Pair
-    /// </summary>
-    public  enum NP{ bothNull, leftNull, rigthNull, bothNotNull}
-
-    public static class NullablePairExt
-{
-        public static NP Get(object left, object right)
-        {
-            return (NP)(((left != null ? 1 : 0) << 1) | (right != null ? 1 : 0));
-        }
-}
+ 
 }

@@ -3,24 +3,21 @@ using RDFCommon.OVns;
 
 namespace SparqlParseRun.SparqlClasses.Expressions
 {
-    class SparqlTimeZone : SparqlExpression
+    class SparqlTimeZone : SparqlUnaryExpression<OV_dayTimeDuration>
     {
         private SparqlExpression sparqlExpression;
 
         public SparqlTimeZone(SparqlExpression value)
-        {
-
-            IsAggragate = value.IsAggragate;
-            IsDistinct = value.IsDistinct;
-            TypedOperator = result =>
+            :base(f =>
             {
-                var f = value.TypedOperator(result).Content;
                 if (f is DateTime)
-                    return new OV_dayTimeDuration(TimeZoneInfo.Utc.GetUtcOffset((DateTime)f));
-                else if(f is DateTimeOffset)
-                    return new OV_dayTimeDuration(((DateTimeOffset)f).Offset);
+                    return TimeZoneInfo.Utc.GetUtcOffset((DateTime)f);
+                else if (f is DateTimeOffset)
+                    return ((DateTimeOffset)f).Offset;
                 throw new ArgumentException();
-            };
+            }, value, f=>new OV_dayTimeDuration(f))
+        {  
+          
         }
     }
 }

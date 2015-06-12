@@ -5,21 +5,21 @@ using SparqlParseRun.SparqlClasses.GraphPattern.Triples.Node;
 
 namespace SparqlParseRun.SparqlClasses.Query.Result
 {
-    public class SpraqlGroupOfResults : SparqlResult
+    public class SparqlGroupOfResults : SparqlResult
     {
         public IEnumerable<SparqlResult> Group;
 
-        public SpraqlGroupOfResults(VariableNode variable, ObjectVariants value, RdfQuery11Translator q) : base(q)
+        public SparqlGroupOfResults(VariableNode variable, ObjectVariants value, RdfQuery11Translator q) : base(q)
         {
             Add(variable, value);
         }
 
-        public SpraqlGroupOfResults(RdfQuery11Translator q) : base(q)
+        public SparqlGroupOfResults(RdfQuery11Translator q) : base(q)
         {
           
         }
 
-        public SpraqlGroupOfResults(IEnumerable<VariableNode> variables, List<ObjectVariants> values, RdfQuery11Translator q)
+        public SparqlGroupOfResults(IEnumerable<VariableNode> variables, List<ObjectVariants> values, RdfQuery11Translator q)
             : base(q)
         {
             int i = 0;

@@ -5561,7 +5561,7 @@ public partial class sparq11lTranslatorParser : Parser {
 			{
 			State = 1034; _localctx._iriString = iriString();
 			State = 1035; _localctx._argList = argList();
-			 _localctx.value = new SparqlFunctionCall(_localctx._iriString.value, _localctx._argList.value,q.Store.NodeGenerator); 
+			 _localctx.value = new SparqlFunctionCall(_localctx._iriString.value, _localctx._argList.value); 
 			}
 		}
 		catch (RecognitionException re) {
@@ -8370,7 +8370,7 @@ public partial class sparq11lTranslatorParser : Parser {
 				{
 				State = 1403; Match(T__8);
 				State = 1404; _localctx.r = _localctx._numericExpression = numericExpression();
-				_localctx.value = SparqlExpression.EqualsExpression(_localctx.value, _localctx.r.value,q);
+				_localctx.value = SparqlExpression.EqualsExpression(_localctx.value, _localctx.r.value);
 				}
 				break;
 			case T__18:
@@ -9005,7 +9005,7 @@ public partial class sparq11lTranslatorParser : Parser {
 				if (_la==NIL || _la==BracketOpen) {
 					{
 					State = 1517; _localctx._argList = argList();
-					_localctx.value = new SparqlFunctionCall(_localctx._iriString.value,  _localctx._argList.value,q.Store.NodeGenerator);
+					_localctx.value = new SparqlFunctionCall(_localctx._iriString.value,  _localctx._argList.value);
 					}
 				}
 
@@ -9265,7 +9265,7 @@ public partial class sparq11lTranslatorParser : Parser {
 				State = 1545; Match(BracketOpen);
 				State = 1546; _localctx._expression = expression();
 				State = 1547; Match(BracketClose);
-				 _localctx.value = new SparqlToString(_localctx._expression.value,q.Store.NodeGenerator); 
+				 _localctx.value = new SparqlToString(_localctx._expression.value); 
 				}
 				break;
 			case LANG:
@@ -9275,7 +9275,7 @@ public partial class sparq11lTranslatorParser : Parser {
 				State = 1551; Match(BracketOpen);
 				State = 1552; _localctx._expression = expression();
 				State = 1553; Match(BracketClose);
-				 _localctx.value = new SparqlLang(_localctx._expression.value, q.Store.NodeGenerator); 
+				 _localctx.value = new SparqlLang(_localctx._expression.value); 
 				}
 				break;
 			case LANGMATCHES:
@@ -9297,7 +9297,7 @@ public partial class sparq11lTranslatorParser : Parser {
 				State = 1565; Match(BracketOpen);
 				State = 1566; _localctx._expression = expression();
 				State = 1567; Match(BracketClose);
-				 _localctx.value = new SparqlDataType(_localctx._expression.value, q.Store.NodeGenerator); 
+				 _localctx.value = new SparqlDataType(_localctx._expression.value); 
 				}
 				break;
 			case BOUND:
@@ -9442,7 +9442,7 @@ public partial class sparq11lTranslatorParser : Parser {
 				State = 1642; Match(BracketOpen);
 				State = 1643; _localctx._expression = expression();
 				State = 1644; Match(BracketClose);
-				 _localctx.value = new SparqlUcase(_localctx._expression.value, q.Store.NodeGenerator); 
+				 _localctx.value = new SparqlUcase(_localctx._expression.value); 
 				}
 				break;
 			case LCASE:
@@ -9452,7 +9452,7 @@ public partial class sparq11lTranslatorParser : Parser {
 				State = 1648; Match(BracketOpen);
 				State = 1649; _localctx._expression = expression();
 				State = 1650; Match(BracketClose);
-				 _localctx.value = new SparqlLCase(_localctx._expression.value, q.Store.NodeGenerator); 
+				 _localctx.value = new SparqlLCase(_localctx._expression.value); 
 				}
 				break;
 			case ENCODE_FOR_URI:
@@ -9510,7 +9510,7 @@ public partial class sparq11lTranslatorParser : Parser {
 				State = 1686; Match(T__22);
 				State = 1687; _localctx.pattern = expression();
 				State = 1688; Match(BracketClose);
-				 _localctx.value = new SparqlStrBefore(_localctx.lit.value, _localctx.pattern.value, q.Store.NodeGenerator); 
+				 _localctx.value = new SparqlStrBefore(_localctx.lit.value, _localctx.pattern.value); 
 				}
 				break;
 			case STRAFTER:
@@ -9522,7 +9522,7 @@ public partial class sparq11lTranslatorParser : Parser {
 				State = 1694; Match(T__22);
 				State = 1695; _localctx.pattern = expression();
 				State = 1696; Match(BracketClose);
-				 _localctx.value = new SparqlStrAfter(_localctx.lit.value, _localctx.pattern.value, q.Store.NodeGenerator); 
+				 _localctx.value = new SparqlStrAfter(_localctx.lit.value, _localctx.pattern.value); 
 				}
 				break;
 			case YEAR:
@@ -9602,7 +9602,7 @@ public partial class sparq11lTranslatorParser : Parser {
 				State = 1742; Match(BracketOpen);
 				State = 1743; _localctx._expression = expression();
 				State = 1744; Match(BracketClose);
-				 _localctx.value = new SparqlTz(_localctx._expression.value,q.Store.NodeGenerator); 
+				 _localctx.value = new SparqlTz(_localctx._expression.value); 
 				}
 				break;
 			case NOW:
@@ -9618,7 +9618,7 @@ public partial class sparq11lTranslatorParser : Parser {
 				{
 				State = 1750; Match(UUID);
 				State = 1751; Match(NIL);
-				 _localctx.value = new SparqlUuid(q.Store.NodeGenerator); 
+				 _localctx.value = new SparqlUuid(); 
 				}
 				break;
 			case STRUUID:
@@ -9710,7 +9710,7 @@ public partial class sparq11lTranslatorParser : Parser {
 				State = 1803; Match(T__22);
 				State = 1804; _localctx.lang = expression();
 				State = 1805; Match(BracketClose);
-				 _localctx.value = new SparqlStringLang(_localctx.lit.value, _localctx.lang.value, q.Store.NodeGenerator); 
+				 _localctx.value = new SparqlStringLang(_localctx.lit.value, _localctx.lang.value); 
 				}
 				break;
 			case STRDT:
@@ -10029,7 +10029,8 @@ public partial class sparq11lTranslatorParser : Parser {
 				}
 			}
 
-			State = 1914; Match(BracketClose);
+			_localctx.value.Create();
+			State = 1915; Match(BracketClose);
 			}
 		}
 		catch (RecognitionException re) {
@@ -10077,8 +10078,8 @@ public partial class sparq11lTranslatorParser : Parser {
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 1916; Match(EXISTS);
-			State = 1917; _localctx._groupGraphPattern = groupGraphPattern();
+			State = 1917; Match(EXISTS);
+			State = 1918; _localctx._groupGraphPattern = groupGraphPattern();
 			_localctx.value = new SparqlExistsExpression(_localctx._groupGraphPattern.value);
 			}
 		}
@@ -10128,9 +10129,9 @@ public partial class sparq11lTranslatorParser : Parser {
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 1920; Match(NOT);
-			State = 1921; Match(EXISTS);
-			State = 1922; _localctx._groupGraphPattern = groupGraphPattern();
+			State = 1921; Match(NOT);
+			State = 1922; Match(EXISTS);
+			State = 1923; _localctx._groupGraphPattern = groupGraphPattern();
 			_localctx.value = new SparqlNotExistsExpression(_localctx._groupGraphPattern.value);
 			}
 		}
@@ -10190,28 +10191,28 @@ public partial class sparq11lTranslatorParser : Parser {
 		EnterRule(_localctx, 234, RULE_aggregate);
 		int _la;
 		try {
-			State = 2014;
+			State = 2015;
 			switch (_input.La(1)) {
 			case COUNT:
 				EnterOuterAlt(_localctx, 1);
 				{
-				State = 1925; Match(COUNT);
+				State = 1926; Match(COUNT);
 				_localctx.value = new SparqlCountExpression();
-				State = 1927; Match(BracketOpen);
-				State = 1930;
+				State = 1928; Match(BracketOpen);
+				State = 1931;
 				_la = _input.La(1);
 				if (_la==DISTINCT) {
 					{
-					State = 1928; Match(DISTINCT);
+					State = 1929; Match(DISTINCT);
 					_localctx.value.IsDistinct=true;
 					}
 				}
 
-				State = 1937;
+				State = 1938;
 				switch (_input.La(1)) {
 				case T__21:
 					{
-					State = 1932; Match(T__21);
+					State = 1933; Match(T__21);
 					_localctx.value.IsAll();
 					}
 					break;
@@ -10301,146 +10302,146 @@ public partial class sparq11lTranslatorParser : Parser {
 				case STRING_LITERAL_LONG2:
 				case BracketOpen:
 					{
-					State = 1934; _localctx._expression = expression();
+					State = 1935; _localctx._expression = expression();
 					_localctx.value.Expression=_localctx._expression.value;
 					}
 					break;
 				default:
 					throw new NoViableAltException(this);
 				}
-				State = 1939; Match(BracketClose);
+				State = 1940; Match(BracketClose);
 				}
 				break;
 			case SUM:
 				EnterOuterAlt(_localctx, 2);
 				{
-				State = 1940; Match(SUM);
+				State = 1941; Match(SUM);
 				_localctx.value = new SparqlSumExpression();
-				State = 1942; Match(BracketOpen);
-				State = 1945;
+				State = 1943; Match(BracketOpen);
+				State = 1946;
 				_la = _input.La(1);
 				if (_la==DISTINCT) {
 					{
-					State = 1943; Match(DISTINCT);
+					State = 1944; Match(DISTINCT);
 					_localctx.value.IsDistinct=true;
 					}
 				}
 
-				State = 1947; _localctx._expression = expression();
+				State = 1948; _localctx._expression = expression();
 				_localctx.value.Expression=_localctx._expression.value;
-				State = 1949; Match(BracketClose);
+				State = 1950; Match(BracketClose);
 				}
 				break;
 			case MIN:
 				EnterOuterAlt(_localctx, 3);
 				{
-				State = 1951; Match(MIN);
+				State = 1952; Match(MIN);
 				_localctx.value = new SparqlMinExpression();
-				State = 1953; Match(BracketOpen);
-				State = 1956;
+				State = 1954; Match(BracketOpen);
+				State = 1957;
 				_la = _input.La(1);
 				if (_la==DISTINCT) {
 					{
-					State = 1954; Match(DISTINCT);
+					State = 1955; Match(DISTINCT);
 					_localctx.value.IsDistinct=true;
 					}
 				}
 
-				State = 1958; _localctx._expression = expression();
+				State = 1959; _localctx._expression = expression();
 				_localctx.value.Expression=_localctx._expression.value;
-				State = 1960; Match(BracketClose);
+				State = 1961; Match(BracketClose);
 				}
 				break;
 			case MAX:
 				EnterOuterAlt(_localctx, 4);
 				{
-				State = 1962; Match(MAX);
+				State = 1963; Match(MAX);
 				_localctx.value = new SparqlMaxExpression();
-				State = 1964; Match(BracketOpen);
-				State = 1967;
+				State = 1965; Match(BracketOpen);
+				State = 1968;
 				_la = _input.La(1);
 				if (_la==DISTINCT) {
 					{
-					State = 1965; Match(DISTINCT);
+					State = 1966; Match(DISTINCT);
 					_localctx.value.IsDistinct=true;
 					}
 				}
 
-				State = 1969; _localctx._expression = expression();
+				State = 1970; _localctx._expression = expression();
 				_localctx.value.Expression=_localctx._expression.value;
-				State = 1971; Match(BracketClose);
+				State = 1972; Match(BracketClose);
 				}
 				break;
 			case AVG:
 				EnterOuterAlt(_localctx, 5);
 				{
-				State = 1973; Match(AVG);
+				State = 1974; Match(AVG);
 				_localctx.value = new SparqlAvgExpression();
-				State = 1975; Match(BracketOpen);
-				State = 1978;
+				State = 1976; Match(BracketOpen);
+				State = 1979;
 				_la = _input.La(1);
 				if (_la==DISTINCT) {
 					{
-					State = 1976; Match(DISTINCT);
+					State = 1977; Match(DISTINCT);
 					_localctx.value.IsDistinct=true;
 					}
 				}
 
-				State = 1980; _localctx._expression = expression();
+				State = 1981; _localctx._expression = expression();
 				_localctx.value.Expression=_localctx._expression.value;
-				State = 1982; Match(BracketClose);
+				State = 1983; Match(BracketClose);
 				}
 				break;
 			case SAMPLE:
 				EnterOuterAlt(_localctx, 6);
 				{
-				State = 1984; Match(SAMPLE);
+				State = 1985; Match(SAMPLE);
 				_localctx.value = new SparqlSampleExpression();
-				State = 1986; Match(BracketOpen);
-				State = 1989;
+				State = 1987; Match(BracketOpen);
+				State = 1990;
 				_la = _input.La(1);
 				if (_la==DISTINCT) {
 					{
-					State = 1987; Match(DISTINCT);
+					State = 1988; Match(DISTINCT);
 					_localctx.value.IsDistinct=true;
 					}
 				}
 
-				State = 1991; _localctx._expression = expression();
+				State = 1992; _localctx._expression = expression();
 				_localctx.value.Expression=_localctx._expression.value;
-				State = 1993; Match(BracketClose);
+				State = 1994; Match(BracketClose);
 				}
 				break;
 			case GROUP_CONCAT:
 				EnterOuterAlt(_localctx, 7);
 				{
-				State = 1995; Match(GROUP_CONCAT);
+				State = 1996; Match(GROUP_CONCAT);
 				_localctx.value = new SparqlGroupConcatExpression();
-				State = 1997; Match(BracketOpen);
-				State = 2000;
+				State = 1998; Match(BracketOpen);
+				State = 2001;
 				_la = _input.La(1);
 				if (_la==DISTINCT) {
 					{
-					State = 1998; Match(DISTINCT);
+					State = 1999; Match(DISTINCT);
 					_localctx.value.IsDistinct=true;
 					}
 				}
 
-				State = 2002; _localctx._expression = expression();
+				State = 2003; _localctx._expression = expression();
 				_localctx.value.Expression=_localctx._expression.value;
-				State = 2010;
+				State = 2011;
 				_la = _input.La(1);
 				if (_la==T__7) {
 					{
-					State = 2004; Match(T__7);
-					State = 2005; Match(SEPARATOR);
-					State = 2006; Match(T__8);
-					State = 2007; _localctx._string = @string();
+					State = 2005; Match(T__7);
+					State = 2006; Match(SEPARATOR);
+					State = 2007; Match(T__8);
+					State = 2008; _localctx._string = @string();
 					_localctx.value.Separator=(_localctx._string!=null?_input.GetText(_localctx._string.start,_localctx._string.stop):null);
 					}
 				}
 
-				State = 2012; Match(BracketClose);
+				State = 2013; Match(BracketClose);
 				}
 				break;
 			default:
@@ -10495,12 +10496,12 @@ public partial class sparq11lTranslatorParser : Parser {
 		RDFLiteralContext _localctx = new RDFLiteralContext(_ctx, State);
 		EnterRule(_localctx, 236, RULE_rDFLiteral);
 		try {
-			State = 2028;
+			State = 2029;
 			switch ( Interpreter.AdaptivePredict(_input,150,_ctx) ) {
 			case 1:
 				EnterOuterAlt(_localctx, 1);
 				{
-				State = 2016; _localctx._string = @string();
+				State = 2017; _localctx._string = @string();
 				 _localctx.value = new OV_string((_localctx._string!=null?_input.GetText(_localctx._string.start,_localctx._string.stop):null).Trim('"', '\'')); 
 				}
 				break;
@@ -10509,8 +10510,8 @@ public partial class sparq11lTranslatorParser : Parser {
 				EnterOuterAlt(_localctx, 2);
 				{
 				{
-				State = 2019; _localctx._string = @string();
-				State = 2020; _localctx._LANGTAG = Match(LANGTAG);
+				State = 2020; _localctx._string = @string();
+				State = 2021; _localctx._LANGTAG = Match(LANGTAG);
 				 _localctx.value = new OV_langstring((_localctx._string!=null?_input.GetText(_localctx._string.start,_localctx._string.stop):null).Trim('"', '\''), (_localctx._LANGTAG!=null?_localctx._LANGTAG.Text:null).Substring(1,2));
 				}
 				}
@@ -10520,9 +10521,9 @@ public partial class sparq11lTranslatorParser : Parser {
 				EnterOuterAlt(_localctx, 3);
 				{
 				{
-				State = 2023; _localctx._string = @string();
-				State = 2024; Match(T__13);
-				State = 2025; _localctx._iriString = iriString();
+				State = 2024; _localctx._string = @string();
+				State = 2025; Match(T__13);
+				State = 2026; _localctx._iriString = iriString();
 				 _localctx.value = q.Store.NodeGenerator.CreateLiteralNode((_localctx._string!=null?_input.GetText(_localctx._string.start,_localctx._string.stop):null), _localctx._iriString.value);
 				}
 				}
@@ -10579,14 +10580,14 @@ public partial class sparq11lTranslatorParser : Parser {
 		NumericLiteralContext _localctx = new NumericLiteralContext(_ctx, State);
 		EnterRule(_localctx, 238, RULE_numericLiteral);
 		try {
-			State = 2039;
+			State = 2040;
 			switch (_input.La(1)) {
 			case INTEGER:
 			case DECIMAL:
 			case DOUBLE:
 				EnterOuterAlt(_localctx, 1);
 				{
-				State = 2030; _localctx._numericLiteralUnsigned = numericLiteralUnsigned();
+				State = 2031; _localctx._numericLiteralUnsigned = numericLiteralUnsigned();
 				_localctx.value = _localctx._numericLiteralUnsigned.value;
 				}
 				break;
@@ -10595,7 +10596,7 @@ public partial class sparq11lTranslatorParser : Parser {
 			case DOUBLE_POSITIVE:
 				EnterOuterAlt(_localctx, 2);
 				{
-				State = 2033; _localctx._numericLiteralPositive = numericLiteralPositive();
+				State = 2034; _localctx._numericLiteralPositive = numericLiteralPositive();
 				_localctx.value = _localctx._numericLiteralPositive.value;
 				}
 				break;
@@ -10604,7 +10605,7 @@ public partial class sparq11lTranslatorParser : Parser {
 			case DOUBLE_NEGATIVE:
 				EnterOuterAlt(_localctx, 3);
 				{
-				State = 2036; _localctx._numericLiteralNegative = numericLiteralNegative();
+				State = 2037; _localctx._numericLiteralNegative = numericLiteralNegative();
 				_localctx.value = _localctx._numericLiteralNegative.value;
 				}
 				break;
@@ -10656,26 +10657,26 @@ public partial class sparq11lTranslatorParser : Parser {
 		NumericLiteralUnsignedContext _localctx = new NumericLiteralUnsignedContext(_ctx, State);
 		EnterRule(_localctx, 240, RULE_numericLiteralUnsigned);
 		try {
-			State = 2047;
+			State = 2048;
 			switch (_input.La(1)) {
 			case INTEGER:
 				EnterOuterAlt(_localctx, 1);
 				{
-				State = 2041; _localctx._INTEGER = Match(INTEGER);
+				State = 2042; _localctx._INTEGER = Match(INTEGER);
 				 _localctx.value = new OV_int(int.Parse((_localctx._INTEGER!=null?_localctx._INTEGER.Text:null))); 
 				}
 				break;
 			case DECIMAL:
 				EnterOuterAlt(_localctx, 2);
 				{
-				State = 2043; _localctx._DECIMAL = Match(DECIMAL);
+				State = 2044; _localctx._DECIMAL = Match(DECIMAL);
 				 _localctx.value = new OV_decimal(decimal.Parse((_localctx._DECIMAL!=null?_localctx._DECIMAL.Text:null).Replace(".", ","))); 
 				}
 				break;
 			case DOUBLE:
 				EnterOuterAlt(_localctx, 3);
 				{
-				State = 2045; _localctx._DOUBLE = Match(DOUBLE);
+				State = 2046; _localctx._DOUBLE = Match(DOUBLE);
 				 _localctx.value = new OV_double(double.Parse((_localctx._DOUBLE!=null?_localctx._DOUBLE.Text:null).Replace(".", ","))); 
 				}
 				break;
@@ -10727,26 +10728,26 @@ public partial class sparq11lTranslatorParser : Parser {
 		NumericLiteralPositiveContext _localctx = new NumericLiteralPositiveContext(_ctx, State);
 		EnterRule(_localctx, 242, RULE_numericLiteralPositive);
 		try {
-			State = 2055;
+			State = 2056;
 			switch (_input.La(1)) {
 			case INTEGER_POSITIVE:
 				EnterOuterAlt(_localctx, 1);
 				{
-				State = 2049; _localctx._INTEGER_POSITIVE = Match(INTEGER_POSITIVE);
+				State = 2050; _localctx._INTEGER_POSITIVE = Match(INTEGER_POSITIVE);
 				 _localctx.value = new OV_int(int.Parse((_localctx._INTEGER_POSITIVE!=null?_localctx._INTEGER_POSITIVE.Text:null))); 
 				}
 				break;
 			case DECIMAL_POSITIVE:
 				EnterOuterAlt(_localctx, 2);
 				{
-				State = 2051; _localctx._DECIMAL_POSITIVE = Match(DECIMAL_POSITIVE);
+				State = 2052; _localctx._DECIMAL_POSITIVE = Match(DECIMAL_POSITIVE);
 				 _localctx.value = new OV_decimal(decimal.Parse((_localctx._DECIMAL_POSITIVE!=null?_localctx._DECIMAL_POSITIVE.Text:null).Replace(".", ","))); 
 				}
 				break;
 			case DOUBLE_POSITIVE:
 				EnterOuterAlt(_localctx, 3);
 				{
-				State = 2053; _localctx._DOUBLE_POSITIVE = Match(DOUBLE_POSITIVE);
+				State = 2054; _localctx._DOUBLE_POSITIVE = Match(DOUBLE_POSITIVE);
 				 _localctx.value = new OV_double(double.Parse((_localctx._DOUBLE_POSITIVE!=null?_localctx._DOUBLE_POSITIVE.Text:null).Replace(".", ","))); 
 				}
 				break;
@@ -10798,26 +10799,26 @@ public partial class sparq11lTranslatorParser : Parser {
 		NumericLiteralNegativeContext _localctx = new NumericLiteralNegativeContext(_ctx, State);
 		EnterRule(_localctx, 244, RULE_numericLiteralNegative);
 		try {
-			State = 2063;
+			State = 2064;
 			switch (_input.La(1)) {
 			case INTEGER_NEGATIVE:
 				EnterOuterAlt(_localctx, 1);
 				{
-				State = 2057; _localctx._INTEGER_NEGATIVE = Match(INTEGER_NEGATIVE);
+				State = 2058; _localctx._INTEGER_NEGATIVE = Match(INTEGER_NEGATIVE);
 				 _localctx.value = new OV_int(int.Parse((_localctx._INTEGER_NEGATIVE!=null?_localctx._INTEGER_NEGATIVE.Text:null))); 
 				}
 				break;
 			case DECIMAL_NEGATIVE:
 				EnterOuterAlt(_localctx, 2);
 				{
-				State = 2059; _localctx._DECIMAL_NEGATIVE = Match(DECIMAL_NEGATIVE);
+				State = 2060; _localctx._DECIMAL_NEGATIVE = Match(DECIMAL_NEGATIVE);
 				 _localctx.value = new OV_decimal(decimal.Parse((_localctx._DECIMAL_NEGATIVE!=null?_localctx._DECIMAL_NEGATIVE.Text:null).Replace(".", ","))); 
 				}
 				break;
 			case DOUBLE_NEGATIVE:
 				EnterOuterAlt(_localctx, 3);
 				{
-				State = 2061; _localctx._DOUBLE_NEGATIVE = Match(DOUBLE_NEGATIVE);
+				State = 2062; _localctx._DOUBLE_NEGATIVE = Match(DOUBLE_NEGATIVE);
 				 _localctx.value = new OV_double(double.Parse((_localctx._DOUBLE_NEGATIVE!=null?_localctx._DOUBLE_NEGATIVE.Text:null).Replace(".", ","))); 
 				}
 				break;
@@ -10869,7 +10870,7 @@ public partial class sparq11lTranslatorParser : Parser {
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 2065; _localctx._boolean = boolean();
+			State = 2066; _localctx._boolean = boolean();
 			 _localctx.value = new OV_bool(_localctx._boolean.value); 
 			}
 		}
@@ -10913,19 +10914,19 @@ public partial class sparq11lTranslatorParser : Parser {
 		BooleanContext _localctx = new BooleanContext(_ctx, State);
 		EnterRule(_localctx, 248, RULE_boolean);
 		try {
-			State = 2072;
+			State = 2073;
 			switch (_input.La(1)) {
 			case TRUE:
 				EnterOuterAlt(_localctx, 1);
 				{
-				State = 2068; Match(TRUE);
+				State = 2069; Match(TRUE);
 				 _localctx.value = true; 
 				}
 				break;
 			case FALSE:
 				EnterOuterAlt(_localctx, 2);
 				{
-				State = 2070; Match(FALSE);
+				State = 2071; Match(FALSE);
 				 _localctx.value = false; 
 				}
 				break;
@@ -10977,7 +10978,7 @@ public partial class sparq11lTranslatorParser : Parser {
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 2074;
+			State = 2075;
 			_la = _input.La(1);
 			if ( !(((((_la - 149)) & ~0x3f) == 0 && ((1L << (_la - 149)) & ((1L << (STRING_LITERAL1 - 149)) | (1L << (STRING_LITERAL2 - 149)) | (1L << (STRING_LITERAL_LONG1 - 149)) | (1L << (STRING_LITERAL_LONG2 - 149)))) != 0)) ) {
 			_errHandler.RecoverInline(this);
@@ -11029,7 +11030,7 @@ public partial class sparq11lTranslatorParser : Parser {
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 2076; _localctx._iriString = iriString();
+			State = 2077; _localctx._iriString = iriString();
 			 _localctx.value = q.Store.NodeGenerator.GetUri(_localctx._iriString.value);
 			}
 		}
@@ -11077,26 +11078,26 @@ public partial class sparq11lTranslatorParser : Parser {
 		IriStringContext _localctx = new IriStringContext(_ctx, State);
 		EnterRule(_localctx, 254, RULE_iriString);
 		try {
-			State = 2085;
+			State = 2086;
 			switch (_input.La(1)) {
 			case IRIREF:
 				EnterOuterAlt(_localctx, 1);
 				{
-				State = 2079; _localctx._IRIREF = Match(IRIREF);
+				State = 2080; _localctx._IRIREF = Match(IRIREF);
 				_localctx.value = (_localctx._IRIREF!=null?_localctx._IRIREF.Text:null).Substring(1, (_localctx._IRIREF!=null?_localctx._IRIREF.Text:null).Length-2);
 				}
 				break;
 			case PNAME_LN:
 				EnterOuterAlt(_localctx, 2);
 				{
-				State = 2081; _localctx._PNAME_LN = Match(PNAME_LN);
+				State = 2082; _localctx._PNAME_LN = Match(PNAME_LN);
 				_localctx.value = q.prolog.GetUriFromPrefixed((_localctx._PNAME_LN!=null?_localctx._PNAME_LN.Text:null)); 
 				}
 				break;
 			case PNAME_NS:
 				EnterOuterAlt(_localctx, 3);
 				{
-				State = 2083; _localctx._PNAME_NS = Match(PNAME_NS);
+				State = 2084; _localctx._PNAME_NS = Match(PNAME_NS);
 				_localctx.value = q.prolog.GetUriFromPrefixedNamespace((_localctx._PNAME_NS!=null?_localctx._PNAME_NS.Text:null)); 
 				}
 				break;
@@ -11145,19 +11146,19 @@ public partial class sparq11lTranslatorParser : Parser {
 		BlankNodeContext _localctx = new BlankNodeContext(_ctx, State);
 		EnterRule(_localctx, 256, RULE_blankNode);
 		try {
-			State = 2091;
+			State = 2092;
 			switch (_input.La(1)) {
 			case BLANK_NODE_LABEL:
 				EnterOuterAlt(_localctx, 1);
 				{
-				State = 2087; _localctx._BLANK_NODE_LABEL = Match(BLANK_NODE_LABEL);
+				State = 2088; _localctx._BLANK_NODE_LABEL = Match(BLANK_NODE_LABEL);
 				 _localctx.value =  q.CreateBlankNode((_localctx._BLANK_NODE_LABEL!=null?_localctx._BLANK_NODE_LABEL.Text:null)); 
 				}
 				break;
 			case ANON:
 				EnterOuterAlt(_localctx, 2);
 				{
-				State = 2089; Match(ANON);
+				State = 2090; Match(ANON);
 				  _localctx.value =  q.CreateBlankNode(); 
 				}
 				break;
@@ -11177,7 +11178,7 @@ public partial class sparq11lTranslatorParser : Parser {
 	}
 
 	public static readonly string _serializedATN =
-		"\x3\xAF6F\x8320\x479D\xB75C\x4880\x1605\x191C\xAB37\x3\xB0\x830\x4\x2"+
+		"\x3\xAF6F\x8320\x479D\xB75C\x4880\x1605\x191C\xAB37\x3\xB0\x831\x4\x2"+
 		"\t\x2\x4\x3\t\x3\x4\x4\t\x4\x4\x5\t\x5\x4\x6\t\x6\x4\a\t\a\x4\b\t\b\x4"+
 		"\t\t\t\x4\n\t\n\x4\v\t\v\x4\f\t\f\x4\r\t\r\x4\xE\t\xE\x4\xF\t\xF\x4\x10"+
 		"\t\x10\x4\x11\t\x11\x4\x12\t\x12\x4\x13\t\x13\x4\x14\t\x14\x4\x15\t\x15"+
@@ -11320,39 +11321,39 @@ public partial class sparq11lTranslatorParser : Parser {
 		"\x5q\x74A\nq\x3r\x3r\x3r\x3r\x3r\x3r\x3r\x3r\x3r\x3r\x3r\x5r\x757\nr\x3"+
 		"r\x3r\x3r\x3s\x3s\x3s\x3s\x3s\x3s\x3s\x3s\x3s\x3s\x3s\x3s\x5s\x768\ns"+
 		"\x3s\x3s\x3t\x3t\x3t\x3t\x3t\x3t\x3t\x3t\x3t\x3t\x3t\x3t\x3t\x3t\x3t\x5"+
-		"t\x77B\nt\x3t\x3t\x3u\x3u\x3u\x3u\x3v\x3v\x3v\x3v\x3v\x3w\x3w\x3w\x3w"+
-		"\x3w\x5w\x78D\nw\x3w\x3w\x3w\x3w\x3w\x5w\x794\nw\x3w\x3w\x3w\x3w\x3w\x3"+
-		"w\x5w\x79C\nw\x3w\x3w\x3w\x3w\x3w\x3w\x3w\x3w\x3w\x5w\x7A7\nw\x3w\x3w"+
-		"\x3w\x3w\x3w\x3w\x3w\x3w\x3w\x5w\x7B2\nw\x3w\x3w\x3w\x3w\x3w\x3w\x3w\x3"+
-		"w\x3w\x5w\x7BD\nw\x3w\x3w\x3w\x3w\x3w\x3w\x3w\x3w\x3w\x5w\x7C8\nw\x3w"+
-		"\x3w\x3w\x3w\x3w\x3w\x3w\x3w\x3w\x5w\x7D3\nw\x3w\x3w\x3w\x3w\x3w\x3w\x3"+
-		"w\x3w\x5w\x7DD\nw\x3w\x3w\x5w\x7E1\nw\x3x\x3x\x3x\x3x\x3x\x3x\x3x\x3x"+
-		"\x3x\x3x\x3x\x3x\x5x\x7EF\nx\x3y\x3y\x3y\x3y\x3y\x3y\x3y\x3y\x3y\x5y\x7FA"+
-		"\ny\x3z\x3z\x3z\x3z\x3z\x3z\x5z\x802\nz\x3{\x3{\x3{\x3{\x3{\x3{\x5{\x80A"+
-		"\n{\x3|\x3|\x3|\x3|\x3|\x3|\x5|\x812\n|\x3}\x3}\x3}\x3~\x3~\x3~\x3~\x5"+
-		"~\x81B\n~\x3\x7F\x3\x7F\x3\x80\x3\x80\x3\x80\x3\x81\x3\x81\x3\x81\x3\x81"+
-		"\x3\x81\x3\x81\x5\x81\x828\n\x81\x3\x82\x3\x82\x3\x82\x3\x82\x5\x82\x82E"+
-		"\n\x82\x3\x82\x2\x2\x2\x83\x2\x2\x4\x2\x6\x2\b\x2\n\x2\f\x2\xE\x2\x10"+
-		"\x2\x12\x2\x14\x2\x16\x2\x18\x2\x1A\x2\x1C\x2\x1E\x2 \x2\"\x2$\x2&\x2"+
-		"(\x2*\x2,\x2.\x2\x30\x2\x32\x2\x34\x2\x36\x2\x38\x2:\x2<\x2>\x2@\x2\x42"+
-		"\x2\x44\x2\x46\x2H\x2J\x2L\x2N\x2P\x2R\x2T\x2V\x2X\x2Z\x2\\\x2^\x2`\x2"+
-		"\x62\x2\x64\x2\x66\x2h\x2j\x2l\x2n\x2p\x2r\x2t\x2v\x2x\x2z\x2|\x2~\x2"+
-		"\x80\x2\x82\x2\x84\x2\x86\x2\x88\x2\x8A\x2\x8C\x2\x8E\x2\x90\x2\x92\x2"+
-		"\x94\x2\x96\x2\x98\x2\x9A\x2\x9C\x2\x9E\x2\xA0\x2\xA2\x2\xA4\x2\xA6\x2"+
-		"\xA8\x2\xAA\x2\xAC\x2\xAE\x2\xB0\x2\xB2\x2\xB4\x2\xB6\x2\xB8\x2\xBA\x2"+
-		"\xBC\x2\xBE\x2\xC0\x2\xC2\x2\xC4\x2\xC6\x2\xC8\x2\xCA\x2\xCC\x2\xCE\x2"+
-		"\xD0\x2\xD2\x2\xD4\x2\xD6\x2\xD8\x2\xDA\x2\xDC\x2\xDE\x2\xE0\x2\xE2\x2"+
-		"\xE4\x2\xE6\x2\xE8\x2\xEA\x2\xEC\x2\xEE\x2\xF0\x2\xF2\x2\xF4\x2\xF6\x2"+
-		"\xF8\x2\xFA\x2\xFC\x2\xFE\x2\x100\x2\x102\x2\x2\x4\x3\x2\x8A\x8B\x3\x2"+
-		"\x97\x9A\x8C1\x2\x11A\x3\x2\x2\x2\x4\x120\x3\x2\x2\x2\x6\x123\x3\x2\x2"+
-		"\x2\b\x127\x3\x2\x2\x2\n\x12C\x3\x2\x2\x2\f\x139\x3\x2\x2\x2\xE\x140\x3"+
-		"\x2\x2\x2\x10\x15A\x3\x2\x2\x2\x12\x17A\x3\x2\x2\x2\x14\x195\x3\x2\x2"+
-		"\x2\x16\x1A1\x3\x2\x2\x2\x18\x1A6\x3\x2\x2\x2\x1A\x1A9\x3\x2\x2\x2\x1C"+
-		"\x1AD\x3\x2\x2\x2\x1E\x1B1\x3\x2\x2\x2 \x1B6\x3\x2\x2\x2\"\x1CB\x3\x2"+
-		"\x2\x2$\x1E9\x3\x2\x2\x2&\x1EB\x3\x2\x2\x2(\x1F4\x3\x2\x2\x2*\x1F7\x3"+
-		"\x2\x2\x2,\x216\x3\x2\x2\x2.\x218\x3\x2\x2\x2\x30\x229\x3\x2\x2\x2\x32"+
-		"\x22D\x3\x2\x2\x2\x34\x231\x3\x2\x2\x2\x36\x238\x3\x2\x2\x2\x38\x23A\x3"+
-		"\x2\x2\x2:\x268\x3\x2\x2\x2<\x26A\x3\x2\x2\x2>\x278\x3\x2\x2\x2@\x281"+
+		"t\x77B\nt\x3t\x3t\x3t\x3u\x3u\x3u\x3u\x3v\x3v\x3v\x3v\x3v\x3w\x3w\x3w"+
+		"\x3w\x3w\x5w\x78E\nw\x3w\x3w\x3w\x3w\x3w\x5w\x795\nw\x3w\x3w\x3w\x3w\x3"+
+		"w\x3w\x5w\x79D\nw\x3w\x3w\x3w\x3w\x3w\x3w\x3w\x3w\x3w\x5w\x7A8\nw\x3w"+
+		"\x3w\x3w\x3w\x3w\x3w\x3w\x3w\x3w\x5w\x7B3\nw\x3w\x3w\x3w\x3w\x3w\x3w\x3"+
+		"w\x3w\x3w\x5w\x7BE\nw\x3w\x3w\x3w\x3w\x3w\x3w\x3w\x3w\x3w\x5w\x7C9\nw"+
+		"\x3w\x3w\x3w\x3w\x3w\x3w\x3w\x3w\x3w\x5w\x7D4\nw\x3w\x3w\x3w\x3w\x3w\x3"+
+		"w\x3w\x3w\x5w\x7DE\nw\x3w\x3w\x5w\x7E2\nw\x3x\x3x\x3x\x3x\x3x\x3x\x3x"+
+		"\x3x\x3x\x3x\x3x\x3x\x5x\x7F0\nx\x3y\x3y\x3y\x3y\x3y\x3y\x3y\x3y\x3y\x5"+
+		"y\x7FB\ny\x3z\x3z\x3z\x3z\x3z\x3z\x5z\x803\nz\x3{\x3{\x3{\x3{\x3{\x3{"+
+		"\x5{\x80B\n{\x3|\x3|\x3|\x3|\x3|\x3|\x5|\x813\n|\x3}\x3}\x3}\x3~\x3~\x3"+
+		"~\x3~\x5~\x81C\n~\x3\x7F\x3\x7F\x3\x80\x3\x80\x3\x80\x3\x81\x3\x81\x3"+
+		"\x81\x3\x81\x3\x81\x3\x81\x5\x81\x829\n\x81\x3\x82\x3\x82\x3\x82\x3\x82"+
+		"\x5\x82\x82F\n\x82\x3\x82\x2\x2\x2\x83\x2\x2\x4\x2\x6\x2\b\x2\n\x2\f\x2"+
+		"\xE\x2\x10\x2\x12\x2\x14\x2\x16\x2\x18\x2\x1A\x2\x1C\x2\x1E\x2 \x2\"\x2"+
+		"$\x2&\x2(\x2*\x2,\x2.\x2\x30\x2\x32\x2\x34\x2\x36\x2\x38\x2:\x2<\x2>\x2"+
+		"@\x2\x42\x2\x44\x2\x46\x2H\x2J\x2L\x2N\x2P\x2R\x2T\x2V\x2X\x2Z\x2\\\x2"+
+		"^\x2`\x2\x62\x2\x64\x2\x66\x2h\x2j\x2l\x2n\x2p\x2r\x2t\x2v\x2x\x2z\x2"+
+		"|\x2~\x2\x80\x2\x82\x2\x84\x2\x86\x2\x88\x2\x8A\x2\x8C\x2\x8E\x2\x90\x2"+
+		"\x92\x2\x94\x2\x96\x2\x98\x2\x9A\x2\x9C\x2\x9E\x2\xA0\x2\xA2\x2\xA4\x2"+
+		"\xA6\x2\xA8\x2\xAA\x2\xAC\x2\xAE\x2\xB0\x2\xB2\x2\xB4\x2\xB6\x2\xB8\x2"+
+		"\xBA\x2\xBC\x2\xBE\x2\xC0\x2\xC2\x2\xC4\x2\xC6\x2\xC8\x2\xCA\x2\xCC\x2"+
+		"\xCE\x2\xD0\x2\xD2\x2\xD4\x2\xD6\x2\xD8\x2\xDA\x2\xDC\x2\xDE\x2\xE0\x2"+
+		"\xE2\x2\xE4\x2\xE6\x2\xE8\x2\xEA\x2\xEC\x2\xEE\x2\xF0\x2\xF2\x2\xF4\x2"+
+		"\xF6\x2\xF8\x2\xFA\x2\xFC\x2\xFE\x2\x100\x2\x102\x2\x2\x4\x3\x2\x8A\x8B"+
+		"\x3\x2\x97\x9A\x8C2\x2\x11A\x3\x2\x2\x2\x4\x120\x3\x2\x2\x2\x6\x123\x3"+
+		"\x2\x2\x2\b\x127\x3\x2\x2\x2\n\x12C\x3\x2\x2\x2\f\x139\x3\x2\x2\x2\xE"+
+		"\x140\x3\x2\x2\x2\x10\x15A\x3\x2\x2\x2\x12\x17A\x3\x2\x2\x2\x14\x195\x3"+
+		"\x2\x2\x2\x16\x1A1\x3\x2\x2\x2\x18\x1A6\x3\x2\x2\x2\x1A\x1A9\x3\x2\x2"+
+		"\x2\x1C\x1AD\x3\x2\x2\x2\x1E\x1B1\x3\x2\x2\x2 \x1B6\x3\x2\x2\x2\"\x1CB"+
+		"\x3\x2\x2\x2$\x1E9\x3\x2\x2\x2&\x1EB\x3\x2\x2\x2(\x1F4\x3\x2\x2\x2*\x1F7"+
+		"\x3\x2\x2\x2,\x216\x3\x2\x2\x2.\x218\x3\x2\x2\x2\x30\x229\x3\x2\x2\x2"+
+		"\x32\x22D\x3\x2\x2\x2\x34\x231\x3\x2\x2\x2\x36\x238\x3\x2\x2\x2\x38\x23A"+
+		"\x3\x2\x2\x2:\x268\x3\x2\x2\x2<\x26A\x3\x2\x2\x2>\x278\x3\x2\x2\x2@\x281"+
 		"\x3\x2\x2\x2\x42\x28A\x3\x2\x2\x2\x44\x293\x3\x2\x2\x2\x46\x29E\x3\x2"+
 		"\x2\x2H\x2A9\x3\x2\x2\x2J\x2B4\x3\x2\x2\x2L\x2B9\x3\x2\x2\x2N\x2BE\x3"+
 		"\x2\x2\x2P\x2C3\x3\x2\x2\x2R\x2E2\x3\x2\x2\x2T\x2E6\x3\x2\x2\x2V\x2EA"+
@@ -11377,11 +11378,11 @@ public partial class sparq11lTranslatorParser : Parser {
 		"\x2\xD4\x57B\x3\x2\x2\x2\xD6\x5A0\x3\x2\x2\x2\xD8\x5C7\x3\x2\x2\x2\xDA"+
 		"\x5E5\x3\x2\x2\x2\xDC\x600\x3\x2\x2\x2\xDE\x602\x3\x2\x2\x2\xE0\x749\x3"+
 		"\x2\x2\x2\xE2\x74B\x3\x2\x2\x2\xE4\x75B\x3\x2\x2\x2\xE6\x76B\x3\x2\x2"+
-		"\x2\xE8\x77E\x3\x2\x2\x2\xEA\x782\x3\x2\x2\x2\xEC\x7E0\x3\x2\x2\x2\xEE"+
-		"\x7EE\x3\x2\x2\x2\xF0\x7F9\x3\x2\x2\x2\xF2\x801\x3\x2\x2\x2\xF4\x809\x3"+
-		"\x2\x2\x2\xF6\x811\x3\x2\x2\x2\xF8\x813\x3\x2\x2\x2\xFA\x81A\x3\x2\x2"+
-		"\x2\xFC\x81C\x3\x2\x2\x2\xFE\x81E\x3\x2\x2\x2\x100\x827\x3\x2\x2\x2\x102"+
-		"\x82D\x3\x2\x2\x2\x104\x105\x5\x4\x3\x2\x105\x112\b\x2\x1\x2\x106\x107"+
+		"\x2\xE8\x77F\x3\x2\x2\x2\xEA\x783\x3\x2\x2\x2\xEC\x7E1\x3\x2\x2\x2\xEE"+
+		"\x7EF\x3\x2\x2\x2\xF0\x7FA\x3\x2\x2\x2\xF2\x802\x3\x2\x2\x2\xF4\x80A\x3"+
+		"\x2\x2\x2\xF6\x812\x3\x2\x2\x2\xF8\x814\x3\x2\x2\x2\xFA\x81B\x3\x2\x2"+
+		"\x2\xFC\x81D\x3\x2\x2\x2\xFE\x81F\x3\x2\x2\x2\x100\x828\x3\x2\x2\x2\x102"+
+		"\x82E\x3\x2\x2\x2\x104\x105\x5\x4\x3\x2\x105\x112\b\x2\x1\x2\x106\x107"+
 		"\x5\n\x6\x2\x107\x108\b\x2\x1\x2\x108\x113\x3\x2\x2\x2\x109\x10A\x5\x10"+
 		"\t\x2\x10A\x10B\b\x2\x1\x2\x10B\x113\x3\x2\x2\x2\x10C\x10D\x5\x12\n\x2"+
 		"\x10D\x10E\b\x2\x1\x2\x10E\x113\x3\x2\x2\x2\x10F\x110\x5\x14\v\x2\x110"+
@@ -11954,81 +11955,81 @@ public partial class sparq11lTranslatorParser : Parser {
 		"\x3\x2\x2\x771\x772\x5\xD0i\x2\x772\x773\bt\x1\x2\x773\x774\a\x3\x2\x2"+
 		"\x774\x775\x5\xD0i\x2\x775\x77A\bt\x1\x2\x776\x777\a\x3\x2\x2\x777\x778"+
 		"\x5\xD0i\x2\x778\x779\bt\x1\x2\x779\x77B\x3\x2\x2\x2\x77A\x776\x3\x2\x2"+
-		"\x2\x77A\x77B\x3\x2\x2\x2\x77B\x77C\x3\x2\x2\x2\x77C\x77D\a\x9E\x2\x2"+
-		"\x77D\xE7\x3\x2\x2\x2\x77E\x77F\a|\x2\x2\x77F\x780\x5h\x35\x2\x780\x781"+
-		"\bu\x1\x2\x781\xE9\x3\x2\x2\x2\x782\x783\a:\x2\x2\x783\x784\a|\x2\x2\x784"+
-		"\x785\x5h\x35\x2\x785\x786\bv\x1\x2\x786\xEB\x3\x2\x2\x2\x787\x788\a}"+
-		"\x2\x2\x788\x789\bw\x1\x2\x789\x78C\a\x9D\x2\x2\x78A\x78B\a,\x2\x2\x78B"+
-		"\x78D\bw\x1\x2\x78C\x78A\x3\x2\x2\x2\x78C\x78D\x3\x2\x2\x2\x78D\x793\x3"+
-		"\x2\x2\x2\x78E\x78F\a\x4\x2\x2\x78F\x794\bw\x1\x2\x790\x791\x5\xD0i\x2"+
-		"\x791\x792\bw\x1\x2\x792\x794\x3\x2\x2\x2\x793\x78E\x3\x2\x2\x2\x793\x790"+
-		"\x3\x2\x2\x2\x794\x795\x3\x2\x2\x2\x795\x7E1\a\x9E\x2\x2\x796\x797\a~"+
-		"\x2\x2\x797\x798\bw\x1\x2\x798\x79B\a\x9D\x2\x2\x799\x79A\a,\x2\x2\x79A"+
-		"\x79C\bw\x1\x2\x79B\x799\x3\x2\x2\x2\x79B\x79C\x3\x2\x2\x2\x79C\x79D\x3"+
-		"\x2\x2\x2\x79D\x79E\x5\xD0i\x2\x79E\x79F\bw\x1\x2\x79F\x7A0\a\x9E\x2\x2"+
-		"\x7A0\x7E1\x3\x2\x2\x2\x7A1\x7A2\a\x7F\x2\x2\x7A2\x7A3\bw\x1\x2\x7A3\x7A6"+
-		"\a\x9D\x2\x2\x7A4\x7A5\a,\x2\x2\x7A5\x7A7\bw\x1\x2\x7A6\x7A4\x3\x2\x2"+
-		"\x2\x7A6\x7A7\x3\x2\x2\x2\x7A7\x7A8\x3\x2\x2\x2\x7A8\x7A9\x5\xD0i\x2\x7A9"+
-		"\x7AA\bw\x1\x2\x7AA\x7AB\a\x9E\x2\x2\x7AB\x7E1\x3\x2\x2\x2\x7AC\x7AD\a"+
-		"\x80\x2\x2\x7AD\x7AE\bw\x1\x2\x7AE\x7B1\a\x9D\x2\x2\x7AF\x7B0\a,\x2\x2"+
-		"\x7B0\x7B2\bw\x1\x2\x7B1\x7AF\x3\x2\x2\x2\x7B1\x7B2\x3\x2\x2\x2\x7B2\x7B3"+
-		"\x3\x2\x2\x2\x7B3\x7B4\x5\xD0i\x2\x7B4\x7B5\bw\x1\x2\x7B5\x7B6\a\x9E\x2"+
-		"\x2\x7B6\x7E1\x3\x2\x2\x2\x7B7\x7B8\a\x81\x2\x2\x7B8\x7B9\bw\x1\x2\x7B9"+
-		"\x7BC\a\x9D\x2\x2\x7BA\x7BB\a,\x2\x2\x7BB\x7BD\bw\x1\x2\x7BC\x7BA\x3\x2"+
-		"\x2\x2\x7BC\x7BD\x3\x2\x2\x2\x7BD\x7BE\x3\x2\x2\x2\x7BE\x7BF\x5\xD0i\x2"+
-		"\x7BF\x7C0\bw\x1\x2\x7C0\x7C1\a\x9E\x2\x2\x7C1\x7E1\x3\x2\x2\x2\x7C2\x7C3"+
-		"\a\x82\x2\x2\x7C3\x7C4\bw\x1\x2\x7C4\x7C7\a\x9D\x2\x2\x7C5\x7C6\a,\x2"+
-		"\x2\x7C6\x7C8\bw\x1\x2\x7C7\x7C5\x3\x2\x2\x2\x7C7\x7C8\x3\x2\x2\x2\x7C8"+
-		"\x7C9\x3\x2\x2\x2\x7C9\x7CA\x5\xD0i\x2\x7CA\x7CB\bw\x1\x2\x7CB\x7CC\a"+
-		"\x9E\x2\x2\x7CC\x7E1\x3\x2\x2\x2\x7CD\x7CE\a\x83\x2\x2\x7CE\x7CF\bw\x1"+
-		"\x2\x7CF\x7D2\a\x9D\x2\x2\x7D0\x7D1\a,\x2\x2\x7D1\x7D3\bw\x1\x2\x7D2\x7D0"+
-		"\x3\x2\x2\x2\x7D2\x7D3\x3\x2\x2\x2\x7D3\x7D4\x3\x2\x2\x2\x7D4\x7D5\x5"+
-		"\xD0i\x2\x7D5\x7DC\bw\x1\x2\x7D6\x7D7\a\x12\x2\x2\x7D7\x7D8\a\xB0\x2\x2"+
-		"\x7D8\x7D9\a\x11\x2\x2\x7D9\x7DA\x5\xFC\x7F\x2\x7DA\x7DB\bw\x1\x2\x7DB"+
-		"\x7DD\x3\x2\x2\x2\x7DC\x7D6\x3\x2\x2\x2\x7DC\x7DD\x3\x2\x2\x2\x7DD\x7DE"+
-		"\x3\x2\x2\x2\x7DE\x7DF\a\x9E\x2\x2\x7DF\x7E1\x3\x2\x2\x2\x7E0\x787\x3"+
-		"\x2\x2\x2\x7E0\x796\x3\x2\x2\x2\x7E0\x7A1\x3\x2\x2\x2\x7E0\x7AC\x3\x2"+
-		"\x2\x2\x7E0\x7B7\x3\x2\x2\x2\x7E0\x7C2\x3\x2\x2\x2\x7E0\x7CD\x3\x2\x2"+
-		"\x2\x7E1\xED\x3\x2\x2\x2\x7E2\x7E3\x5\xFC\x7F\x2\x7E3\x7E4\bx\x1\x2\x7E4"+
-		"\x7EF\x3\x2\x2\x2\x7E5\x7E6\x5\xFC\x7F\x2\x7E6\x7E7\a\x8C\x2\x2\x7E7\x7E8"+
-		"\bx\x1\x2\x7E8\x7EF\x3\x2\x2\x2\x7E9\x7EA\x5\xFC\x7F\x2\x7EA\x7EB\a\f"+
-		"\x2\x2\x7EB\x7EC\x5\x100\x81\x2\x7EC\x7ED\bx\x1\x2\x7ED\x7EF\x3\x2\x2"+
-		"\x2\x7EE\x7E2\x3\x2\x2\x2\x7EE\x7E5\x3\x2\x2\x2\x7EE\x7E9\x3\x2\x2\x2"+
-		"\x7EF\xEF\x3\x2\x2\x2\x7F0\x7F1\x5\xF2z\x2\x7F1\x7F2\by\x1\x2\x7F2\x7FA"+
-		"\x3\x2\x2\x2\x7F3\x7F4\x5\xF4{\x2\x7F4\x7F5\by\x1\x2\x7F5\x7FA\x3\x2\x2"+
-		"\x2\x7F6\x7F7\x5\xF6|\x2\x7F7\x7F8\by\x1\x2\x7F8\x7FA\x3\x2\x2\x2\x7F9"+
-		"\x7F0\x3\x2\x2\x2\x7F9\x7F3\x3\x2\x2\x2\x7F9\x7F6\x3\x2\x2\x2\x7FA\xF1"+
-		"\x3\x2\x2\x2\x7FB\x7FC\a\x8D\x2\x2\x7FC\x802\bz\x1\x2\x7FD\x7FE\a\x8E"+
-		"\x2\x2\x7FE\x802\bz\x1\x2\x7FF\x800\a\x8F\x2\x2\x800\x802\bz\x1\x2\x801"+
-		"\x7FB\x3\x2\x2\x2\x801\x7FD\x3\x2\x2\x2\x801\x7FF\x3\x2\x2\x2\x802\xF3"+
-		"\x3\x2\x2\x2\x803\x804\a\x90\x2\x2\x804\x80A\b{\x1\x2\x805\x806\a\x91"+
-		"\x2\x2\x806\x80A\b{\x1\x2\x807\x808\a\x92\x2\x2\x808\x80A\b{\x1\x2\x809"+
-		"\x803\x3\x2\x2\x2\x809\x805\x3\x2\x2\x2\x809\x807\x3\x2\x2\x2\x80A\xF5"+
-		"\x3\x2\x2\x2\x80B\x80C\a\x93\x2\x2\x80C\x812\b|\x1\x2\x80D\x80E\a\x94"+
-		"\x2\x2\x80E\x812\b|\x1\x2\x80F\x810\a\x95\x2\x2\x810\x812\b|\x1\x2\x811"+
-		"\x80B\x3\x2\x2\x2\x811\x80D\x3\x2\x2\x2\x811\x80F\x3\x2\x2\x2\x812\xF7"+
-		"\x3\x2\x2\x2\x813\x814\x5\xFA~\x2\x814\x815\b}\x1\x2\x815\xF9\x3\x2\x2"+
-		"\x2\x816\x817\a\x84\x2\x2\x817\x81B\b~\x1\x2\x818\x819\a\x85\x2\x2\x819"+
-		"\x81B\b~\x1\x2\x81A\x816\x3\x2\x2\x2\x81A\x818\x3\x2\x2\x2\x81B\xFB\x3"+
-		"\x2\x2\x2\x81C\x81D\t\x3\x2\x2\x81D\xFD\x3\x2\x2\x2\x81E\x81F\x5\x100"+
-		"\x81\x2\x81F\x820\b\x80\x1\x2\x820\xFF\x3\x2\x2\x2\x821\x822\a\x86\x2"+
-		"\x2\x822\x828\b\x81\x1\x2\x823\x824\a\x87\x2\x2\x824\x828\b\x81\x1\x2"+
-		"\x825\x826\a\x88\x2\x2\x826\x828\b\x81\x1\x2\x827\x821\x3\x2\x2\x2\x827"+
-		"\x823\x3\x2\x2\x2\x827\x825\x3\x2\x2\x2\x828\x101\x3\x2\x2\x2\x829\x82A"+
-		"\a\x89\x2\x2\x82A\x82E\b\x82\x1\x2\x82B\x82C\a\xA0\x2\x2\x82C\x82E\b\x82"+
-		"\x1\x2\x82D\x829\x3\x2\x2\x2\x82D\x82B\x3\x2\x2\x2\x82E\x103\x3\x2\x2"+
-		"\x2\xA0\x112\x11A\x11E\x120\x131\x146\x152\x154\x158\x160\x16A\x172\x178"+
-		"\x181\x185\x18A\x190\x19A\x1A4\x1B1\x1BA\x1BF\x1C4\x1C9\x1D3\x1E2\x1E9"+
-		"\x1F2\x1FF\x203\x214\x216\x21E\x225\x227\x238\x243\x245\x268\x26E\x276"+
-		"\x27C\x285\x28E\x297\x2A2\x2AD\x2C8\x2CF\x2D4\x2DA\x2DC\x2F2\x2F6\x2FB"+
-		"\x30A\x31A\x31F\x324\x328\x332\x33C\x33E\x347\x34F\x354\x359\x35D\x366"+
-		"\x368\x382\x392\x3AA\x3B4\x3C1\x3C5\x3CE\x3D4\x3D6\x3EC\x3FA\x40A\x415"+
-		"\x41F\x424\x430\x435\x43C\x446\x448\x451\x453\x45B\x45F\x467\x46E\x47A"+
-		"\x483\x48C\x49C\x49E\x4A6\x4AF\x4B1\x4B5\x4BD\x4CB\x4D6\x4E0\x4EA\x4FA"+
-		"\x508\x50B\x50E\x51B\x51D\x524\x531\x53B\x543\x54B\x563\x56D\x578\x59E"+
-		"\x5B1\x5BB\x5BD\x5C2\x5C4\x5D1\x5D3\x5E5\x5F2\x600\x63E\x749\x756\x767"+
-		"\x77A\x78C\x793\x79B\x7A6\x7B1\x7BC\x7C7\x7D2\x7DC\x7E0\x7EE\x7F9\x801"+
-		"\x809\x811\x81A\x827\x82D";
+		"\x2\x77A\x77B\x3\x2\x2\x2\x77B\x77C\x3\x2\x2\x2\x77C\x77D\bt\x1\x2\x77D"+
+		"\x77E\a\x9E\x2\x2\x77E\xE7\x3\x2\x2\x2\x77F\x780\a|\x2\x2\x780\x781\x5"+
+		"h\x35\x2\x781\x782\bu\x1\x2\x782\xE9\x3\x2\x2\x2\x783\x784\a:\x2\x2\x784"+
+		"\x785\a|\x2\x2\x785\x786\x5h\x35\x2\x786\x787\bv\x1\x2\x787\xEB\x3\x2"+
+		"\x2\x2\x788\x789\a}\x2\x2\x789\x78A\bw\x1\x2\x78A\x78D\a\x9D\x2\x2\x78B"+
+		"\x78C\a,\x2\x2\x78C\x78E\bw\x1\x2\x78D\x78B\x3\x2\x2\x2\x78D\x78E\x3\x2"+
+		"\x2\x2\x78E\x794\x3\x2\x2\x2\x78F\x790\a\x4\x2\x2\x790\x795\bw\x1\x2\x791"+
+		"\x792\x5\xD0i\x2\x792\x793\bw\x1\x2\x793\x795\x3\x2\x2\x2\x794\x78F\x3"+
+		"\x2\x2\x2\x794\x791\x3\x2\x2\x2\x795\x796\x3\x2\x2\x2\x796\x7E2\a\x9E"+
+		"\x2\x2\x797\x798\a~\x2\x2\x798\x799\bw\x1\x2\x799\x79C\a\x9D\x2\x2\x79A"+
+		"\x79B\a,\x2\x2\x79B\x79D\bw\x1\x2\x79C\x79A\x3\x2\x2\x2\x79C\x79D\x3\x2"+
+		"\x2\x2\x79D\x79E\x3\x2\x2\x2\x79E\x79F\x5\xD0i\x2\x79F\x7A0\bw\x1\x2\x7A0"+
+		"\x7A1\a\x9E\x2\x2\x7A1\x7E2\x3\x2\x2\x2\x7A2\x7A3\a\x7F\x2\x2\x7A3\x7A4"+
+		"\bw\x1\x2\x7A4\x7A7\a\x9D\x2\x2\x7A5\x7A6\a,\x2\x2\x7A6\x7A8\bw\x1\x2"+
+		"\x7A7\x7A5\x3\x2\x2\x2\x7A7\x7A8\x3\x2\x2\x2\x7A8\x7A9\x3\x2\x2\x2\x7A9"+
+		"\x7AA\x5\xD0i\x2\x7AA\x7AB\bw\x1\x2\x7AB\x7AC\a\x9E\x2\x2\x7AC\x7E2\x3"+
+		"\x2\x2\x2\x7AD\x7AE\a\x80\x2\x2\x7AE\x7AF\bw\x1\x2\x7AF\x7B2\a\x9D\x2"+
+		"\x2\x7B0\x7B1\a,\x2\x2\x7B1\x7B3\bw\x1\x2\x7B2\x7B0\x3\x2\x2\x2\x7B2\x7B3"+
+		"\x3\x2\x2\x2\x7B3\x7B4\x3\x2\x2\x2\x7B4\x7B5\x5\xD0i\x2\x7B5\x7B6\bw\x1"+
+		"\x2\x7B6\x7B7\a\x9E\x2\x2\x7B7\x7E2\x3\x2\x2\x2\x7B8\x7B9\a\x81\x2\x2"+
+		"\x7B9\x7BA\bw\x1\x2\x7BA\x7BD\a\x9D\x2\x2\x7BB\x7BC\a,\x2\x2\x7BC\x7BE"+
+		"\bw\x1\x2\x7BD\x7BB\x3\x2\x2\x2\x7BD\x7BE\x3\x2\x2\x2\x7BE\x7BF\x3\x2"+
+		"\x2\x2\x7BF\x7C0\x5\xD0i\x2\x7C0\x7C1\bw\x1\x2\x7C1\x7C2\a\x9E\x2\x2\x7C2"+
+		"\x7E2\x3\x2\x2\x2\x7C3\x7C4\a\x82\x2\x2\x7C4\x7C5\bw\x1\x2\x7C5\x7C8\a"+
+		"\x9D\x2\x2\x7C6\x7C7\a,\x2\x2\x7C7\x7C9\bw\x1\x2\x7C8\x7C6\x3\x2\x2\x2"+
+		"\x7C8\x7C9\x3\x2\x2\x2\x7C9\x7CA\x3\x2\x2\x2\x7CA\x7CB\x5\xD0i\x2\x7CB"+
+		"\x7CC\bw\x1\x2\x7CC\x7CD\a\x9E\x2\x2\x7CD\x7E2\x3\x2\x2\x2\x7CE\x7CF\a"+
+		"\x83\x2\x2\x7CF\x7D0\bw\x1\x2\x7D0\x7D3\a\x9D\x2\x2\x7D1\x7D2\a,\x2\x2"+
+		"\x7D2\x7D4\bw\x1\x2\x7D3\x7D1\x3\x2\x2\x2\x7D3\x7D4\x3\x2\x2\x2\x7D4\x7D5"+
+		"\x3\x2\x2\x2\x7D5\x7D6\x5\xD0i\x2\x7D6\x7DD\bw\x1\x2\x7D7\x7D8\a\x12\x2"+
+		"\x2\x7D8\x7D9\a\xB0\x2\x2\x7D9\x7DA\a\x11\x2\x2\x7DA\x7DB\x5\xFC\x7F\x2"+
+		"\x7DB\x7DC\bw\x1\x2\x7DC\x7DE\x3\x2\x2\x2\x7DD\x7D7\x3\x2\x2\x2\x7DD\x7DE"+
+		"\x3\x2\x2\x2\x7DE\x7DF\x3\x2\x2\x2\x7DF\x7E0\a\x9E\x2\x2\x7E0\x7E2\x3"+
+		"\x2\x2\x2\x7E1\x788\x3\x2\x2\x2\x7E1\x797\x3\x2\x2\x2\x7E1\x7A2\x3\x2"+
+		"\x2\x2\x7E1\x7AD\x3\x2\x2\x2\x7E1\x7B8\x3\x2\x2\x2\x7E1\x7C3\x3\x2\x2"+
+		"\x2\x7E1\x7CE\x3\x2\x2\x2\x7E2\xED\x3\x2\x2\x2\x7E3\x7E4\x5\xFC\x7F\x2"+
+		"\x7E4\x7E5\bx\x1\x2\x7E5\x7F0\x3\x2\x2\x2\x7E6\x7E7\x5\xFC\x7F\x2\x7E7"+
+		"\x7E8\a\x8C\x2\x2\x7E8\x7E9\bx\x1\x2\x7E9\x7F0\x3\x2\x2\x2\x7EA\x7EB\x5"+
+		"\xFC\x7F\x2\x7EB\x7EC\a\f\x2\x2\x7EC\x7ED\x5\x100\x81\x2\x7ED\x7EE\bx"+
+		"\x1\x2\x7EE\x7F0\x3\x2\x2\x2\x7EF\x7E3\x3\x2\x2\x2\x7EF\x7E6\x3\x2\x2"+
+		"\x2\x7EF\x7EA\x3\x2\x2\x2\x7F0\xEF\x3\x2\x2\x2\x7F1\x7F2\x5\xF2z\x2\x7F2"+
+		"\x7F3\by\x1\x2\x7F3\x7FB\x3\x2\x2\x2\x7F4\x7F5\x5\xF4{\x2\x7F5\x7F6\b"+
+		"y\x1\x2\x7F6\x7FB\x3\x2\x2\x2\x7F7\x7F8\x5\xF6|\x2\x7F8\x7F9\by\x1\x2"+
+		"\x7F9\x7FB\x3\x2\x2\x2\x7FA\x7F1\x3\x2\x2\x2\x7FA\x7F4\x3\x2\x2\x2\x7FA"+
+		"\x7F7\x3\x2\x2\x2\x7FB\xF1\x3\x2\x2\x2\x7FC\x7FD\a\x8D\x2\x2\x7FD\x803"+
+		"\bz\x1\x2\x7FE\x7FF\a\x8E\x2\x2\x7FF\x803\bz\x1\x2\x800\x801\a\x8F\x2"+
+		"\x2\x801\x803\bz\x1\x2\x802\x7FC\x3\x2\x2\x2\x802\x7FE\x3\x2\x2\x2\x802"+
+		"\x800\x3\x2\x2\x2\x803\xF3\x3\x2\x2\x2\x804\x805\a\x90\x2\x2\x805\x80B"+
+		"\b{\x1\x2\x806\x807\a\x91\x2\x2\x807\x80B\b{\x1\x2\x808\x809\a\x92\x2"+
+		"\x2\x809\x80B\b{\x1\x2\x80A\x804\x3\x2\x2\x2\x80A\x806\x3\x2\x2\x2\x80A"+
+		"\x808\x3\x2\x2\x2\x80B\xF5\x3\x2\x2\x2\x80C\x80D\a\x93\x2\x2\x80D\x813"+
+		"\b|\x1\x2\x80E\x80F\a\x94\x2\x2\x80F\x813\b|\x1\x2\x810\x811\a\x95\x2"+
+		"\x2\x811\x813\b|\x1\x2\x812\x80C\x3\x2\x2\x2\x812\x80E\x3\x2\x2\x2\x812"+
+		"\x810\x3\x2\x2\x2\x813\xF7\x3\x2\x2\x2\x814\x815\x5\xFA~\x2\x815\x816"+
+		"\b}\x1\x2\x816\xF9\x3\x2\x2\x2\x817\x818\a\x84\x2\x2\x818\x81C\b~\x1\x2"+
+		"\x819\x81A\a\x85\x2\x2\x81A\x81C\b~\x1\x2\x81B\x817\x3\x2\x2\x2\x81B\x819"+
+		"\x3\x2\x2\x2\x81C\xFB\x3\x2\x2\x2\x81D\x81E\t\x3\x2\x2\x81E\xFD\x3\x2"+
+		"\x2\x2\x81F\x820\x5\x100\x81\x2\x820\x821\b\x80\x1\x2\x821\xFF\x3\x2\x2"+
+		"\x2\x822\x823\a\x86\x2\x2\x823\x829\b\x81\x1\x2\x824\x825\a\x87\x2\x2"+
+		"\x825\x829\b\x81\x1\x2\x826\x827\a\x88\x2\x2\x827\x829\b\x81\x1\x2\x828"+
+		"\x822\x3\x2\x2\x2\x828\x824\x3\x2\x2\x2\x828\x826\x3\x2\x2\x2\x829\x101"+
+		"\x3\x2\x2\x2\x82A\x82B\a\x89\x2\x2\x82B\x82F\b\x82\x1\x2\x82C\x82D\a\xA0"+
+		"\x2\x2\x82D\x82F\b\x82\x1\x2\x82E\x82A\x3\x2\x2\x2\x82E\x82C\x3\x2\x2"+
+		"\x2\x82F\x103\x3\x2\x2\x2\xA0\x112\x11A\x11E\x120\x131\x146\x152\x154"+
+		"\x158\x160\x16A\x172\x178\x181\x185\x18A\x190\x19A\x1A4\x1B1\x1BA\x1BF"+
+		"\x1C4\x1C9\x1D3\x1E2\x1E9\x1F2\x1FF\x203\x214\x216\x21E\x225\x227\x238"+
+		"\x243\x245\x268\x26E\x276\x27C\x285\x28E\x297\x2A2\x2AD\x2C8\x2CF\x2D4"+
+		"\x2DA\x2DC\x2F2\x2F6\x2FB\x30A\x31A\x31F\x324\x328\x332\x33C\x33E\x347"+
+		"\x34F\x354\x359\x35D\x366\x368\x382\x392\x3AA\x3B4\x3C1\x3C5\x3CE\x3D4"+
+		"\x3D6\x3EC\x3FA\x40A\x415\x41F\x424\x430\x435\x43C\x446\x448\x451\x453"+
+		"\x45B\x45F\x467\x46E\x47A\x483\x48C\x49C\x49E\x4A6\x4AF\x4B1\x4B5\x4BD"+
+		"\x4CB\x4D6\x4E0\x4EA\x4FA\x508\x50B\x50E\x51B\x51D\x524\x531\x53B\x543"+
+		"\x54B\x563\x56D\x578\x59E\x5B1\x5BB\x5BD\x5C2\x5C4\x5D1\x5D3\x5E5\x5F2"+
+		"\x600\x63E\x749\x756\x767\x77A\x78D\x794\x79C\x7A7\x7B2\x7BD\x7C8\x7D3"+
+		"\x7DD\x7E1\x7EF\x7FA\x802\x80A\x812\x81B\x828\x82E";
 	public static readonly ATN _ATN =
 		new ATNDeserializer().Deserialize(_serializedATN.ToCharArray());
 }

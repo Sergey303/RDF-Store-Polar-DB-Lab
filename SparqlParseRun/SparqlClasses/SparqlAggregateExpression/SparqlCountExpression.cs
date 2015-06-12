@@ -8,25 +8,34 @@ namespace SparqlParseRun.SparqlClasses.SparqlAggregateExpression
     class SparqlCountExpression : SparqlAggregateExpression
     {
         public SparqlCountExpression() :base()
-        {
-            if(isAll)
-                TypedOperator = result =>
+        {          
+            Const=null;
+            if (IsDistinct)
+            {
+                Operator = result =>
                 {
-                    if (result is SpraqlGroupOfResults)
-                    {
-                        return new OV_int(((SpraqlGroupOfResults)result).Group.Count());
-                    }
+                    var groupOfResults = result as SparqlGroupOfResults;
+                    if (groupOfResults != null)
+                        return new OV_int(groupOfResults.Group.Count());
                     else throw new Exception();
                 };
+            }
             else
-            TypedOperator = result =>
             {
-                if (result is SpraqlGroupOfResults)
+                Operator = result =>
                 {
-                    return new OV_int(((SpraqlGroupOfResults)result).Group.Count());//sparqlResult => Expression.Func(sparqlResult)
-                }
-                else throw new Exception();
-            };
+                    var groupOfResults = result as SparqlGroupOfResults;
+                    if (groupOfResults != null)
+                        return new OV_int(groupOfResults.Group.Count());
+                    else throw new Exception();
+                };                                                 
+            }
+            TypedOperator = result => new OV_int(Operator(result));
+        }
+
+        protected override void Create()
+        {
+            throw new NotImplementedException();
         }
     }
 }

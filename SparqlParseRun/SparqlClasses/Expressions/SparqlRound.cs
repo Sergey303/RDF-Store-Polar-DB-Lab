@@ -3,18 +3,11 @@ using RDFCommon.OVns;
 
 namespace SparqlParseRun.SparqlClasses.Expressions
 {
-    class SparqlRound : SparqlExpression
+    internal class SparqlRound : SparqlUnaryExpression
     {
-        private SparqlExpression sparqlExpression;
-
-        public SparqlRound(SparqlExpression value)
+        public SparqlRound(SparqlExpression value) : base(o => Math.Round(o), value)
         {
 
-            IsAggragate = value.IsAggragate;
-            IsDistinct = value.IsDistinct;
-          
-            sparqlExpression = value;
-            TypedOperator = result => value.TypedOperator(result).Change(o => Math.Round(o));
         }
     }
 }

@@ -53,7 +53,7 @@ namespace SparqlParseRun
 
         internal IVariableNode CreateExpressionAsVariable(VariableNode variableNode, SparqlExpression sparqlExpression)
         {
-            return new SparqlExpressionAsVariable(variableNode, sparqlExpression, this);
+            return new SparqlExpressionAsVariable(variableNode, sparqlExpression);
         }
 
 

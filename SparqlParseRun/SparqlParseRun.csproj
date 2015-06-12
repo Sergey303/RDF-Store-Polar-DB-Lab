@@ -47,6 +47,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="NullableExt.cs" />
     <Compile Include="DataSet.cs" />
     <Compile Include="obj\Debug\sparq11lTranslatorBaseListener.cs" />
     <Compile Include="obj\Debug\sparq11lTranslatorBaseVisitor.cs" />
@@ -57,7 +58,8 @@
     <Compile Include="SparqlClasses\Expressions\SparqlBinaryExpression.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="SparqlClasses\Expressions\SparqlBoolExpression.cs" />
+    <Compile Include="SparqlClasses\Expressions\SparqlHashExpression.cs" />
+    <Compile Include="SparqlClasses\Expressions\SparqlInCollectionExpression.cs" />
     <Compile Include="SparqlClasses\Expressions\SparqlIriExpression.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -95,7 +97,7 @@
     <Compile Include="SparqlClasses\Query\Result\SparqlResult.cs" />
     <Compile Include="SparqlClasses\Query\Result\SparqlResultSet.cs" />
     <Compile Include="SparqlClasses\Query\Result\SparqlVariableBinding.cs" />
-    <Compile Include="SparqlClasses\Query\Result\SpraqlGroupOfResults.cs" />
+    <Compile Include="SparqlClasses\Query\Result\SparqlGroupOfResults.cs" />
     <Compile Include="SparqlClasses\Query\SparqlAsqQuery.cs" />
     <Compile Include="SparqlClasses\Query\SparqlConstructQuery.cs" />
     <Compile Include="SparqlClasses\Query\SparqlDescribeQuery.cs" />

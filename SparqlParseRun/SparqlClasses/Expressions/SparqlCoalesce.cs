@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using RDFCommon.OVns;
 using SparqlParseRun.SparqlClasses.GraphPattern.Triples.Node;
 
 namespace SparqlParseRun.SparqlClasses.Expressions
@@ -9,22 +10,40 @@ namespace SparqlParseRun.SparqlClasses.Expressions
     {
         public SparqlCoalesce(List<SparqlExpression> list)
         {
-            //todo
-                   IsAggragate = list.Any(value=> value.IsAggragate);
-            IsDistinct = list.Any(value=>  value.IsDistinct);
-            TypedOperator = result =>
-                    
+            if(list.Count==0) throw new Exception();
+          
+            
+            Const = list[0].Const;
+            AggregateLevel = list[0].AggregateLevel;
+            Operator = result =>
             {
-                foreach (var sparqlExpression in list)
+                foreach (SparqlExpression expression in list)
+                {
                     try
                     {
-                        var test = sparqlExpression.TypedOperator(result);
+                        if (expression.Const != null) return expression.Const.Content;
+                        return expression.Operator(result);
+                    }
+                    catch // (Exception e)
+                    {
+                        // Console.WriteLine(e.Message);
+                    }
+                }
+                throw new Exception("Coalesce ");
+            };
+            TypedOperator = result =>     
+            {
+                foreach (var expression in list)
+                    try
+                    {
+                        if (expression.Const != null) return expression.Const;
+                        var test = expression.TypedOperator(result);
                       //  if(test is SparqlUnDefinedNode) continue;
                         return test;
                     }
-                    catch (Exception e)
+                    catch// (Exception e)
                     {
-                        Console.WriteLine(e.Message);
+                       // Console.WriteLine(e.Message);
                     }
                 throw new Exception("Coalesce ");
             };

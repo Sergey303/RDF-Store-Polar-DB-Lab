@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 using RDFCommon.OVns;
 using SparqlParseRun.SparqlClasses.Expressions;
@@ -11,18 +13,44 @@ namespace SparqlParseRun.SparqlClasses.GraphPattern
     {
         public VariableNode variableNode;
         public SparqlExpression sparqlExpression;
-        private readonly RdfQuery11Translator q;
 
-        public SparqlExpressionAsVariable(VariableNode variableNode, SparqlExpression sparqlExpression, RdfQuery11Translator q)
+        public SparqlExpressionAsVariable(VariableNode variableNode, SparqlExpression sparqlExpression)
         {
             // TODO: Complete member initialization
             this.variableNode = variableNode;
             this.sparqlExpression = sparqlExpression;
-            this.q = q;
         }
 
         public IEnumerable<SparqlResult> Run(IEnumerable<SparqlResult> variableBindings)
         {
+            switch (sparqlExpression.AggregateLevel)
+            {
+                case SparqlExpression.VariableDependenceGroupLevel.Const:
+                    return variableBindings.Select(
+                        variableBinding =>
+                        {
+                            variableBinding.Add(variableNode, sparqlExpression.Const);
+                            return variableBinding;
+                        });
+                    break;
+                case SparqlExpression.VariableDependenceGroupLevel.UndependableFunc:
+                case SparqlExpression.VariableDependenceGroupLevel.SimpleVariable:
+                    return variableBindings.Select(
+                        variableBinding =>
+                        {
+                            variableBinding.Add(variableNode, sparqlExpression.Operator(variableBinding));
+                            return variableBinding;
+                        });
+                case SparqlExpression.VariableDependenceGroupLevel.Group:
+                    if (variableBindings is SparqlGroupsCollection)
+
+                else
+                    break;
+                case SparqlExpression.VariableDependenceGroupLevel.GroupOfGroups:
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
             return variableBindings.Select(
                 variableBinding =>
                 {
@@ -42,5 +70,23 @@ namespace SparqlParseRun.SparqlClasses.GraphPattern
       
     }
 
-    
+    public class SparqlGroupsCollection: IEnumerable<SparqlGroupOfResults>
+    {
+        public IEnumerable<SparqlGroupOfResults> groups;
+
+        public SparqlGroupsCollection(IEnumerable<SparqlGroupOfResults> groups)
+        {
+            this.groups = groups;
+        }
+
+        public IEnumerator<SparqlGroupOfResults> GetEnumerator()
+        {
+            return groups.GetEnumerator();
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
+        }
+    }
 }

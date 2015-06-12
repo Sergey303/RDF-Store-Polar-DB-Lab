@@ -6,18 +6,24 @@ namespace SparqlParseRun.SparqlClasses.Expressions
     class SparqlHours : SparqlExpression
     {
         public SparqlHours(SparqlExpression value)
+            : base(value.AggregateLevel)
         {
-            IsAggragate = value.IsAggragate;
-            IsDistinct = value.IsDistinct;
-            value.SetExprType(ExpressionTypeEnum.Date);
-            SetExprType(ObjectVariantEnum.Int);
-            TypedOperator = result =>
+            if (value.Const != null)
+                Const = new OV_int(GetHours(value.Const.Content));
+            else
             {
-                var f = value.TypedOperator(result).Content;
-                if (f is DateTimeOffset)
-                    return new OV_int(((DateTimeOffset)f).Hour);
-                throw new ArgumentException();
-            };
+                Operator = result => GetHours(value.Operator(result));
+                TypedOperator = result => new OV_int(Operator(result));
+            }
+        }
+
+        private int GetHours(dynamic o)
+        {
+            if (o is DateTime)
+                return ((DateTime)o).Hour;
+            if (o is DateTimeOffset)
+                return ((DateTimeOffset)o).Hour;
+            throw new ArgumentException();
         }
     }
 }

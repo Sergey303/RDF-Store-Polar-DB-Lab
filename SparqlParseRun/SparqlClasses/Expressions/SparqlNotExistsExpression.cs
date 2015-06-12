@@ -1,4 +1,6 @@
-﻿using SparqlParseRun.SparqlClasses.GraphPattern;
+﻿using System.Linq;
+using RDFCommon.OVns;
+using SparqlParseRun.SparqlClasses.GraphPattern;
 
 namespace SparqlParseRun.SparqlClasses
 {
@@ -10,8 +12,7 @@ namespace SparqlParseRun.SparqlClasses
         {
             // TODO: Complete member initialization
             //this.sparqlGraphPattern = sparqlGraphPattern;
-            var funcClone = FunkClone;
-            TypedOperator = result => funcClone(result).Change(o => !o);
+            Operator = variableBinding => !sparqlGraphPattern.Run(Enumerable.Repeat(variableBinding, 1)).Any(); 
         }
     }
 }

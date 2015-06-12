@@ -10,28 +10,24 @@ namespace SparqlParseRun.SparqlClasses.SparqlAggregateExpression
     public class SparqlGroupConstraint
     {
         public readonly Func<SparqlResult, ObjectVariants> Constrained;
-        public bool IsDistinct;
-
 
         public SparqlGroupConstraint(SparqlExpression sparqlExpression)
         {
             // TODO: Complete member initialization
             Constrained = sparqlExpression.TypedOperator;
-            IsDistinct = sparqlExpression.IsDistinct;
+           
         }
 
         public SparqlGroupConstraint(SparqlFunctionCall sparqlFunctionCall)
         {
             // TODO: Complete member initialization
             Constrained = sparqlFunctionCall.TypedOperator;
-            IsDistinct = sparqlFunctionCall.sparqlArgs.isDistinct;
+         
         }
 
         public SparqlGroupConstraint(VariableNode variableNode)
         {
-            // TODO: Complete member initialization
-            Variable = variableNode;
-            Constrained = (result => result[variableNode]);
+            Constrained = result => result[variableNode];
         }
 
         public VariableNode Variable { get; set; }
@@ -41,7 +37,7 @@ namespace SparqlParseRun.SparqlClasses.SparqlAggregateExpression
             // TODO: Complete member initialization
             Variable = sparqlExpressionAsVariable.variableNode;
             Constrained = sparqlExpressionAsVariable.RunExpressionCreateBind;
-            IsDistinct = sparqlExpressionAsVariable.sparqlExpression.IsDistinct;
+ 
         }
 
 
