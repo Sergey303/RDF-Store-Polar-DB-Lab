@@ -13,7 +13,8 @@ namespace SparqlParseRun.SparqlClasses.SparqlAggregateExpression
 
         public SparqlGroupConstraint(SparqlExpression sparqlExpression)
         {
-            // TODO: Complete member initialization
+            // TODO: Const
+
             Constrained = sparqlExpression.TypedOperator;
            
         }

@@ -15,22 +15,22 @@ namespace SparqlParseRun.SparqlClasses.SolutionModifier
             this.q = q;
         }
 
-        public IEnumerable<SparqlResult> Group(IEnumerable<SparqlResult> enumerable)
+        public IEnumerable<SparqlGroupOfResults> Group(IEnumerable<SparqlResult> enumerable)
         {
                if(Count==1)
                    if (this[0].Variable != null)
-                       return new SparqlGroupsCollection(enumerable.GroupBy(result => this[0].Constrained(result))
+                       return enumerable.GroupBy(result => this[0].Constrained(result))
                            .Select(grouping =>
-                               new SparqlGroupOfResults(this[0].Variable, grouping.Key, q) {Group = grouping}));
+                               new SparqlGroupOfResults(this[0].Variable, grouping.Key, q) {Group = grouping});
                    else
                        return
-                           new SparqlGroupsCollection(enumerable.GroupBy(result => this[0].Constrained(result))
-                               .Select(grouping => new SparqlGroupOfResults(q) {Group = grouping}));
+                           enumerable.GroupBy(result => this[0].Constrained(result))
+                               .Select(grouping => new SparqlGroupOfResults(q) {Group = grouping});
 
 
-            return new SparqlGroupsCollection(enumerable
+            return enumerable
                 .GroupBy(result =>this.Select(constraint => constraint.Constrained(result)).ToList(), new CollectionEqualityComparer())
-                .Select(grouping => new SparqlGroupOfResults(this.Select(constraint => constraint.Variable), grouping.Key, q) { Group = grouping }));
+                .Select(grouping => new SparqlGroupOfResults(this.Select(constraint => constraint.Variable), grouping.Key, q) { Group = grouping });
         }
     }
 }

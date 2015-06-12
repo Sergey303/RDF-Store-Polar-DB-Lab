@@ -13,12 +13,14 @@ namespace SparqlParseRun.SparqlClasses.GraphPattern
     {
         public VariableNode variableNode;
         public SparqlExpression sparqlExpression;
+        private readonly RdfQuery11Translator q;
 
-        public SparqlExpressionAsVariable(VariableNode variableNode, SparqlExpression sparqlExpression)
+        public SparqlExpressionAsVariable(VariableNode variableNode, SparqlExpression sparqlExpression, RdfQuery11Translator q)
         {
             // TODO: Complete member initialization
             this.variableNode = variableNode;
             this.sparqlExpression = sparqlExpression;
+            this.q = q;
         }
 
         public IEnumerable<SparqlResult> Run(IEnumerable<SparqlResult> variableBindings)
@@ -38,15 +40,14 @@ namespace SparqlParseRun.SparqlClasses.GraphPattern
                     return variableBindings.Select(
                         variableBinding =>
                         {
-                            variableBinding.Add(variableNode, sparqlExpression.Operator(variableBinding));
+                            variableBinding.Add(variableNode, sparqlExpression.TypedOperator(variableBinding));
                             return variableBinding;
                         });
                 case SparqlExpression.VariableDependenceGroupLevel.Group:
-                    if (variableBindings is SparqlGroupsCollection)
-
-                else
+                    sparqlExpression.TypedOperator(new SparqlGroupOfResults(q) {Group = variableBindings});
                     break;
                 case SparqlExpression.VariableDependenceGroupLevel.GroupOfGroups:
+                    throw new Exception("groping requested");
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();
@@ -55,6 +56,48 @@ namespace SparqlParseRun.SparqlClasses.GraphPattern
                 variableBinding =>
                 {
                     variableBinding.Add(variableNode,RunExpressionCreateBind(variableBinding));
+                    return variableBinding;
+                });
+        }
+        public IEnumerable<SparqlResult> Run4Grouped(IEnumerable<SparqlResult> variableBindings)
+        {
+            switch (sparqlExpression.AggregateLevel)
+            {
+                case SparqlExpression.VariableDependenceGroupLevel.Const:
+                    return variableBindings.Select(
+                        variableBinding =>
+                        {
+                            variableBinding.Add(variableNode, sparqlExpression.Const);
+                            return variableBinding;
+                        });
+                    break;
+                case SparqlExpression.VariableDependenceGroupLevel.UndependableFunc:
+                case SparqlExpression.VariableDependenceGroupLevel.SimpleVariable:
+                 
+                case SparqlExpression.VariableDependenceGroupLevel.Group:
+                    return RunAddVar(variableBindings);
+                    break;
+                case SparqlExpression.VariableDependenceGroupLevel.GroupOfGroups:
+                    var arr = variableBindings as SparqlResult[] ?? variableBindings.Select(result => result.Clone()).ToArray();
+                    var groupOfGroups = new SparqlGroupOfResults(q) {Group = arr};
+                    return arr.Select(variableBinding =>
+                    {
+                        variableBinding.Add(variableNode, sparqlExpression.TypedOperator(groupOfGroups));
+                        return variableBinding;
+                    });
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+           
+        }
+
+        public IEnumerable<SparqlResult> RunAddVar(IEnumerable<SparqlResult> variableBindings)
+        {
+            return variableBindings.Select(
+                variableBinding =>
+                {
+                    variableBinding.Add(variableNode, sparqlExpression.TypedOperator(variableBinding));
                     return variableBinding;
                 });
         }
@@ -70,23 +113,4 @@ namespace SparqlParseRun.SparqlClasses.GraphPattern
       
     }
 
-    public class SparqlGroupsCollection: IEnumerable<SparqlGroupOfResults>
-    {
-        public IEnumerable<SparqlGroupOfResults> groups;
-
-        public SparqlGroupsCollection(IEnumerable<SparqlGroupOfResults> groups)
-        {
-            this.groups = groups;
-        }
-
-        public IEnumerator<SparqlGroupOfResults> GetEnumerator()
-        {
-            return groups.GetEnumerator();
-        }
-
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return GetEnumerator();
-        }
-    }
 }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using SparqlParseRun.SparqlClasses.Expressions;
 using SparqlParseRun.SparqlClasses.GraphPattern;
 using SparqlParseRun.SparqlClasses.GraphPattern.Triples.Node;
 using SparqlParseRun.SparqlClasses.Query.Result;
@@ -12,6 +13,12 @@ namespace SparqlParseRun.SparqlClasses.Query
 
         private bool isAll;
         internal bool IsReduced;
+        private RdfQuery11Translator q;
+
+        public SparqlSelect(RdfQuery11Translator q)
+        {
+            this.q = q;
+        }
 
 
         internal bool IsDistinct { get; set; }
@@ -23,7 +30,7 @@ namespace SparqlParseRun.SparqlClasses.Query
         }
 
 
-        public IEnumerable<SparqlResult> Run(IEnumerable<SparqlResult> variableBindings, SparqlResultSet resultSet)
+        public IEnumerable<SparqlResult> Run(IEnumerable<SparqlResult> variableBindings, SparqlResultSet resultSet, bool isGrouped)
         {
             List<VariableNode> selected=null;
 
@@ -35,12 +42,65 @@ namespace SparqlParseRun.SparqlClasses.Query
             else
             {
                 selected = new List<VariableNode>();
+                var asExpressions = this.Select(varOrExpr => varOrExpr as SparqlExpressionAsVariable).ToArray();
+                if (isGrouped)
+                {
+                    if (asExpressions.All(exp => exp != null))
+                    {
+                        if (asExpressions.All(
+                            exp =>
+                                exp.sparqlExpression.AggregateLevel ==
+                                SparqlExpression.VariableDependenceGroupLevel.GroupOfGroups))
+
+                            return Enumerable.Range(0, 1).Select(i =>
+                            {
+                                var oneRowResult = new SparqlResult(q);
+                                foreach (var sparqlExpressionAsVariable in asExpressions)
+                                    oneRowResult.Add(sparqlExpressionAsVariable.RunExpressionCreateBind(
+                                        new SparqlGroupOfResults(q)
+                                        {
+                                            Group = variableBindings
+                                        }),
+                                        sparqlExpressionAsVariable.variableNode);
+                                return oneRowResult;
+                            });
+                    }
+                    else
+                    {
+                        //todo
+                    }
+                }
+                else
+                {
+                    if (asExpressions.All(exp => exp != null))
+                    {
+                        //if(asExpressions.All(exp=>exp.sparqlExpression.AggregateLevel==SparqlExpression.VariableDependenceGroupLevel.Const || exp.sparqlExpression.AggregateLevel==SparqlExpression.VariableDependenceGroupLevel.UndependableFunc))
+                        if (
+                            asExpressions.All(
+                                exp =>
+                                    exp.sparqlExpression.AggregateLevel ==
+                                    SparqlExpression.VariableDependenceGroupLevel.Group))
+
+                            return Enumerable.Range(0, 1).Select(i =>
+                            {
+                                var oneRowResult = new SparqlResult(q);
+                                foreach (var sparqlExpressionAsVariable in asExpressions)
+                                    oneRowResult.Add(sparqlExpressionAsVariable.RunExpressionCreateBind(
+                                        new SparqlGroupOfResults(q)
+                                        {
+                                            Group = variableBindings
+                                        }),
+                                        sparqlExpressionAsVariable.variableNode);
+                                return oneRowResult;
+                            });
+                    }
+                }
                 foreach (IVariableNode variable in this)
                 {
                     var expr = variable as SparqlExpressionAsVariable;
                     if (expr != null)
                     {
-                        variableBindings = expr.Run(variableBindings);
+                        variableBindings = isGrouped ? expr.Run4Grouped(variableBindings) : expr.Run(variableBindings);
                         selected.Add(expr.variableNode);
                     }
                     else selected.Add((VariableNode) variable);

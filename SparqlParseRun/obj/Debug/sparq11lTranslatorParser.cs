@@ -682,7 +682,7 @@ public partial class sparq11lTranslatorParser : Parser {
 			EnterOuterAlt(_localctx, 1);
 			{
 			State = 318; Match(SELECT);
-			_localctx.value = new SparqlSelect();
+			_localctx.value = new SparqlSelect(q);
 			State = 324;
 			switch (_input.La(1)) {
 			case DISTINCT:
@@ -1664,7 +1664,7 @@ public partial class sparq11lTranslatorParser : Parser {
 					{
 					State = 476; Match(AS);
 					State = 477; _localctx._var = var();
-					_localctx.value = new SparqlGroupConstraint(new SparqlExpressionAsVariable(_localctx._var.value, _localctx._expression.value, q));
+					_localctx.value = new SparqlGroupConstraint(q.CreateExpressionAsVariable(_localctx._var.value, _localctx._expression.value));
 					}
 				}
 
@@ -1947,7 +1947,7 @@ public partial class sparq11lTranslatorParser : Parser {
 					throw new NoViableAltException(this);
 				}
 				State = 515; _localctx._brackettedExpression = brackettedExpression();
-				_localctx.value =  new SparqlOrderCondition(_localctx._brackettedExpression.value, (_localctx.dir!=null?_localctx.dir.Text:null));
+				_localctx.value =  new SparqlOrderCondition(_localctx._brackettedExpression.value, (_localctx.dir!=null?_localctx.dir.Text:null), q);
 				}
 				}
 				break;
@@ -2025,7 +2025,7 @@ public partial class sparq11lTranslatorParser : Parser {
 				case BracketOpen:
 					{
 					State = 518; _localctx._brackettedExpression = brackettedExpression();
-					_localctx.value = new SparqlOrderCondition(_localctx._brackettedExpression.value);
+					_localctx.value = new SparqlOrderCondition(_localctx._brackettedExpression.value, q);
 					}
 					break;
 				case NOT:
@@ -2091,7 +2091,7 @@ public partial class sparq11lTranslatorParser : Parser {
 				case GROUP_CONCAT:
 					{
 					State = 521; _localctx._builtInCall = builtInCall();
-					_localctx.value = new SparqlOrderCondition(_localctx._builtInCall.value);
+					_localctx.value = new SparqlOrderCondition(_localctx._builtInCall.value,q);
 					}
 					break;
 				case IRIREF:
@@ -2099,14 +2099,14 @@ public partial class sparq11lTranslatorParser : Parser {
 				case PNAME_NS:
 					{
 					State = 524; _localctx._functionCall = functionCall();
-					_localctx.value = new SparqlOrderCondition(_localctx._functionCall.value);
+					_localctx.value = new SparqlOrderCondition(_localctx._functionCall.value,q);
 					}
 					break;
 				case VAR1:
 				case VAR2:
 					{
 					State = 527; _localctx._var = var();
-					_localctx.value = new SparqlOrderCondition(_localctx._var.value);
+					_localctx.value = new SparqlOrderCondition(_localctx._var.value,q);
 					}
 					break;
 				default:
@@ -4751,7 +4751,7 @@ public partial class sparq11lTranslatorParser : Parser {
 			State = 921; Match(AS);
 			State = 922; _localctx._var = var();
 			State = 923; Match(BracketClose);
-			_localctx.value = new SparqlExpressionAsVariable(_localctx._var.value, _localctx._expression.value,q);
+			_localctx.value = q.CreateExpressionAsVariable(_localctx._var.value, _localctx._expression.value);
 			}
 		}
 		catch (RecognitionException re) {

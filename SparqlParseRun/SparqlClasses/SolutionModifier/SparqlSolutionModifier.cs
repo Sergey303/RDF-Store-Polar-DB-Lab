@@ -17,10 +17,11 @@ namespace SparqlParseRun.SparqlClasses.SolutionModifier
 
         private Func<IEnumerable<SparqlResult>, IEnumerable<SparqlResult>> LimitOffset;
         private Func<IEnumerable<SparqlResult>, IEnumerable<SparqlResult>> Order;
-        private Func<IEnumerable<SparqlResult>, SparqlGroupsCollection> Group;
+        private Func<IEnumerable<SparqlResult>, IEnumerable<SparqlGroupOfResults>> Group;
         private SparqlSelect Select;
         private SparqlSolutionModifierHaving sparqlSolutionModifierHaving;
         private RdfQuery11Translator q;
+        private SparqlSolutionModifierOrder sparqlSolutionModifierOrder;
 
         internal void Add(SparqlSolutionModifierLimit sparqlSolutionModifierLimit)
         {
@@ -30,7 +31,7 @@ namespace SparqlParseRun.SparqlClasses.SolutionModifier
 
         internal void Add(SparqlSolutionModifierOrder sparqlSolutionModifierOrder)
         {
-                Order = sparqlSolutionModifierOrder.Order;
+            this.sparqlSolutionModifierOrder = sparqlSolutionModifierOrder;
         }
 
         internal void Add(SparqlSolutionModifierHaving sparqlSolutionModifierHaving, RdfQuery11Translator q)
@@ -52,19 +53,20 @@ namespace SparqlParseRun.SparqlClasses.SolutionModifier
         {
             if (Group != null)
             {
-                var groupedResults = Group(results);
+                var groupedResults = Group(results.Select(r => r.Clone()));
                 if (sparqlSolutionModifierHaving != null)
-                    groupedResults = sparqlSolutionModifierHaving.Having(groupedResults, q);
+                    groupedResults= sparqlSolutionModifierHaving.Having4CollectionGroups(groupedResults, q);
 
                 if (Order != null)
-                    results = Order(groupedResults.Select(r => r.Clone()));
+                    groupedResults= sparqlSolutionModifierOrder.Order4Grouped(groupedResults).Cast<SparqlGroupOfResults>();
 
+                var res = groupedResults.Cast<SparqlResult>();
                 if (Select != null)
-                    results = Select.Run(results, sparqlResultSet);
+                    res = Select.Run(res, sparqlResultSet, true);
 
                 if (LimitOffset != null)
-                    results = LimitOffset(results);
-                return results;
+                    res = LimitOffset(res);
+                return res;
             }
             else
             {
@@ -75,7 +77,7 @@ namespace SparqlParseRun.SparqlClasses.SolutionModifier
                     results = Order(results.Select(r => r.Clone()));
 
                 if (Select != null)
-                    results = Select.Run(results, sparqlResultSet);
+                    results = Select.Run(results, sparqlResultSet, false);
 
                 if (LimitOffset != null)
                     results = LimitOffset(results);

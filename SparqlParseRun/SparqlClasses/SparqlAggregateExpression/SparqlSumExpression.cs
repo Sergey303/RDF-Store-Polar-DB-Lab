@@ -76,7 +76,6 @@ namespace SparqlParseRun.SparqlClasses.SparqlAggregateExpression
             }
         }
 
-       throw new NotImplementedException();
+   
         }
     }
-}

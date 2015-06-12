@@ -51,9 +51,9 @@ namespace SparqlParseRun
         //    return Variables.Values.Cast<>.Skip(p);
         //}
 
-        internal IVariableNode CreateExpressionAsVariable(VariableNode variableNode, SparqlExpression sparqlExpression)
+        internal SparqlExpressionAsVariable CreateExpressionAsVariable(VariableNode variableNode, SparqlExpression sparqlExpression)
         {
-            return new SparqlExpressionAsVariable(variableNode, sparqlExpression);
+            return new SparqlExpressionAsVariable(variableNode, sparqlExpression, this);
         }
 
 

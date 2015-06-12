@@ -130,7 +130,30 @@ namespace SparqlParseRun.SparqlClasses.SolutionModifier
                    break;
            }
         }
-
+        public IEnumerable<SparqlResult> Order4Grouped(IEnumerable<SparqlResult> resultSet)
+        {
+            if (AggregateLevel == SparqlExpression.VariableDependenceGroupLevel.Const)
+                return resultSet;
+            var toOrderArray = resultSet.Select(result => result.Clone());
+                if (AggregateLevel == SparqlExpression.VariableDependenceGroupLevel.GroupOfGroups)
+                    toOrderArray = new SparqlResult[] {new SparqlGroupOfResults(q) {Group = toOrderArray}};
+            switch (direction)
+            {
+                case SparqlOrderDirection.Desc:
+                    return from r in toOrderArray
+                           let node = getNode(r)
+                           orderby orderByTypeCondition(node) descending, orderCondition(node) descending
+                           select r;
+                    break;
+                case SparqlOrderDirection.Asc:
+                default:
+                    return from r in toOrderArray
+                           let node = getNode(r)
+                           orderby orderByTypeCondition(node), orderCondition(node)
+                           select r;
+                    break;
+            }
+        }
      
 
      

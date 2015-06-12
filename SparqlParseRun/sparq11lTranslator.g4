@@ -52,7 +52,7 @@ valuesClause 	{ $value.SetValues($valuesClause.value);} )
  };
  selectQuery returns [SparqlSelectQuery value]: {$value=new SparqlSelectQuery(q);} selectClause datasetClause* whereClause solutionModifier {$solutionModifier.value.Add($selectClause.value);} {$value.Create($whereClause.value, $solutionModifier.value);};
  subSelect returns [SparqlSubSelect value] : selectClause whereClause solutionModifier {$solutionModifier.value.Add($selectClause.value);} valuesClause {$value=new SparqlSubSelect($whereClause.value, $solutionModifier.value, $valuesClause.value);};
- selectClause returns [SparqlSelect value] : SELECT {$value=new SparqlSelect();} ( DISTINCT {$value.IsDistinct=true;} | REDUCED {$value.IsReduced=true;} )? ( ( var {$value.Add($var.value);} | ( '(' expression AS var {$value.Add(q.CreateExpressionAsVariable($var.value, $expression.value));} ')' ) )+ | '*' {$value.IsAll();} );
+ selectClause returns [SparqlSelect value] : SELECT {$value=new SparqlSelect(q);} ( DISTINCT {$value.IsDistinct=true;} | REDUCED {$value.IsReduced=true;} )? ( ( var {$value.Add($var.value);} | ( '(' expression AS var {$value.Add(q.CreateExpressionAsVariable($var.value, $expression.value));} ')' ) )+ | '*' {$value.IsAll();} );
  constructQuery returns [SparqlConstructQuery value] : CONSTRUCT {$value=new SparqlConstructQuery(q);} 
  ( constructTemplate datasetClause* whereClause solutionModifier { $value.Create($constructTemplate.value, $whereClause.value, $solutionModifier.value); }
  | datasetClause* WHERE '{'( triplesTemplate { $value.Create($triplesTemplate.value); } )? '}' solutionModifier { $value.Create($solutionModifier.value); } );
@@ -69,16 +69,16 @@ datasetClause : FROM ( defaultGraphClause | namedGraphClause )	 ;
  ( groupCondition  { $value.Add($groupCondition.value);})+;
  groupCondition returns [SparqlGroupConstraint value] : builtInCall {$value=new SparqlGroupConstraint($builtInCall.value);}
   | functionCall   {$value=new SparqlGroupConstraint($functionCall.value);}
-  | '(' expression {$value=new SparqlGroupConstraint($expression.value);} ( AS var  {$value=new SparqlGroupConstraint(new SparqlExpressionAsVariable($var.value, $expression.value, q));})? ')' 
+  | '(' expression {$value=new SparqlGroupConstraint($expression.value);} ( AS var  {$value=new SparqlGroupConstraint(q.CreateExpressionAsVariable($var.value, $expression.value));})? ')' 
   | var {$value=new SparqlGroupConstraint($var.value);};
  havingClause returns [SparqlSolutionModifierHaving value] : HAVING {$value=new SparqlSolutionModifierHaving();} (havingCondition {$value.Add($havingCondition.value);} )+;
  havingCondition returns [SparqlExpression value] : constraint { $value=$constraint.value;};
  orderClause returns [SparqlSolutionModifierOrder value]: ORDER BY {$value=new SparqlSolutionModifierOrder();} (orderCondition {$value.Add($orderCondition.value); } )+;
- orderCondition returns [SparqlOrderCondition value]: ( ( dir= ASC | dir= DESC ) brackettedExpression {$value = new SparqlOrderCondition($brackettedExpression.value, $dir.text);} )
-| ( brackettedExpression {$value=new SparqlOrderCondition($brackettedExpression.value);}
- | builtInCall {$value=new SparqlOrderCondition($builtInCall.value);}
- | functionCall {$value=new SparqlOrderCondition($functionCall.value);} 
- | var {$value=new SparqlOrderCondition($var.value);}  );
+ orderCondition returns [SparqlOrderCondition value]: ( ( dir= ASC | dir= DESC ) brackettedExpression {$value = new SparqlOrderCondition($brackettedExpression.value, $dir.text, q);} )
+| ( brackettedExpression {$value=new SparqlOrderCondition($brackettedExpression.value, q);}
+ | builtInCall {$value=new SparqlOrderCondition($builtInCall.value,q);}
+ | functionCall {$value=new SparqlOrderCondition($functionCall.value,q);} 
+ | var {$value=new SparqlOrderCondition($var.value,q);}  );
  limitOffsetClauses returns [SparqlSolutionModifierLimit value] : {$value=new SparqlSolutionModifierLimit();} (limitClause {$value.CreateLimit($limitClause.value); } ( offsetClause {$value.CreateOffset($offsetClause.value); } )? | offsetClause {$value.CreateOffset($offsetClause.value); }  ( limitClause  {$value.CreateLimit($limitClause.value); } )?);
  limitClause returns [int value]: LIMIT integer {$value=$integer.value;};
  offsetClause returns [int value]: OFFSET integer {$value=$integer.value;};
@@ -145,7 +145,7 @@ WHERE groupGraphPattern { $value.SetWhere($groupGraphPattern.value); };
  optionalGraphPattern  returns [SparqlOptionalGraphPattern value] : OPTIONAL  groupGraphPattern  {$value=new SparqlOptionalGraphPattern($groupGraphPattern.value);};
  graphGraphPattern returns [ISparqlGraphPattern value]: GRAPH varOrIri{var temp=q.ActiveGraphs;  q.ActiveGraphs=q.SetNamedGraphOrVariable($varOrIri.value, q.NamedGraphs); } groupGraphPattern {$value=$groupGraphPattern.value; q.ActiveGraphs=temp;};
  serviceGraphPattern  returns [SparqlServicePattern value] : {$value=new SparqlServicePattern();} SERVICE (SILENT {$value.IsSilent();})? varOrIri groupGraphPattern  {$value.Create($varOrIri.value, $groupGraphPattern.text, q.prolog.StringRepresentationOfProlog, q);};
- bind returns [SparqlExpressionAsVariable value] : BIND '(' expression AS var ')' {$value=new SparqlExpressionAsVariable($var.value, $expression.value,q);};
+ bind returns [SparqlExpressionAsVariable value] : BIND '(' expression AS var ')' {$value=q.CreateExpressionAsVariable($var.value, $expression.value);};
  inlineData returns [ISparqlGraphPattern value] : VALUES dataBlock { $value=$dataBlock.value;};
  dataBlock returns [ISparqlGraphPattern value] : inlineDataOneVar {$value=$inlineDataOneVar.value;} | inlineDataFull {$value=$inlineDataFull.value;};
  inlineDataOneVar returns [SparqlInlineVariable value] : var { $value=new SparqlInlineVariable($var.value);} '{' (dataBlockValue { $value.Add($dataBlockValue.value);})* '}';

@@ -38,21 +38,21 @@ namespace SparqlParseRun.SparqlClasses.SolutionModifier
             return resultsGroups;
         }
 
-        internal IEnumerable<SparqlResult> Having4CollectionGroups(IEnumerable<SparqlResult> resultsGroups, RdfQuery11Translator q)
+        internal IEnumerable<SparqlGroupOfResults> Having4CollectionGroups(IEnumerable<SparqlGroupOfResults> resultsGroups, RdfQuery11Translator q)
         {
             foreach (var testExpr in this)
                 switch (testExpr.AggregateLevel)
                 {
                     case SparqlExpression.VariableDependenceGroupLevel.Const:
                         if ((bool) testExpr.Const.Content) continue;
-                        else return Enumerable.Empty<SparqlResult>();
+                        else return Enumerable.Empty<SparqlGroupOfResults>();
                     case SparqlExpression.VariableDependenceGroupLevel.UndependableFunc:
                         if ((bool) testExpr.Operator(null)) continue;
-                        else return Enumerable.Empty<SparqlResult>();
+                        else return Enumerable.Empty<SparqlGroupOfResults>();
                     case SparqlExpression.VariableDependenceGroupLevel.SimpleVariable:
                     case SparqlExpression.VariableDependenceGroupLevel.Group:
                         SparqlExpression expr = testExpr;
-                        resultsGroups.groups = resultsGroups.Where(result => expr.Operator(result));
+                        resultsGroups = resultsGroups.Where(result => expr.Operator(result));
                         continue;
                     case SparqlExpression.VariableDependenceGroupLevel.GroupOfGroups:
                         if (testExpr.Test(new SparqlGroupOfResults(q) {Group = resultsGroups})) continue;
