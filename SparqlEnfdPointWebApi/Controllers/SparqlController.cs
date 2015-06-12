@@ -3,8 +3,8 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Web.Mvc;
+using RDFCommon;
 using SparqlEndpointForm;
-using SparqlParseRun.RdfCommon;
 using SparqlParseRun.SparqlClasses;
 using SparqlParseRun.SparqlClasses.Query.Result;
 using SparqlParseRun;
@@ -27,7 +27,7 @@ namespace SparqlEnfdPointWebApi.Controllers
                 var graphUriNode = RdfStores.Store.NodeGenerator.GetUri(graphUri);
                 if (graphUriNode == null)
                     return new HttpNotFoundResult();
-                graph = RdfStores.Store.NamedGraphs.GetGraph(graphUriNode);
+                graph = RdfStores.Store.NamedGraphs.GetGraph(graphUri);
                // if(graph.Any())
                 //return new HttpNotFoundResult();
             }
@@ -62,7 +62,7 @@ namespace SparqlEnfdPointWebApi.Controllers
                 var graphs = GetGraphsParames();
                 //if (Request.HttpMethod == "POST" && Request.ContentType == @"application\url-encoded")
                 //    query = HttpUtility.UrlDecode(query);
-                var resultSet = SparqlQueryParser.Parse(RdfStores.Store, (graphs ?? "") + query).Run(RdfStores.Store);
+                var resultSet = SparqlQueryParser.Parse(RdfStores.Store, (graphs ?? "") + query).Run();
                 if (Request.AcceptTypes != null && Request.AcceptTypes.Contains("text/xml"))
                 {
                     return Content(resultSet.ToXml().ToString(), "text/xml");
@@ -133,7 +133,7 @@ namespace SparqlEnfdPointWebApi.Controllers
                 var graphUriNode = RdfStores.Store.NodeGenerator.GetUri(graphUri);
                 if (graphUriNode == null)
                     return new HttpNotFoundResult();
-               graph = RdfStores.Store.NamedGraphs.GetGraph(graphUriNode);
+                graph = RdfStores.Store.NamedGraphs.GetGraph(graphUri);
                 if(!graph.Any())
                     return new HttpNotFoundResult();
             }
@@ -171,7 +171,7 @@ namespace SparqlEnfdPointWebApi.Controllers
 
                 if (qParsed != null)
                 {
-                    var res = qParsed.Run(RdfStores.Store);
+                    var res = qParsed.Run();
                     if (Request.AcceptTypes != null && Request.AcceptTypes.Contains("text/xml"))
                     {
                         return Content(res.ToXml().ToString(),
@@ -216,7 +216,7 @@ namespace SparqlEnfdPointWebApi.Controllers
                 var graphUriNode = RdfStores.Store.NodeGenerator.GetUri(graphUri);
                 if (graphUriNode != null)
                 {
-                    graph = RdfStores.Store.NamedGraphs.GetGraph(graphUriNode);
+                    graph = RdfStores.Store.NamedGraphs.GetGraph(graphUri);
                 }
                 else
                 {
@@ -259,7 +259,7 @@ namespace SparqlEnfdPointWebApi.Controllers
                 IGraph g;
                 if (graphUriNode != null)
                 {
-                    RdfStores.Store.NamedGraphs.DropGraph(graphUriNode);
+                    RdfStores.Store.NamedGraphs.DropGraph(graph);
                     return new HttpStatusCodeResult(HttpStatusCode.OK);
                 }
                 else

@@ -1,11 +1,12 @@
-﻿using SparqlParseRun;
-using SparqlParseRun.RdfCommon;
+﻿using RDFCommon;
+using RDFTripleStore;
+
 
 namespace SparqlEndpointForm
 {
     public class RdfStores
     {
-        public static readonly   IStore Store=new Rdf2DictionaryStore("http://default");
+        public static readonly   IStore Store=new RamListOftriplesStore("http://default");
         
     }
 }

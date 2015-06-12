@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using RDFCommon;
 using RDFCommon.OVns;
@@ -123,6 +124,11 @@ namespace RDFTripleStore
             //table.Clear();
              @base.FromTurtle(path);
 
+        }
+
+        public void FromTurtle(Stream inputStream)
+        {
+            throw new NotImplementedException();
         }
 
         void IGraph.Warmup()
