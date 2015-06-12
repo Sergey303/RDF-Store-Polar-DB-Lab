@@ -12,12 +12,11 @@ namespace GoTripleStore
     {
         public static void Main() // Main8()
         {
-            //string path = "../../../Databases/";
-            string path = "G:/Home/Databases/";
+            string path = "../../../Databases/";
             System.Diagnostics.Stopwatch sw = new System.Diagnostics.Stopwatch();
             Random rnd = new Random();
             TripleSetInt ttab = new TripleSetInt(path);
-            int npersons = 10000000;
+            int npersons = 40000;
             PaEntry.bufferBytes = 200000000;
 
             bool toload = false;
@@ -133,7 +132,7 @@ namespace GoTripleStore
                     .SelectMany(c => g.GetTriplesWithPredicateSubject(iname, c))
                     .Select(en => g.Dereference(en))
                     ;
-                sum += qu5.Count();
+                sum += qu4.Count();
             }
             sw.Stop();
             Console.WriteLine("10000 person inv relations ok. duration={0} sum={1}", sw.ElapsedMilliseconds, sum);
