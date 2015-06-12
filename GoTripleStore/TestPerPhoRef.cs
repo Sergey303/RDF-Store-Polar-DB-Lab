@@ -12,11 +12,13 @@ namespace GoTripleStore
     {
         public static void Main() // Main8()
         {
-            string path = "../../../Databases/";
+            //string path = "../../../Databases/";
+            string path = "G:/Home/Databases/";
             System.Diagnostics.Stopwatch sw = new System.Diagnostics.Stopwatch();
             Random rnd = new Random();
             TripleSetInt ttab = new TripleSetInt(path);
-            int npersons = 40000;
+            int npersons = 10000000;
+            PaEntry.bufferBytes = 200000000;
 
             bool toload = false;
             //toload = true;
