@@ -39,6 +39,18 @@ namespace Task15UniversalIndex
             //TODO: Надо проверить словарь
             return index_arr.GetAllByKeys(key1, key2);
         }
+        public IEnumerable<object> GetRecordsWithKey1(int key1)
+        {
+            //TODO: Надо еще обработать словарь
+            var diap = index_arr.GetDiapasonByKey1(key1);
+            return index_arr.GetAllInDiap(diap);
+        }
+        public IEnumerable<object> GetRecordsWithKey2(Tkey key2)
+        {
+            //TODO: Надо еще обработать словарь
+            var keys1 = index_arr.GetKey1All().ToArray();
+            return keys1.SelectMany(key1 => index_arr.GetAllByKeys(key1, key2));
+        }
         public void Build()
         {
             index_arr.Build();

@@ -93,6 +93,10 @@ namespace Task15UniversalIndex
             Diapason dia = GetLocalDiapason(key1, key2);
             return GetAllInDiap(dia, key2);
         }
+        public IEnumerable<int> GetKey1All()
+        {
+            return gr_discale.Keys;
+        }
         /// <summary>
         /// Получение триплетов из диапазона, соответствующих заданному второму ключу
         /// </summary>
@@ -125,6 +129,22 @@ namespace Task15UniversalIndex
                 })
                 .Where(two => !(bool)((object[])two)[0] && Key2Producer(two).CompareTo(key2) == 0)
                 .Select(two => ((object[])((object[])two)[1]));
+        }
+        public IEnumerable<object> GetAllInDiap(Diapason dia)
+        {
+            if (dia.IsEmpty()) return Enumerable.Empty<object>();
+            PaEntry entry = Table.Element(0);
+
+            var query2 = index_cell.Root.ElementValues(dia.start, dia.numb)
+                .Select(va =>
+                {
+                    long off = (long)((object[])va)[0];
+                    entry.offset = off;
+                    return entry.Get();
+                })
+                .Where(two => !(bool)((object[])two)[0])
+                .Select(two => ((object[])((object[])two)[1]));
+            return query2;
         }
         // Получение потока всех элементов в отсортированном виде
         // Альтернатива - выдача всех записей из таблицы Table
