@@ -13,14 +13,14 @@ namespace RDFTurtleParser
         private List<TripleStrOV> buffer;
         private int maxBuffer;
 
-        public TripleGeneratorBuffered(string path, string graphName, int maxBuffer=1000)
+        public TripleGeneratorBuffered(string path, string graphName, int maxBuffer = 1000000)
         {
             this.maxBuffer = maxBuffer;
             buffer = new List<TripleStrOV>();
             tg = new TriplesGenerator(path);
         }
 
-        public TripleGeneratorBuffered(Stream baseStream, string graphName, int maxBuffer=1000)
+        public TripleGeneratorBuffered(Stream baseStream, string graphName, int maxBuffer = 1000000)
         {
             this.maxBuffer = maxBuffer;
             buffer = new List<TripleStrOV>();

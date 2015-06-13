@@ -20,7 +20,7 @@ namespace GoTripleStore
             PaEntry.bufferBytes = 200000000;
 
             bool toload = false;
-            //toload = true;
+            toload = true;
             if (toload)
             {
                 sw.Restart();

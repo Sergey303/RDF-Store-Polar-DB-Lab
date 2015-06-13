@@ -10,6 +10,7 @@ namespace RDFCommon.OVns
             coding_table=new NameTableUniversal(path);
             if (empty)
             {
+                Clear();
                 Build();
             }
             else
@@ -17,16 +18,26 @@ namespace RDFCommon.OVns
                 SpecialTypes = new SpecialTypesClass(this);
             }
         }
-        public void Build()
+
+        public void Clear()
         {
-            coding_table.Clear();
+             coding_table.Clear();
             coding_table.Fill(new string[0]);
             coding_table.BuildIndexes();
+        }
+        public void Build()
+        {
+           
             coding_table.InsertPortion(SpecialTypesClass.GetAll());
             coding_table.BuildScale();
             SpecialTypes = new SpecialTypesClass(this);
         }
-  
+        public static NodeGeneratorInt Create(string path, bool isEmpty)
+        {
+            var ng = new NodeGeneratorInt(path, isEmpty);
+            ng.SpecialTypes = new SpecialTypesClass(ng);
+            return ng;
+        }
         public override ObjectVariants GetUri(string uri)
         {
            
