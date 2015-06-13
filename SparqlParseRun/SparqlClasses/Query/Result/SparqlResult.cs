@@ -50,20 +50,20 @@ namespace SparqlParseRun.SparqlClasses.Query.Result
         public bool ContainsKey(VariableNode var)
         {
             return rowArray[var.Index]!=null;
-        }                       
-
-        public bool Equals(SparqlResult other)
-        {
-           // return ((IStructuralComparable) row).CompareTo(other.row, Comparer<INode>.Default)==0;
-
-            return TestAll((var, value) => value.Equals(other[var]));
         }
 
-        public override bool Equals(object obj)
-        {
-            var sparqlResult = obj as SparqlResult;
-            return sparqlResult != null && Equals(sparqlResult);
-        }
+        //public bool Equals(SparqlResult other)
+        //{
+        //    // return ((IStructuralComparable) row).CompareTo(other.row, Comparer<INode>.Default)==0;
+
+        //    return TestAll((var, value) => value.Equals(other[var]));
+        //}
+
+        //public override bool Equals(object obj)
+        //{
+        //    var sparqlResult = obj as SparqlResult;
+        //    return sparqlResult != null && Equals(sparqlResult);
+        //}
 
       
 
@@ -71,12 +71,21 @@ namespace SparqlParseRun.SparqlClasses.Query.Result
         {
             unchecked
             {
-                int sum = 0;
-                foreach (ObjectVariants value in rowArray)
-                    sum += value == null ? 1 : (int) Math.Pow(value.GetHashCode(), 2);
-                return sum;
+                int mult = 0;
+                for (int i = 0; i < selected.Count; i++)
+                {
+                    mult *= (int)Math.Pow(4 * i + 5, this[selected[i]] == null ? 0 : this[selected[i]].GetHashCode());
+                }
+                return mult;
             }
         }
+
+        public override bool Equals(object obj)
+        {
+            var sparqlResult = obj as SparqlResult;
+            return sparqlResult != null && selected.All(v => sparqlResult[v].Equals(this[v]));
+        }
+
         private readonly ObjectVariants[] rowArray;
 
         public SparqlResult Add(ObjectVariants newObj1, VariableNode variable1, ObjectVariants newObj2, VariableNode variable2, ObjectVariants newObj3, VariableNode variable3)
@@ -107,10 +116,10 @@ namespace SparqlParseRun.SparqlClasses.Query.Result
          rowArray[variable.Index]= value;
         }
 
-        public IEnumerable<T> GetAll<T>(Func<VariableNode,ObjectVariants, T> selector)
-        {
-            return q.Variables.Values.Select(v => selector(v, rowArray[v.Index]));
-        }
+        //public IEnumerable<T> GetAll<T>(Func<VariableNode,ObjectVariants, T> selector)
+        //{
+        //    return q.Variables.Values.Select(v => selector(v, rowArray[v.Index]));
+        //}
 
         public bool TestAll(Func<VariableNode, ObjectVariants, bool> selector)
         {
@@ -118,7 +127,7 @@ namespace SparqlParseRun.SparqlClasses.Query.Result
         }
 
      
-        public void SeletSelection(List<VariableNode> selected)
+        public void SetSelection(List<VariableNode> selected)
         {
             this.selected = selected;
         }
@@ -160,7 +169,7 @@ namespace SparqlParseRun.SparqlClasses.Query.Result
         {
             ObjectVariants[] copy=new ObjectVariants[rowArray.Length];
             rowArray.CopyTo(copy,0);
-            return new SparqlResult(copy, q);
+            return new SparqlResult(copy, q){selected=selected};
         }
     }
 }

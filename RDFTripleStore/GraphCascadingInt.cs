@@ -60,7 +60,7 @@ namespace RDFTripleStore
         {
             return ps_index.GetRecordsAll()
                 .Cast<object[]>()
-                .Select(rec => returns(new OV_iriint((int)rec[0], ng.coding_table.GetStringByCode), new OV_iriint((int)rec[1], ng.coding_table.GetStringByCode), rec[2].ToOVariant()));
+                .Select(rec => returns(new OV_iriint((int)rec[0], ng.coding_table.GetStringByCode), new OV_iriint((int)rec[1], ng.coding_table.GetStringByCode), rec[2].ToOVariant(ng.coding_table.GetStringByCode)));
         }
 
   
@@ -68,14 +68,14 @@ namespace RDFTripleStore
         {
             return ps_index.GetRecordsWithKey2(((OV_iriint)subj).code)
                 .Cast<object[]>()
-                 .Select(rec => createResult( new OV_iriint((int) rec[1], ng.coding_table.GetStringByCode),rec[2].ToOVariant()));
+                 .Select(rec => createResult( new OV_iriint((int) rec[1], ng.coding_table.GetStringByCode),rec[2].ToOVariant(ng.coding_table.GetStringByCode)));
         }
 
         public IEnumerable<ObjectVariants> GetTriplesWithSubjectPredicate(ObjectVariants subj, ObjectVariants pred)
         {
             return ps_index.GetRecordsWithKeys(((OV_iriint)pred).code, ((OV_iriint)subj).code)
                 .Cast<object[]>()
-                .Select(rec => rec[2].ToOVariant());
+                .Select(rec => rec[2].ToOVariant(ng.coding_table.GetStringByCode));
         }
 
         public IEnumerable<ObjectVariants> GetTriplesWithSubjectObject(ObjectVariants subj, ObjectVariants obj)
@@ -101,7 +101,7 @@ namespace RDFTripleStore
         {
             return ps_index.GetRecordsWithKey1(((OV_iriint)pred).code)
                 .Cast<object[]>()
-                .Select(rec => createResult(new OV_iriint((int) rec[0], ng.coding_table.GetStringByCode),rec[2].ToOVariant()));
+                .Select(rec => createResult(new OV_iriint((int) rec[0], ng.coding_table.GetStringByCode),rec[2].ToOVariant(ng.coding_table.GetStringByCode)));
         }
     
 
@@ -126,7 +126,7 @@ namespace RDFTripleStore
             po_index = new IndexCascadingDynamic<ObjectVariants>(path + "po_index",
                 table,
                 ob => (int)((object[])((object[])ob)[1])[1],
-                ob => ((object[])((object[])ob)[1])[2].ToOVariant(),
+                ob => ((object[])((object[])ob)[1])[2].ToOVariant(ng.coding_table.GetStringByCode),
                 ov => ov.GetHashCode());
         }
         public void Start() 
@@ -194,7 +194,7 @@ namespace RDFTripleStore
                 ObjectVariants ov = t.Object;
                 if (ov.Variant == ObjectVariantEnum.Iri)
                 {
-                    OV_iriint ovi = new OV_iriint(dic[((OV_iri)ov).Name], ii => ii.ToString());
+                    OV_iriint ovi = new OV_iriint(dic[((OV_iri)ov).Name], ng.coding_table.GetStringByCode);
                     return new object[] { dic[t.Subject], dic[t.Predicate], ovi.ToWritable() };
                 }
                 else

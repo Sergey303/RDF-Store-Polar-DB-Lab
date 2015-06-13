@@ -13,7 +13,7 @@ namespace SparqlParseRun.SparqlClasses.Expressions
             //l.SetExprType(ObjectVariantEnum.Bool); 
             //r.SetExprType(ObjectVariantEnum.Bool);
             //SetExprType(ObjectVariantEnum.Bool);      
-            switch (NullablePairExt.Get(l, r))
+            switch (NullablePairExt.Get(l.Const, r.Const))
             {
                 case NP.bothNull:
                     Operator = res => l.Operator(res) && r.Operator(res);

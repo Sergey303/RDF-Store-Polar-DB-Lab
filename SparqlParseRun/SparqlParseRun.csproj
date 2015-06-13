@@ -188,7 +188,7 @@
     <Compile Include="SparqlClasses\Query\SparqlQueryTypeEnum.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Query.cs" />
-    <Compile Include="SparqlClasses\Query\SparqlSelect.cs" />
+    <Compile Include="SparqlClasses\SolutionModifier\SparqlSelect.cs" />
     <Compile Include="SparqlClasses\Update\SparqlGrpahRefTypeEnum.cs" />
     <Compile Include="SparqlClasses\Update\SparqlUpadate.cs" />
     <Compile Include="SparqlClasses\Update\SparqlUpadateAdd.cs" />

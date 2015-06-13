@@ -1,12 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using SparqlParseRun.SparqlClasses.Expressions;
 using SparqlParseRun.SparqlClasses.GraphPattern;
 using SparqlParseRun.SparqlClasses.GraphPattern.Triples.Node;
 using SparqlParseRun.SparqlClasses.Query.Result;
 
-namespace SparqlParseRun.SparqlClasses.Query
+namespace SparqlParseRun.SparqlClasses.SolutionModifier
 {
     public class SparqlSelect : List<IVariableNode>
     {
@@ -41,7 +40,7 @@ namespace SparqlParseRun.SparqlClasses.Query
             }
             else
             {
-                selected = new List<VariableNode>();
+                   selected = new List<VariableNode>();
                 var asExpressions = this.Select(varOrExpr => varOrExpr as SparqlExpressionAsVariable).ToArray();
                 if (isGrouped)
                 {
@@ -108,11 +107,11 @@ namespace SparqlParseRun.SparqlClasses.Query
             }
             variableBindings = variableBindings.Select(result =>
                 {
-                    result.SeletSelection(selected);
+                    result.SetSelection(selected);
                     return result;
                 });
             if (IsDistinct)
-                variableBindings = variableBindings.Distinct(new BindingsComparer());
+                variableBindings = Distinct(variableBindings);
             if (IsReduced)
                 variableBindings = Reduce(variableBindings);
 
@@ -133,13 +132,27 @@ namespace SparqlParseRun.SparqlClasses.Query
                 yield return res;
             }
         }
-
-        class BindingsComparer :  IEqualityComparer<SparqlResult>
+        private static IEnumerable<SparqlResult> Distinct(IEnumerable<SparqlResult> results)
         {
+            var history = new HashSet<SparqlResult>();
+            foreach (var res in results.Where(res => !history.Contains(res)))
+            {
+                history.Add(res);
+                yield return res;
+            }
+        }
+
+        class SelectedComparer :  IEqualityComparer<SparqlResult>
+        {
+         
+
             public bool Equals(SparqlResult x, SparqlResult y)
             {
                 //if (x.Count != y.Count) return false;
-                return x.TestAll((var, value) => value == null || value.Equals(y[var]));
+           
+                return x.GetSelected((var, value) 
+                    => 
+                    (value == null && y[var]==null) || value!=null && value.Equals(y[var])).All(b=>b);
             }
 
             public int GetHashCode(SparqlResult obj)

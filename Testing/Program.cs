@@ -13,7 +13,12 @@ namespace TestingNs
 {
     class Program
     {
-        private static void Main(string[] args)
+        static void Main(string[] args)
+        {
+
+            SparqlTesting.RunBerlinsWithConstants();
+        }
+        private static void MainPersons(string[] args)
         {
             TestingPhotoPersons.Npersons = 40*1000;
             string path = "../../../Databases/int based/" + TestingPhotoPersons.Npersons/1000+"/";

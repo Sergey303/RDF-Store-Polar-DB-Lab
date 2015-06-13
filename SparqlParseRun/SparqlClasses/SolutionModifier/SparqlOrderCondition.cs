@@ -93,6 +93,7 @@ namespace SparqlParseRun.SparqlClasses.SolutionModifier
                         : sparqlVariableBinding;
                 else return new SparqlUnDefinedNode(); 
             };
+            AggregateLevel=SparqlExpression.VariableDependenceGroupLevel.SimpleVariable;
         }
 
         public IEnumerable<SparqlResult> Order(IEnumerable<SparqlResult> resultSet)

@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using RDFCommon;
+using RDFTripleStore;
 using SparqlParseRun;
 using SparqlParseRun.SparqlClasses;
 using SparqlParseRun.SparqlClasses.Query.Result;
@@ -177,14 +178,14 @@ namespace TestingNs
             Console.WriteLine("bsbm with constants");
                 var timer = new Stopwatch();
           //  using (
-            var Store = new SecondStringStore("../../../Databases/string based/");
+            var Store = new StoreCascadingInt("../../../Databases/int based/");
             {
                 Store.ReloadFrom(Config.Source_data_folder_path+"1.ttl");
                 SparqlQueryParser.Parse(Store, sq5);
-                          
-                //for (
-                         int i = 6; 
-                //i < 12; i++)
+
+                for (
+                         int i = 0;
+                i < 12; i++)
                 {
                     string file = string.Format(@"..\..\examples\bsbm\queries\with constants\{0}.rq", i + 1);
                     var readAllText = File.ReadAllText(file);

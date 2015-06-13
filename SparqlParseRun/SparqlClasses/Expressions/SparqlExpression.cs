@@ -67,30 +67,82 @@ namespace SparqlParseRun.SparqlClasses.Expressions
         }
         internal static SparqlExpression EqualsExpression(SparqlExpression l, SparqlExpression r)
         {
-            var sparqlBinaryExpression = new SparqlBinaryExpression(l, r, (o, o1) => o.Equals(o1));
-            l.SyncTypes(r);
-          //  sparqlBinaryExpression.SetExprType(ObjectVariantEnum.Bool);
-            return sparqlBinaryExpression;
+          return new SparqlEqualsExpression(l, r);
         }
 
+        class SparqlEqualsExpression : SparqlExpression
+        {
+            public SparqlEqualsExpression(SparqlExpression l, SparqlExpression r)
+            {
+
+                var lc = l.Const;
+                var rc = r.Const;
+
+                switch (NullablePairExt.Get(lc, rc))
+                {
+                    case NP.bothNull:
+                        Operator = result => l.TypedOperator(result).Equals(r.TypedOperator(result));
+                        AggregateLevel = SetAggregateLevel(l.AggregateLevel, r.AggregateLevel);
+                        break;
+                    case NP.leftNull:
+                        Operator = result => l.TypedOperator(result).Equals(rc);
+                        AggregateLevel = l.AggregateLevel;
+                        break;
+                    case NP.rigthNull:
+                        Operator = result => lc.Equals(r.TypedOperator(result));
+                        AggregateLevel = r.AggregateLevel;
+                        break;
+                    case NP.bothNotNull:
+                        Const = new OV_bool(lc.Equals(rc));
+                        break;
+                }
+                TypedOperator = result => new OV_bool(Operator(result));
+
+            }
+ 
+        }
+        class SparqlNotEqualsExpression : SparqlExpression
+        {
+            public SparqlNotEqualsExpression(SparqlExpression l, SparqlExpression r)
+            {
+
+                var lc = l.Const;
+                var rc = r.Const;
+
+                switch (NullablePairExt.Get(lc, rc))
+                {
+                    case NP.bothNull:
+                        Operator = result => !l.TypedOperator(result).Equals(r.TypedOperator(result));
+                        AggregateLevel = SetAggregateLevel(l.AggregateLevel, r.AggregateLevel);
+                        break;
+                    case NP.leftNull:
+                        Operator = result =>! l.TypedOperator(result).Equals(rc);
+                        AggregateLevel = l.AggregateLevel;
+                        break;
+                    case NP.rigthNull:
+                        Operator = result => !lc.Equals(r.TypedOperator(result));
+                        AggregateLevel = r.AggregateLevel;
+                        break;
+                    case NP.bothNotNull:
+                        Const = new OV_bool(!lc.Equals(rc));
+                        break;
+                }
+                TypedOperator = result => new OV_bool(Operator(result));
+
+            }
+
+        }
 
         public static SparqlExpression NotEquals(SparqlExpression l, SparqlExpression r)
         {
-            var sparqlBinaryExpression = new SparqlBinaryExpression(l, r, (o, o1) => ! o.Equals(o1));
-            l.SyncTypes(r);
-          //  sparqlBinaryExpression.SetExprType(ObjectVariantEnum.Bool);
-            return sparqlBinaryExpression;
+         return new SparqlNotEqualsExpression(l, r);
         }
 
-        public void SyncTypes(SparqlExpression other)
-        {
-            
-        }
+      
 
         public static SparqlExpression Smaller(SparqlExpression l, SparqlExpression r)
         {
-            var sparqlBinaryExpression = new SparqlBinaryExpression(l, r, (o, o1) => ((IComparable) o).CompareTo(o1) == -1);
-            l.SyncTypes(r);
+            var sparqlBinaryExpression = new SparqlBinaryExpression<OV_bool>(l, r, (o, o1) => ((IComparable) o).CompareTo(o1) == -1, b=>new OV_bool(b));
          //   sparqlBinaryExpression.SetExprType(ObjectVariantEnum.Bool);
             return sparqlBinaryExpression;
         }
@@ -106,21 +158,21 @@ namespace SparqlParseRun.SparqlClasses.Expressions
             //    if (l.RealType == ObjectVariantEnum.Date|| r.RealType == ObjectVariantEnum.Date)
             //    @operator = (o, o1) => (DateTimeOffset)o > (DateTimeOffset)o1;
             //else                                                          throw new NotImplementedException();
-            var sparqlBinaryExpression = new SparqlBinaryExpression(l, r, (o, o1) => ((IComparable)o).CompareTo(o1) ==1);
+            var sparqlBinaryExpression = new SparqlBinaryExpression<OV_bool>(l, r, (o, o1) => ((IComparable)o).CompareTo(o1) == 1, b => new OV_bool(b));
        //     sparqlBinaryExpression.SetExprType(ObjectVariantEnum.Bool);
             return sparqlBinaryExpression;
         }
 
         internal static SparqlExpression SmallerOrEquals(SparqlExpression l, SparqlExpression r)
         {
-            var sparqlBinaryExpression = new SparqlBinaryExpression(l, r, (o, o1) => ((IComparable)o).CompareTo(o1) != 1);
+            var sparqlBinaryExpression = new SparqlBinaryExpression<OV_bool>(l, r, (o, o1) => ((IComparable)o).CompareTo(o1) != 1, b => new OV_bool(b));
           //  sparqlBinaryExpression.SetExprType(ObjectVariantEnum.Bool);
             return sparqlBinaryExpression;
         }
 
         public static SparqlExpression GreatherOrEquals(SparqlExpression l, SparqlExpression r)
         {
-            var sparqlBinaryExpression = new SparqlBinaryExpression(l, r, (o, o1) => ((IComparable)o).CompareTo(o1) !=-1 );
+            var sparqlBinaryExpression = new SparqlBinaryExpression<OV_bool>(l, r, (o, o1) => ((IComparable)o).CompareTo(o1) != -1, b => new OV_bool(b));
          //   sparqlBinaryExpression.SetExprType(ObjectVariantEnum.Bool);
             return sparqlBinaryExpression;
         }
@@ -170,7 +222,7 @@ namespace SparqlParseRun.SparqlClasses.Expressions
         public static SparqlExpression operator *(SparqlExpression l, SparqlExpression r)
         {
          //   l.SetExprType(ExpressionTypeEnum.numeric);
-            var sparqlBinaryExpression = new SparqlBinaryExpression(l, r, (o, o1) => (int)o * (int)o1);
+            var sparqlBinaryExpression = new SparqlBinaryExpression(l, r, (o, o1) => o * o1);
          //   sparqlBinaryExpression.SetExprType(l);
             return sparqlBinaryExpression;   
         }
@@ -180,7 +232,7 @@ namespace SparqlParseRun.SparqlClasses.Expressions
           //  l.SetExprType(ExpressionTypeEnum.numeric);
             //but xsd:decimal if both operands are xsd:integeк
 
-            var sparqlBinaryExpression = new SparqlBinaryExpression(l, r, (o, o1) => (int)o / (int)o1);
+            var sparqlBinaryExpression = new SparqlBinaryExpression(l, r, (o, o1) => o / o1);
           //  sparqlBinaryExpression.SetExprType(l);
             return sparqlBinaryExpression;
         }

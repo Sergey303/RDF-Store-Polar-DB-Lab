@@ -16,7 +16,7 @@ namespace SparqlParseRun.SparqlClasses.SolutionModifier
         }
 
         private Func<IEnumerable<SparqlResult>, IEnumerable<SparqlResult>> LimitOffset;
-        private Func<IEnumerable<SparqlResult>, IEnumerable<SparqlResult>> Order;
+        
         private Func<IEnumerable<SparqlResult>, IEnumerable<SparqlGroupOfResults>> Group;
         private SparqlSelect Select;
         private SparqlSolutionModifierHaving sparqlSolutionModifierHaving;
@@ -57,7 +57,7 @@ namespace SparqlParseRun.SparqlClasses.SolutionModifier
                 if (sparqlSolutionModifierHaving != null)
                     groupedResults= sparqlSolutionModifierHaving.Having4CollectionGroups(groupedResults, q);
 
-                if (Order != null)
+                if (sparqlSolutionModifierOrder != null)
                     groupedResults= sparqlSolutionModifierOrder.Order4Grouped(groupedResults).Cast<SparqlGroupOfResults>();
 
                 var res = groupedResults.Cast<SparqlResult>();
@@ -73,8 +73,8 @@ namespace SparqlParseRun.SparqlClasses.SolutionModifier
                 if (sparqlSolutionModifierHaving != null)
                     results = sparqlSolutionModifierHaving.Having(results, q);
 
-                if (Order != null)
-                    results = Order(results.Select(r => r.Clone()));
+                if (sparqlSolutionModifierOrder != null)
+                    results = sparqlSolutionModifierOrder.Order(results.Select(r => r.Clone()));
 
                 if (Select != null)
                     results = Select.Run(results, sparqlResultSet, false);
