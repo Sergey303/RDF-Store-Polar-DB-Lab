@@ -8,10 +8,8 @@ namespace SparqlParseRun.SparqlClasses.Expressions
     {
         public SparqlLangMatches(SparqlExpression value, SparqlExpression langExpression)
         {
-            IsDistinct = value.IsDistinct || langExpression.IsDistinct;
-            IsAggragate = value.IsAggragate || langExpression.IsAggragate;
-            value.SetExprType(ObjectVariantEnum.Str); //todo lang
-            langExpression.SetExprType(ObjectVariantEnum.Str); //todo lang
+            //     value.SetExprType(ObjectVariantEnum.Str); //todo lang
+          //  langExpression.SetExprType(ObjectVariantEnum.Str); //todo lang
             switch (NullablePairExt.Get(value.Const, langExpression.Const))
             {
                 case NP.bothNull:  
@@ -23,6 +21,8 @@ namespace SparqlParseRun.SparqlClasses.Expressions
                     ? !string.IsNullOrWhiteSpace(langRange.Content)
                     : Equals(lang, langRange);
             };
+
+                    AggregateLevel = SetAggregateLevel(value.AggregateLevel, langExpression.AggregateLevel);
                     break;
                 case NP.leftNull:
                     var rlang = langExpression.Const.Content;
@@ -33,6 +33,7 @@ namespace SparqlParseRun.SparqlClasses.Expressions
                             ? !string.IsNullOrWhiteSpace(lang)
                             : Equals(lang, rlang);
                     };
+                    AggregateLevel = value.AggregateLevel;
                     break;
                 case NP.rigthNull:
                     var llang = value.Const.Content;
@@ -40,6 +41,7 @@ namespace SparqlParseRun.SparqlClasses.Expressions
                     Operator = result => !string.IsNullOrWhiteSpace(langExpression.Operator(result));
                     else 
                     Operator = result => Equals(llang, langExpression.Operator(result));
+                    AggregateLevel = langExpression.AggregateLevel;
                     break;
                 case NP.bothNotNull:
                     var ll = value.Const.Content;

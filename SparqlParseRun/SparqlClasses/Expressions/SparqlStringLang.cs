@@ -7,17 +7,32 @@ namespace SparqlParseRun.SparqlClasses.Expressions
 {
     class SparqlStringLang  :SparqlExpression
     {
-        public SparqlStringLang(SparqlExpression literalExpression, SparqlExpression langExpression, NodeGenerator q)
+        public SparqlStringLang(SparqlExpression literalExpression, SparqlExpression langExpression)
         {
-            IsAggragate = langExpression.IsAggragate || literalExpression.IsAggragate;
-            IsDistinct = langExpression.IsDistinct || literalExpression.IsDistinct;
-            TypedOperator = result =>
+            switch (NullablePairExt.Get(literalExpression.Const, langExpression.Const))
             {
-                string literal = (string) literalExpression.TypedOperator(result).Content;
-                string lang = (string) langExpression.TypedOperator(result).Content;
-
-                return new OV_langstring(literal, lang);
-            };
+                case NP.bothNull:
+                    Operator = literalExpression.Operator;
+                    TypedOperator = result => new OV_langstring((string)literalExpression.Operator(result), (string)langExpression.Operator(result));
+                    AggregateLevel = SetAggregateLevel(literalExpression.AggregateLevel, langExpression.AggregateLevel);
+                    break;
+                case NP.leftNull:
+                    Operator = literalExpression.Operator;
+                    TypedOperator = result => new OV_langstring((string)literalExpression.Operator(result), (string) langExpression.Const.Content);
+                    AggregateLevel = literalExpression.AggregateLevel;
+                    break;
+                case NP.rigthNull:                                       
+                    Operator = result => literalExpression.Const.Content;
+                    TypedOperator = result => new OV_langstring((string) literalExpression.Const.Content, langExpression.Operator(result));
+                    AggregateLevel = langExpression.AggregateLevel;
+                    break;
+                case NP.bothNotNull:
+                    Const = new OV_langstring((string) literalExpression.Const.Content, (string) langExpression.Const.Content);
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+            
         }
     }
 }

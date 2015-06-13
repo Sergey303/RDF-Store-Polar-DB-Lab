@@ -6,14 +6,14 @@ namespace SparqlParseRun.SparqlClasses.Expressions
     class SparqlIsNum : SparqlExpression
     {
         public SparqlIsNum(SparqlExpression value)
+            :base(value.AggregateLevel)
         {
-
-            IsAggragate = value.IsAggragate;
-            IsDistinct = value.IsDistinct;
-          TypedOperator = result =>
-            {
-                var f = value.TypedOperator(result);
-                return new OV_bool(f is INumLiteral);
+            if (value.Const != null)
+                Const = new OV_bool(value.Const is INumLiteral);
+            else     {
+                Operator = result => value.TypedOperator(result) is INumLiteral; 
+                TypedOperator = result => new OV_bool(value.TypedOperator(result) is INumLiteral); //todo
+            }
                     //f is double ||
                     //   f is long ||
                     //   f is int ||
@@ -22,7 +22,7 @@ namespace SparqlParseRun.SparqlClasses.Expressions
                     //   f is ulong ||
                     //   f is uint ||
                     //   f is ushort;
-            };
+
         }
     }
 }

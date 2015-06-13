@@ -31,21 +31,21 @@ namespace RDFCommon
         void Clear(string uri);
 
         void Delete(ObjectVariants g, ObjectVariants s, ObjectVariants p, ObjectVariants o);
-        void DeleteFromAll(IEnumerable<TripleOV> triples);
-        void Add(ObjectVariants name, ObjectVariants s, ObjectVariants p, ObjectVariants o);
+        //void DeleteFromAll(IEnumerable<TripleOV> triples);
+        void Add(ObjectVariants g, ObjectVariants s, ObjectVariants p, ObjectVariants o);
 
       //  IGraph TryGetGraph(IUriNode graphUriNode);
 
        //  Dictionary<IUriNode,IGraph> Named { get;  }
         void AddGraph(string to, IGraph fromGraph);
-        void ReplaceGraph(ObjectVariants to, IGraph graph);
-        IEnumerable<KeyValuePair<ObjectVariants, long>> GetAllGraphCounts();
+        //void ReplaceGraph(ObjectVariants to, IGraph graph);
+        IEnumerable<KeyValuePair<string, long>> GetAllGraphCounts();
 
        // bool ContainsGraph(IUriNode to);
 
         IGraph GetGraph(string graphUriNode);
-        IEnumerable<ObjectVariants> GetAllSubjects(ObjectVariants graphUri);
-        bool Any(ObjectVariants graphUri);
+     //   IEnumerable<ObjectVariants> GetAllSubjects(ObjectVariants graphUri);
+        bool Any(string graphUri);
 
         void ClearAllNamedGraphs();
         IEnumerable<T> GetAll<T>(Func<ObjectVariants, ObjectVariants, ObjectVariants, ObjectVariants, T> func);

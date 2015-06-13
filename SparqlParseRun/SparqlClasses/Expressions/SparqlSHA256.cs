@@ -7,22 +7,18 @@ using RDFCommon.OVns;
 
 namespace SparqlParseRun.SparqlClasses.Expressions
 {
-    class SparqlSHA256 : SparqlExpression
+    class SparqlSHA256 : SparqlHashExpression
     {
-        private SparqlExpression sparqlExpression;
         readonly SHA256 hash=new SHA256CryptoServiceProvider();
-        public SparqlSHA256(SparqlExpression value)
+        public SparqlSHA256(SparqlExpression value)   :base(value)
         {
+            //SetExprType(ObjectVariantEnum.Str);
+            //value.SetExprType(ObjectVariantEnum.Str);
 
-            IsAggragate = value.IsAggragate;
-            IsDistinct = value.IsDistinct;
-            SetExprType(ObjectVariantEnum.Str);
-            value.SetExprType(ObjectVariantEnum.Str);
-
-            TypedOperator = result => value.TypedOperator(result).Change(o => CreateHash(o));
+            Create(value);
         }
 
-        private string CreateHash(string f)
+        protected override string CreateHash(string f)
         {
             return string.Join("",
                 hash.ComputeHash(Encoding.UTF8.GetBytes(f)).Select( b => b.ToString("x2")));

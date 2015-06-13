@@ -8,27 +8,17 @@ namespace SparqlParseRun.SparqlClasses.Expressions
 {
     class SparqlEncodeForUri : SparqlExpression
     {
-        public SparqlEncodeForUri(SparqlExpression value, RdfQuery11Translator q)
-        {                    
-            IsAggragate = value.IsAggragate;
-            IsDistinct = value.IsDistinct;
-            SetExprType(ObjectVariantEnum.Str);
-            value.SetExprType(ExpressionTypeEnum.stringOrWithLang);
-            TypedOperator = result =>
+        public SparqlEncodeForUri(SparqlExpression value, RdfQuery11Translator q)   :base(value.AggregateLevel)
+        {
+            //SetExprType(ObjectVariantEnum.Str);
+          //  value.SetExprType(ExpressionTypeEnum.stringOrWithLang);
+            if (value.Const != null)
+                Const = new OV_string(HttpUtility.UrlEncode((string) value.Const.Content));
+            else
             {
-                var f = value.TypedOperator(result);
-                if (f is string)
-                    //todo
-                {
-                    //return new OV_string(HttpUtility.UrlEncode(f));
-                }
-                if (f is ILanguageLiteral)
-                {
-                    return new OV_string(HttpUtility.UrlEncode((string) f.Content));
-                }
-
-                throw new ArgumentException();
-            };
+                Operator = result => HttpUtility.UrlEncode((string) value.Operator(result).Content);
+                TypedOperator = result => new OV_string(Operator(result));
+            }
         }
     }
 }

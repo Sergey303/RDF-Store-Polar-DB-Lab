@@ -4,12 +4,13 @@ using RDFCommon.OVns;
 
 namespace SparqlParseRun.SparqlClasses.Expressions
 {
-   public class SparqlBoolLiteralExpression : SparqlExpression  
+   public class SparqlBoolLiteralExpression : SparqlExpression
     {
 
-        public SparqlBoolLiteralExpression(ObjectVariants sparqlLiteralNode)
+        public SparqlBoolLiteralExpression(ObjectVariants sparqlLiteralNode)       :base(VariableDependenceGroupLevel.Const)
         {
             Const = sparqlLiteralNode;
+            
         }
 
        

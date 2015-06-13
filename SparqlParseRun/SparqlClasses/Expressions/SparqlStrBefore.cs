@@ -6,21 +6,31 @@ namespace SparqlParseRun.SparqlClasses.Expressions
 {
     class SparqlStrBefore : SparqlExpression
     {
-        public SparqlStrBefore(SparqlExpression str, SparqlExpression pattern, NodeGenerator q)
+        public SparqlStrBefore(SparqlExpression str, SparqlExpression pattern)
         {
-            IsAggragate = pattern.IsAggragate || str.IsAggragate;
-            IsDistinct = pattern.IsDistinct || str.IsDistinct;
-           str.SetExprType(ExpressionTypeEnum.@stringOrWithLang);
-                pattern.SetExprType(ExpressionTypeEnum.@stringOrWithLang);
-
-                SetExprType(ExpressionTypeEnum.@stringOrWithLang);
-
-
-            TypedOperator = result =>
+            switch (NullablePairExt.Get(str.Const, pattern.Const))
             {
-                var patternValue = pattern.TypedOperator(result);
-                return str.TypedOperator(result).Change(o => StringBefore(o, (string)patternValue.Content));
-            };
+                case NP.bothNull:
+                    Operator = result => StringBefore(str.Operator(result), pattern.Operator(result));
+                    AggregateLevel = SetAggregateLevel(str.AggregateLevel, pattern.AggregateLevel);
+                    TypedOperator = result => str.TypedOperator(result).Change(o => StringBefore(o, (string)pattern.TypedOperator(result).Content));
+                    break;
+                case NP.leftNull:
+                    Operator = result => StringBefore(str.Operator(result), (string)pattern.Const.Content);
+                    TypedOperator = result => pattern.Const.Change(o => StringBefore(str.Operator(result), o));
+                    AggregateLevel = str.AggregateLevel;
+                    break;
+                case NP.rigthNull:
+                    Operator = result => StringBefore((string)str.Const.Content, pattern.Operator(result));
+                    TypedOperator = result => str.Const.Change(o => StringBefore(o, (string)pattern.Operator(result).Content));
+                    AggregateLevel = pattern.AggregateLevel;
+                    break;
+                case NP.bothNotNull:
+                    Const = new OV_bool(StringBefore((string)str.Const.Content, (string)pattern.Const.Content));
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
 
         }
           string StringBefore(string str, string pattern)

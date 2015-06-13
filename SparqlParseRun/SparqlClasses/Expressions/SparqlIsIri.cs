@@ -5,15 +5,20 @@ namespace SparqlParseRun.SparqlClasses.Expressions
 {
     class SparqlIsIri : SparqlExpression
     {
-        private SparqlExpression sparqlExpression;
+        
 
         public SparqlIsIri(SparqlExpression value)
+            : base(value.AggregateLevel)
         {
-
-            IsAggragate = value.IsAggragate;
-            IsDistinct = value.IsDistinct;
-             SetExprType(ObjectVariantEnum.Bool);
-            TypedOperator = result => new OV_bool(sparqlExpression.TypedOperator(result) is ObjectVariants);
+            if (value.Const != null)
+                Const = new OV_bool(value.Const is IIriNode);
+            else
+            {
+                Operator = result => value.TypedOperator(result) is IIriNode;
+                TypedOperator = result => new OV_bool(value.TypedOperator(result) is IIriNode); //todo 
+            }
+            //SetExprType(ObjectVariantEnum.Bool);
+            
 
         }
     }

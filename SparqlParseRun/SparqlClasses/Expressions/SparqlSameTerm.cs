@@ -1,4 +1,5 @@
-﻿using RDFCommon.OVns;
+﻿using System;
+using RDFCommon.OVns;
 
 namespace SparqlParseRun.SparqlClasses.Expressions
 {
@@ -6,9 +7,27 @@ namespace SparqlParseRun.SparqlClasses.Expressions
     {
         public SparqlSameTerm(SparqlExpression str, SparqlExpression pattern)
         {
-            IsAggragate = pattern.IsAggragate || str.IsAggragate;
-            IsDistinct = pattern.IsDistinct || str.IsDistinct;
-            TypedOperator = result => new OV_bool(str.TypedOperator(result).Equals(pattern.TypedOperator(result))); 
+            switch (NullablePairExt.Get(str.Const, pattern.Const))
+            {
+                case NP.bothNull:
+                    Operator = result => str.TypedOperator(result).Equals(pattern.TypedOperator(result));
+                    AggregateLevel = SetAggregateLevel(str.AggregateLevel, pattern.AggregateLevel);
+                    break;
+                case NP.leftNull:
+                    Operator = result => str.TypedOperator(result).Equals(pattern.Const);
+                    AggregateLevel = str.AggregateLevel;
+                    break;
+                case NP.rigthNull:
+                    Operator = result => str.Const.Equals(pattern.TypedOperator(result));
+                    AggregateLevel = pattern.AggregateLevel;
+                    break;
+                case NP.bothNotNull:
+                    Const = new OV_bool(str.Const.Equals(pattern.Const));
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+            TypedOperator = result => new OV_bool(Operator(result));
         }
     }
 }

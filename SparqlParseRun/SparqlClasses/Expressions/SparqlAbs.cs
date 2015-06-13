@@ -10,8 +10,8 @@ namespace SparqlParseRun.SparqlClasses.Expressions
         public SparqlAbs(SparqlExpression value)
             : base(o => Math.Abs(o), value)
         {
-            value.SetExprType(ExpressionTypeEnum.numeric);
-            SetExprType(ExpressionTypeEnum.numeric);
+           // value.SetExprType(ExpressionTypeEnum.numeric);
+            //SetExprType(ExpressionTypeEnum.numeric);
         }
     }
 }

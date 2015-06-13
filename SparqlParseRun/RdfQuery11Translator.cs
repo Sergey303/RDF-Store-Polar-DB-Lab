@@ -51,7 +51,7 @@ namespace SparqlParseRun
         //    return Variables.Values.Cast<>.Skip(p);
         //}
 
-        internal IVariableNode CreateExpressionAsVariable(VariableNode variableNode, SparqlExpression sparqlExpression)
+        internal SparqlExpressionAsVariable CreateExpressionAsVariable(VariableNode variableNode, SparqlExpression sparqlExpression)
         {
             return new SparqlExpressionAsVariable(variableNode, sparqlExpression, this);
         }
@@ -62,7 +62,7 @@ namespace SparqlParseRun
         {
        
             VariableNode graphVariable = sparqlNode as VariableNode;
-            return graphVariable != null ? new VariableDataSet(graphVariable, namedDataSet) : new DataSet(){(ObjectVariants) sparqlNode};
+            return graphVariable != null ? new VariableDataSet(graphVariable, namedDataSet) : new DataSet(){sparqlNode};
         
         }
 

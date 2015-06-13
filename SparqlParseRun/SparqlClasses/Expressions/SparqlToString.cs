@@ -8,19 +8,16 @@ namespace SparqlParseRun.SparqlClasses.Expressions
     {
        // private SparqlExpression sparqlExpression;
 
-        public SparqlToString(SparqlExpression child, NodeGenerator q)
+        public SparqlToString(SparqlExpression child):base(child.AggregateLevel)
            
         {
-           IsAggragate = child.IsAggragate;
-            IsDistinct = child.IsDistinct;
-        
             var childConst = child.Const;
             if (childConst != null) Const =new OV_string(childConst.Content.ToString());
             else
             {
                 Operator = result => child.Operator(result).ToString();
                                 TypedOperator = result => new OV_string(child.Operator(result).ToString());                
-            
+               
             }
         }
     }

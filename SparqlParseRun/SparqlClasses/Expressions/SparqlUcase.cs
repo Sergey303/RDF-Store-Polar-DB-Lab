@@ -4,14 +4,12 @@ using RDFCommon.OVns;
 
 namespace SparqlParseRun.SparqlClasses.Expressions
 {
-    class SparqlUcase :SparqlExpression
+    class SparqlUcase :SparqlUnaryExpression
     {
-        public SparqlUcase(SparqlExpression value, NodeGenerator q)
+        public SparqlUcase(SparqlExpression value)
+            : base(o => o.ToUpperInvariant(), value)
         {
 
-            IsAggragate = value.IsAggragate;
-            IsDistinct = value.IsDistinct;    
-            TypedOperator = result => value.TypedOperator(result).Change(o => o.ToUpperInvariant());
         }
     }
 }

@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 using RDFCommon.OVns;
 using SparqlParseRun.SparqlClasses.Expressions;
@@ -23,10 +25,79 @@ namespace SparqlParseRun.SparqlClasses.GraphPattern
 
         public IEnumerable<SparqlResult> Run(IEnumerable<SparqlResult> variableBindings)
         {
+            switch (sparqlExpression.AggregateLevel)
+            {
+                case SparqlExpression.VariableDependenceGroupLevel.Const:
+                    return variableBindings.Select(
+                        variableBinding =>
+                        {
+                            variableBinding.Add(variableNode, sparqlExpression.Const);
+                            return variableBinding;
+                        });
+                    break;
+                case SparqlExpression.VariableDependenceGroupLevel.UndependableFunc:
+                case SparqlExpression.VariableDependenceGroupLevel.SimpleVariable:
+                    return variableBindings.Select(
+                        variableBinding =>
+                        {
+                            variableBinding.Add(variableNode, sparqlExpression.TypedOperator(variableBinding));
+                            return variableBinding;
+                        });
+                case SparqlExpression.VariableDependenceGroupLevel.Group:
+                    sparqlExpression.TypedOperator(new SparqlGroupOfResults(q) {Group = variableBindings});
+                    break;
+                case SparqlExpression.VariableDependenceGroupLevel.GroupOfGroups:
+                    throw new Exception("groping requested");
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
             return variableBindings.Select(
                 variableBinding =>
                 {
                     variableBinding.Add(variableNode,RunExpressionCreateBind(variableBinding));
+                    return variableBinding;
+                });
+        }
+        public IEnumerable<SparqlResult> Run4Grouped(IEnumerable<SparqlResult> variableBindings)
+        {
+            switch (sparqlExpression.AggregateLevel)
+            {
+                case SparqlExpression.VariableDependenceGroupLevel.Const:
+                    return variableBindings.Select(
+                        variableBinding =>
+                        {
+                            variableBinding.Add(variableNode, sparqlExpression.Const);
+                            return variableBinding;
+                        });
+                    break;
+                case SparqlExpression.VariableDependenceGroupLevel.UndependableFunc:
+                case SparqlExpression.VariableDependenceGroupLevel.SimpleVariable:
+                 
+                case SparqlExpression.VariableDependenceGroupLevel.Group:
+                    return RunAddVar(variableBindings);
+                    break;
+                case SparqlExpression.VariableDependenceGroupLevel.GroupOfGroups:
+                    var arr = variableBindings as SparqlResult[] ?? variableBindings.Select(result => result.Clone()).ToArray();
+                    var groupOfGroups = new SparqlGroupOfResults(q) {Group = arr};
+                    return arr.Select(variableBinding =>
+                    {
+                        variableBinding.Add(variableNode, sparqlExpression.TypedOperator(groupOfGroups));
+                        return variableBinding;
+                    });
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+           
+        }
+
+        public IEnumerable<SparqlResult> RunAddVar(IEnumerable<SparqlResult> variableBindings)
+        {
+            return variableBindings.Select(
+                variableBinding =>
+                {
+                    variableBinding.Add(variableNode, sparqlExpression.TypedOperator(variableBinding));
                     return variableBinding;
                 });
         }
@@ -42,5 +113,4 @@ namespace SparqlParseRun.SparqlClasses.GraphPattern
       
     }
 
-    
 }

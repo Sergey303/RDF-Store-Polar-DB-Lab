@@ -7,13 +7,17 @@ namespace SparqlParseRun.SparqlClasses.Expressions
 {
     class SparqlUri : SparqlExpression
     {
-        public SparqlUri(SparqlExpression value, RdfQuery11Translator q)
+        public SparqlUri(SparqlExpression value, RdfQuery11Translator q)  :base(value.AggregateLevel)
         {
-            IsAggragate = value.IsAggragate;
-            IsDistinct = value.IsDistinct;
-            Operator = result => q.prolog.GetFromString((string) value.TypedOperator(result).Content);
-            SetExprType(ObjectVariantEnum.Iri);
-            TypedOperator = result => new OV_iri(q.prolog.GetFromString((string) value.TypedOperator(result).Content)); 
+            if (value.Const != null)
+                Const = new OV_iri(q.prolog.GetFromString((string)value.Const.Content));
+            else
+            {
+               Operator = result => new OV_iri(q.prolog.GetFromString((string) value.Operator(result).Content));
+                //SetExprType(ObjectVariantEnum.Iri);
+                TypedOperator =
+                    result => new OV_iri(q.prolog.GetFromString((string) value.TypedOperator(result).Content));
+            }
         }
     }
 }

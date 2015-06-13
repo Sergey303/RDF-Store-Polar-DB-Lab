@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -94,6 +95,11 @@ namespace RDFTripleStore
         }
 
         public void FromTurtle(string gString)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void FromTurtle(Stream inputStream)
         {
             throw new NotImplementedException();
         }

@@ -6,10 +6,10 @@ namespace SparqlParseRun.SparqlClasses.Expressions
 {
     class SparqlUuid : SparqlExpression
     {
-        public SparqlUuid(NodeGenerator q)
+        public SparqlUuid()    :base(VariableDependenceGroupLevel.UndependableFunc)
         {                          
           
-            TypedOperator = result => q.GetUri("urn:uuid:" + Guid.NewGuid());
+           Operator = TypedOperator = result => new OV_iri("urn:uuid:" + Guid.NewGuid());
         }
     }
 }

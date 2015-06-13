@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using SparqlParseRun.SparqlClasses.GraphPattern;
 using SparqlParseRun.SparqlClasses.Query;
 using SparqlParseRun.SparqlClasses.Query.Result;
 
@@ -16,9 +17,11 @@ namespace SparqlParseRun.SparqlClasses.SolutionModifier
 
         private Func<IEnumerable<SparqlResult>, IEnumerable<SparqlResult>> LimitOffset;
         private Func<IEnumerable<SparqlResult>, IEnumerable<SparqlResult>> Order;
-        private Func<IEnumerable<SparqlResult>, IEnumerable<SparqlResult>> Having;
-        private Func<IEnumerable<SparqlResult>, IEnumerable<SparqlResult>> Group;
+        private Func<IEnumerable<SparqlResult>, IEnumerable<SparqlGroupOfResults>> Group;
         private SparqlSelect Select;
+        private SparqlSolutionModifierHaving sparqlSolutionModifierHaving;
+        private RdfQuery11Translator q;
+        private SparqlSolutionModifierOrder sparqlSolutionModifierOrder;
 
         internal void Add(SparqlSolutionModifierLimit sparqlSolutionModifierLimit)
         {
@@ -28,12 +31,13 @@ namespace SparqlParseRun.SparqlClasses.SolutionModifier
 
         internal void Add(SparqlSolutionModifierOrder sparqlSolutionModifierOrder)
         {
-                Order = sparqlSolutionModifierOrder.Order;
+            this.sparqlSolutionModifierOrder = sparqlSolutionModifierOrder;
         }
 
         internal void Add(SparqlSolutionModifierHaving sparqlSolutionModifierHaving, RdfQuery11Translator q)
         {
-            Having = enumerable => sparqlSolutionModifierHaving.Having(enumerable,q);
+            this.sparqlSolutionModifierHaving = sparqlSolutionModifierHaving;
+            this.q = q;
         }
 
         internal void Add(SparqlSolutionModifierGroup sparqlSolutionModifierGroup)
@@ -48,19 +52,37 @@ namespace SparqlParseRun.SparqlClasses.SolutionModifier
         public IEnumerable<SparqlResult> Run( IEnumerable<SparqlResult> results, SparqlResultSet sparqlResultSet=null)
         {
             if (Group != null)
-                results = Group(results);
-            if (Having != null)
-                results = Having(results);
+            {
+                var groupedResults = Group(results.Select(r => r.Clone()));
+                if (sparqlSolutionModifierHaving != null)
+                    groupedResults= sparqlSolutionModifierHaving.Having4CollectionGroups(groupedResults, q);
 
-            if (Order != null)
-                results = Order(results.Select(r=>r.Clone()));
+                if (Order != null)
+                    groupedResults= sparqlSolutionModifierOrder.Order4Grouped(groupedResults).Cast<SparqlGroupOfResults>();
 
-            if (Select != null)
-                results = Select.Run(results, sparqlResultSet);
+                var res = groupedResults.Cast<SparqlResult>();
+                if (Select != null)
+                    res = Select.Run(res, sparqlResultSet, true);
 
-            if (LimitOffset!= null)
-                results = LimitOffset(results);
-            return results;
+                if (LimitOffset != null)
+                    res = LimitOffset(res);
+                return res;
+            }
+            else
+            {
+                if (sparqlSolutionModifierHaving != null)
+                    results = sparqlSolutionModifierHaving.Having(results, q);
+
+                if (Order != null)
+                    results = Order(results.Select(r => r.Clone()));
+
+                if (Select != null)
+                    results = Select.Run(results, sparqlResultSet, false);
+
+                if (LimitOffset != null)
+                    results = LimitOffset(results);
+                return results;
+            }
         }
     }
 }

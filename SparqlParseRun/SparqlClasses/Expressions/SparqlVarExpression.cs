@@ -9,7 +9,7 @@ namespace SparqlParseRun.SparqlClasses.Expressions
     {
      //  public VariableNode Variable;
 
-        public SparqlVarExpression(VariableNode variableNode)
+        public SparqlVarExpression(VariableNode variableNode) :base(VariableDependenceGroupLevel.SimpleVariable)
         {
             // TODO: Complete member initialization
             //Variable = variableNode;
@@ -19,7 +19,10 @@ namespace SparqlParseRun.SparqlClasses.Expressions
                 ////if (result.TryGetValue(Variable, out sparqlVariableBinding))
                 ////    return sparqlVariableBinding;
                 ////else return new SparqlUnDefinedNode();
-                return result[variableNode].Content;
+                var value = result[variableNode];
+                if(value is IIriNode)
+                    return value;
+                else return value.Content;
             };
             TypedOperator = result =>
             {

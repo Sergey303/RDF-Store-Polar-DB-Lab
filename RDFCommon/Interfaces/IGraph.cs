@@ -72,6 +72,8 @@ namespace RDFCommon
 
         bool Any();
         void FromTurtle(string gString);
+        void FromTurtle(Stream inputStream);
+
         void Warmup();
     }
 }

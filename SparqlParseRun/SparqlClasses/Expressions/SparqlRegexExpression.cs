@@ -9,6 +9,8 @@ namespace SparqlParseRun.SparqlClasses.Expressions
     {
         private SparqlExpression variableExpression;
 
+     
+
         internal void SetVariableExpression(SparqlExpression sparqlExpression)
         {
             variableExpression = sparqlExpression;
@@ -19,24 +21,35 @@ namespace SparqlParseRun.SparqlClasses.Expressions
             var varConst = variableExpression.Const;
             var patternConst = patternExpression.Const;
             Regex regex;
-            if (patternConst != null)
+            switch (NullablePairExt.Get(patternConst, varConst))
             {
-
-                regex = CreateRegex((string)patternConst.Content);
-                if (varConst != null)
-                    Const = new OV_bool(regex.IsMatch((string)varConst.Content));
-                else
-                    Operator = result => regex.IsMatch(variableExpression.Operator(result));
-            }
-            else if (varConst != null)
-            {
-                Operator = result =>
-                {
-                    var pattern = patternExpression.TypedOperator(result).Content;
-                    regex = CreateRegex((string)pattern);
-
-                    return regex.IsMatch((string)varConst.Content);
-                };
+                case NP.bothNull:
+                    break;
+                case NP.leftNull:
+                    Operator = result =>
+                    {
+                        var pattern = patternExpression.TypedOperator(result).Content;
+                        regex = CreateRegex((string) pattern);        
+                        return regex.IsMatch((string) varConst.Content);
+                    };
+                    AggregateLevel = patternExpression.AggregateLevel;
+                    break;
+                case NP.rigthNull:
+                    regex = CreateRegex((string)patternConst.Content);
+                    if (varConst != null)
+                        Const = new OV_bool(regex.IsMatch((string) varConst.Content));
+                    else
+                    {
+                        Operator = result => regex.IsMatch(variableExpression.Operator(result));
+                        AggregateLevel = variableExpression.AggregateLevel;
+                    }
+                    break;
+                case NP.bothNotNull:
+                    regex = CreateRegex((string) patternConst.Content);
+                    Const=new OV_bool(regex.IsMatch((string) variableExpression.Const.Content));
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
             }
             TypedOperator = result => new OV_bool(Operator(result));
         }
