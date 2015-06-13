@@ -8,7 +8,7 @@ namespace RDFTripleStore
 {
     public class RdfNamedGraphs :IStoreNamedGraphs
     {
-       private readonly Dictionary<string,IGraph> named=new Dictionary<string, IGraph>();
+        protected readonly Dictionary<string,IGraph> named=new Dictionary<string, IGraph>();
         private NodeGenerator ng;
 
         public RdfNamedGraphs(NodeGenerator ng, Func<string, IGraph> graphCtor)

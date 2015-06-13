@@ -53,6 +53,7 @@
     <Compile Include="CacheMeasure.cs" />
     <Compile Include="GraphCached.cs" />
     <Compile Include="ICache.cs" />
+    <Compile Include="NamedGraphSerialize.cs" />
     <Compile Include="RamDictGraph.cs" />
     <Compile Include="RamListOfTriplesGraph.cs" />
     <Compile Include="RamListOftriplesStore.cs" />
