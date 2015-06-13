@@ -15,7 +15,7 @@ namespace TestingNs
     {
         private static void Main(string[] args)
         {
-            TestingPhotoPersons.Npersons = 1000*1000;
+            TestingPhotoPersons.Npersons = 40*1000;
             string path = "../../../Databases/int based/" + TestingPhotoPersons.Npersons/1000+"/";
             if (!Directory.Exists(path)) Directory.CreateDirectory(path);
             StoreCascadingInt store = new StoreCascadingInt(path);
@@ -72,7 +72,7 @@ namespace TestingNs
                     }));
                 return seq;
             }));
-            File.WriteAllText("../../../Databases/string based/photoPersons.ttl", store.ToTurtle());
+          //  File.WriteAllText("../../../Databases/string based/photoPersons.ttl", store.ToTurtle());
         }
 
         public static int Millions = 1;

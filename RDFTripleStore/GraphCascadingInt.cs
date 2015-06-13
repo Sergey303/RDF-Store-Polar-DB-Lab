@@ -63,9 +63,12 @@ namespace RDFTripleStore
                 .Select(rec => returns(new OV_iriint((int)rec[0], ng.coding_table.GetStringByCode), new OV_iriint((int)rec[1], ng.coding_table.GetStringByCode), rec[2].ToOVariant()));
         }
 
-        public IEnumerable<T> GetTriplesWithSubject<T>(ObjectVariants s, Func<ObjectVariants, ObjectVariants, T> createResult)
+  
+        public IEnumerable<T> GetTriplesWithSubject<T>(ObjectVariants subj, Func<ObjectVariants, ObjectVariants, T> createResult)
         {
-            throw new NotImplementedException();
+            return ps_index.GetRecordsWithKey2(((OV_iriint)subj).code)
+                .Cast<object[]>()
+                 .Select(rec => createResult( new OV_iriint((int) rec[1], ng.coding_table.GetStringByCode),rec[2].ToOVariant()));
         }
 
         public IEnumerable<ObjectVariants> GetTriplesWithSubjectPredicate(ObjectVariants subj, ObjectVariants pred)
@@ -87,7 +90,19 @@ namespace RDFTripleStore
                 .Cast<object[]>()
                 .Select(rec => new OV_iriint((int) rec[0], ng.coding_table.GetStringByCode));
         }
+            public IEnumerable<T> GetTriplesWithObject<T>(ObjectVariants obj, Func<ObjectVariants, ObjectVariants, T> createResult)
+        {
+            return po_index.GetRecordsWithKey2(obj)
+                .Cast<object[]>()
+              .Select(rec => createResult(new OV_iriint((int) rec[0], ng.coding_table.GetStringByCode), new OV_iriint((int) rec[1], ng.coding_table.GetStringByCode)));
+        }
 
+        public IEnumerable<T> GetTriplesWithPredicate<T>(ObjectVariants pred, Func<ObjectVariants, ObjectVariants, T> createResult)
+        {
+            return ps_index.GetRecordsWithKey1(((OV_iriint)pred).code)
+                .Cast<object[]>()
+                .Select(rec => createResult(new OV_iriint((int) rec[0], ng.coding_table.GetStringByCode),rec[2].ToOVariant()));
+        }
     
 
       
@@ -124,15 +139,7 @@ namespace RDFTripleStore
         public string Name { get; private set; }
         public NodeGenerator NodeGenerator { get { return ng; } }
         public void Clear() { table.Clear(); }
-        public IEnumerable<T> GetTriplesWithObject<T>(ObjectVariants o, Func<ObjectVariants, ObjectVariants, T> createResult)
-        {
-            throw new NotImplementedException();
-        }
-
-        public IEnumerable<T> GetTriplesWithPredicate<T>(ObjectVariants p, Func<ObjectVariants, ObjectVariants, T> createResult)
-        {
-            throw new NotImplementedException();
-        }
+      
 
         public void Warmup() { table.Warmup(); }
 
