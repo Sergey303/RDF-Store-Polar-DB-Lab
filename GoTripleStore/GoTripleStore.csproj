@@ -67,6 +67,7 @@
     <Compile Include="TestTPack.cs" />
     <Compile Include="TPack.cs" />
     <Compile Include="TripleSetInt.cs" />
+    <Compile Include="TriplesGraphInt.cs" />
     <Compile Include="TripleStore.cs" />
   </ItemGroup>
   <ItemGroup>

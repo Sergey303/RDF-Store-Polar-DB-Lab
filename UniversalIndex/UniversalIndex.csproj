@@ -48,6 +48,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="IndexCascading.cs" />
+    <Compile Include="IndexCascadingDynamic.cs" />
+    <Compile Include="IndexCascadingImmutable.cs" />
     <Compile Include="IndexDynamic.cs" />
     <Compile Include="IInterfaces.cs" />
     <Compile Include="IndexHalfkeyImmutable.cs" />
