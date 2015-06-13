@@ -62,7 +62,7 @@ namespace SparqlParseRun
         {
        
             VariableNode graphVariable = sparqlNode as VariableNode;
-            return graphVariable != null ? new VariableDataSet(graphVariable, namedDataSet) : new DataSet(){(ObjectVariants) sparqlNode};
+            return graphVariable != null ? new VariableDataSet(graphVariable, namedDataSet) : new DataSet(){sparqlNode};
         
         }
 
