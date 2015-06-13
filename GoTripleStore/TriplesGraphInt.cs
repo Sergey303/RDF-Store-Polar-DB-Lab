@@ -32,28 +32,28 @@ namespace GoTripleStore
             return ps_index.GetRecordsWithKeys(((OV_iriint)pred).code, ((OV_iriint)subj).code)
                 .Select(rec => ToTriple(rec));
         }
-
-        public IEnumerable<Triple> GetTriplesWithSubject(ObjectVariants subj)
-        {
-            throw new NotImplementedException();
-        }
-
-
-        public IEnumerable<Triple> GetTriplesWithPredicate(ObjectVariants pred)
-        {
-            throw new NotImplementedException();
-        }
-
         public IEnumerable<Triple> GetTriplesWithPredicateObject(ObjectVariants pred, ObjectVariants obj)
         {
             return po_index.GetRecordsWithKeys(((OV_iriint)pred).code, obj)
                 .Select(rec => ToTriple(rec));
         }
 
+        public IEnumerable<Triple> GetTriplesWithSubject(ObjectVariants subj)
+        {
+            return ps_index.GetRecordsWithKey2(((OV_iriint)subj).code)
+                .Select(rec => ToTriple(rec));
+        }
+        public IEnumerable<Triple> GetTriplesWithPredicate(ObjectVariants pred)
+        {
+            return ps_index.GetRecordsWithKey1(((OV_iriint)pred).code)
+                .Select(rec => ToTriple(rec));
+        }
         public IEnumerable<Triple> GetTriplesWithObject(ObjectVariants obj)
         {
-            throw new NotImplementedException();
+            return po_index.GetRecordsWithKey2(obj)
+                .Select(rec => ToTriple(rec));
         }
+
 
         private NameTableUniversal nametable;
         private TableView table;
