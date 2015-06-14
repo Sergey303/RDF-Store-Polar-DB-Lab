@@ -29,7 +29,7 @@ namespace SparqlParseRun.SparqlClasses.SolutionModifier
                 return 0;
             if (node is IBlankNode)
                 return 1;
-            if (node is ObjectVariants)
+            if (node is IIriNode )
                 return 2;
             if (node is IStringLiteralNode)
                 return 3;
@@ -84,15 +84,7 @@ namespace SparqlParseRun.SparqlClasses.SolutionModifier
         {
             this.q = q;
             // TODO: Complete member initialization
-            getNode = result =>
-            {
-                ObjectVariants sparqlVariableBinding = result[variableNode];
-                if (sparqlVariableBinding !=null)
-                    return sparqlVariableBinding is ILiteralNode &&  !(sparqlVariableBinding is ILanguageLiteral)
-                        ? ((ILiteralNode)sparqlVariableBinding ).Content
-                        : sparqlVariableBinding;
-                else return new SparqlUnDefinedNode(); 
-            };
+            getNode = result => result[variableNode] ?? new SparqlUnDefinedNode();
             AggregateLevel=SparqlExpression.VariableDependenceGroupLevel.SimpleVariable;
         }
 

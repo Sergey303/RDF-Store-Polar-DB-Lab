@@ -85,8 +85,33 @@ namespace TestingNs
 
         }
     
-        public static void RunBerlinsParameters(IStore Store)
+        public static void RunBerlinsParameters()
         {
+            var Store = new StoreCascadingInt("../../../Databases/int based/");
+            //Store.ReloadFrom(Config.Source_data_folder_path + "1.ttl");
+            Store.Start();
+            foreach (var objectVariantse in Store.GetTriplesWithSubjectPredicate(
+                Store.NodeGenerator.GetUri(
+                    "http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromProducer30/Product1358"),
+                Store.NodeGenerator.GetUri("http://www.w3.org/2000/01/rdf-schema#label")))
+            {
+                Console.WriteLine(objectVariantse.Content);
+            }
+           var q=SparqlQueryParser.Parse(Store, @"PREFIX bsbm-inst: <http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/>
+PREFIX bsbm: <http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/vocabulary/>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX dc: <http://purl.org/dc/elements/1.1/>
+
+SELECT ?label ?comment 
+WHERE {
+    <http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromProducer30/Product1358> rdfs:label ?label .
+    <http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromProducer30/Product1358> rdfs:comment ?comment .
+    <http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromProducer30/Product1358> bsbm:producer ?p .
+}
+");
+            q.Run().ToJson();
+
+            //Store.Start();
             //Store.Warmup();
             Console.WriteLine("bsbm parametered");
             var paramvaluesFilePath = string.Format(@"..\..\examples\bsbm\queries\parameters\param values for{0} m.txt", Program.Millions);
@@ -95,7 +120,7 @@ namespace TestingNs
             //                    foreach (var file in fileInfos.Select(info => File.ReadAllText(info.FullName)))
             //                        QueryWriteParameters(file, streamQueryParameters, ts);
             //return;
-
+          return;
             using (StreamReader streamQueryParameters = new StreamReader(paramvaluesFilePath))
             {
                 for (int j = 0; j < 500; j++)
@@ -125,14 +150,14 @@ namespace TestingNs
 
                     var timer = new Stopwatch();
                     SparqlQuery sparqlQuery = null;
-                    if (i == 0)
+                  //  if (i == 0)
                     {
                         sparqlQuery = SparqlQueryParser.Parse(Store, readAllText);
                     }
 
                     totalparseMS[i] += GetTimeWthLast2Digits(timer);
                     var st1 = DateTime.Now;
-                    if (i == 0)
+                    //if (i == 0)
                     {
                         var sparqlResultSet = sparqlQuery.Run().ToJson();                        
                     }
@@ -240,8 +265,14 @@ namespace TestingNs
 
 
 
-        public static void RunTestParametred(IStore Store, int count = 100)
+        public static void RunTestParametred(int count = 100)
         {
+
+            var Store = new StoreCascadingInt("../../../Databases/int based/");
+            Store.ReloadFrom(Config.Source_data_folder_path + "1.ttl");
+            SparqlQueryParser.Parse(Store, sq5);
+            //Store.Start();
+            //Store.Warmup();
             for (int i = 0; i < 12; i++)
             {
 
