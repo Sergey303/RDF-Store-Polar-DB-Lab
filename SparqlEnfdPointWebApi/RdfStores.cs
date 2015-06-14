@@ -6,7 +6,13 @@ namespace SparqlEndpointForm
 {
     public class RdfStores
     {
-        public static readonly IStore Store = new StoreCascadingInt("../../../Databases/int based/");
+        public static StoreCascadingInt Store;
+
+        public RdfStores()
+        {
+            Store = new StoreCascadingInt("../../../Databases/int based/");
+            Store.Start();
+        }
         
     }
 }

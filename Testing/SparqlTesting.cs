@@ -370,7 +370,7 @@ WHERE {
        public static void OneParametrized(IStore store, int i, int count)
         {
 
-        //   SparqlQueryParser.Parse(store, sq5);      
+          SparqlQueryParser.Parse(store, sq5);      
            store.Warmup();
             using (StreamReader streamQueryParameters = new StreamReader(string.Format(
                 @"..\..\..\Testing\examples\bsbm\queries\parameters\param values for{0}m {1} query.txt", 1, i)))
