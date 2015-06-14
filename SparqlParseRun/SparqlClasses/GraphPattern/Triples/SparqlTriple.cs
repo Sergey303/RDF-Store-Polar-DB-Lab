@@ -68,7 +68,7 @@ namespace SparqlParseRun.SparqlClasses.GraphPattern.Triples
             int @case = ((Subject != null ? 0 : 1) << 2) | ((Predicate != null ? 0 : 1) << 1) | (Object != null ? 0 : 1);
             if (!isDefaultGraph)
                 @case |= 1 << (isGKnown ? 3 : 4);
-            return ClearNewValues(Subject != null, Predicate!=null, Object!=null, isGKnown, variableBinding,
+            return ClearNewValues(Subject == null, Predicate==null, Object==null, !isGKnown, variableBinding,
                 SetVariablesValues(variableBinding, (StoreCallCase)@case));
 
         }
