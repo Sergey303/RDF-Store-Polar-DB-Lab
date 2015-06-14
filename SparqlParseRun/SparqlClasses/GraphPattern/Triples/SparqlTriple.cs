@@ -68,7 +68,23 @@ namespace SparqlParseRun.SparqlClasses.GraphPattern.Triples
             int @case = ((Subject != null ? 0 : 1) << 2) | ((Predicate != null ? 0 : 1) << 1) | (Object != null ? 0 : 1);
             if (!isDefaultGraph)
                 @case |= 1 << (isGKnown ? 3 : 4);
-            return SetVariablesValues(variableBinding, (StoreCallCase)@case);
+            return ClearNewValues(Subject != null, Predicate!=null, Object!=null, isGKnown, variableBinding,
+                SetVariablesValues(variableBinding, (StoreCallCase)@case));
+
+        }
+
+        private IEnumerable<SparqlResult> ClearNewValues(bool clearSubject, bool clearPredicate, bool clearObject, bool clearGraph, SparqlResult sourceResult, IEnumerable<SparqlResult> sparqlResults)
+        {
+            foreach (var result in sparqlResults)
+                yield return result;
+            if (clearSubject)
+                sourceResult[sVariableNode] = null;
+            if (clearPredicate)
+                sourceResult[pVariableNode] = null;
+            if (clearObject)
+                sourceResult[oVariableNode] = null;
+            if (clearGraph)
+                sourceResult[variableDataSet.Variable] = null;
 
         }
 
@@ -85,78 +101,64 @@ namespace SparqlParseRun.SparqlClasses.GraphPattern.Triples
             switch (@case)
             {
                 case StoreCallCase.spo:
-                    foreach (var r in q.StoreCalls.spo(Subject, Predicate, Object, variableBinding)) yield return r; break;
+                    return q.StoreCalls.spo(Subject, Predicate, Object, variableBinding);
                 case StoreCallCase.spO:
-                    foreach (var r in q.StoreCalls.spO(Subject, Predicate, oVariableNode, variableBinding)) yield return r;
-                    variableBinding[oVariableNode] = null;
-                    break;
+                    return q.StoreCalls.spO(Subject, Predicate, oVariableNode, variableBinding);
                 case StoreCallCase.sPo:
-                    foreach (var r in q.StoreCalls.sPo(Subject, pVariableNode, Object, variableBinding)) yield return r;
-                    variableBinding[pVariableNode] = null;
-                    break;
+                    return q.StoreCalls.sPo(Subject, pVariableNode, Object, variableBinding);
+                    
                 case StoreCallCase.sPO:
-                    foreach (var r in q.StoreCalls.sPO(Subject, pVariableNode, oVariableNode, variableBinding)) yield return r;
-                    variableBinding[pVariableNode] = null;
-                    variableBinding[oVariableNode] = null;
-                    break;
+                    return q.StoreCalls.sPO(Subject, pVariableNode, oVariableNode, variableBinding);
+                    
                 case StoreCallCase.Spo:
-                    foreach (var r in q.StoreCalls.Spo(sVariableNode, Predicate, Object, variableBinding)) yield return r;
-                    variableBinding[sVariableNode] = null;
-                    break;
+                    return q.StoreCalls.Spo(sVariableNode, Predicate, Object, variableBinding);
+                    
                 case StoreCallCase.SpO:
-                    foreach (var r in q.StoreCalls.SpO(sVariableNode, Predicate, oVariableNode, variableBinding)) yield return r;
-                    variableBinding[sVariableNode] = null;
-                    variableBinding[oVariableNode] = null;
-                    break;
+                    return q.StoreCalls.SpO(sVariableNode, Predicate, oVariableNode, variableBinding);
+                    
                 case StoreCallCase.SPo:
-                    foreach (var r in q.StoreCalls.SPo(sVariableNode, pVariableNode, Object, variableBinding)) yield return r;
-                    variableBinding[sVariableNode] = null;
-                    variableBinding[pVariableNode] = null;
-                    break;
+                    return q.StoreCalls.SPo(sVariableNode, pVariableNode, Object, variableBinding);
+                    
                 case StoreCallCase.SPO:
-                    foreach (var r in q.StoreCalls.SPO(sVariableNode, pVariableNode, oVariableNode, variableBinding)) yield return r;
-                    variableBinding[sVariableNode] = null;
-                    variableBinding[pVariableNode] = null;
-                    variableBinding[oVariableNode] = null;
-                    break;
-                //todo
+                    return q.StoreCalls.SPO(sVariableNode, pVariableNode, oVariableNode, variableBinding);
+                    
+
                 case StoreCallCase.gspo:
-                    foreach (var r in q.StoreCalls.spoGraphs(Subject, Predicate, Object, variableBinding, graphs)) yield return r; break;
+                    return q.StoreCalls.spoGraphs(Subject, Predicate, Object, variableBinding, graphs); 
                 case StoreCallCase.gspO:
-                    foreach (var r in q.StoreCalls.spOGraphs(Subject, Predicate, oVariableNode, variableBinding, graphs)) yield return r; break;
+                    return q.StoreCalls.spOGraphs(Subject, Predicate, oVariableNode, variableBinding, graphs); 
                 case StoreCallCase.gsPo:
-                    foreach (var r in q.StoreCalls.sPoGraphs(Subject, pVariableNode, Object, variableBinding, graphs)) yield return r; break;
+                    return q.StoreCalls.sPoGraphs(Subject, pVariableNode, Object, variableBinding, graphs); 
                 case StoreCallCase.gsPO:
-                    foreach (var r in q.StoreCalls.sPOGraphs(Subject, pVariableNode, oVariableNode, variableBinding, graphs)) yield return r; break;
+                    return q.StoreCalls.sPOGraphs(Subject, pVariableNode, oVariableNode, variableBinding, graphs); 
                 case StoreCallCase.gSpo:
-                    foreach (var r in q.StoreCalls.SpoGraphs(sVariableNode, Predicate, Object, variableBinding, graphs)) yield return r; break;
+                    return q.StoreCalls.SpoGraphs(sVariableNode, Predicate, Object, variableBinding, graphs); 
                 case StoreCallCase.gSpO:
-                    foreach (var r in q.StoreCalls.SpOGraphs(sVariableNode, Predicate, oVariableNode, variableBinding, graphs)) yield return r; break;
+                    return q.StoreCalls.SpOGraphs(sVariableNode, Predicate, oVariableNode, variableBinding, graphs); 
                 case StoreCallCase.gSPo:
-                    foreach (var r in q.StoreCalls.SPoGraphs(sVariableNode, pVariableNode, Object, variableBinding, graphs)) yield return r; break;
+                    return q.StoreCalls.SPoGraphs(sVariableNode, pVariableNode, Object, variableBinding, graphs); 
                 case StoreCallCase.gSPO:
-                    foreach (var r in q.StoreCalls.SPOGraphs(sVariableNode, pVariableNode, oVariableNode, variableBinding, graphs)) yield return r; break;
+                    return q.StoreCalls.SPOGraphs(sVariableNode, pVariableNode, oVariableNode, variableBinding, graphs); 
 
                 case StoreCallCase.Gspo:
-                    foreach (var r in q.StoreCalls.spoVarGraphs(Subject, Predicate, Object, variableBinding, variableDataSet)) yield return r; break;
+                    return q.StoreCalls.spoVarGraphs(Subject, Predicate, Object, variableBinding, variableDataSet); 
                 case StoreCallCase.GspO:
-                    foreach (var r in q.StoreCalls.spOVarGraphs(Subject, Predicate, oVariableNode, variableBinding, variableDataSet)) yield return r; break;
+                    return q.StoreCalls.spOVarGraphs(Subject, Predicate, oVariableNode, variableBinding, variableDataSet); 
                 case StoreCallCase.GsPo:
-                    foreach (var r in q.StoreCalls.sPoVarGraphs(Subject, pVariableNode, Object, variableBinding, variableDataSet)) yield return r; break;
+                    return q.StoreCalls.sPoVarGraphs(Subject, pVariableNode, Object, variableBinding, variableDataSet); 
                 case StoreCallCase.GsPO:
-                    foreach (var r in q.StoreCalls.sPOVarGraphs(Subject, pVariableNode, oVariableNode, variableBinding, variableDataSet)) yield return r; break;
+                    return q.StoreCalls.sPOVarGraphs(Subject, pVariableNode, oVariableNode, variableBinding, variableDataSet); 
                 case StoreCallCase.GSpo:
-                    foreach (var r in q.StoreCalls.SpoVarGraphs(sVariableNode, Predicate, Object, variableBinding, variableDataSet)) yield return r; break;
+                    return q.StoreCalls.SpoVarGraphs(sVariableNode, Predicate, Object, variableBinding, variableDataSet); 
                 case StoreCallCase.GSpO:
-                    foreach (var r in q.StoreCalls.SpOVarGraphs(sVariableNode, Predicate, oVariableNode, variableBinding, variableDataSet)) yield return r; break;
+                    return q.StoreCalls.SpOVarGraphs(sVariableNode, Predicate, oVariableNode, variableBinding, variableDataSet); 
                 case StoreCallCase.GSPo:
-                    foreach (var r in q.StoreCalls.SPoVarGraphs(sVariableNode, pVariableNode, Object, variableBinding, variableDataSet)) yield return r; break;
+                    return q.StoreCalls.SPoVarGraphs(sVariableNode, pVariableNode, Object, variableBinding, variableDataSet); 
                 case StoreCallCase.GSPO:
-                    foreach (var r in q.StoreCalls.SPOVarGraphs(sVariableNode, pVariableNode, oVariableNode, variableBinding, variableDataSet)) yield return r; break;
+                    return q.StoreCalls.SPOVarGraphs(sVariableNode, pVariableNode, oVariableNode, variableBinding, variableDataSet); 
                 default:
                     throw new ArgumentOutOfRangeException("case");
             }
-            yield break;
         }
 
         public void Substitution(SparqlResult variableBinding,

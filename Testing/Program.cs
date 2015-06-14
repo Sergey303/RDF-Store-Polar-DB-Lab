@@ -16,7 +16,7 @@ namespace TestingNs
         static void Main(string[] args)
         {
 
-            SparqlTesting.RunBerlinsParameters();
+            SparqlTesting.RunTestParametred();
         }
         private static void MainPersons(string[] args)
         {

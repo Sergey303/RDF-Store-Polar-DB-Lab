@@ -60,6 +60,7 @@ namespace RDFTripleStore
         {
             return ps_index.GetRecordsAll()
                 .Cast<object[]>()
+                .ToArray()
                 .Select(rec => returns(new OV_iriint((int)rec[0], ng.coding_table.GetStringByCode), new OV_iriint((int)rec[1], ng.coding_table.GetStringByCode), rec[2].ToOVariant(ng.coding_table.GetStringByCode)));
         }
 
@@ -68,13 +69,15 @@ namespace RDFTripleStore
         {
             return ps_index.GetRecordsWithKey2(((OV_iriint)subj).code)
                 .Cast<object[]>()
-                 .Select(rec => createResult( new OV_iriint((int) rec[1], ng.coding_table.GetStringByCode),rec[2].ToOVariant(ng.coding_table.GetStringByCode)));
+                .ToArray()
+                 .Select(rec => createResult(new OV_iriint((int)rec[1], ng.coding_table.GetStringByCode), rec[2].ToOVariant(ng.coding_table.GetStringByCode)));
         }
 
         public IEnumerable<ObjectVariants> GetTriplesWithSubjectPredicate(ObjectVariants subj, ObjectVariants pred)
         {
             return ps_index.GetRecordsWithKeys(((OV_iriint)pred).code, ((OV_iriint)subj).code)
                 .Cast<object[]>()
+                .ToArray()
                 .Select(rec => rec[2].ToOVariant(ng.coding_table.GetStringByCode));
         }
 
@@ -88,20 +91,23 @@ namespace RDFTripleStore
         {
             return po_index.GetRecordsWithKeys(((OV_iriint) pred).code, obj)
                 .Cast<object[]>()
-                .Select(rec => new OV_iriint((int) rec[0], ng.coding_table.GetStringByCode));
+                .ToArray()
+                .Select(rec => new OV_iriint((int)rec[0], ng.coding_table.GetStringByCode));
         }
             public IEnumerable<T> GetTriplesWithObject<T>(ObjectVariants obj, Func<ObjectVariants, ObjectVariants, T> createResult)
         {
             return po_index.GetRecordsWithKey2(obj)
                 .Cast<object[]>()
-              .Select(rec => createResult(new OV_iriint((int) rec[0], ng.coding_table.GetStringByCode), new OV_iriint((int) rec[1], ng.coding_table.GetStringByCode)));
+                .ToArray()
+              .Select(rec => createResult(new OV_iriint((int)rec[0], ng.coding_table.GetStringByCode), new OV_iriint((int)rec[1], ng.coding_table.GetStringByCode)));
         }
 
         public IEnumerable<T> GetTriplesWithPredicate<T>(ObjectVariants pred, Func<ObjectVariants, ObjectVariants, T> createResult)
         {
             return ps_index.GetRecordsWithKey1(((OV_iriint)pred).code)
                 .Cast<object[]>()
-                .Select(rec => createResult(new OV_iriint((int) rec[0], ng.coding_table.GetStringByCode),rec[2].ToOVariant(ng.coding_table.GetStringByCode)));
+                .ToArray()
+                .Select(rec => createResult(new OV_iriint((int)rec[0], ng.coding_table.GetStringByCode), rec[2].ToOVariant(ng.coding_table.GetStringByCode)));
         }
     
 

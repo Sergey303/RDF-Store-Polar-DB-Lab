@@ -90,27 +90,7 @@ namespace TestingNs
             var Store = new StoreCascadingInt("../../../Databases/int based/");
             //Store.ReloadFrom(Config.Source_data_folder_path + "1.ttl");
             Store.Start();
-            foreach (var objectVariantse in Store.GetTriplesWithSubjectPredicate(
-                Store.NodeGenerator.GetUri(
-                    "http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromProducer30/Product1358"),
-                Store.NodeGenerator.GetUri("http://www.w3.org/2000/01/rdf-schema#label")))
-            {
-                Console.WriteLine(objectVariantse.Content);
-            }
-           var q=SparqlQueryParser.Parse(Store, @"PREFIX bsbm-inst: <http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/>
-PREFIX bsbm: <http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/vocabulary/>
-PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
-PREFIX dc: <http://purl.org/dc/elements/1.1/>
-
-SELECT ?label ?comment 
-WHERE {
-    <http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromProducer30/Product1358> rdfs:label ?label .
-    <http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromProducer30/Product1358> rdfs:comment ?comment .
-    <http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromProducer30/Product1358> bsbm:producer ?p .
-}
-");
-            q.Run().ToJson();
-
+            
             //Store.Start();
             //Store.Warmup();
             Console.WriteLine("bsbm parametered");
@@ -120,7 +100,7 @@ WHERE {
             //                    foreach (var file in fileInfos.Select(info => File.ReadAllText(info.FullName)))
             //                        QueryWriteParameters(file, streamQueryParameters, ts);
             //return;
-          return;
+     
             using (StreamReader streamQueryParameters = new StreamReader(paramvaluesFilePath))
             {
                 for (int j = 0; j < 500; j++)
