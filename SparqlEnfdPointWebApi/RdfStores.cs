@@ -1,4 +1,7 @@
-﻿using RDFCommon;
+﻿using System;
+using System.IO;
+using System.Web;
+using RDFCommon;
 using RDFTripleStore;
 
 
@@ -6,13 +9,22 @@ namespace SparqlEndpointForm
 {
     public class RdfStores
     {
-        public static StoreCascadingInt Store;
+        private static StoreCascadingInt store;
 
-        public RdfStores()
+        public static StoreCascadingInt Store
         {
-            Store = new StoreCascadingInt("../../../Databases/int based/");
-            Store.Start();
+            get
+            {
+                if (store == null)
+                {
+                    store = new StoreCascadingInt(AppDomain.CurrentDomain.BaseDirectory+"../Databases/int based/");
+                    Store.Start();
+                }
+                return store;
+            }
         }
+
+    
         
     }
 }
