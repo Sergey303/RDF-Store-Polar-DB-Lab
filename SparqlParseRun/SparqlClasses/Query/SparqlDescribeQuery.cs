@@ -50,16 +50,14 @@ namespace SparqlParseRun.SparqlClasses.Query
                     //.Where(node => node is ObjectVariants).Cast<ObjectVariants>()))
                 {
                     ObjectVariants node1 = node;
-                    foreach (var temp in q.Store.GetTriplesWithSubject(node, (p, o) =>
+                    foreach (var t in q.Store.GetTriplesWithSubject(node))
                     {
-                        rdfInMemoryGraph.Add(node1, p, o);
-                        return true;
-                    })) ;
-                    foreach (var temp in q.Store.GetTriplesWithObject(node, (s, p) =>
+                        rdfInMemoryGraph.Add(node1, t.Predicate, t.Object);
+                    }
+                    foreach (var t in q.Store.GetTriplesWithObject(node))
                     {
-                        rdfInMemoryGraph.Add(s, p, node1);
-                        return true;
-                    })) ;
+                        rdfInMemoryGraph.Add(t.Subject, t.Predicate, node1);
+                    }
                 }
             else
             {
@@ -70,31 +68,27 @@ namespace SparqlParseRun.SparqlClasses.Query
                         //.Where(node => node is ObjectVariants).Cast<ObjectVariants>()
                 {
                     ObjectVariants node1 = node;
-                    foreach (var temp in q.Store.GetTriplesWithSubject(node, (p, o) =>
+                    foreach (var t in q.Store.GetTriplesWithSubject(node))
                     {
-                        rdfInMemoryGraph.Add(node1, p, o);
-                        return true;
-                    })) ;
-                    foreach (var temp in q.Store.GetTriplesWithObject(node, (s, p) =>
+                        rdfInMemoryGraph.Add(node1, t.Predicate, t.Object);
+                    }
+                    foreach (var t in q.Store.GetTriplesWithObject(node))
                     {
-                        rdfInMemoryGraph.Add(s, p, node1);
-                        return true;
-                    })) ;
+                        rdfInMemoryGraph.Add(t.Subject, t.Predicate, node1);
+                    }
                 }
                 foreach (ObjectVariants node in nodeList.Where(node => !(node is VariableNode)))
 
                     {
                         ObjectVariants node1 = node;
-                        foreach (var temp in q.Store.GetTriplesWithSubject(node, (p, o) =>
+                        foreach (var t in q.Store.GetTriplesWithSubject(node))
                         {
-                            rdfInMemoryGraph.Add(node1, p, o);
-                            return true;
-                        })) ;
-                        foreach (var temp in q.Store.GetTriplesWithObject(node, (s, p) =>
+                            rdfInMemoryGraph.Add(node1, t.Predicate, t.Object);
+                        }
+                        foreach (var t in q.Store.GetTriplesWithObject(node))
                         {
-                            rdfInMemoryGraph.Add(s, p, node1);
-                            return true;
-                        })) ;
+                            rdfInMemoryGraph.Add(t.Subject, t.Predicate, node1);
+                        }
                     }
             }
             ResultSet.ResultType = ResultType.Describe;

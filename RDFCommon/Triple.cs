@@ -197,4 +197,27 @@ namespace RDFCommon
             //return unchecked(ov.GetHashCode() + p.GetHashCode() * 77777); 
         }
     }
+
+    public struct TripleOVStruct
+    {
+        public ObjectVariants Subject, Predicate, Object;
+
+        public TripleOVStruct(ObjectVariants s, ObjectVariants p, ObjectVariants o)
+        {
+            Subject = s;
+            Predicate = p;
+            Object = o;
+        }
+    }
+    public struct QuadOVStruct
+    {
+        public ObjectVariants Subject, Predicate, Object, Graph;
+        public QuadOVStruct(ObjectVariants s, ObjectVariants p, ObjectVariants o, ObjectVariants g)
+        {
+            Subject = s;
+            Predicate = p;
+            Object = o;
+              Graph = g;
+        }
+    }
 }

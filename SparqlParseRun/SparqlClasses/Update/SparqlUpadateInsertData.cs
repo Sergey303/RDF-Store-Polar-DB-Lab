@@ -9,20 +9,20 @@ namespace SparqlParseRun.SparqlClasses.Update
 {
     public class SparqlUpdateInsertData : ISparqlUpdate
     {
-        private readonly SparqlQuardsPattern sparqlQuardsPattern;
+        private readonly SparqlQuadsPattern sparqlQuadsPattern;
 
-        public SparqlUpdateInsertData(SparqlQuardsPattern sparqlQuardsPattern)
+        public SparqlUpdateInsertData(SparqlQuadsPattern sparqlQuadsPattern)
         {
             // TODO: Complete member initialization
-            this.sparqlQuardsPattern = sparqlQuardsPattern;
+            this.sparqlQuadsPattern = sparqlQuadsPattern;
         }
         public  void Run(IStore store)   
         {
             throw new NotImplementedException();
-            //store.Insert( sparqlQuardsPattern.Where(pattern => pattern.PatternType == SparqlGraphPatternType.SparqlTriple)
+            //store.Insert( SparqlQuadsPattern.Where(pattern => pattern.PatternType == SparqlGraphPatternType.SparqlTriple)
             //    .Cast<SparqlTriple>().Select(t=>new TripleOV(t.Subject, t.Predicate,t.Object)));
             //foreach (var sparqlGraph in
-            //        sparqlQuardsPattern.Where(pattern => pattern.PatternType == SparqlGraphPatternType.Graph)
+            //        SparqlQuadsPattern.Where(pattern => pattern.PatternType == SparqlGraphPatternType.Graph)
             //            .Cast<SparqlGraphGraph>()
             //            //.Where(graph => store.NamedGraphs.ContainsGraph(graph.Name))
             //            )

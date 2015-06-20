@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
+using System.Text.RegularExpressions;
 using System.Xml.Linq;
 using RDFCommon;
 using RDFCommon.OVns;
@@ -34,12 +35,11 @@ namespace SparqlParseRun.SparqlClasses.GraphPattern
         public IEnumerable<SparqlResult> Run(IEnumerable<SparqlResult> variableBindings)
         {
             //HashSet<VariableNode> vars = new HashSet<VariableNode>(q.Variables.Select(pair => pair.Value)); 
-            var bindings = variableBindings as SparqlResult[] ?? variableBindings.ToArray();
+            var bindings = variableBindings as SparqlResult[] ?? variableBindings.Select(result => result.Clone()).ToArray();
             //foreach (var pair in bindings.SelectMany(variableBinding => variableBinding.row.Where(pair => !vars.Contains(pair.Key))))
             //    vars.Add(pair.Key);
             // string s = string.Format("VALUES ({0})", variableBindings.SelectMany(r=>r.row.Values).Select(binding => binding.));
-            ObjectVariants b;
-
+            
             string query = string.Format("{0} SELECT * WHERE {1}   VALUES ({2}) {{ {3} }}", 
                 prolog, sparqlGraphPattern, string.Join(" ", q.Variables.Values.Select(pv => pv.VariableName)),
                 string.Join(Environment.NewLine, 
@@ -55,7 +55,7 @@ namespace SparqlParseRun.SparqlClasses.GraphPattern
                     if (isSilent) return Enumerable.Empty<SparqlResult>();
                     throw;
                 }
-               //TODO blank nodes
+               //TODO blank nodes     graph names parallel
         }
 
         private IEnumerable<SparqlResult> Download(IEnumerable<SparqlResult> variableBindings, string query)
@@ -64,42 +64,42 @@ namespace SparqlParseRun.SparqlClasses.GraphPattern
             
             var variableUri = uri as VariableNode;
             if (variableUri != null)
-                foreach (var result in variableBindings
+                return variableBindings
                     .Select(binding => binding[variableUri])
-                    .Where(uriFromVar => (uriFromVar !=null) )
-                    .SelectMany(uriFromVar => XElement.Load(uriFromVar + "?query=" + query)
-                        .Element(xn + "results")
-                        .Elements()
-                        .Select(xResult => new SparqlResult(xResult.Elements()
-                            .Select(xb =>
-                                new SparqlVariableBinding(q.GetVariable(xb.Attribute("name").Value),
-                                    Xml2Node(xn, xb.Elements().FirstOrDefault())))))))
-                    yield return result;
+                    .Where(uriFromVar => (uriFromVar != null))
+                    .SelectMany(uriFromVar => DownloadOne(query, uriFromVar.ToString()));
+
             else
+                return DownloadOne(query, (string) uri.Content);
+        }
+
+        private IEnumerable<SparqlResult> DownloadOne(string query, string urlString)
+        {
+            using (WebClient wc = new WebClient())
             {
-                using (WebClient wc = new WebClient())
-                {
-                    wc.Headers[HttpRequestHeader.ContentType] = "application/sparql-query"; //"query="+ 
-                    string HtmlResult = wc.UploadString((string) uri.Content, query);
+                wc.Headers[HttpRequestHeader.ContentType] = "application/application/sparql-results+xml"; //"query="+ 
+                string HtmlResult = wc.UploadString(urlString, query);
 
-
-                    var load = XElement.Parse(HtmlResult);
-
-                    foreach (var result in load
-                        .Element(xn + "results")
-                        .Elements()
-                        .Select(xResult => new SparqlResult(xResult.Elements()
-                            .Select(xb =>
-                            {
-                                var variable = q.GetVariable(xb.Attribute(xn + "name").Value);
-                                var node = xb.Elements().FirstOrDefault();
-                                return new SparqlVariableBinding(variable,
-                                    Xml2Node(xn, node));
-                            }))))
-                        //if(result.row.Values.All(b => ! sourceBinding.row.ContainsKey(b.Variable) ))
-                        yield return result;
-                }
+                var load = XElement.Parse(HtmlResult);
+                foreach (var sparqlResult in FromXml(load)) yield return sparqlResult;
             }
+        }
+
+        private IEnumerable<SparqlResult> FromXml(XElement load)
+        {
+            XNamespace xn = "http://www.w3.org/2005/sparql-results#";
+
+            return load
+                .Element(xn + "results")
+                .Elements()
+                .Select(xResult => new SparqlResult(xResult.Elements()
+                    .Select(xb =>
+                    {
+                        var variable = q.GetVariable(xb.Attribute(xn + "name").Value);
+                        var node = xb.Elements().FirstOrDefault();
+                        return new SparqlVariableBinding(variable,
+                            Xml2Node(xn, node));
+                    })));
         }
 
         private ObjectVariants Xml2Node(XNamespace xn, XElement b)
@@ -125,6 +125,72 @@ namespace SparqlParseRun.SparqlClasses.GraphPattern
             throw new ArgumentOutOfRangeException();
         }
 
-public SparqlGraphPatternType PatternType { get{return SparqlGraphPatternType.Federated;} }
+        //private IEnumerable<SparqlResult> FromJson(string load)
+        //{
+        //    XNamespace xn = "http://www.w3.org/2005/sparql-results#";
+
+        //    return load
+        //        .Element(xn + "results")
+        //        .Elements()
+        //        .Select(xResult => new SparqlResult(xResult.Elements()
+        //            .Select(xb =>
+        //            {
+        //                var variable = q.GetVariable(xb.Attribute(xn + "name").Value);
+        //                var node = xb.Elements().FirstOrDefault();
+        //                return new SparqlVariableBinding(variable,
+        //                    Xml2Node(xn, node));
+        //            })));
+        //}
+
+        //private ObjectVariants Json2Node(string b)
+        //{
+        //    dynamic decode = System.Web.Helpers.Json.Decode(b);
+        //    if (decode.type == "uri")
+        //        return q.Store.NodeGenerator.GetUri(decode.value);
+        //        if(decode.type=="literal")
+        //        {
+        //            if (b.Contains("datatype"))
+        //                try
+        //                {
+        //                    return q.Store.NodeGenerator.CreateLiteralNode(decode.value, decode.datatype);
+        //                }
+        //                catch (Exception)
+        //                {
+        //                }
+        //            if(b.Contains(lang))
+        //        }
+        //    if (decode.type == "bnode")
+        //        return q.Store.NodeGenerator.CreateBlankNode(decode.value);//
+        //    else if (b is ILiteralNode)
+        //    {
+        //        var literalNode = ((ILiteralNode) b);
+        //        if (literalNode is ILanguageLiteral)
+        //        {
+        //            return "{ \"type\" : \"literal\", \"value\" : \"" + literalNode.Content +
+        //                   "\", \"xml:lang\": \"" + ((ILanguageLiteral) literalNode).Lang + "\" }";
+        //        }
+        //        else if (literalNode is IStringLiteralNode)
+        //        {
+        //            return "{ \"type\" : \"literal\", \"value\" : \"" + literalNode.Content + "\" }";
+        //        }
+        //        else
+        //        {
+        //            return "{ \"type\" : \"literal\", \"value\" : \"" + literalNode.Content +
+        //                   "\", \"datatype\": \"" + literalNode.DataType + "\" }";
+        //        }
+        //    }
+        //    else if (b is IBlankNode)
+        //    {
+        //        return "{ \"type\" : \"bnode\", \"value\" : \"" + b + "\" }";
+        //    }
+        //    else if (b == null)
+        //        return "";
+        //    else
+        //    {
+        //        throw new ArgumentOutOfRangeException();
+        //    }
+        //}
+
+        public SparqlGraphPatternType PatternType { get{return SparqlGraphPatternType.Federated;} }
     }
 }

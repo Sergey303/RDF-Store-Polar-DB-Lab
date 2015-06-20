@@ -42,6 +42,7 @@
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Web" />
+    <Reference Include="System.Web.Helpers, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Xml" />
@@ -157,9 +158,6 @@
     <Compile Include="SparqlClasses\SparqlAggregateExpression\SparqlSampleExpression.cs" />
     <Compile Include="SparqlClasses\SparqlAggregateExpression\SparqlSumExpression.cs" />
     <Compile Include="SparqlClasses\GraphPattern\Triples\Node\IVariableNode.cs" />
-    <Compile Include="SparqlClasses\GraphPattern\Triples\SparqlTripletsStoreCalls.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="SparqlClasses\GraphPattern\Triples\Node\SparqlBlankNode.cs" />
     <Compile Include="RdfQuery11Translator.cs" />
     <Compile Include="SparqlClasses\SparqlQueryParser.cs" />
@@ -180,7 +178,7 @@
     <Compile Include="SparqlClasses\Expressions\SparqlNumLiteralExpression.cs" />
     <Compile Include="SparqlClasses\GraphPattern\SparqlOptionalGraphPattern.cs" />
     <Compile Include="SparqlClasses\SolutionModifier\SparqlOrderCondition.cs" />
-    <Compile Include="SparqlClasses\GraphPattern\SparqlQuardsPattern.cs" />
+    <Compile Include="SparqlClasses\GraphPattern\SparqlQuadsPattern.cs" />
     <Compile Include="SparqlClasses\GraphPattern\SparqlSubSelect.cs" />
     <Compile Include="SparqlClasses\Expressions\SparqlToString.cs" />
     <Compile Include="SparqlClasses\GraphPattern\SparqlUnionGraphPattern.cs" />

@@ -15,14 +15,15 @@ namespace TestingNs
     {
         static void Main(string[] args)
         {
-            var Store = new StoreCascadingInt("../../../Databases/int based/");
-        //    Store.ReloadFrom(Config.Source_data_folder_path + "1.ttl");
-            Store.Start();
-          
-            for (int i = 0; i < 12; i++)
-            {
-                SparqlTesting.OneParametrized(Store, i+1, 100);
-            }
+          //  var Store = new StoreCascadingInt("../../../Databases/int based/");
+          ////  Store.ReloadFrom(Config.Source_data_folder_path + "1.ttl");
+          //  Store.Start();
+
+          //  for (int i = 0; i < 12; i++)
+          //  {
+          //      SparqlTesting.OneParametrized(Store, i + 1, 100);
+          //  }
+            SparqlTesting.RunBerlinsWithConstants();
         }
         private static void MainPersons(string[] args)
         {

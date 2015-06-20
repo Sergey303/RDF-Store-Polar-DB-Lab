@@ -5,7 +5,7 @@ using SparqlParseRun.SparqlClasses.Query.Result;
 
 namespace SparqlParseRun.SparqlClasses
 {
-    public class SparqlQuardsPattern : List<ISparqlGraphPattern>, ISparqlGraphPattern
+    public class SparqlQuadsPattern : List<ISparqlGraphPattern>, ISparqlGraphPattern
     {
         public virtual IEnumerable<SparqlResult> Run(IEnumerable<SparqlResult> variableBindings)
         {
@@ -15,4 +15,5 @@ namespace SparqlParseRun.SparqlClasses
         public virtual SparqlGraphPatternType PatternType { get{return SparqlGraphPatternType.ListOfPatterns;} }
     
     }
+  
 }

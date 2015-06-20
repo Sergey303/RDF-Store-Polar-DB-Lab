@@ -11,18 +11,17 @@ namespace SparqlParseRun.SparqlClasses.Expressions
       //  public Func<IEnumerable<Action>> SelectVariableValuesOrFilter { get; set; }
       //   public SparqlResultSet resultSet;
    //     private SparqlConstraint sparqlConstraint;
-        private readonly SparqlExpression sparqlExpression;
+        public readonly SparqlExpression SparqlExpression;
 
         public SparqlFilter(SparqlExpression sparqlExpression)
         {
             // TODO: Complete member initialization
-            this.sparqlExpression = sparqlExpression;
+            this.SparqlExpression = sparqlExpression;
         }
 
         public IEnumerable<SparqlResult> Run(IEnumerable<SparqlResult> variableBindings)
-        {
-            
-            return variableBindings.Where(variableBinding => sparqlExpression.Test(variableBinding));
+        {                    
+            return variableBindings.Where(SparqlExpression.Test);
         }
 
         public SparqlGraphPatternType PatternType { get{return SparqlGraphPatternType.Filter;} }

@@ -114,8 +114,8 @@ datasetClause : FROM ( defaultGraphClause | namedGraphClause )	 ;
 | insertClause {$value.SetInsert($insertClause.value);} ) 
 	({q.ActiveGraphs.Clear();} usingClause+)? 
 WHERE groupGraphPattern { $value.SetWhere($groupGraphPattern.value); };
- deleteClause returns [SparqlQuardsPattern value]: DELETE quadPattern { $value=$quadPattern.value;};
- insertClause returns [SparqlQuardsPattern value]: INSERT quadPattern { $value=$quadPattern.value;};
+ deleteClause returns [SparqlQuadsPattern value]: DELETE quadPattern { $value=$quadPattern.value;};
+ insertClause returns [SparqlQuadsPattern value]: INSERT quadPattern { $value=$quadPattern.value;};
  usingClause: USING ( iri {q.ActiveGraphs.Add($iri.value);} | NAMED iri  {q.NamedGraphs.Add($iri.value);} );
  graphOrDefault returns [string value] : DEFAULT | GRAPH? iriString {$value=$iriString.value; } ;
  graphRef returns [string value] : GRAPH iriString {$value=$iriString.value;};
@@ -123,15 +123,16 @@ WHERE groupGraphPattern { $value.SetWhere($groupGraphPattern.value); };
  | g = DEFAULT  {$value=new UpdateGraph(SparqlGrpahRefTypeEnum.Default); }
  | g = NAMED  {$value=new UpdateGraph( SparqlGrpahRefTypeEnum.Named); }
  | g = ALL {$value=new UpdateGraph(SparqlGrpahRefTypeEnum.All); };
- quadPattern returns [SparqlQuardsPattern value]: '{' quads '}' {$value=$quads.value;};
- quadData returns [SparqlQuardsPattern value]: '{' quads '}'{$value=$quads.value;};
- quads returns [SparqlQuardsPattern value]:  {$value=new SparqlQuardsPattern();} (triplesTemplate {$value.AddRange($triplesTemplate.value);} )? ( quadsNotTriples {$value.Add($quadsNotTriples.value);} '.'? (triplesTemplate {$value.AddRange($triplesTemplate.value);} )? )*;
+ quadPattern returns [SparqlQuadsPattern value]: '{' quads '}' {$value=$quads.value;};
+ quadData returns [SparqlQuadsPattern value]: '{' quads '}'{$value=$quads.value;};
+ quads returns [SparqlQuadsPattern value]:  {$value=new SparqlQuadsPattern();} (triplesTemplate {$value.AddRange($triplesTemplate.value);} )? ( quadsNotTriples {$value.Add($quadsNotTriples.value);} '.'? (triplesTemplate {$value.AddRange($triplesTemplate.value);} )? )*;
  quadsNotTriples returns [SparqlGraphGraph value] : GRAPH varOrIri {$value=new SparqlGraphGraph($varOrIri.value);} '{' ( triplesTemplate { $value.AddTriples($triplesTemplate.value);} )? '}';
  triplesTemplate returns [SparqlGraphPattern value] : triplesSameSubject {$value=$triplesSameSubject.value;} ( '.' ( tt= triplesTemplate {$value.AddRange($tt.value); } )? )?;
 
  groupGraphPattern  returns [SparqlGraphPattern value] : '{' ( subSelect {$value=$subSelect.value;} | groupGraphPatternSub  {$value=$groupGraphPatternSub.value;} ) '}';
  groupGraphPatternSub  returns [SparqlGraphPattern value] : {$value=new SparqlGraphPattern();} 
-	(triplesBlock  {$value.AddRange($triplesBlock.value); })? ( graphPatternNotTriples  {$value.Add($graphPatternNotTriples.value); } '.'? ( triplesBlock  {$value.AddRange($triplesBlock.value); } )? )*;
+	(triplesBlock  {$value.AddRange($triplesBlock.value); })? 
+	( graphPatternNotTriples  {$value.Add($graphPatternNotTriples.value); } '.'? ( triplesBlock  {$value.AddRange($triplesBlock.value); } )? )*;
  triplesBlock  returns [SparqlGraphPattern value]: triplesSameSubjectPath  {$value=$triplesSameSubjectPath.value;} ( '.' (added=triplesBlock  {$value.AddRange($added.value);})? )?;
  graphPatternNotTriples  returns [ISparqlGraphPattern value]
  : groupOrUnionGraphPattern {$value=$groupOrUnionGraphPattern.value;}

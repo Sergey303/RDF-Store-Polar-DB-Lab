@@ -5,7 +5,7 @@ using RDFCommon;
 using RDFCommon.OVns;
 using SparqlParseRun;
 using SparqlParseRun.SparqlClasses.Query.Result;
-using TestingNs;
+
 
 namespace RDFTripleStore
 {

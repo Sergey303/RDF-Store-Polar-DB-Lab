@@ -23,13 +23,13 @@ namespace SparqlParseRun
             set
             {
                 store = value;
-                StoreCalls = new SparqlTripletsStoreCalls(Store);                
+             //   StoreCalls = new SparqlTripletsStoreCalls(Store);                
             }
         }
 
      
 
-        public SparqlTripletsStoreCalls StoreCalls;
+     //   public SparqlTripletsStoreCalls StoreCalls;
         private IStore store;
 
         public RdfQuery11Translator(IStore store1)

@@ -3425,7 +3425,7 @@ public partial class sparq11lTranslatorParser : Parser {
 	}
 
 	public partial class DeleteClauseContext : ParserRuleContext {
-		public SparqlQuardsPattern value;
+		public SparqlQuadsPattern value;
 		public QuadPatternContext _quadPattern;
 		public ITerminalNode DELETE() { return GetToken(sparq11lTranslatorParser.DELETE, 0); }
 		public QuadPatternContext quadPattern() {
@@ -3475,7 +3475,7 @@ public partial class sparq11lTranslatorParser : Parser {
 	}
 
 	public partial class InsertClauseContext : ParserRuleContext {
-		public SparqlQuardsPattern value;
+		public SparqlQuadsPattern value;
 		public QuadPatternContext _quadPattern;
 		public ITerminalNode INSERT() { return GetToken(sparq11lTranslatorParser.INSERT, 0); }
 		public QuadPatternContext quadPattern() {
@@ -3798,7 +3798,7 @@ public partial class sparq11lTranslatorParser : Parser {
 	}
 
 	public partial class QuadPatternContext : ParserRuleContext {
-		public SparqlQuardsPattern value;
+		public SparqlQuadsPattern value;
 		public QuadsContext _quads;
 		public QuadsContext quads() {
 			return GetRuleContext<QuadsContext>(0);
@@ -3848,7 +3848,7 @@ public partial class sparq11lTranslatorParser : Parser {
 	}
 
 	public partial class QuadDataContext : ParserRuleContext {
-		public SparqlQuardsPattern value;
+		public SparqlQuadsPattern value;
 		public QuadsContext _quads;
 		public QuadsContext quads() {
 			return GetRuleContext<QuadsContext>(0);
@@ -3898,7 +3898,7 @@ public partial class sparq11lTranslatorParser : Parser {
 	}
 
 	public partial class QuadsContext : ParserRuleContext {
-		public SparqlQuardsPattern value;
+		public SparqlQuadsPattern value;
 		public TriplesTemplateContext _triplesTemplate;
 		public QuadsNotTriplesContext _quadsNotTriples;
 		public QuadsNotTriplesContext quadsNotTriples(int i) {
@@ -3941,7 +3941,7 @@ public partial class sparq11lTranslatorParser : Parser {
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
-			_localctx.value = new SparqlQuardsPattern();
+			_localctx.value = new SparqlQuadsPattern();
 			State = 792;
 			_la = _input.La(1);
 			if (((((_la - 130)) & ~0x3f) == 0 && ((1L << (_la - 130)) & ((1L << (TRUE - 130)) | (1L << (FALSE - 130)) | (1L << (IRIREF - 130)) | (1L << (PNAME_LN - 130)) | (1L << (PNAME_NS - 130)) | (1L << (BLANK_NODE_LABEL - 130)) | (1L << (VAR1 - 130)) | (1L << (VAR2 - 130)) | (1L << (INTEGER - 130)) | (1L << (DECIMAL - 130)) | (1L << (DOUBLE - 130)) | (1L << (INTEGER_POSITIVE - 130)) | (1L << (DECIMAL_POSITIVE - 130)) | (1L << (DOUBLE_POSITIVE - 130)) | (1L << (INTEGER_NEGATIVE - 130)) | (1L << (DECIMAL_NEGATIVE - 130)) | (1L << (DOUBLE_NEGATIVE - 130)) | (1L << (STRING_LITERAL1 - 130)) | (1L << (STRING_LITERAL2 - 130)) | (1L << (STRING_LITERAL_LONG1 - 130)) | (1L << (STRING_LITERAL_LONG2 - 130)) | (1L << (NIL - 130)) | (1L << (BracketOpen - 130)) | (1L << (ANON - 130)) | (1L << (SquareBracketOpen - 130)))) != 0)) {

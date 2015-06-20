@@ -48,55 +48,58 @@ namespace RDFTripleStore
         private readonly Func<IGraph, ObjectVariants> getGraphUriByName;
         private readonly Func<string, IGraph> graphCtor;
 
-        public IEnumerable<T> GetTriplesWithSubjectPredicate<T>(ObjectVariants subjectNode, ObjectVariants predicateNode, Func<ObjectVariants, ObjectVariants, T> returns)
+        public IEnumerable<QuadOVStruct> GetTriplesWithSubjectPredicate(ObjectVariants subjectNode, ObjectVariants predicateNode)
         {
-            return named.Values.SelectMany(g => g.GetTriplesWithSubjectPredicate(subjectNode, predicateNode).Select(o => returns(o,getGraphUriByName(g))));
+            return named.Values.SelectMany(g => g.GetTriplesWithSubjectPredicate(subjectNode, predicateNode).Select(o => new QuadOVStruct(null, null, o, getGraphUriByName(g))));
         }
 
-        public IEnumerable<T> GetTriplesWithPredicateObject<T>(ObjectVariants predicateNode, ObjectVariants objectNode, Func<ObjectVariants, ObjectVariants, T> returns)
+        public IEnumerable<QuadOVStruct> GetTriplesWithPredicateObject(ObjectVariants predicateNode, ObjectVariants objectNode)
         {
-            return named.Values.SelectMany(g => g.GetTriplesWithPredicateObject(predicateNode, objectNode).Select(o => returns(o, getGraphUriByName(g))));
+            return named.Values.SelectMany(g => g.GetTriplesWithPredicateObject(predicateNode, objectNode).Select(s => new QuadOVStruct(s, null, null, getGraphUriByName(g))));
         }
 
-        public IEnumerable<T> GetTriplesWithSubjectObject<T>(ObjectVariants subjectNode, ObjectVariants objectNode, Func<ObjectVariants, ObjectVariants, T> returns)
+        public IEnumerable<QuadOVStruct> GetTriplesWithSubjectObject(ObjectVariants subjectNode, ObjectVariants objectNode)
         {
-            return named.Values.SelectMany(g => g.GetTriplesWithSubjectObject(subjectNode, objectNode).Select(o => returns(o, getGraphUriByName(g))));
+            return named.Values.SelectMany(g => g.GetTriplesWithSubjectObject(subjectNode, objectNode).Select(p => new QuadOVStruct(null, p, null, getGraphUriByName(g))));
         }
 
-        public IEnumerable<T> GetTriplesWithSubjectFromGraph<T>(ObjectVariants subjectNode, ObjectVariants graph, Func<ObjectVariants, ObjectVariants, T> returns)
+        public IEnumerable<QuadOVStruct> GetTriplesWithSubjectFromGraph(ObjectVariants subjectNode, ObjectVariants graph)
         {
             IGraph g;
-            if (named.TryGetValue(graph.ToString(), out g)) return Enumerable.Empty<T>();
-            return g.GetTriplesWithSubject(subjectNode, returns);
+            if (named.TryGetValue(graph.ToString(), out g)) return Enumerable.Empty<QuadOVStruct>();
+            return g.GetTriplesWithSubject(subjectNode).Select(t => new QuadOVStruct(null, t.Predicate, t.Object, getGraphUriByName(g)));
         }
 
-        public IEnumerable<T> GetTriplesWithPredicateFromGraph<T>(ObjectVariants predicateNode, ObjectVariants graph, Func<ObjectVariants, ObjectVariants, T> returns)
+        public IEnumerable<QuadOVStruct> GetTriplesWithPredicateFromGraph(ObjectVariants predicateNode, ObjectVariants graph)
         {
             IGraph g;                                     
-            if (named.TryGetValue(graph.ToString(), out g)) return Enumerable.Empty<T>();
-            return g.GetTriplesWithPredicate(predicateNode, returns);
+            if (named.TryGetValue(graph.ToString(), out g)) return Enumerable.Empty<QuadOVStruct>();
+            return
+                g.GetTriplesWithPredicate(predicateNode)
+                    .Select(t => new QuadOVStruct(null, t.Predicate, t.Object, getGraphUriByName(g)));
         }
 
-        public IEnumerable<T> GetTriplesWithObjectFromGraph<T>(ObjectVariants objectNode, ObjectVariants graph, Func<ObjectVariants, ObjectVariants, T> returns)
+        public IEnumerable<QuadOVStruct> GetTriplesWithObjectFromGraph(ObjectVariants objectNode, ObjectVariants graph)
         {                     
             IGraph g;
-            if (named.TryGetValue(graph.ToString(), out g)) return Enumerable.Empty<T>();
-            return g.GetTriplesWithObject(objectNode, returns);
+            if (named.TryGetValue(graph.ToString(), out g)) return Enumerable.Empty<QuadOVStruct>();
+            return g.GetTriplesWithObject(objectNode)
+                    .Select(t => new QuadOVStruct(t.Subject, t.Predicate, null, getGraphUriByName(g)));
         }
 
-        public IEnumerable<T> GetTriplesWithPredicate<T>(ObjectVariants predicateNode, Func<ObjectVariants, ObjectVariants, ObjectVariants, T> returns)
+        public IEnumerable<QuadOVStruct> GetTriplesWithPredicate(ObjectVariants predicateNode)
         {
-            return named.Values.SelectMany(g => g.GetTriplesWithPredicate(predicateNode, (s, o) => returns(s, o, getGraphUriByName(g))));
+            return named.Values.SelectMany(g => g.GetTriplesWithPredicate(predicateNode).Select(t => new QuadOVStruct(t.Subject, null, t.Object, getGraphUriByName(g))));
         }
 
-        public IEnumerable<T> GetTriplesWithObject<T>(ObjectVariants objectNode, Func<ObjectVariants, ObjectVariants, ObjectVariants, T> returns)
+        public IEnumerable<QuadOVStruct> GetTriplesWithObject(ObjectVariants objectNode)
         {
-            return named.Values.SelectMany(g => g.GetTriplesWithObject(objectNode, (s, p) => returns(s, p, getGraphUriByName(g))));
+            return named.Values.SelectMany(g => g.GetTriplesWithObject(objectNode).Select(t => new QuadOVStruct(t.Subject, t.Predicate, null, getGraphUriByName(g))));
         }
 
-        public IEnumerable<T> GetTriplesWithSubject<T>(ObjectVariants subjectNode, Func<ObjectVariants, ObjectVariants, ObjectVariants, T> returns)
+        public IEnumerable<QuadOVStruct> GetTriplesWithSubject(ObjectVariants subjectNode)
         {
-            return named.Values.SelectMany(g => g.GetTriplesWithSubject(subjectNode, (p, o) => returns(p, o, getGraphUriByName(g))));
+            return named.Values.SelectMany(g => g.GetTriplesWithSubject(subjectNode).Select(t => new QuadOVStruct(null, t.Predicate, t.Object, getGraphUriByName(g))));
         }
 
         public IEnumerable<T> GetTriplesFromGraph<T>(ObjectVariants graph, Func<ObjectVariants, ObjectVariants, ObjectVariants, T> returns)
@@ -121,6 +124,7 @@ namespace RDFTripleStore
         public void DropGraph(string g)
         {
             named.Remove(g);
+            //todo remove dir
         }
 
         public void Clear(string uri)

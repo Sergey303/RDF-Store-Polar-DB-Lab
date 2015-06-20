@@ -27,19 +27,19 @@ namespace RDFTripleStore
            triples.Clear();
         }
 
-        public IEnumerable<T> GetTriplesWithObject<T>(ObjectVariants o, Func<ObjectVariants, ObjectVariants, T> createResult)
+        public IEnumerable<TripleOVStruct> GetTriplesWithObject(ObjectVariants o)
         {
             KeyValuePair<Dictionary<ObjectVariants, ObjectVariants>, Dictionary<ObjectVariants, HashSet<ObjectVariants>>> finded;
-            if (triples.TryGetValue(o, out finded)) return Enumerable.Empty<T>();
+            if (triples.TryGetValue(o, out finded)) return Enumerable.Empty<TripleOVStruct>();
             return null;
         }
 
-        public IEnumerable<T> GetTriplesWithPredicate<T>(ObjectVariants p, Func<ObjectVariants, ObjectVariants, T> createResult)
+        public IEnumerable<TripleOVStruct> GetTriplesWithPredicate(ObjectVariants p)
         {
             throw new NotImplementedException();
         }
 
-        public IEnumerable<T> GetTriplesWithSubject<T>(ObjectVariants s, Func<ObjectVariants, ObjectVariants, T> createResult)
+        public IEnumerable<TripleOVStruct> GetTriplesWithSubject(ObjectVariants s)
         {
             throw new NotImplementedException();
         }

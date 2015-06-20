@@ -14,8 +14,8 @@ namespace SparqlParseRun.SparqlClasses.Update
         private readonly RdfQuery11Translator q;
         private SparqlGraphPattern @where;
         private ObjectVariants with;
-        private SparqlQuardsPattern insert;
-        private SparqlQuardsPattern delete;
+        private SparqlQuadsPattern insert;
+        private SparqlQuadsPattern delete;
 
         public void SetWith(ObjectVariants iri)
         {
@@ -26,18 +26,18 @@ namespace SparqlParseRun.SparqlClasses.Update
             this.q = q;
         }
 
-        public SparqlUpdateModify(SparqlQuardsPattern sparqlUpdateDelete)
+        public SparqlUpdateModify(SparqlQuadsPattern sparqlUpdateDelete)
         {
             delete = sparqlUpdateDelete;
         }
      
 
-        internal void SetInsert(SparqlQuardsPattern sparqlUpdateInsert)
+        internal void SetInsert(SparqlQuadsPattern sparqlUpdateInsert)
         {
             insert = sparqlUpdateInsert;
         }
 
-        internal void SetDelete(SparqlQuardsPattern sparqlUpdateDelete)
+        internal void SetDelete(SparqlQuadsPattern sparqlUpdateDelete)
         {
             delete = sparqlUpdateDelete;
         }

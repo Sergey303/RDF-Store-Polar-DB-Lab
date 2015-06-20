@@ -12,17 +12,17 @@ namespace RDFCommon
         IEnumerable<ObjectVariants> GetObject(ObjectVariants subjectNode, ObjectVariants predicateNode, ObjectVariants graph);
         IEnumerable<ObjectVariants> GetGraph(ObjectVariants subjectNode, ObjectVariants predicateNode, ObjectVariants objectNode);
 
-        IEnumerable<T> GetTriplesWithSubjectPredicate<T>(ObjectVariants subjectNode, ObjectVariants predicateNode, Func<ObjectVariants, ObjectVariants, T> returns);
-        IEnumerable<T> GetTriplesWithPredicateObject<T>(ObjectVariants predicateNode, ObjectVariants objectNode, Func<ObjectVariants, ObjectVariants, T> returns);
-        IEnumerable<T> GetTriplesWithSubjectObject<T>(ObjectVariants subjectNode, ObjectVariants objectNode, Func<ObjectVariants, ObjectVariants, T> returns);
+        IEnumerable<QuadOVStruct> GetTriplesWithSubjectPredicate(ObjectVariants subjectNode, ObjectVariants predicateNode);
+        IEnumerable<QuadOVStruct> GetTriplesWithPredicateObject(ObjectVariants predicateNode, ObjectVariants objectNode);
+        IEnumerable<QuadOVStruct> GetTriplesWithSubjectObject(ObjectVariants subjectNode, ObjectVariants objectNode);
 
-        IEnumerable<T> GetTriplesWithSubjectFromGraph<T>(ObjectVariants subjectNode, ObjectVariants graph, Func<ObjectVariants, ObjectVariants, T> returns);
-        IEnumerable<T> GetTriplesWithPredicateFromGraph<T>(ObjectVariants predicateNode, ObjectVariants graph, Func<ObjectVariants, ObjectVariants, T> returns);
-        IEnumerable<T> GetTriplesWithObjectFromGraph<T>(ObjectVariants objectNode, ObjectVariants graph, Func<ObjectVariants, ObjectVariants, T> returns);
+        IEnumerable<QuadOVStruct> GetTriplesWithSubjectFromGraph(ObjectVariants subjectNode, ObjectVariants graph);
+        IEnumerable<QuadOVStruct> GetTriplesWithPredicateFromGraph(ObjectVariants predicateNode, ObjectVariants graph);
+        IEnumerable<QuadOVStruct> GetTriplesWithObjectFromGraph(ObjectVariants objectNode, ObjectVariants graph);
 
-        IEnumerable<T> GetTriplesWithPredicate<T>(ObjectVariants predicateNode, Func<ObjectVariants, ObjectVariants, ObjectVariants, T> returns);
-        IEnumerable<T> GetTriplesWithObject<T>(ObjectVariants objectNode, Func<ObjectVariants, ObjectVariants, ObjectVariants, T> returns);
-        IEnumerable<T> GetTriplesWithSubject<T>(ObjectVariants subjectNode, Func<ObjectVariants, ObjectVariants, ObjectVariants, T> returns);
+        IEnumerable<QuadOVStruct> GetTriplesWithPredicate(ObjectVariants predicateNode);
+        IEnumerable<QuadOVStruct> GetTriplesWithObject(ObjectVariants objectNode);
+        IEnumerable<QuadOVStruct> GetTriplesWithSubject(ObjectVariants subjectNode);
         IEnumerable<T> GetTriplesFromGraph<T>(ObjectVariants graph, Func<ObjectVariants, ObjectVariants, ObjectVariants, T> returns);
 
         IGraph CreateGraph(string sparqlUriNode);

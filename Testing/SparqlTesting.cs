@@ -16,74 +16,74 @@ namespace TestingNs
   
 
      
-        public static void InterpretMeas<T>(T Store, int i) where T:InterpretMeasure,IStore
-        {
-            Store.TrainingMode = true;
+        //public static void InterpretMeas<T>(T Store, int i) where T:InterpretMeasure,IStore
+        //{
+        //    Store.TrainingMode = true;
 
-            using (StreamWriter sr = new StreamWriter(@"..\..\output.txt", true))
-                sr.WriteLine("train");
-            SparqlTesting.OneParametrized(Store, i, 100);
+        //    using (StreamWriter sr = new StreamWriter(@"..\..\output.txt", true))
+        //        sr.WriteLine("train");
+        //    SparqlTesting.OneParametrized(Store, i, 100);
 
 
-            using (StreamWriter sr = new StreamWriter(@"..\..\output.txt", true))
-                sr.WriteLine("history count " + Store.history.Count);
+        //    using (StreamWriter sr = new StreamWriter(@"..\..\output.txt", true))
+        //        sr.WriteLine("history count " + Store.history.Count);
             
-            Store.TrainingMode = false;
-            SparqlTesting.OneParametrized(Store, i, 100);
+        //    Store.TrainingMode = false;
+        //    SparqlTesting.OneParametrized(Store, i, 100);
 
-        }
+        //}
 
-        public static void CallsAnalyze<T>(T Store, int i, int count=100)      where T: CacheMeasure,IStore
-        {
-            Store.TrainingMode = true;
-            using (StreamReader streamQueryParameters = new StreamReader(string.Format(
-                @"..\..\..\Testing\examples\bsbm\queries\parameters\param values for{0}m {1} query.txt", 1, i)))
-            {
-                var file = new FileInfo(string.Format(@"..\..\..\Testing\examples\bsbm\queries\parameters\{0}.rq", i));
-                var parametred = File.ReadAllText(file.FullName);
-                 for (int j = 0; j < count; j++)
-                {
-                    var consted = BSBmParams.QueryReadNewParameters(parametred, streamQueryParameters);
-                    SparqlQuery sparqlQuery = SparqlQueryParser.Parse(Store, consted);
-                    SparqlResultSet sparqlResultSet = sparqlQuery.Run();
-                    sparqlResultSet.ToJson();
-                }
-                Console.WriteLine("history count " + Store.history.Count);
-                using (StreamWriter sr = new StreamWriter(@"..\..\output.txt", true))
-                {
-                    sr.WriteLine("q"+i);
-                    sr.WriteLine(Store.Output());
-                }
-                //Store.TrainingMode = false;
+        //public static void CallsAnalyze<T>(T Store, int i, int count=100)      where T: CacheMeasure,IStore
+        //{
+        //    Store.TrainingMode = true;
+        //    using (StreamReader streamQueryParameters = new StreamReader(string.Format(
+        //        @"..\..\..\Testing\examples\bsbm\queries\parameters\param values for{0}m {1} query.txt", 1, i)))
+        //    {
+        //        var file = new FileInfo(string.Format(@"..\..\..\Testing\examples\bsbm\queries\parameters\{0}.rq", i));
+        //        var parametred = File.ReadAllText(file.FullName);
+        //         for (int j = 0; j < count; j++)
+        //        {
+        //            var consted = BSBmParams.QueryReadNewParameters(parametred, streamQueryParameters);
+        //            SparqlQuery sparqlQuery = SparqlQueryParser.Parse(Store, consted);
+        //            SparqlResultSet sparqlResultSet = sparqlQuery.Run();
+        //            sparqlResultSet.ToJson();
+        //        }
+        //        Console.WriteLine("history count " + Store.history.Count);
+        //        using (StreamWriter sr = new StreamWriter(@"..\..\output.txt", true))
+        //        {
+        //            sr.WriteLine("q"+i);
+        //            sr.WriteLine(Store.Output());
+        //        }
+        //        //Store.TrainingMode = false;
 
-                //RunTestParametred(Store, count: 1);
-            }
-        }
-        public static void CacheMeasureAllWithConstants<T>(T Store) where T : CacheMeasure, IStore
-        {
-            Store.TrainingMode = true;
-
-
-            Console.WriteLine("bsbm with constants train");
+        //        //RunTestParametred(Store, count: 1);
+        //    }
+        //}
+        //public static void CacheMeasureAllWithConstants<T>(T Store) where T : CacheMeasure, IStore
+        //{
+        //    Store.TrainingMode = true;
 
 
-            int i=8;
-            string file = string.Format(@"..\..\examples\bsbm\queries\with constants\{0}.rq", i);
-            var readAllText = File.ReadAllText(file);
-            var sparqlQuery = SparqlQueryParser.Parse(Store, readAllText);
-            sparqlQuery.Run().ToJson();
+        //    Console.WriteLine("bsbm with constants train");
 
-            Console.WriteLine("history count " + Store.history.Count);
-            using (StreamWriter sr = new StreamWriter(@"..\..\output.txt", true))
-            {  sr.WriteLine(i);
-            sr.WriteLine(Store.Output());  }
 
-            //for ideal cache
-            //cacheMeasure.TrainingMode = false;
-            //Console.WriteLine("bsbm with constants from history");
-            //RunTestParametred(50, 1);
+        //    int i=8;
+        //    string file = string.Format(@"..\..\examples\bsbm\queries\with constants\{0}.rq", i);
+        //    var readAllText = File.ReadAllText(file);
+        //    var sparqlQuery = SparqlQueryParser.Parse(Store, readAllText);
+        //    sparqlQuery.Run().ToJson();
 
-        }
+        //    Console.WriteLine("history count " + Store.history.Count);
+        //    using (StreamWriter sr = new StreamWriter(@"..\..\output.txt", true))
+        //    {  sr.WriteLine(i);
+        //    sr.WriteLine(Store.Output());  }
+
+        //    //for ideal cache
+        //    //cacheMeasure.TrainingMode = false;
+        //    //Console.WriteLine("bsbm with constants from history");
+        //    //RunTestParametred(50, 1);
+
+        //}
     
         public static void RunBerlinsParameters()
         {
@@ -188,9 +188,9 @@ namespace TestingNs
                 Store.ReloadFrom(Config.Source_data_folder_path+"1.ttl");
                 SparqlQueryParser.Parse(Store, sq5);
 
-                for (
-                         int i = 0;
-                i < 12; i++)
+                //for (
+                         int i = 5;
+                //i < 12; i++)
                 {
                     string file = string.Format(@"..\..\examples\bsbm\queries\with constants\{0}.rq", i + 1);
                     var readAllText = File.ReadAllText(file);
