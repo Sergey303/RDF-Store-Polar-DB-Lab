@@ -5,7 +5,7 @@ namespace SparqlParseRun.SparqlClasses.Expressions
 {
     class SparqlMinutes : SparqlExpression
     {
-        public SparqlMinutes(SparqlExpression value):base(value.AggregateLevel)
+        public SparqlMinutes(SparqlExpression value):base(value.AggregateLevel, value.IsStoreUsed)
         {
             if (value.Const != null)
                 Const = new OV_int(GetMinute(value.Const.Content));

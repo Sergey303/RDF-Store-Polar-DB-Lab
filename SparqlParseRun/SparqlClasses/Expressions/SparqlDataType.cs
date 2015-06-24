@@ -7,7 +7,7 @@ namespace SparqlParseRun.SparqlClasses.Expressions
 {
     public class SparqlDataType : SparqlExpression
     {
-        public SparqlDataType(SparqlExpression value)     : base(value.AggregateLevel)
+        public SparqlDataType(SparqlExpression value)     : base(value.AggregateLevel, value.IsStoreUsed)
         {
             //SetExprType(ObjectVariantEnum.Iri);
         // value.SetExprType(ExpressionTypeEnum.literal);

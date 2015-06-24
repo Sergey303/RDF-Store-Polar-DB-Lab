@@ -4,7 +4,7 @@ namespace SparqlParseRun.SparqlClasses.Expressions
 {
     class SparqlStrLength  : SparqlExpression
     {
-        public SparqlStrLength(SparqlExpression value) :base(value.AggregateLevel)
+        public SparqlStrLength(SparqlExpression value) :base(value.AggregateLevel, value.IsStoreUsed)
         {
             if (value.Const != null)
                 Const = new OV_int(((string) value.Const.Content).Length);

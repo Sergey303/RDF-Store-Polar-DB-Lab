@@ -16,6 +16,7 @@ namespace RDFTripleStore
                    //        : base(new SecondStringGraph(path)) 
          :   base(path)
         {
+            NamedGraphs = new NamedGraphsByFolders(new DirectoryInfo(path), NodeGenerator, d=> new GraphCascadingInt(d.FullName));
         }
 
         public void ReloadFrom(string fileName)
@@ -28,8 +29,8 @@ namespace RDFTripleStore
 
         public void ReloadFrom(Stream baseStream)
         {
-          //  ClearAll();
-          //base.FromTurtle(baseStream);    
+            ClearAll();
+          base.FromTurtle(baseStream);    
         }
 
        
@@ -39,7 +40,7 @@ namespace RDFTripleStore
         }
 
 
-        public IStoreNamedGraphs NamedGraphs { get; private set; }
+        public IStoreNamedGraphs NamedGraphs { get; set; }
         public void ClearAll()
         {
            base.Clear();

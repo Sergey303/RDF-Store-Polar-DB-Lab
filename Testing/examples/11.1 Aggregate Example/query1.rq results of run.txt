@@ -2,4 +2,4 @@
 "?totalPrice",
 "?org",
 "?auth",
-"?book" ] }, "results": { "bindings" : [] } }
+"?book" ] }, "results": { "bindings" : [{"?totalPrice" : { "type" : "literal", "value" : "21", "datatype": "http://www.w3.org/2001/XMLSchema#integer" }}] } }

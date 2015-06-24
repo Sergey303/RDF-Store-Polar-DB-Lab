@@ -27,7 +27,8 @@ namespace SparqlParseRun.SparqlClasses.Query.Result
 
         public SparqlResult(RdfQuery11Translator q)
         {
-            this.q = q;                    
+            this.q = q;
+            id = new Lazy<string>(() => this.q.Store.NodeGenerator.BlankNodeGenerateNums());
             rowArray = new ObjectVariants[q.Variables.Count];
         }
 
@@ -71,12 +72,8 @@ namespace SparqlParseRun.SparqlClasses.Query.Result
         {
             unchecked
             {
-                int mult = 0;
-                for (int i = 0; i < selected.Count; i++)
-                {
-                    mult *= (int)Math.Pow(4 * i + 5, this[selected[i]] == null ? 0 : this[selected[i]].GetHashCode());
-                }
-                return mult;
+                int i = 0;
+                return selected.Aggregate(0, (current, selectVar) => current*(int) Math.Pow(4*(i++) + 5, this[selectVar] == null ? 0 : this[selectVar].GetHashCode()));
             }
         }
 
@@ -105,9 +102,12 @@ namespace SparqlParseRun.SparqlClasses.Query.Result
             return this;
         }
 
-        public SparqlResult(IEnumerable<SparqlVariableBinding> old)
+        public SparqlResult(IEnumerable<KeyValuePair<VariableNode, ObjectVariants>> copy, RdfQuery11Translator q)
         {
-            
+
+            this.q = q;
+            id = new Lazy<string>(() => q.Store.NodeGenerator.BlankNodeGenerateNums());
+
             throw new NotImplementedException();
         }
 
@@ -127,7 +127,7 @@ namespace SparqlParseRun.SparqlClasses.Query.Result
         }
 
      
-        public void SetSelection(List<VariableNode> selected)
+        public void SetSelection(IEnumerable<VariableNode> selected)
         {
             this.selected = selected;
         }
@@ -140,29 +140,30 @@ namespace SparqlParseRun.SparqlClasses.Query.Result
 
        // private readonly Dictionary<string, VariableNode> Variables;
 
-        private List<VariableNode> selected;
+        private IEnumerable<VariableNode> selected;
         private readonly RdfQuery11Translator q;
 
         private SparqlResult(ObjectVariants[] copy, RdfQuery11Translator q)
         {
-        this.q = q;
+            id = new Lazy<string>(() => this.q.Store.NodeGenerator.BlankNodeGenerateNums());
+            this.q = q;
             rowArray = copy;
         }
 
         //public IEnumerator<SparqlResult> Branching() 
-        public bool[] BackupMask()
-        {
-            return rowArray.Select(v => v != null).ToArray();
-        }
+        //public bool[] BackupMask()
+        //{
+        //    return rowArray.Select(v => v != null).ToArray();
+        //}
 
-        public void Restore(bool[] backup)
-        {
-            for (int i = 0; i < backup.Length; i++)
-            {
-                if(backup[i]) continue;
-                rowArray[i] = null;
-            }
-        }
+        //public void Restore(bool[] backup)
+        //{
+        //    for (int i = 0; i < backup.Length; i++)
+        //    {
+        //        if(backup[i]) continue;
+        //        rowArray[i] = null;
+        //    }
+        //}
 
 
         public SparqlResult Clone()
@@ -171,5 +172,8 @@ namespace SparqlParseRun.SparqlClasses.Query.Result
             rowArray.CopyTo(copy,0);
             return new SparqlResult(copy, q){selected=selected};
         }
+
+        public string Id {get { return id.Value; }}
+       private readonly Lazy<string> id;
     }
 }

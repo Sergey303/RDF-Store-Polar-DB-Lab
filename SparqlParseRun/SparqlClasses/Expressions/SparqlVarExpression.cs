@@ -9,7 +9,7 @@ namespace SparqlParseRun.SparqlClasses.Expressions
     {
      //  public VariableNode Variable;
 
-        public SparqlVarExpression(VariableNode variableNode) :base(VariableDependenceGroupLevel.SimpleVariable)
+        public SparqlVarExpression(VariableNode variableNode) :base(VariableDependenceGroupLevel.SimpleVariable, false)
         {
             // TODO: Complete member initialization
             //Variable = variableNode;

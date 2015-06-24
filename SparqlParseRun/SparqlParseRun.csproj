@@ -59,11 +59,13 @@
     <Compile Include="SparqlClasses\Expressions\SparqlBinaryExpression.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="SparqlClasses\Expressions\SparqlEqualsExpression.cs" />
     <Compile Include="SparqlClasses\Expressions\SparqlHashExpression.cs" />
     <Compile Include="SparqlClasses\Expressions\SparqlInCollectionExpression.cs" />
     <Compile Include="SparqlClasses\Expressions\SparqlIriExpression.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="SparqlClasses\Expressions\SparqlNotEqualsExpression.cs" />
     <Compile Include="SparqlClasses\Expressions\SparqlStringLang.cs" />
     <Compile Include="SparqlClasses\Expressions\SparqlAbs.cs" />
     <Compile Include="SparqlClasses\Expressions\SparqlAndExpression.cs" />

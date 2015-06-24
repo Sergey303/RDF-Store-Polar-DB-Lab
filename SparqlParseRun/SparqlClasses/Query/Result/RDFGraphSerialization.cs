@@ -197,7 +197,7 @@ namespace SparqlParseRun.SparqlClasses.Query.Result
                     .Select(t=>
                     {
                         string p;
-                        NamespaceLocalName ns = Prologue.SplitUri((string) t.Predicate.Content);
+                        NamespaceLocalName ns = Prologue.SplitUri(t.Predicate.Content.ToString());
                         //if (!prefixes.TryGetValue(ns.@namespace, out p))
                         //{ 
                         //    RDF.Add);

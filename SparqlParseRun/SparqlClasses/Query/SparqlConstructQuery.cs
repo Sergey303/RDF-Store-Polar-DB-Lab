@@ -47,10 +47,12 @@ namespace SparqlParseRun.SparqlClasses.Query
         {
            base.Run();
             ResultSet.GraphResult = q.Store.CreateTempGraph();
-            foreach (var st in constract.Cast<SparqlTriple>())
-                foreach (var result in  ResultSet.Results)
+            foreach (var result in ResultSet.Results)
+            {   
+                foreach (var st in constract.Cast<SparqlTriple>())
+             
                     st.Substitution(result, (s, p, o) =>
-                        ResultSet.GraphResult.Add(s, p, o));
+                        ResultSet.GraphResult.Add(s, p, o));}
 
             ResultSet.ResultType = ResultType.Construct;  
             return  ResultSet;

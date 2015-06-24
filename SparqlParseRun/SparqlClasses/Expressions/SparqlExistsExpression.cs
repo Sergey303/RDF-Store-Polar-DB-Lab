@@ -9,7 +9,7 @@ namespace SparqlParseRun.SparqlClasses
     {
         //private SparqlGraphPattern sparqlGraphPattern;
 
-        public SparqlExistsExpression(ISparqlGraphPattern sparqlGraphPattern)   : base(VariableDependenceGroupLevel.SimpleVariable)
+        public SparqlExistsExpression(ISparqlGraphPattern sparqlGraphPattern)   : base(VariableDependenceGroupLevel.SimpleVariable, true)
         {
             // TODO: Complete member initialization
             //this.sparqlGraphPattern = sparqlGraphPattern;

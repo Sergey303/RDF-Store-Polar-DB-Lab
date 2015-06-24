@@ -24,7 +24,7 @@ namespace SparqlParseRun.SparqlClasses.GraphPattern
         {
             var filter = node as SparqlFilter;
             SparqlTriple sparqlTriple;
-            if (filter == null || Count == 0 || (sparqlTriple = this[Count - 1] as SparqlTriple) == null)
+            if (filter == null || Count == 0 || (sparqlTriple = this[Count - 1] as SparqlTriple) == null  || filter.SparqlExpression.IsStoreUsed)
                 base.Add(node);
             else
                 sparqlTriple.AddFilter(filter);

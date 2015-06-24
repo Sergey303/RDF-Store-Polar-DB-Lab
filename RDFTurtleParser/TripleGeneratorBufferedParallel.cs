@@ -25,9 +25,10 @@ namespace RDFTurtleParser
             tg = new TripleGeneratorBuffered(path, graphName, maxBuffer);
         }
 
-        public TripleGeneratorBufferedParallel(Stream baseStream, string graphName, int maxBuffer = 1000000)
+        public TripleGeneratorBufferedParallel(Stream baseStream, string graphName, int maxBuffer = 1000000, int maxQueue = 1000*1000)
         {
-            tg = new TripleGeneratorBuffered(baseStream, graphName, maxBuffer);
+            this.maxQueue = maxQueue;
+             tg = new TripleGeneratorBuffered(baseStream, graphName, maxBuffer);
 
         }
 

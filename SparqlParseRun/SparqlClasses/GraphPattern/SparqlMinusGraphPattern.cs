@@ -22,13 +22,16 @@ namespace SparqlParseRun.SparqlClasses.GraphPattern
         {
             var minusResults =
                 sparqlGraphPattern.Run(Enumerable.Repeat(new SparqlResult(q), 1))
-                    ;
-            return variableBindings.Where(result => minusResults.All(minusResult =>
-                minusResult.TestAll((minusVar, minusValue) =>
-                {
-                    var value = result[minusVar];
-                    return value == null || !Equals(minusValue, value);
-                })));
+             .Select(result => result.Clone()).ToArray()       ;
+            var before = variableBindings.Select(result => result.Clone()).ToArray();
+            var after = before.Where(result =>
+                minusResults.All(minusResult =>
+                    minusResult.TestAll((minusVar, minusValue) =>
+                    {
+                        var value = result[minusVar];
+                        return value == null || !Equals(minusValue, value);
+                    })));
+            return after;
         }
 
         public SparqlGraphPatternType PatternType { get{return SparqlGraphPatternType.Minus;} }

@@ -8,7 +8,7 @@ namespace SparqlParseRun.SparqlClasses.Expressions
 {
     class SparqlEncodeForUri : SparqlExpression
     {
-        public SparqlEncodeForUri(SparqlExpression value, RdfQuery11Translator q)   :base(value.AggregateLevel)
+        public SparqlEncodeForUri(SparqlExpression value, RdfQuery11Translator q)   :base(value.AggregateLevel, value.IsStoreUsed)
         {
             //SetExprType(ObjectVariantEnum.Str);
           //  value.SetExprType(ExpressionTypeEnum.stringOrWithLang);

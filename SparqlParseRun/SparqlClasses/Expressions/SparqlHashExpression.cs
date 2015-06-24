@@ -6,7 +6,7 @@ namespace SparqlParseRun.SparqlClasses.Expressions
     {
 
         public SparqlHashExpression(SparqlExpression value)
-            : base(value.AggregateLevel)
+            : base(value.AggregateLevel, value.IsStoreUsed)
         {
         }
 

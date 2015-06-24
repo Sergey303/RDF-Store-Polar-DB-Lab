@@ -14,7 +14,7 @@ namespace RDFCommon.OVns
             (s, nt) => new OV_string((string) s),
             (strLang, nt) => new OV_langstring((string) ((object[]) strLang)[0], (string) ((object[]) strLang)[1]),
             (s, nt) => new OV_double((double) s),
-            (s, nt) => new OV_decimal((decimal) s),
+            (s, nt) => new OV_decimal(Convert.ToDecimal(s)),
             (s, nt) => new OV_float((float) s),
             (s, nt) => new OV_int((int) s),
             (s, nt) => new OV_dateTimeStamp(DateTimeOffset.FromFileTime((long) s)), 

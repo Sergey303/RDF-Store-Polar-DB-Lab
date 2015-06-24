@@ -80,16 +80,16 @@ namespace SparqlParseRun.SparqlClasses.Update
 
             foreach (var result in results)
             {
+               
                 if (delete != null)
                 {
                     if (with == null)
                         foreach (SparqlTriple triple in defaultGraphTriplesDelete)
                             triple.Substitution(result,
-                                store.Delete,
-                                store.Name);
+                                store.Delete);
                     else
                         foreach (SparqlTriple triple in defaultGraphTriplesDelete)
-                            triple.Substitution(result,
+                            triple.Substitution(result,   
                                 with,
                                 store.NamedGraphs.Delete);
                     foreach (SparqlGraphGraph sparqlGraphPattern in graphPatternsDelete)
@@ -110,8 +110,7 @@ namespace SparqlParseRun.SparqlClasses.Update
                     if (with == null)
                     foreach (SparqlTriple triple in defaultGraphTriplesInsert)
                         triple.Substitution(result,
-                            store.Add,
-                            store.Name);
+                            store.Add);
                     else
                         foreach (SparqlTriple triple in defaultGraphTriplesInsert)
                             triple.Substitution(result,

@@ -8,7 +8,7 @@ namespace SparqlParseRun.SparqlClasses.Expressions
     {
       
 
-        public SparqlIsBlank(SparqlExpression value)  :base(value.AggregateLevel)
+        public SparqlIsBlank(SparqlExpression value)  :base(value.AggregateLevel, value.IsStoreUsed)
         {
             //SetExprType(ObjectVariantEnum.Bool);
             if(value.Const!=null)

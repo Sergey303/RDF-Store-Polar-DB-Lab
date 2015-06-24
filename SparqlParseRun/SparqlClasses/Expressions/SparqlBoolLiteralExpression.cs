@@ -7,7 +7,7 @@ namespace SparqlParseRun.SparqlClasses.Expressions
    public class SparqlBoolLiteralExpression : SparqlExpression
     {
 
-        public SparqlBoolLiteralExpression(ObjectVariants sparqlLiteralNode)       :base(VariableDependenceGroupLevel.Const)
+        public SparqlBoolLiteralExpression(ObjectVariants sparqlLiteralNode)
         {
             Const = sparqlLiteralNode;
             

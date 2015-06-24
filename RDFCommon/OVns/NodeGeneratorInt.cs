@@ -1,3 +1,4 @@
+using System.Linq;
 using Task15UniversalIndex;
 
 namespace RDFCommon.OVns
@@ -28,7 +29,8 @@ namespace RDFCommon.OVns
         public void Build()
         {
            
-            coding_table.InsertPortion(SpecialTypesClass.GetAll());
+            //coding_table.InsertPortion(SpecialTypesClass.GetAll());
+            coding_table.InsertPortion(Enumerable.Repeat(SpecialTypesClass.RdfType,1));
             coding_table.BuildScale();
             SpecialTypes = new SpecialTypesClass(this);
         }
@@ -53,20 +55,26 @@ namespace RDFCommon.OVns
         }
 
 
-        public override ObjectVariants CreateLiteralOtherType(string p, string typeUriNode)
-        {
-            return new OV_typedint(p, coding_table.Add(typeUriNode), coding_table.GetStringByCode);
-        }
+        //public override ObjectVariants CreateLiteralOtherType(string p, string typeUriNode)
+        //{
+        //    return new OV_typedint(p, coding_table.Add(typeUriNode), coding_table.GetStringByCode);
+        //}
 
        
-           public ObjectVariants GetCoded(int code)
+        //   public ObjectVariants GetCoded(int code)
+        //{
+        //    return new OV_iriint(code, coding_table.GetStringByCode);
+        //}
+
+        public override bool TryGetUri(OV_iri iriString, out ObjectVariants iriCoded)
         {
-            return new OV_iriint(code, coding_table.GetStringByCode);
+            int code = coding_table.GetCodeByString(iriString.UriString);
+            iriCoded = iriString;
+            if (code == -1)
+                return false;
+            iriCoded=new OV_iriint(code, coding_table.GetStringByCode);
+            return true;
         }
-
-     
-
-     
     }
     
 }

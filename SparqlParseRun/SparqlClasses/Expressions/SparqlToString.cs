@@ -8,7 +8,7 @@ namespace SparqlParseRun.SparqlClasses.Expressions
     {
        // private SparqlExpression sparqlExpression;
 
-        public SparqlToString(SparqlExpression child):base(child.AggregateLevel)
+        public SparqlToString(SparqlExpression child):base(child.AggregateLevel, child.IsStoreUsed)
            
         {
             var childConst = child.Const;

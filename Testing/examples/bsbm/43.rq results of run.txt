@@ -1,57 +1,14 @@
-<ns:sparql xmlns:ns="http://www.w3.org/2005/sparql-results#">
-  <ns:head>
-    <ns:variable ns:name="?propertyTextual" />
-  </ns:head>
-  <ns:results>
-    <ns:result>
-      <ns:binding ns:name="?propertyTextual">
-        <ns:literal ns:type="http://www.w3.org/2001/XMLSchema#string">farers sibilation splicing curbstones cryobiologically chirks amoebean stapled awaked</ns:literal>
-      </ns:binding>
-    </ns:result>
-    <ns:result>
-      <ns:binding ns:name="?propertyTextual">
-        <ns:literal ns:type="http://www.w3.org/2001/XMLSchema#string">pseudopod masterpieces curvet abandoning</ns:literal>
-      </ns:binding>
-    </ns:result>
-    <ns:result>
-      <ns:binding ns:name="?propertyTextual">
-        <ns:literal ns:type="http://www.w3.org/2001/XMLSchema#string">subvarieties wineshop spunkiest democratizing roseate affectionless disequilibriums sennits heroinism tucked</ns:literal>
-      </ns:binding>
-    </ns:result>
-    <ns:result>
-      <ns:binding ns:name="?propertyTextual">
-        <ns:literal ns:type="http://www.w3.org/2001/XMLSchema#string">medicable unfaltering caftan brocks rocketer</ns:literal>
-      </ns:binding>
-    </ns:result>
-    <ns:result>
-      <ns:binding ns:name="?propertyTextual">
-        <ns:literal ns:type="http://www.w3.org/2001/XMLSchema#string">thwacking scourgers reigned copyists boater chela unicef</ns:literal>
-      </ns:binding>
-    </ns:result>
-    <ns:result>
-      <ns:binding ns:name="?propertyTextual">
-        <ns:literal ns:type="http://www.w3.org/2001/XMLSchema#string">astounds recruiting treasuries copulatively succour</ns:literal>
-      </ns:binding>
-    </ns:result>
-    <ns:result>
-      <ns:binding ns:name="?propertyTextual">
-        <ns:literal ns:type="http://www.w3.org/2001/XMLSchema#string">fordable refueled querns propagates assets alarmclock clonk unstoppable fuelled incubational mordant turquoises foreteller wheedler stereotyper</ns:literal>
-      </ns:binding>
-    </ns:result>
-    <ns:result>
-      <ns:binding ns:name="?propertyTextual">
-        <ns:literal ns:type="http://www.w3.org/2001/XMLSchema#string">ranger heartburn subhuman zaftig ascertaining spearer martins</ns:literal>
-      </ns:binding>
-    </ns:result>
-    <ns:result>
-      <ns:binding ns:name="?propertyTextual">
-        <ns:literal ns:type="http://www.w3.org/2001/XMLSchema#string">liquidizing throwaways extraneousness blamably refuels shamrocks ironstones idiosyncracies enslavers resurrects collegium maniple</ns:literal>
-      </ns:binding>
-    </ns:result>
-    <ns:result>
-      <ns:binding ns:name="?propertyTextual">
-        <ns:literal ns:type="http://www.w3.org/2001/XMLSchema#string">writeoff altering eolithic outgun occulting obstacles carboys wassail cankers sponsorship</ns:literal>
-      </ns:binding>
-    </ns:result>
-  </ns:results>
-</ns:sparql>
+{ "head": { "vars": [ "?propertyTextual",
+"?product",
+"?label",
+"?p1",
+"?p2" ] }, "results": { "bindings" : [{"?propertyTextual" : { "type" : "literal", "value" : "farers sibilation splicing curbstones cryobiologically chirks amoebean stapled awaked" }},
+{"?propertyTextual" : { "type" : "literal", "value" : "pseudopod masterpieces curvet abandoning" }},
+{"?propertyTextual" : { "type" : "literal", "value" : "subvarieties wineshop spunkiest democratizing roseate affectionless disequilibriums sennits heroinism tucked" }},
+{"?propertyTextual" : { "type" : "literal", "value" : "medicable unfaltering caftan brocks rocketer" }},
+{"?propertyTextual" : { "type" : "literal", "value" : "thwacking scourgers reigned copyists boater chela unicef" }},
+{"?propertyTextual" : { "type" : "literal", "value" : "astounds recruiting treasuries copulatively succour" }},
+{"?propertyTextual" : { "type" : "literal", "value" : "fordable refueled querns propagates assets alarmclock clonk unstoppable fuelled incubational mordant turquoises foreteller wheedler stereotyper" }},
+{"?propertyTextual" : { "type" : "literal", "value" : "ranger heartburn subhuman zaftig ascertaining spearer martins" }},
+{"?propertyTextual" : { "type" : "literal", "value" : "liquidizing throwaways extraneousness blamably refuels shamrocks ironstones idiosyncracies enslavers resurrects collegium maniple" }},
+{"?propertyTextual" : { "type" : "literal", "value" : "writeoff altering eolithic outgun occulting obstacles carboys wassail cankers sponsorship" }}] } }

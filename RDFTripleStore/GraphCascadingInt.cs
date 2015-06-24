@@ -33,7 +33,12 @@ namespace RDFTripleStore
 
         public IEnumerable<ObjectVariants> GetAllSubjects()
         {
-            throw new NotImplementedException();
+            return
+                ps_index.GetRecordsAll()
+                    .Cast<object[]>()
+                    .Select(row => (int) row[0])
+                    .Distinct()
+                    .Select(s => new OV_iriint((int) s, ng.coding_table.GetStringByCode));
         }
 
         public long GetTriplesCount()
@@ -53,7 +58,8 @@ namespace RDFTripleStore
 
         public void FromTurtle(Stream inputStream)
         {
-            throw new NotImplementedException();
+            Build(new TripleGeneratorBufferedParallel(inputStream, null));
+            
         }
 
         public IEnumerable<T> GetTriples<T>(Func<ObjectVariants,ObjectVariants,ObjectVariants, T> returns)
@@ -159,7 +165,7 @@ namespace RDFTripleStore
             
             generator.Start(ProcessPortion);
             table.TableCell.Flush();
-
+             if(!table.Elements().Any()) return;
             ng.Build();
 
             sw.Stop();

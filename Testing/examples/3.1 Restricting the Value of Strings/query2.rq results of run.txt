@@ -1,2 +1,2 @@
 { "head": { "vars": [ "?title",
-"?x" ] }, "results": { "bindings" : [] } }
+"?x" ] }, "results": { "bindings" : [{"?title" : { "type" : "literal", "value" : "The Semantic Web" }}] } }

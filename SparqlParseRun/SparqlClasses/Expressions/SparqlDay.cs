@@ -6,7 +6,7 @@ namespace SparqlParseRun.SparqlClasses.Expressions
     class SparqlDay : SparqlExpression
     {
         public SparqlDay(SparqlExpression value)
-            : base(value.AggregateLevel)
+            : base(value.AggregateLevel, value.IsStoreUsed)
         {
             if (value.Const != null)
                 Const = new OV_int(GetDay(value.Const.Content));

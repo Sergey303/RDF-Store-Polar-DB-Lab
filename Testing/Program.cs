@@ -5,6 +5,7 @@ using System.Xml.Linq;
 using RDFCommon;
 using RDFCommon.OVns;
 using RDFTripleStore;
+using SparqlParseRun;
 using SparqlParseRun.SparqlClasses;
 using SparqlParseRun.SparqlClasses.Query;
 using SparqlParseRun.SparqlClasses.Query.Result;
@@ -23,9 +24,80 @@ namespace TestingNs
           //  {
           //      SparqlTesting.OneParametrized(Store, i + 1, 100);
           //  }
-            SparqlTesting.RunBerlinsWithConstants();
+         TestExamples();
+             //  SparqlTesting.RunBerlinsWithConstants();
         }
-        private static void MainPersons(string[] args)
+
+        private static void TestExamples()
+        {
+            DirectoryInfo examplesRoot = new DirectoryInfo(@"..\..\examples");
+            foreach (var exampleDir in examplesRoot.GetDirectories().Skip(0))
+                //  var exampleDir = new DirectoryInfo(@"..\..\examples\bsbm");
+            {
+                Console.WriteLine("example: " + exampleDir.Name);
+                //if (exampleDir.Name != @"9.4 Arbitrary Length Path Matching"
+                //    //&& rqQueryFile.FullName != @"C:\Users\Admin\Source\Repos\SparqlWpf\UnitTestDotnetrdf_test\examples\insert where\query2.rq"
+                //  ) continue;
+                //var nameGraphsDir = new DirectoryInfo(Path.Combine(exampleDir.FullName, "named graphs"));
+                //if (nameGraphsDir.Exists) continue;
+                foreach (var ttlDatabase in exampleDir.GetFiles("*.ttl"))
+                {
+                    var store = new StoreCascadingInt(exampleDir.FullName + "/tmp");
+                    //using (StreamReader reader = new StreamReader(ttlDatabase.FullName))
+                    store.ReloadFrom(ttlDatabase.FullName);
+                  store.Start();
+                  var nameGraphsDir = new DirectoryInfo(Path.Combine(exampleDir.FullName, "named graphs"));
+                  if (nameGraphsDir.Exists) 
+                      foreach (var namedGraphFile in nameGraphsDir.GetFiles())
+                      using (StreamReader reader = new StreamReader(namedGraphFile.FullName))
+                      {
+                          var readLine = reader.ReadLine();
+                          if (readLine == null) continue;
+                          var headComment = readLine.Trim();
+                          if (!headComment.StartsWith("#")) continue;
+                          headComment = headComment.Substring(1);
+                          //Uri uri;
+                          //if (!Uri.TryCreate(headComment, UriKind.Absolute, out uri)) continue;Prologue.SplitUri(uri.AbsoluteUri).FullName
+                          var graph = store.NamedGraphs.CreateGraph(headComment);
+                          graph.FromTurtle(reader.ReadToEnd());
+                          
+                      }
+                    foreach (var rqQueryFile in exampleDir.GetFiles("*.rq"))
+                    {
+
+                        Console.WriteLine("query file: " + rqQueryFile);
+                        var outputFile = rqQueryFile.FullName + " results of run.txt";
+                        SparqlResultSet sparqlResultSet = null;
+                        //  try
+                        var query = rqQueryFile.OpenText().ReadToEnd();
+
+                        SparqlQuery sparqlQuery = null;
+                        {
+                            //Perfomance.ComputeTime(() =>
+                            {
+                                sparqlQuery = SparqlQueryParser.Parse(store, query);
+                            } //, exampleDir.Name+" "+rqQueryFile.Name+" parse ", true);
+
+                            if (sparqlQuery != null)
+                                // Perfomance.ComputeTime(() =>
+                            {
+                                sparqlResultSet = sparqlQuery.Run();
+                                File.WriteAllText(outputFile, sparqlResultSet.ToJson().ToString());
+                            } //, exampleDir.Name + " " + rqQueryFile.Name + " run ", true);
+                            //    Assert.AreEqual(File.ReadAllText(rqQueryFile.FullName + " expected results.txt"),
+                            //      File.ReadAllText(outputFile));
+                        }
+                        //  catch (Exception e)
+                        {
+                            // Assert.(e.Message);
+                        }
+                    }
+                }
+            }
+        }
+
+        private static
+           void MainPersons(string[] args)
         {
             TestingPhotoPersons.Npersons = 40*1000;
             string path = "../../../Databases/int based/" + TestingPhotoPersons.Npersons/1000+"/";

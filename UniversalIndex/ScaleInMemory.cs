@@ -77,7 +77,7 @@ namespace Task15UniversalIndex
             else
             {
                 long sta = starts[ind];
-                long num = ind < n_scale - 1 ? starts[ind + 1] - sta : number - sta;
+                long num = ind < n_scale - 1 ? starts[ind + 1] - sta : number-sta+start;
                 return new Diapason() { start = sta, numb = num };
             }
         }

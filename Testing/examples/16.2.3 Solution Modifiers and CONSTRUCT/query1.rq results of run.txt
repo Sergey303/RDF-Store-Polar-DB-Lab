@@ -1,1 +1,2 @@
-{  }
+{ "http://iis.nsk.su/.well-known/genid/blank537266122893088512640220121312989056" : { "http://xmlns.com/foaf/0.1/name" : { "type" : "literal", "value" : "Alice" } },
+"http://iis.nsk.su/.well-known/genid/blank537266122893088512285337992611032928" : { "http://xmlns.com/foaf/0.1/name" : { "type" : "literal", "value" : "Eve" } } }

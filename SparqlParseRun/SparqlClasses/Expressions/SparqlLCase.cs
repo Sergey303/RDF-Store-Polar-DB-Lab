@@ -5,7 +5,7 @@ namespace SparqlParseRun.SparqlClasses.Expressions
 {
     class SparqlLCase :SparqlExpression
     {
-        public SparqlLCase(SparqlExpression value)        :base(value.AggregateLevel)
+        public SparqlLCase(SparqlExpression value)        :base(value.AggregateLevel, value.IsStoreUsed)
         {
             if (value.Const != null)
                 Const = value.Const.Change(o => o.ToLower());

@@ -5,7 +5,7 @@ namespace SparqlParseRun.SparqlClasses.Expressions
 {
     class SparqlNumLiteralExpression : SparqlExpression
     {
-        public SparqlNumLiteralExpression(ObjectVariants sparqlLiteralNode)     :base(VariableDependenceGroupLevel.Const)
+        public SparqlNumLiteralExpression(ObjectVariants sparqlLiteralNode)  
         {
             //SetExprType(ExpressionTypeEnum.numeric);
             Const = sparqlLiteralNode;

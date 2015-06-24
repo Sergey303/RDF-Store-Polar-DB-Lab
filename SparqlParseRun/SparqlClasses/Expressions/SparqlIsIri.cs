@@ -8,7 +8,7 @@ namespace SparqlParseRun.SparqlClasses.Expressions
         
 
         public SparqlIsIri(SparqlExpression value)
-            : base(value.AggregateLevel)
+            : base(value.AggregateLevel, value.IsStoreUsed)
         {
             if (value.Const != null)
                 Const = new OV_bool(value.Const is IIriNode);

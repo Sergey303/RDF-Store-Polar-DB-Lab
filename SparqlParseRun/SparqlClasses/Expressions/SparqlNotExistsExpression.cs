@@ -6,7 +6,7 @@ namespace SparqlParseRun.SparqlClasses
 {
     public class SparqlNotExistsExpression : SparqlExistsExpression
     {
-
+             
         public SparqlNotExistsExpression(ISparqlGraphPattern sparqlGraphPattern)
             : base(sparqlGraphPattern)
         {

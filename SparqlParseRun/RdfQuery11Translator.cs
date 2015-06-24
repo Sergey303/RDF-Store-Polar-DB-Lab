@@ -68,8 +68,7 @@ namespace SparqlParseRun
 
       
         public new SparqlBlankNode CreateBlankNode(string blankNodeString)
-        {
-            blankNodeString = "blank " + blankNodeString;
+        {   
             VariableNode blankNode;
             if (Variables.TryGetValue(blankNodeString, out blankNode)) return (SparqlBlankNode)blankNode;
             Variables.Add(blankNodeString, blankNode = new SparqlBlankNode(blankNodeString, Variables.Count));
@@ -78,7 +77,7 @@ namespace SparqlParseRun
 
         public new SparqlBlankNode CreateBlankNode()
         {
-            var blankNode = new SparqlBlankNode("generated ", Variables.Count);
+            var blankNode = new SparqlBlankNode(store.NodeGenerator.CreateBlank(), Variables.Count);
             Variables.Add(Guid.NewGuid().ToString(), blankNode); //todo
 
             return blankNode;

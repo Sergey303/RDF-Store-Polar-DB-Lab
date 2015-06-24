@@ -231,8 +231,8 @@ WHERE groupGraphPattern { $value.SetWhere($groupGraphPattern.value); };
 
  conditionalAndExpression returns [SparqlExpression value] :  relationalExpression { $value=$relationalExpression.value; } ( '&&' r= relationalExpression {$value=new SparqlAndExpression($value, $r.value);} )*;
  relationalExpression returns [SparqlExpression value] :  numericExpression { $value=$numericExpression.value; }  
- ( '=' r=numericExpression {$value=SparqlExpression.EqualsExpression($value, $r.value);}
-  | '!=' r=numericExpression {$value=SparqlExpression.NotEquals($value, $r.value);}
+ ( '=' r=numericExpression {$value=new SparqlEqualsExpression($value, $r.value, q.Store.NodeGenerator);}
+  | '!=' r=numericExpression {$value= new SparqlNotEqualsExpression($value, $r.value, q.Store.NodeGenerator);}
   | '<' r=numericExpression {$value=SparqlExpression.Smaller($value, $r.value);}
   | '>' r=numericExpression {$value=SparqlExpression.Greather($value, $r.value);}
   | '<=' r=numericExpression {$value=SparqlExpression.SmallerOrEquals($value, $r.value);}
@@ -353,7 +353,7 @@ WHERE groupGraphPattern { $value.SetWhere($groupGraphPattern.value); };
  :  TRUE { $value=true; } 
  |	FALSE { $value=false; } ;
  string : STRING_LITERAL1 | STRING_LITERAL2 | STRING_LITERAL_LONG1 | STRING_LITERAL_LONG2;
- iri returns [ObjectVariants value] : iriString { $value=q.Store.NodeGenerator.GetUri($iriString.value);};
+ iri returns [ObjectVariants value] : iriString { $value=new OV_iri($iriString.value);};
  iriString returns [string value] : IRIREF {$value=$IRIREF.text.Substring(1, $IRIREF.text.Length-2);} 
  |	PNAME_LN {$value=q.prolog.GetUriFromPrefixed($PNAME_LN.text); } 
  | PNAME_NS {$value=q.prolog.GetUriFromPrefixedNamespace($PNAME_NS.text); };

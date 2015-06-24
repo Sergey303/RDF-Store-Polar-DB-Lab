@@ -62,7 +62,7 @@ namespace SparqlParseRun.SparqlClasses.SparqlAggregateExpression
                 {
                     if (result is SparqlGroupOfResults)
                     {
-                        var @group = (result as SparqlGroupOfResults).Group.ToArray();
+                        var @group = (result as SparqlGroupOfResults).Group.Select(r=>r.Clone()).ToArray();
                         //.Select(sparqlResult => sparqlResult.Clone())
                         if (group.Length == 0) return new OV_int(0);
                         if (group.Length == 1) return Expression.TypedOperator(group[0]);

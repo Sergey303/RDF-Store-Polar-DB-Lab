@@ -1,15 +1,10 @@
-<ns:sparql xmlns:ns="http://www.w3.org/2005/sparql-results#">
-  <ns:head>
-    <ns:variable ns:name="?title" />
-    <ns:variable ns:name="?text" />
-    <ns:variable ns:name="?reviewDate" />
-    <ns:variable ns:name="?reviewer" />
-    <ns:variable ns:name="?reviewerName" />
-    <ns:variable ns:name="?rating1" />
-    <ns:variable ns:name="?rating2" />
-    <ns:variable ns:name="?rating3" />
-    <ns:variable ns:name="?rating4" />
-    <ns:variable ns:name="?review" />
-  </ns:head>
-  <ns:results />
-</ns:sparql>
+{ "head": { "vars": [ "?title",
+"?text",
+"?reviewDate",
+"?reviewer",
+"?reviewerName",
+"?rating1",
+"?rating2",
+"?rating3",
+"?rating4",
+"?review" ] }, "results": { "bindings" : [] } }

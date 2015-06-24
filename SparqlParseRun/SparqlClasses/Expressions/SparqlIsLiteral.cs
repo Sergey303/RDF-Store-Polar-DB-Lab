@@ -6,7 +6,7 @@ namespace SparqlParseRun.SparqlClasses.Expressions
     class SparqlIsLiteral : SparqlExpression
     {
         public SparqlIsLiteral(SparqlExpression value)
-            : base(value.AggregateLevel)
+            : base(value.AggregateLevel, value.IsStoreUsed)
         {
             //SetExprType(ObjectVariantEnum.Bool);
 

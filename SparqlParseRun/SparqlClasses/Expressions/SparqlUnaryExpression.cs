@@ -11,7 +11,8 @@ namespace SparqlParseRun.SparqlClasses.Expressions
     {
 
 
-        public SparqlUnaryExpression(Func<dynamic, dynamic> @operator, SparqlExpression child):base(child.AggregateLevel)
+        public SparqlUnaryExpression(Func<dynamic, dynamic> @operator, SparqlExpression child)
+            : base(child.AggregateLevel, child.IsStoreUsed)
         {
             var childConst = child.Const;
 
@@ -27,7 +28,8 @@ namespace SparqlParseRun.SparqlClasses.Expressions
     internal class SparqlUnaryExpression<T> : SparqlExpression where T : ObjectVariants
     {
         public SparqlUnaryExpression(Func<dynamic, dynamic> @operator, SparqlExpression child,
-            Func<dynamic, ObjectVariants> ctor)    :base(child.AggregateLevel)
+            Func<dynamic, ObjectVariants> ctor)
+            : base(child.AggregateLevel, child.IsStoreUsed)
         {
             Operator = @operator;
          

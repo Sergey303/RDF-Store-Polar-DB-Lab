@@ -8,7 +8,7 @@ namespace SparqlParseRun.SparqlClasses.Expressions
 {
     class SparqlTz : SparqlExpression
     {
-        public SparqlTz(SparqlExpression value)   :base(value.AggregateLevel)
+        public SparqlTz(SparqlExpression value)   :base(value.AggregateLevel, value.IsStoreUsed)
         {
             if (value.Const != null)
             {

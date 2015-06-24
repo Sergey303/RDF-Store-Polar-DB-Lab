@@ -7,6 +7,6 @@
 :book1  ns:discount  0.2 .
 
 :book2  dc:title     "The Semantic Web" .
-:book2  ns:price     23 .
+:book2  ns:price     23.
 :book2  ns:discount  0.25 .
 #coment

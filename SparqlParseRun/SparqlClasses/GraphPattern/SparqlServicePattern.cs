@@ -97,9 +97,8 @@ namespace SparqlParseRun.SparqlClasses.GraphPattern
                     {
                         var variable = q.GetVariable(xb.Attribute(xn + "name").Value);
                         var node = xb.Elements().FirstOrDefault();
-                        return new SparqlVariableBinding(variable,
-                            Xml2Node(xn, node));
-                    })));
+                        return new KeyValuePair<VariableNode, ObjectVariants>(variable, Xml2Node(xn, node));
+                    }), q));
         }
 
         private ObjectVariants Xml2Node(XNamespace xn, XElement b)

@@ -91,7 +91,7 @@ namespace Task15UniversalIndex
         public IEnumerable<object> GetAllByKeys(int key1, Tkey key2)
         {
             Diapason dia = GetLocalDiapason(key1, key2);
-            return GetAllInDiap(dia, key2);
+             return GetAllInDiap(dia, key2);
         }
         public IEnumerable<int> GetKey1All()
         {

@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using RDFCommon;
@@ -26,33 +27,44 @@ namespace SparqlParseRun.SparqlClasses.GraphPattern.Triples.Path
         {
             var firstVar = sNode as VariableNode;
             var secondVar = oNode as VariableNode;
-        
-            ObjectVariants s = null, o = null;
-           IEnumerable<SparqlResult> bindings = variableBindings as SparqlResult[] ?? variableBindings.ToArray();
-            foreach (var variableBinding in bindings)
-            {
 
-                s = firstVar == null ? sNode : variableBinding[firstVar];
-                o = secondVar == null ? oNode : variableBinding[secondVar]; 
-                bool isSKnowns = s!=null;
-                bool isOKnowns = o!=null;
-                if (isSKnowns)
+            foreach (var variableBinding in variableBindings)
+            {                                         
+                ObjectVariants s = firstVar == null ? sNode : variableBinding[firstVar];
+                ObjectVariants o = secondVar == null ? oNode : variableBinding[secondVar];
+                
+                switch (NullablePairExt.Get(s, o))
                 {
-                    if (isOKnowns)
-                    {
-                        if (s.Equals(o)) yield return variableBinding;
-                    }  else
-                     yield return variableBinding.Add(s, secondVar);
+                    case NP.bothNull:
+                        foreach (var subjectNode in q.Store.GetAllSubjects())
+                        {
+                            yield return variableBinding.Add(subjectNode, firstVar, subjectNode, secondVar);
+                            variableBinding[secondVar] = null;
+                            foreach (var tr in triples.Aggregate(Enumerable.Repeat(variableBinding, 1),
+                     (enumerable, triple) => triple.Run(enumerable)))
+                                yield return tr;
+                        }                       
+                    continue;
+                    case NP.leftNull:
+                        yield return variableBinding.Add(o, firstVar);
+                        variableBinding[firstVar] = null;
+                        break;
+                    case NP.rigthNull:
+                           yield return variableBinding.Add(s, secondVar);
+                           variableBinding[secondVar] = null;
+                        break;
+                    case NP.bothNotNull:
+                        if (s.Equals(o)) yield return variableBinding;                   
+                        break;
+                    default:
+                        throw new ArgumentOutOfRangeException();
                 }
-                else if (isOKnowns) yield return variableBinding.Add(o, firstVar);
-                else
-                    foreach (var subjectNode in q.Store.GetAllSubjects())
-                    {
-                       yield return variableBinding.Add(subjectNode, firstVar, subjectNode, secondVar);
-                    }
+                 //todo optimize
+                foreach (var tr in triples.Aggregate(Enumerable.Repeat(variableBinding, 1),
+                    (enumerable, triple) => triple.Run(enumerable)))
+                    yield return tr;
             }
-            foreach (var tr in triples.Aggregate(bindings, (current, sparqlGraphPattern) => sparqlGraphPattern.Run(current)))
-                yield return tr;
+
         }
 
         public SparqlGraphPatternType PatternType { get{return SparqlGraphPatternType.SparqlTriple;} }

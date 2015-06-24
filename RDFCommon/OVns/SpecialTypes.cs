@@ -71,26 +71,26 @@ namespace RDFCommon
         //public ObjectVariants @float;
         //public ObjectVariants timeDuration;
         //public ObjectVariants dateTime;
-        public ObjectVariants nil;
-        public ObjectVariants first;
-        public ObjectVariants rest;
+        public ObjectVariants nil=new OV_iri(Nil);
+        public ObjectVariants first=new OV_iri(RdfFirst);
+        public ObjectVariants rest=new OV_iri(RdfRest);
         public ObjectVariants type;
         //private const string rdf_syntax_ns = "http://www.w3.org/1999/02/22-rdf-syntax-ns#";
         //private const string xmlSchemaNs = "http://www.w3.org/2001/XMLSchema#";
         //private const string xmlSchemaPrefix="xsd:";
 
-        public static string[] GetAll()
-        {
-            return new[]
-            {
-              // String,Bool,Decimal,Integer, Float, Double, 
-              // Date, Time, DateTime, DateTimeStamp,
-              // GYear, GMonth, GDay, GYearMonth,           GMonthDay,      Duration   ,YearMonthDuration  , DayTimeDuration,
-              // Byte, Short, Int, Long, UnsignedByte, unsignedShort, unsignedInt, unsignedLong,  positiveInteger,   nonNegativeInteger, negativeInteger, nonPositiveInteger,
-              //hexBinary, base64Binary, anyURI, language, normalizedString, token, NMTOKEN,  Name, NCName   
-             Nil   ,RdfFirst,  RdfRest, RdfType
-            };
-        }
+        //public static string[] GetAll()
+        //{
+        //    return new[]
+        //    {
+        //      // String,Bool,Decimal,Integer, Float, Double, 
+        //      // Date, Time, DateTime, DateTimeStamp,
+        //      // GYear, GMonth, GDay, GYearMonth,           GMonthDay,      Duration   ,YearMonthDuration  , DayTimeDuration,
+        //      // Byte, Short, Int, Long, UnsignedByte, unsignedShort, unsignedInt, unsignedLong,  positiveInteger,   nonNegativeInteger, negativeInteger, nonPositiveInteger,
+        //      //hexBinary, base64Binary, anyURI, language, normalizedString, token, NMTOKEN,  Name, NCName   
+        //     Nil   ,RdfFirst,  RdfRest, RdfType
+        //    };
+        //}
        public SpecialTypesClass(NodeGenerator nodeGenerator)
         {
         //    date =nodeGenerator. CreateUriNode(Date);
@@ -106,9 +106,9 @@ namespace RDFCommon
         //    @float = nodeGenerator.CreateUriNode(Float);
         //    timeDuration = nodeGenerator.CreateUriNode(DayTimeDuration);
         //    dateTime = nodeGenerator.CreateUriNode(DateTime);
-            nil = nodeGenerator.AddIri(Nil);
-            first = nodeGenerator.AddIri(RdfFirst);
-            rest = nodeGenerator.AddIri(RdfRest);
+            //nil = nodeGenerator.AddIri(Nil);
+            //first = nodeGenerator.AddIri(RdfFirst);
+            //rest = nodeGenerator.AddIri(RdfRest);
             type = nodeGenerator.AddIri(RdfType);        
         }
 

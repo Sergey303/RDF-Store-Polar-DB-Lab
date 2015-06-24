@@ -11,7 +11,7 @@ namespace SparqlParseRun.SparqlClasses.Expressions
    //     private SparqlUriNode sparqlUriNode;
  
 
-        public SparqlFunctionCall(string sparqlUriNode, SparqlArgs sparqlArgs):base(SetAggregateLevel(sparqlArgs[0].AggregateLevel))
+        public SparqlFunctionCall(string sparqlUriNode, SparqlArgs sparqlArgs):base(SetAggregateLevel(sparqlArgs[0].AggregateLevel), sparqlArgs.Any(expression => expression.IsStoreUsed))
         {
             // TODO: Complete member initialization
             // this.sparqlUriNode = sparqlUriNode;

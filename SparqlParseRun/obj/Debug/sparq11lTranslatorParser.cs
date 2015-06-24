@@ -8370,14 +8370,14 @@ public partial class sparq11lTranslatorParser : Parser {
 				{
 				State = 1403; Match(T__8);
 				State = 1404; _localctx.r = _localctx._numericExpression = numericExpression();
-				_localctx.value = SparqlExpression.EqualsExpression(_localctx.value, _localctx.r.value);
+				_localctx.value = new SparqlEqualsExpression(_localctx.value, _localctx.r.value, q.Store.NodeGenerator);
 				}
 				break;
 			case T__18:
 				{
 				State = 1407; Match(T__18);
 				State = 1408; _localctx.r = _localctx._numericExpression = numericExpression();
-				_localctx.value = SparqlExpression.NotEquals(_localctx.value, _localctx.r.value);
+				_localctx.value =  new SparqlNotEqualsExpression(_localctx.value, _localctx.r.value, q.Store.NodeGenerator);
 				}
 				break;
 			case T__19:
@@ -11031,7 +11031,7 @@ public partial class sparq11lTranslatorParser : Parser {
 			EnterOuterAlt(_localctx, 1);
 			{
 			State = 2077; _localctx._iriString = iriString();
-			 _localctx.value = q.Store.NodeGenerator.GetUri(_localctx._iriString.value);
+			 _localctx.value = new OV_iri(_localctx._iriString.value);
 			}
 		}
 		catch (RecognitionException re) {
