@@ -68,7 +68,9 @@ namespace Task15UniversalIndex
         }
 
         public Diapason GetDiapason(int key)
-        {
+        {       
+            if(ToPosition==null)
+                return Diapason.Empty;
             int ind = ToPosition(key);
             if (ind < 0 || ind >= n_scale)
             {

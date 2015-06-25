@@ -194,7 +194,7 @@ namespace SparqlParseRun.SparqlClasses.GraphPattern.Triples
                     return q.Store.GetTriplesWithSubject(Subject).ToArray().Select(t => SetValues(variableBinding, t));
                     
                 case StoreCallCase.Spo:
-                    return q.Store.GetTriplesWithPredicateObject(Predicate, Object).ToArray().Select(s => variableBinding.Add(s, sVariableNode));
+                    return q.Store.GetSubjects(Predicate, Object).ToArray().Select(s => variableBinding.Add(s, sVariableNode));
                     
                 case StoreCallCase.SpO:
                     return q.Store.GetTriplesWithPredicate(Predicate).ToArray().Select(t =>     SetValues(variableBinding, t));
@@ -363,7 +363,7 @@ namespace SparqlParseRun.SparqlClasses.GraphPattern.Triples
                     return ApplyFilters(variableBinding,  q.Store.GetTriplesWithSubject(Subject));
 
                 case StoreCallCase.Spo:
-                    return ApplyFilters(variableBinding, sVariableNode, q.Store.GetTriplesWithPredicateObject(Predicate, Object));
+                    return ApplyFilters(variableBinding, sVariableNode, q.Store.GetSubjects(Predicate, Object));
 
                 case StoreCallCase.SpO:
                     return ApplyFilters(variableBinding, q.Store.GetTriplesWithPredicate(Predicate));

@@ -6,9 +6,9 @@ namespace RDFCommon.OVns
     {
 
         
-        public virtual ObjectVariants GetUri(string uri)
+        public virtual ObjectVariants GetUri(object uri)
         {
-          return new OV_iri(uri);
+          return new OV_iri((string) uri);
         }
 
         public SpecialTypesClass SpecialTypes { get; set; }

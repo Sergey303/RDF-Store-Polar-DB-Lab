@@ -35,9 +35,9 @@ namespace TestingNs
                 //  var exampleDir = new DirectoryInfo(@"..\..\examples\bsbm");
             {
                 Console.WriteLine("example: " + exampleDir.Name);
-                //if (exampleDir.Name != @"9.4 Arbitrary Length Path Matching"
-                //    //&& rqQueryFile.FullName != @"C:\Users\Admin\Source\Repos\SparqlWpf\UnitTestDotnetrdf_test\examples\insert where\query2.rq"
-                //  ) continue;
+                if (exampleDir.Name != @"13.2.1 Specifying the Default Graph"
+                    //&& rqQueryFile.FullName != @"C:\Users\Admin\Source\Repos\SparqlWpf\UnitTestDotnetrdf_test\examples\insert where\query2.rq"
+                  ) continue;
                 //var nameGraphsDir = new DirectoryInfo(Path.Combine(exampleDir.FullName, "named graphs"));
                 //if (nameGraphsDir.Exists) continue;
                 foreach (var ttlDatabase in exampleDir.GetFiles("*.ttl"))
@@ -45,23 +45,27 @@ namespace TestingNs
                     var store = new StoreCascadingInt(exampleDir.FullName + "/tmp");
                     //using (StreamReader reader = new StreamReader(ttlDatabase.FullName))
                     store.ReloadFrom(ttlDatabase.FullName);
-                  store.Start();
+                //  store.Start();
                   var nameGraphsDir = new DirectoryInfo(Path.Combine(exampleDir.FullName, "named graphs"));
-                  if (nameGraphsDir.Exists) 
+                  if (nameGraphsDir.Exists)
                       foreach (var namedGraphFile in nameGraphsDir.GetFiles())
-                      using (StreamReader reader = new StreamReader(namedGraphFile.FullName))
                       {
-                          var readLine = reader.ReadLine();
-                          if (readLine == null) continue;
-                          var headComment = readLine.Trim();
-                          if (!headComment.StartsWith("#")) continue;
-                          headComment = headComment.Substring(1);
-                          //Uri uri;
-                          //if (!Uri.TryCreate(headComment, UriKind.Absolute, out uri)) continue;Prologue.SplitUri(uri.AbsoluteUri).FullName
-                          var graph = store.NamedGraphs.CreateGraph(headComment);
-                          graph.FromTurtle(reader.ReadToEnd());
-                          
+                          IGraph graph;
+                          using (StreamReader reader = new StreamReader(namedGraphFile.FullName))
+                          {
+                              var readLine = reader.ReadLine();
+                              if (readLine == null) continue;
+                              var headComment = readLine.Trim();
+                              if (!headComment.StartsWith("#")) continue;
+                              headComment = headComment.Substring(1);
+                              //Uri uri;
+                              //if (!Uri.TryCreate(headComment, UriKind.Absolute, out uri)) continue;Prologue.SplitUri(uri.AbsoluteUri).FullName
+                              graph = store.NamedGraphs.CreateGraph(headComment);
+
+                          }
+                          graph.FromTurtle(namedGraphFile.FullName);
                       }
+
                     foreach (var rqQueryFile in exampleDir.GetFiles("*.rq"))
                     {
 

@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using Task15UniversalIndex;
 
@@ -12,12 +13,12 @@ namespace RDFCommon.OVns
             if (empty)
             {
                 Clear();
-                Build();
+                coding_table.InsertPortion(Enumerable.Repeat(SpecialTypesClass.RdfType, 1));
+                coding_table.BuildScale();
             }
-            else
-            {
-                SpecialTypes = new SpecialTypesClass(this);
-            }
+            
+            SpecialTypes = new SpecialTypesClass(this);
+
         }
 
         public void Clear()
@@ -30,9 +31,9 @@ namespace RDFCommon.OVns
         {
            
             //coding_table.InsertPortion(SpecialTypesClass.GetAll());
-            coding_table.InsertPortion(Enumerable.Repeat(SpecialTypesClass.RdfType,1));
+            
             coding_table.BuildScale();
-            SpecialTypes = new SpecialTypesClass(this);
+            
         }
         public static NodeGeneratorInt Create(string path, bool isEmpty)
         {
@@ -40,13 +41,21 @@ namespace RDFCommon.OVns
             ng.SpecialTypes = new SpecialTypesClass(ng);
             return ng;
         }
-        public override ObjectVariants GetUri(string uri)
+
+        public override ObjectVariants GetUri(object uri)
         {
-           
-            int code=coding_table.GetCodeByString(uri);
+            var s = uri as string;
+            if (s != null)
+            {
+                int code = coding_table.GetCodeByString(s);
+         
             if (code == -1)
-                return new OV_iri(uri);
+                return new OV_iri(s);
             else return new OV_iriint(code, coding_table.GetStringByCode);
+            }
+            else  if(uri is int)
+                return new OV_iriint((int) uri, coding_table.GetStringByCode);
+            throw new ArgumentException();
         }
 
         public override ObjectVariants AddIri(string iri)

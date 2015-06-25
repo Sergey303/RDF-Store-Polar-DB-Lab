@@ -14,7 +14,6 @@ namespace RDFTripleStore
 {
     public class GraphCascadingInt :  IGraph
     {
-        private readonly NodeGeneratorInt ng;
 
         public void Add(ObjectVariants s, ObjectVariants p, ObjectVariants o)
         {
@@ -38,7 +37,7 @@ namespace RDFTripleStore
                     .Cast<object[]>()
                     .Select(row => (int) row[0])
                     .Distinct()
-                    .Select(s => new OV_iriint((int) s, ng.coding_table.GetStringByCode));
+                    .Select(uri => NodeGenerator.GetUri(uri));
         }
 
         public long GetTriplesCount()
@@ -67,7 +66,7 @@ namespace RDFTripleStore
             return ps_index.GetRecordsAll()
                 .Cast<object[]>()
                 
-                .Select(rec => returns(new OV_iriint((int)rec[0], ng.coding_table.GetStringByCode), new OV_iriint((int)rec[1], ng.coding_table.GetStringByCode), rec[2].ToOVariant(ng.coding_table.GetStringByCode)));
+                .Select(rec => returns(NodeGenerator.GetUri(rec[0]), NodeGenerator.GetUri(rec[0]), rec[2].ToOVariant(NodeGenerator)));
         }
 
   
@@ -75,8 +74,8 @@ namespace RDFTripleStore
         {
             return ps_index.GetRecordsWithKey2(((OV_iriint)subj).code)
                 .Cast<object[]>()
-                
-                 .Select(rec => new TripleOVStruct(null, new OV_iriint((int)rec[1], ng.coding_table.GetStringByCode), rec[2].ToOVariant(ng.coding_table.GetStringByCode)));
+
+                 .Select(rec => new TripleOVStruct(null, NodeGenerator.GetUri(rec[1]), rec[2].ToOVariant(NodeGenerator)));
         }
 
         public IEnumerable<ObjectVariants> GetTriplesWithSubjectPredicate(ObjectVariants subj, ObjectVariants pred)
@@ -84,7 +83,7 @@ namespace RDFTripleStore
             return ps_index.GetRecordsWithKeys(((OV_iriint)pred).code, ((OV_iriint)subj).code)
                 .Cast<object[]>()
                 
-                .Select(rec => rec[2].ToOVariant(ng.coding_table.GetStringByCode));
+                .Select(rec => rec[2].ToOVariant(NodeGenerator));
         }
 
         public IEnumerable<ObjectVariants> GetTriplesWithSubjectObject(ObjectVariants subj, ObjectVariants obj)
@@ -93,43 +92,40 @@ namespace RDFTripleStore
         }
 
 
-        public IEnumerable<ObjectVariants> GetTriplesWithPredicateObject(ObjectVariants pred, ObjectVariants obj)
+        public IEnumerable<ObjectVariants> GetSubjects(ObjectVariants pred, ObjectVariants obj)
         {
             return po_index.GetRecordsWithKeys(((OV_iriint) pred).code, obj)
                 .Cast<object[]>()
-                
-                .Select(rec => new OV_iriint((int)rec[0], ng.coding_table.GetStringByCode));
+
+                .Select(rec => NodeGenerator.GetUri(rec[0]));
         }
         public IEnumerable<TripleOVStruct> GetTriplesWithObject(ObjectVariants obj)
         {
             return po_index.GetRecordsWithKey2(obj)
                 .Cast<object[]>()
-                
-              .Select(rec => new TripleOVStruct(new OV_iriint((int)rec[0], ng.coding_table.GetStringByCode), new OV_iriint((int)rec[1], ng.coding_table.GetStringByCode), null));
+                .Select(rec => new TripleOVStruct(NodeGenerator.GetUri(rec[0]), NodeGenerator.GetUri(rec[1]), null));
         }
 
         public IEnumerable<TripleOVStruct> GetTriplesWithPredicate(ObjectVariants pred)
         {
             return ps_index.GetRecordsWithKey1(((OV_iriint)pred).code)
-                .Cast<object[]>()
-                
-                .Select(rec => new TripleOVStruct(new OV_iriint((int)rec[0], ng.coding_table.GetStringByCode), null, rec[2].ToOVariant(ng.coding_table.GetStringByCode)));
+                .Cast<object[]>()                                                                
+                             .Select(rec => new TripleOVStruct(NodeGenerator.GetUri(rec[0]), null, rec[2].ToOVariant(NodeGenerator)));
         }
-    
 
-      
-        private TableView table;
+
+        protected TableView table;
         public TableView Table { get { return table; } }
         private IndexCascadingDynamic<int> ps_index;
         private IndexCascadingDynamic<ObjectVariants> po_index;
         public GraphCascadingInt(string path)
         {
+            if (!Directory.Exists(path)) Directory.CreateDirectory(path);
             PType tp_triple = new PTypeRecord(
                 new NamedType("subj", new PType(PTypeEnumeration.integer)),
                 new NamedType("pred", new PType(PTypeEnumeration.integer)),
                 new NamedType("obj", ObjectVariantsPolarType.ObjectVariantPolarType));
             table = new TableView(path + "triples", tp_triple);
-            ng = NodeGeneratorInt.Create(path, table.TableCell.IsEmpty);
             ps_index = new IndexCascadingDynamic<int>(path + "ps_index",
                 table,
                 ob => (int)((object[])((object[])ob)[1])[1],
@@ -138,7 +134,7 @@ namespace RDFTripleStore
             po_index = new IndexCascadingDynamic<ObjectVariants>(path + "po_index",
                 table,
                 ob => (int)((object[])((object[])ob)[1])[1],
-                ob => ((object[])((object[])ob)[1])[2].ToOVariant(ng.coding_table.GetStringByCode),
+                ob => ((object[])((object[])ob)[1])[2].ToOVariant(NodeGenerator),
                 ov => ov.GetHashCode());
         }
         public void Start() 
@@ -146,10 +142,10 @@ namespace RDFTripleStore
             ps_index.CreateDiscaleDictionary();
             po_index.CreateDiscaleDictionary();
         }
-        public int Code(string s) { return ng.coding_table.GetCodeByString(s); }
+        
 
         public string Name { get; private set; }
-        public NodeGenerator NodeGenerator { get { return ng; } }
+        public NodeGenerator NodeGenerator { get; set; }
         public void Clear() { table.Clear(); }
       
 
@@ -159,19 +155,19 @@ namespace RDFTripleStore
         {
             System.Diagnostics.Stopwatch sw = new System.Diagnostics.Stopwatch();
             sw.Start();
-          ng.Clear();
+          
             table.Clear();
             table.Fill(new object[0]);
             
             generator.Start(ProcessPortion);
             table.TableCell.Flush();
              if(!table.Elements().Any()) return;
-            ng.Build();
 
             sw.Stop();
             Console.WriteLine("Load data and nametable ok. Duration={0}", sw.ElapsedMilliseconds);
             sw.Restart();
-
+            var ng = NodeGenerator as NodeGeneratorInt;
+            ng.Build();
             ps_index.Build();
 
             sw.Stop();
@@ -188,6 +184,7 @@ namespace RDFTripleStore
         private void ProcessPortion(List<TripleStrOV> buff)
         {
             // Пополнение таблицы имен
+            var ng = NodeGenerator as NodeGeneratorInt;
             var dic = ng.coding_table.InsertPortion(buff.SelectMany(t =>
             {
                 ObjectVariants ov = t.Object;
@@ -219,7 +216,7 @@ namespace RDFTripleStore
         {
             System.Diagnostics.Stopwatch sw = new System.Diagnostics.Stopwatch();
             sw.Start();
-            ng.Clear();
+            
 
             table.Clear();
             table.Fill(new object[0]);
@@ -237,7 +234,7 @@ namespace RDFTripleStore
             if (buff.Count > 0) ProcessPortion(buff);
             table.TableCell.Flush();
 
-            ng.Build();
+         
 
             sw.Stop();
             Console.WriteLine("Load data and nametable ok. Duration={0}", sw.ElapsedMilliseconds);

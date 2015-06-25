@@ -29,7 +29,7 @@ namespace RDFTripleStore
         {
             IGraph g;
             if (named.TryGetValue(graph.ToString(), out g)) return Enumerable.Empty<ObjectVariants>();
-            return g.GetTriplesWithPredicateObject(predicateNode, objectNode);
+            return g.GetSubjects(predicateNode, objectNode);
         }
 
         public IEnumerable<ObjectVariants> GetObject(ObjectVariants subjectNode, ObjectVariants predicateNode, ObjectVariants graph)
@@ -55,7 +55,7 @@ namespace RDFTripleStore
 
         public IEnumerable<QuadOVStruct> GetTriplesWithPredicateObject(ObjectVariants predicateNode, ObjectVariants objectNode)
         {
-            return named.Values.SelectMany(g => g.GetTriplesWithPredicateObject(predicateNode, objectNode).Select(s => new QuadOVStruct(s, null, null, getGraphUriByName(g))));
+            return named.Values.SelectMany(g => g.GetSubjects(predicateNode, objectNode).Select(s => new QuadOVStruct(s, null, null, getGraphUriByName(g))));
         }
 
         public IEnumerable<QuadOVStruct> GetTriplesWithSubjectObject(ObjectVariants subjectNode, ObjectVariants objectNode)

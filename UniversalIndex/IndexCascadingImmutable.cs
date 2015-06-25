@@ -176,7 +176,7 @@ namespace Task15UniversalIndex
                 return true;
             });
             index_cell.Flush();
-
+          
             PaEntry entry = Table.Element(0);
             index_cell.Root.SortByKey<GroupElement>(ob =>
                 new GroupElement((int)((object[])ob)[1], (int)((object[])ob)[2], () =>

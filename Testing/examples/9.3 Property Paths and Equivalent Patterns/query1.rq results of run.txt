@@ -1,6 +1,6 @@
 { "head": { "vars": [ "?s",
 "?x",
-"de2d7e08-4266-47cc-89e3-641b45000bcf" ] }, "results": { "bindings" : [{"?s" : { "type" : "uri", "value" : "http://example/order" },
+"86ce0205-1fca-4881-a2d5-c96584f587a9" ] }, "results": { "bindings" : [{"?s" : { "type" : "uri", "value" : "http://example/order" },
 "?x" : { "type" : "literal", "value" : "5", "datatype": "http://www.w3.org/2001/XMLSchema#integer" }},
 {"?s" : { "type" : "uri", "value" : "http://example/order" },
 "?x" : { "type" : "literal", "value" : "5", "datatype": "http://www.w3.org/2001/XMLSchema#integer" }}] } }

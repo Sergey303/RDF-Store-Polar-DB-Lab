@@ -1,7 +1,2 @@
-<ns:sparql xmlns:ns="http://www.w3.org/2005/sparql-results#">
-  <ns:head>
-    <ns:variable ns:name="?name" />
-    <ns:variable ns:name="?x" />
-  </ns:head>
-  <ns:results />
-</ns:sparql>
+{ "head": { "vars": [ "?name",
+"?x" ] }, "results": { "bindings" : [] } }

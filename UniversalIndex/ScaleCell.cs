@@ -20,9 +20,7 @@ namespace Task15UniversalIndex
                     this.n = this.scell.Root.Count();
                     if (index_cell.Root.Count() > 0)
                     {
-                        min = (int)index_cell.Root.Element(0).Field(0).Get();
-                        max = (int)index_cell.Root.Element(index_cell.Root.Count() - 1).Field(0).Get();
-                        ToPosition = (int key) => (int)(((long)key - min) * (long)(n - 1) / (max - min)); // Будет null если нет массива
+                        CreateMethodToPosition();// Будет null если нет массива
                     }
                 }
             } 
@@ -45,15 +43,9 @@ namespace Task15UniversalIndex
         public void Build(long n)
         {
             this.n = n;
-            // Вычисление минимума и максимума
-            min = (int)index_cell.Root.Element(0).Field(0).Get();
-            max = (int)index_cell.Root.Element(index_cell.Root.Count() - 1).Field(0).Get();
-            //diapasons = new Diapason[n];
             long[] numbers = new long[n];
-            if (max == min)
-                ToPosition = (int key) => key == min ? 0 : -1;
-            else
-            ToPosition = (int key) => (int)(((long)key - min) * (long)(n - 1) / (max - min));
+            CreateMethodToPosition();
+
             // Заполнение количеств элементов в диапазонах
             index_cell.Root.Scan((long off, object val) =>
             {
@@ -75,8 +67,23 @@ namespace Task15UniversalIndex
             }
             scell.Flush();
         }
+
+        private void CreateMethodToPosition()
+        {
+            // Вычисление минимума и максимума
+            min = (int) index_cell.Root.Element(0).Field(0).Get();
+            max = (int) index_cell.Root.Element(index_cell.Root.Count() - 1).Field(0).Get();
+            //diapasons = new Diapason[n];
+            if (max == min)
+                ToPosition = (int key) => key == min ? 0 : -1;
+            else
+                ToPosition = (int key) => (int) (((long) key - min)*(long) (n - 1)/(max - min));
+        }
+
         public Diapason GetDiapason(int key)
         {
+            if (ToPosition == null)
+                return Diapason.Empty;
              int ind = ToPosition(key);
             if (ind < 0 || ind >= n)
             {

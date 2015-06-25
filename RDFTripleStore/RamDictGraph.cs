@@ -54,7 +54,7 @@ namespace RDFTripleStore
             throw new NotImplementedException();
         }
 
-        public IEnumerable<ObjectVariants> GetTriplesWithPredicateObject(ObjectVariants pred, ObjectVariants obj)
+        public IEnumerable<ObjectVariants> GetSubjects(ObjectVariants pred, ObjectVariants obj)
         {
             throw new NotImplementedException();
         }

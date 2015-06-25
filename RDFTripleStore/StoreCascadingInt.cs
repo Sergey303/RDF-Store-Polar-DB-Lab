@@ -16,13 +16,19 @@ namespace RDFTripleStore
                    //        : base(new SecondStringGraph(path)) 
          :   base(path)
         {
-            NamedGraphs = new NamedGraphsByFolders(new DirectoryInfo(path), NodeGenerator, d=> new GraphCascadingInt(d.FullName));
+            
+            NodeGenerator=
+                ng = NodeGeneratorInt.Create(path, table.TableCell.IsEmpty);
+            NamedGraphs = new NamedGraphsByFolders(new DirectoryInfo(path), ng, d => new GraphCascadingInt(d.FullName + "/"){NodeGenerator=NodeGenerator});
         }
+
+        private readonly NodeGeneratorInt ng;
 
         public void ReloadFrom(string fileName)
         {
-          //  ClearAll();
-            FromTurtle(fileName);    
+            ng.Clear();  //  ClearAll();
+            FromTurtle(fileName);
+            ng.Build();
         }
 
      
