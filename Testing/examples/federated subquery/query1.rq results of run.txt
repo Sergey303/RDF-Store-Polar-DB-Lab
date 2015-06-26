@@ -1,10 +1,5 @@
 { "head": { "vars": [ "?x",
 "?givenName",
 "?date" ] }, "results": { "bindings" : [{"?x" : { "type" : "uri", "value" : "http://purl.org/dc/elements/1.1/b" },
-"?givenName" : { "type" : "literal", "value" : "Bob" }},
-{"?x" : { "type" : "uri", "value" : "http://purl.org/dc/elements/1.1/c" },
-"?givenName" : { "type" : "literal", "value" : "Carol" }},
-{"?x" : { "type" : "uri", "value" : "http://purl.org/dc/elements/1.1/a" },
-"?givenName" : { "type" : "literal", "value" : "Alice" }},
-{"?x" : { "type" : "uri", "value" : "http://purl.org/dc/elements/1.1/d" },
-"?givenName" : { "type" : "literal", "value" : "Dmitriy" }}] } }
+"?givenName" : { "type" : "literal", "value" : "Bob" },
+"?date" : { "type" : "literal", "value" : "04.04.2005 4:04:04 +00:00", "datatype": "http://www.w3.org/2001/XMLSchema#dayTimeDuration" }}] } }

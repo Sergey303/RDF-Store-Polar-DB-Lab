@@ -102,13 +102,11 @@ namespace SparqlParseRun.SparqlClasses.Query.Result
             return this;
         }
 
-        public SparqlResult(IEnumerable<KeyValuePair<VariableNode, ObjectVariants>> copy, RdfQuery11Translator q)
+        public SparqlResult Add(IEnumerable<KeyValuePair<VariableNode, ObjectVariants>> copy)
         {
-
-            this.q = q;
-            id = new Lazy<string>(() => q.Store.NodeGenerator.BlankNodeGenerateNums());
-
-            throw new NotImplementedException();
+            foreach (var pair in copy)
+                Add(pair.Value, pair.Key);
+            return this;
         }
 
         public void Add(VariableNode variable, ObjectVariants value)

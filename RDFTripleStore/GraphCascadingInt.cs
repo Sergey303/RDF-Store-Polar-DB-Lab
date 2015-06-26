@@ -68,7 +68,7 @@ namespace RDFTripleStore
             return ps_index.GetRecordsAll()
                 .Cast<object[]>()
                 
-                .Select(rec => returns(NodeGenerator.GetUri(rec[0]), NodeGenerator.GetUri(rec[0]), rec[2].ToOVariant(NodeGenerator)));
+                .Select(rec => returns(NodeGenerator.GetUri(rec[0]), NodeGenerator.GetUri(rec[1]), rec[2].ToOVariant(NodeGenerator)));
         }
 
   

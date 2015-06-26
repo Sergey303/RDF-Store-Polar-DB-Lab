@@ -12,6 +12,7 @@ namespace SparqlParseRun.SparqlClasses.Query
     
         public SparqlSelectQuery(RdfQuery11Translator q) : base(q)
         {
+            ResultSet.ResultType = ResultType.Select;
           
         }
 
@@ -37,13 +38,12 @@ namespace SparqlParseRun.SparqlClasses.Query
             if (sparqlSolutionModifier != null )
                 ResultSet.Results = sparqlSolutionModifier.Run(ResultSet.Results, ResultSet);
           
-            ResultSet.ResultType = ResultType.Select;
             return ResultSet;
         }
 
-        public override SparqlQueryTypeEnum QueryType
-        {
-            get { return SparqlQueryTypeEnum.Select; }
-        }
+        //public override SparqlQueryTypeEnum QueryType
+        //{
+        //    get { return SparqlQueryTypeEnum.Select; }
+        //}
     }
 }

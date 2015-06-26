@@ -31,7 +31,7 @@ namespace SparqlParseRun.SparqlClasses.Query
             isAll = true;
         }
 
-        internal void Create(SparqlGraphPattern sparqlWhere)
+        internal void Create(ISparqlGraphPattern sparqlWhere)
         {
             this.sparqlWhere = sparqlWhere;
         }
@@ -96,9 +96,9 @@ namespace SparqlParseRun.SparqlClasses.Query
             return ResultSet;
         }
 
-        public override SparqlQueryTypeEnum QueryType
-        {
-            get { return SparqlQueryTypeEnum.Describe; }
-        }
+        //public override SparqlQueryTypeEnum QueryType
+        //{
+        //    get { return SparqlQueryTypeEnum.Describe; }
+        //}
     }
 }

@@ -49,7 +49,7 @@ namespace SparqlParseRun.SparqlClasses.SolutionModifier
         {
             Select = projection;
         }
-        public IEnumerable<SparqlResult> Run( IEnumerable<SparqlResult> results, SparqlResultSet sparqlResultSet=null)
+        public IEnumerable<SparqlResult> Run( IEnumerable<SparqlResult> results, SparqlResultSet sparqlResultSet)
         {
             if (Group != null)
             {

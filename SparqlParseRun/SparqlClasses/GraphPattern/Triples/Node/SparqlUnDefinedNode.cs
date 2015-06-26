@@ -9,7 +9,7 @@ namespace SparqlParseRun.SparqlClasses.GraphPattern.Triples.Node
     {
         public override ObjectVariantEnum Variant
         {
-            get { throw new NotImplementedException(); }
+            get { return ObjectVariantEnum.Undef; }
         }
 
         public override object WritableValue

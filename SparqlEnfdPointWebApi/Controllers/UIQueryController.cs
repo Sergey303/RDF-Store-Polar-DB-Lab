@@ -23,10 +23,10 @@ namespace SparqlEnfdPointWebApi.Controllers
             return View("SimpleUI");
         }
 
-        [System.Web.Mvc.Route("put")]
+        [System.Web.Mvc.Route("add")]
         // GET: Query
-        [System.Web.Mvc.HttpPut]
-        public ActionResult Put([FromBody] string q)
+        [System.Web.Mvc.HttpPost]
+        public ActionResult Add([FromBody] string q)
         {
           QuerieStrings.Add(q);
             return new HttpStatusCodeResult(HttpStatusCode.OK);

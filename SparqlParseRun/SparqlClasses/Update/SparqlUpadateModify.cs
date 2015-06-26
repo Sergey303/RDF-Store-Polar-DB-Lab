@@ -12,7 +12,7 @@ namespace SparqlParseRun.SparqlClasses.Update
     public class SparqlUpdateModify : ISparqlUpdate    
     {
         private readonly RdfQuery11Translator q;
-        private SparqlGraphPattern @where;
+        private ISparqlGraphPattern @where;
         private ObjectVariants with;
         private SparqlQuadsPattern insert;
         private SparqlQuadsPattern delete;
@@ -42,7 +42,7 @@ namespace SparqlParseRun.SparqlClasses.Update
             delete = sparqlUpdateDelete;
         }
 
-        internal void SetWhere(SparqlGraphPattern sparqlGraphPattern)
+        internal void SetWhere(ISparqlGraphPattern sparqlGraphPattern)
         {
             @where = sparqlGraphPattern;
         }

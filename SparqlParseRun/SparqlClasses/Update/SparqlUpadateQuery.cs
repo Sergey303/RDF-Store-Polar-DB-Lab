@@ -45,9 +45,9 @@ namespace SparqlParseRun.SparqlClasses.Update
         Updates.AddRange(sparqlUpdateQuery.Updates);
         }
 
-        public override SparqlQueryTypeEnum QueryType
-        {
-         get{ return SparqlQueryTypeEnum.Update;}
-        }
+        //public override SparqlQueryTypeEnum QueryType
+        //{
+        // get{ return SparqlQueryTypeEnum.Update;}
+        //}
     }
 }

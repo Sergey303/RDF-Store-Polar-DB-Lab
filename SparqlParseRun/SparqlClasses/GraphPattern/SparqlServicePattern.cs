@@ -44,7 +44,7 @@ namespace SparqlParseRun.SparqlClasses.GraphPattern
                 prolog, sparqlGraphPattern, string.Join(" ", q.Variables.Values.Select(pv => pv.VariableName)),
                 string.Join(Environment.NewLine, 
                         bindings.Select(variableBinding =>  "(" + string.Join(" ",
-                            q.Variables.Values.Select(v => (variableBinding[v] ?? SparqlUnDefinedNode.Undef ).ToString()))+ ")")));                   
+                            q.Variables.Values.Select(v => ToSparqlInput(variableBinding[v] ?? SparqlUnDefinedNode.Undef )))+ ")")));                   
            
                 try
                 {
@@ -58,11 +58,42 @@ namespace SparqlParseRun.SparqlClasses.GraphPattern
                //TODO blank nodes     graph names parallel
         }
 
+        private string ToSparqlInput(ObjectVariants objectVariants)
+        {             
+            switch (objectVariants.Variant)
+            {
+                case ObjectVariantEnum.Iri:
+                case ObjectVariantEnum.IriInt:
+
+                    return "<" + ((IIriNode) objectVariants).UriString + ">";
+                    
+                case ObjectVariantEnum.Str:
+                    return "\"" + objectVariants.Content +"\"";
+                case ObjectVariantEnum.Lang:
+                    return "\"" + objectVariants.Content + "\"@"+((OV_langstring)objectVariants).Lang;
+                case ObjectVariantEnum.Decimal:
+                case ObjectVariantEnum.Float:
+                case ObjectVariantEnum.Int:
+                case ObjectVariantEnum.DateTimeZone:
+                case ObjectVariantEnum.DateTime:
+                case ObjectVariantEnum.Date:
+                case ObjectVariantEnum.Time:
+                case ObjectVariantEnum.Other:
+                case ObjectVariantEnum.OtherIntType:
+                case ObjectVariantEnum.Double:
+                    return "\"" + objectVariants.Content + "\"^^<"+((ILiteralNode)objectVariants).DataType+">" ;
+
+                case ObjectVariantEnum.Undef:
+                    return objectVariants.ToString();
+                case ObjectVariantEnum.Index:
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+        }
+
         private IEnumerable<SparqlResult> Download(IEnumerable<SparqlResult> variableBindings, string query)
         {
-            XNamespace xn = "http://www.w3.org/2005/sparql-results#";
-            
-            var variableUri = uri as VariableNode;
+             var variableUri = uri as VariableNode;
             if (variableUri != null)
                 return variableBindings
                     .Select(binding => binding[variableUri])
@@ -77,7 +108,7 @@ namespace SparqlParseRun.SparqlClasses.GraphPattern
         {
             using (WebClient wc = new WebClient())
             {
-                wc.Headers[HttpRequestHeader.ContentType] = "application/application/sparql-results+xml"; //"query="+ 
+               // wc.Headers[HttpRequestHeader.ContentType] = "application/application/sparql-results+xml"; //"query="+ 
                 string HtmlResult = wc.UploadString(urlString, query);
 
                 var load = XElement.Parse(HtmlResult);
@@ -92,13 +123,13 @@ namespace SparqlParseRun.SparqlClasses.GraphPattern
             return load
                 .Element(xn + "results")
                 .Elements()
-                .Select(xResult => new SparqlResult(xResult.Elements()
+                .Select(xResult => new SparqlResult(q).Add(xResult.Elements()
                     .Select(xb =>
                     {
                         var variable = q.GetVariable(xb.Attribute(xn + "name").Value);
                         var node = xb.Elements().FirstOrDefault();
                         return new KeyValuePair<VariableNode, ObjectVariants>(variable, Xml2Node(xn, node));
-                    }), q));
+                    })));
         }
 
         private ObjectVariants Xml2Node(XNamespace xn, XElement b)

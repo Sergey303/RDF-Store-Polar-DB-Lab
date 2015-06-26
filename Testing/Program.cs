@@ -35,9 +35,9 @@ namespace TestingNs
                 //  var exampleDir = new DirectoryInfo(@"..\..\examples\bsbm");
             {
                 Console.WriteLine("example: " + exampleDir.Name);
-                //if (exampleDir.Name != @"13.2.1 Specifying the Default Graph"
-                //    //&& rqQueryFile.FullName != @"C:\Users\Admin\Source\Repos\SparqlWpf\UnitTestDotnetrdf_test\examples\insert where\query2.rq"
-                //  ) continue;
+                if (exampleDir.Name != @"federated subquery"
+                    //&& rqQueryFile.FullName != @"C:\Users\Admin\Source\Repos\SparqlWpf\UnitTestDotnetrdf_test\examples\insert where\query2.rq"
+                  ) continue;
                 //var nameGraphsDir = new DirectoryInfo(Path.Combine(exampleDir.FullName, "named graphs"));
                 //if (nameGraphsDir.Exists) continue;
                 foreach (var ttlDatabase in exampleDir.GetFiles("*.ttl"))
@@ -114,11 +114,11 @@ namespace TestingNs
             Performance.ComputeTime(() => Reload(store), "load " + TestingPhotoPersons.Npersons + " ", true);
             TestingPhotoPersons.Run((q) =>
             {
-                var sparqlQuery = SparqlQueryParser.Parse(store, q);
-                if (sparqlQuery.Type == SparqlQueryTypeEnum.Ask)
-                {var b=   sparqlQuery.Run().AnyResult;}
+                var sparqlQuery = SparqlQueryParser.Parse(store, q).Run();
+                if (sparqlQuery.ResultType== ResultType.Ask)
+                {var b=   sparqlQuery.AnyResult;}
                 else 
-                    sparqlQuery.Run().Results.Count();
+                    sparqlQuery.Results.Count();
             });
         }
 

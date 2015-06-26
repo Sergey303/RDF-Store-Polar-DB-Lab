@@ -38,10 +38,10 @@ public RdfQuery11Translator q;
 }
  query returns [SparqlQuery value] : 
  (prologue 	{q.prolog.StringRepresentationOfProlog=$prologue.text;}
- ( selectQuery {$value=$selectQuery.value; $value.Type = SparqlQueryTypeEnum.Select; }
-  | constructQuery { $value=$constructQuery.value; $value.Type = SparqlQueryTypeEnum.Construct;}  
-  | describeQuery { $value=$describeQuery.value; $value.Type = SparqlQueryTypeEnum.Describe;}  
-  | askQuery { $value=$askQuery.value; $value.Type = SparqlQueryTypeEnum.Ask;}  )
+ ( selectQuery {$value=$selectQuery.value; $value.ResultSet.ResultType= ResultType.Select; }
+  | constructQuery { $value=$constructQuery.value; $value.ResultSet.ResultType= ResultType.Construct;}  
+  | describeQuery { $value=$describeQuery.value; $value.ResultSet.ResultType= ResultType.Describe;}  
+  | askQuery { $value=$askQuery.value; $value.ResultSet.ResultType= ResultType.Ask;}  )
 valuesClause 	{ $value.SetValues($valuesClause.value);} )
 | update {$value = $update.value;} ;
  prologue: ( baseDecl | prefixDecl )*;
@@ -50,20 +50,20 @@ valuesClause 	{ $value.SetValues($valuesClause.value);} )
  {
 	q.prolog.AddPrefix($PNAME_NS.text, $IRIREF.text);
  };
- selectQuery returns [SparqlSelectQuery value]: {$value=new SparqlSelectQuery(q);} selectClause datasetClause* whereClause solutionModifier {$solutionModifier.value.Add($selectClause.value);} {$value.Create($whereClause.value, $solutionModifier.value);};
- subSelect returns [SparqlSubSelect value] : selectClause whereClause solutionModifier {$solutionModifier.value.Add($selectClause.value);} valuesClause {$value=new SparqlSubSelect($whereClause.value, $solutionModifier.value, $valuesClause.value);};
+ selectQuery returns [SparqlQuery value]: {$value=new SparqlQuery(q);} selectClause datasetClause* whereClause solutionModifier {$solutionModifier.value.Add($selectClause.value);} {$value.Create($whereClause.value, $solutionModifier.value);};
+ subSelect returns [SparqlSubSelect value] : selectClause whereClause solutionModifier {$solutionModifier.value.Add($selectClause.value);} valuesClause {$value=new SparqlSubSelect($whereClause.value, $solutionModifier.value, $valuesClause.value, q);};
  selectClause returns [SparqlSelect value] : SELECT {$value=new SparqlSelect(q);} ( DISTINCT {$value.IsDistinct=true;} | REDUCED {$value.IsReduced=true;} )? ( ( var {$value.Add($var.value);} | ( '(' expression AS var {$value.Add(q.CreateExpressionAsVariable($var.value, $expression.value));} ')' ) )+ | '*' {$value.IsAll();} );
  constructQuery returns [SparqlConstructQuery value] : CONSTRUCT {$value=new SparqlConstructQuery(q);} 
  ( constructTemplate datasetClause* whereClause solutionModifier { $value.Create($constructTemplate.value, $whereClause.value, $solutionModifier.value); }
  | datasetClause* WHERE '{'( triplesTemplate { $value.Create($triplesTemplate.value); } )? '}' solutionModifier { $value.Create($solutionModifier.value); } );
  describeQuery returns [SparqlDescribeQuery value] : DESCRIBE {$value=new SparqlDescribeQuery(q);} ( (varOrIri {$value.Add($varOrIri.value);})+ | '*' {$value.IsAll();} ) datasetClause* ( whereClause {$value.Create($whereClause.value);} )? solutionModifier {$value.Create($solutionModifier.value);};
- askQuery returns [SparqlAsqQuery value] : ASK {$value=new SparqlAsqQuery(q);}  datasetClause* whereClause solutionModifier {$value.Create($whereClause.value, $solutionModifier.value);};
+ askQuery returns [SparqlQuery value] : ASK {$value=new SparqlQuery(q);}  datasetClause* whereClause solutionModifier {$value.Create($whereClause.value, $solutionModifier.value);};
 datasetClause : FROM ( defaultGraphClause | namedGraphClause )	 ;
   defaultGraphClause : sourceSelector {q.ActiveGraphs.Add($sourceSelector.value);};
  namedGraphClause :NAMED sourceSelector {q.NamedGraphs.Add($sourceSelector.value);};
  sourceSelector returns [ObjectVariants value] : iri  {$value=$iri.value;};
 
- whereClause returns [SparqlGraphPattern value] : WHERE? groupGraphPattern {$value=$groupGraphPattern.value; };
+ whereClause returns [ISparqlGraphPattern value] : WHERE? groupGraphPattern {$value=$groupGraphPattern.value; };
  solutionModifier returns [SparqlSolutionModifier value]: {$value=new SparqlSolutionModifier();} ( groupClause {$value.Add($groupClause.value);} )? (havingClause {$value.Add($havingClause.value, q);})? (orderClause {$value.Add($orderClause.value);})? (limitOffsetClauses {$value.Add($limitOffsetClauses.value);} )? ;
  groupClause returns [SparqlSolutionModifierGroup value] : GROUP BY {$value=new SparqlSolutionModifierGroup(q);} 
  ( groupCondition  { $value.Add($groupCondition.value);})+;
@@ -129,7 +129,7 @@ WHERE groupGraphPattern { $value.SetWhere($groupGraphPattern.value); };
  quadsNotTriples returns [SparqlGraphGraph value] : GRAPH varOrIri {$value=new SparqlGraphGraph($varOrIri.value);} '{' ( triplesTemplate { $value.AddTriples($triplesTemplate.value);} )? '}';
  triplesTemplate returns [SparqlGraphPattern value] : triplesSameSubject {$value=$triplesSameSubject.value;} ( '.' ( tt= triplesTemplate {$value.AddRange($tt.value); } )? )?;
 
- groupGraphPattern  returns [SparqlGraphPattern value] : '{' ( subSelect {$value=$subSelect.value;} | groupGraphPatternSub  {$value=$groupGraphPatternSub.value;} ) '}';
+ groupGraphPattern  returns [ISparqlGraphPattern value] : '{' ( subSelect {$value=$subSelect.value;} | groupGraphPatternSub  {$value=$groupGraphPatternSub.value;} ) '}';
  groupGraphPatternSub  returns [SparqlGraphPattern value] : {$value=new SparqlGraphPattern();} 
 	(triplesBlock  {$value.AddRange($triplesBlock.value); })? 
 	( graphPatternNotTriples  {$value.Add($graphPatternNotTriples.value); } '.'? ( triplesBlock  {$value.AddRange($triplesBlock.value); } )? )*;

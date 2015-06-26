@@ -98,6 +98,7 @@
   <ItemGroup>
     <Content Include="Views\UIQuery\SimpleUI.cshtml" />
     <Content Include="packages.config" />
+    <Content Include="Data.ttl" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

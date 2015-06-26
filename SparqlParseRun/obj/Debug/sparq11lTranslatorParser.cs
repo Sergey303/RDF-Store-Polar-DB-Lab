@@ -258,25 +258,25 @@ public partial class sparq11lTranslatorParser : Parser {
 				case SELECT:
 					{
 					State = 260; _localctx._selectQuery = selectQuery();
-					_localctx.value = _localctx._selectQuery.value; _localctx.value.Type = SparqlQueryTypeEnum.Select; 
+					_localctx.value = _localctx._selectQuery.value; _localctx.value.ResultSet.ResultType= ResultType.Select; 
 					}
 					break;
 				case CONSTRUCT:
 					{
 					State = 263; _localctx._constructQuery = constructQuery();
-					 _localctx.value = _localctx._constructQuery.value; _localctx.value.Type = SparqlQueryTypeEnum.Construct;
+					 _localctx.value = _localctx._constructQuery.value; _localctx.value.ResultSet.ResultType= ResultType.Construct;
 					}
 					break;
 				case DESCRIBE:
 					{
 					State = 266; _localctx._describeQuery = describeQuery();
-					 _localctx.value = _localctx._describeQuery.value; _localctx.value.Type = SparqlQueryTypeEnum.Describe;
+					 _localctx.value = _localctx._describeQuery.value; _localctx.value.ResultSet.ResultType= ResultType.Describe;
 					}
 					break;
 				case ASK:
 					{
 					State = 269; _localctx._askQuery = askQuery();
-					 _localctx.value = _localctx._askQuery.value; _localctx.value.Type = SparqlQueryTypeEnum.Ask;
+					 _localctx.value = _localctx._askQuery.value; _localctx.value.ResultSet.ResultType= ResultType.Ask;
 					}
 					break;
 				default:
@@ -487,7 +487,7 @@ public partial class sparq11lTranslatorParser : Parser {
 	}
 
 	public partial class SelectQueryContext : ParserRuleContext {
-		public SparqlSelectQuery value;
+		public SparqlQuery value;
 		public SelectClauseContext _selectClause;
 		public WhereClauseContext _whereClause;
 		public SolutionModifierContext _solutionModifier;
@@ -534,7 +534,7 @@ public partial class sparq11lTranslatorParser : Parser {
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
-			_localctx.value = new SparqlSelectQuery(q);
+			_localctx.value = new SparqlQuery(q);
 			State = 299; _localctx._selectClause = selectClause();
 			State = 303;
 			_errHandler.Sync(this);
@@ -616,7 +616,7 @@ public partial class sparq11lTranslatorParser : Parser {
 			State = 313; _localctx._solutionModifier = solutionModifier();
 			_localctx._solutionModifier.value.Add(_localctx._selectClause.value);
 			State = 315; _localctx._valuesClause = valuesClause();
-			_localctx.value = new SparqlSubSelect(_localctx._whereClause.value, _localctx._solutionModifier.value, _localctx._valuesClause.value);
+			_localctx.value = new SparqlSubSelect(_localctx._whereClause.value, _localctx._solutionModifier.value, _localctx._valuesClause.value, q);
 			}
 		}
 		catch (RecognitionException re) {
@@ -1021,7 +1021,7 @@ public partial class sparq11lTranslatorParser : Parser {
 	}
 
 	public partial class AskQueryContext : ParserRuleContext {
-		public SparqlAsqQuery value;
+		public SparqlQuery value;
 		public WhereClauseContext _whereClause;
 		public SolutionModifierContext _solutionModifier;
 		public DatasetClauseContext datasetClause(int i) {
@@ -1066,7 +1066,7 @@ public partial class sparq11lTranslatorParser : Parser {
 			EnterOuterAlt(_localctx, 1);
 			{
 			State = 403; Match(ASK);
-			_localctx.value = new SparqlAsqQuery(q);
+			_localctx.value = new SparqlQuery(q);
 			State = 408;
 			_errHandler.Sync(this);
 			_la = _input.La(1);
@@ -1307,7 +1307,7 @@ public partial class sparq11lTranslatorParser : Parser {
 	}
 
 	public partial class WhereClauseContext : ParserRuleContext {
-		public SparqlGraphPattern value;
+		public ISparqlGraphPattern value;
 		public GroupGraphPatternContext _groupGraphPattern;
 		public ITerminalNode WHERE() { return GetToken(sparq11lTranslatorParser.WHERE, 0); }
 		public GroupGraphPatternContext groupGraphPattern() {
@@ -4132,7 +4132,7 @@ public partial class sparq11lTranslatorParser : Parser {
 	}
 
 	public partial class GroupGraphPatternContext : ParserRuleContext {
-		public SparqlGraphPattern value;
+		public ISparqlGraphPattern value;
 		public SubSelectContext _subSelect;
 		public GroupGraphPatternSubContext _groupGraphPatternSub;
 		public SubSelectContext subSelect() {

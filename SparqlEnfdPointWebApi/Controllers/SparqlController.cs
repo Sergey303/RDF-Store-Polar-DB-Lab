@@ -163,7 +163,7 @@ namespace SparqlEnfdPointWebApi.Controllers
 
                     qParsed = SparqlQueryParser.Parse(RdfStores.Store,(graphs ?? "") + query);
                 }
-                  else if (Request.ContentType == "application/sparql-update" || Request.ContentType == "application/sparql-query")
+                  else //if (Request.ContentType == "application/sparql-update" || Request.ContentType == "application/sparql-query")
                       if (graphs == null) qParsed = SparqlQueryParser.Parse(RdfStores.Store, Request.InputStream);
                       else
                            using (StreamReader reader = new StreamReader(Request.InputStream))

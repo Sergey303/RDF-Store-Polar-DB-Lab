@@ -21,14 +21,13 @@ namespace SparqlParseRun.SparqlClasses.Query
         public override SparqlResultSet Run()
         {
             base.Run();
-            ResultSet.ResultType = ResultType.Ask;
             return ResultSet;
 
         }
 
-        public override SparqlQueryTypeEnum QueryType
-        {
-            get { return SparqlQueryTypeEnum.Ask; }
-        }
+        //public override SparqlQueryTypeEnum QueryType
+        //{
+        //    get { return SparqlQueryTypeEnum.Ask; }
+        //}
     }
 }

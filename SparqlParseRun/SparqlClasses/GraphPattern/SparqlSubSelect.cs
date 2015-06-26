@@ -1,34 +1,36 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using SparqlParseRun.SparqlClasses.Query.Result;
 using SparqlParseRun.SparqlClasses.SolutionModifier;
 
 namespace SparqlParseRun.SparqlClasses.GraphPattern
 {
-    public class SparqlSubSelect : SparqlGraphPattern
-    {
-      
+    public class SparqlSubSelect : SparqlQuery, ISparqlGraphPattern
+    {   
 
-        private readonly SparqlSolutionModifier sparqlSolutionModifier;
-        private readonly ISparqlGraphPattern sparqlValueDataBlock;
-
-
-        public SparqlSubSelect(SparqlGraphPattern sparqlWhere, SparqlSolutionModifier sparqlSolutionModifier, ISparqlGraphPattern sparqlValueDataBlock)
+        public SparqlSubSelect(ISparqlGraphPattern sparqlWhere, SparqlSolutionModifier sparqlSolutionModifier, ISparqlGraphPattern sparqlValueDataBlock, RdfQuery11Translator q) 
+            :base(q)
         {
             // TODO: Complete member initialization
-            AddRange(sparqlWhere);
+           this. sparqlWhere= sparqlWhere;
             this.sparqlSolutionModifier = sparqlSolutionModifier;
-            this.sparqlValueDataBlock = sparqlValueDataBlock;
+            this.valueDataBlock = sparqlValueDataBlock;
             //   this.sparqlValueDataBlock = sparqlValueDataBlock;
         
         }
 
-        public override IEnumerable<SparqlResult> Run(IEnumerable<SparqlResult> variableBindings)
+        public IEnumerable<SparqlResult> Run(IEnumerable<SparqlResult> variableBindings)
         {
-                if(sparqlValueDataBlock!=null)
-                 variableBindings = sparqlValueDataBlock.Run(variableBindings);
-            return sparqlSolutionModifier.Run(base.Run(variableBindings));
+            foreach (var sparqlResult in variableBindings)
+            {
+                Seed = Enumerable.Repeat<SparqlResult>(sparqlResult,1);
+                var sparqlResultSet = base.Run();
+                foreach (var result in sparqlResultSet.Results)
+                    yield return result;
+            }
+            
         }
 
-        public override SparqlGraphPatternType PatternType { get{return SparqlGraphPatternType.SubSelect;}}
+        public SparqlGraphPatternType PatternType { get{return SparqlGraphPatternType.SubSelect;}}
     }
 }

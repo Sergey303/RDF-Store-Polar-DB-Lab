@@ -16,7 +16,7 @@ namespace SparqlParseRun.SparqlClasses.Query.Result
         private readonly RdfQuery11Translator q;
         public IEnumerable<SparqlResult> Results ;
         public IGraph GraphResult;
-        internal ResultType ResultType;
+        public ResultType ResultType;
 
       
 
@@ -73,7 +73,7 @@ namespace SparqlParseRun.SparqlClasses.Query.Result
         {
             if (b is IIriNode)
             {
-                return new XElement(xn + "uri", ((ObjectVariants)b).Content);
+                return new XElement(xn + "uri", ((IIriNode)b).UriString);
             }     
             else if (b is IBlankNode)
             {
@@ -161,7 +161,7 @@ namespace SparqlParseRun.SparqlClasses.Query.Result
     }
 
 
-    internal enum ResultType
+    public enum ResultType
     {
         Describe, Select, Construct, Ask,
         Update

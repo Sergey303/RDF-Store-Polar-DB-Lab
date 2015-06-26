@@ -18,7 +18,8 @@ namespace SparqlEndpointForm
                 if (store == null)
                 {
                     store = new StoreCascadingInt(AppDomain.CurrentDomain.BaseDirectory+"../Databases/int based/");
-                    Store.Start();
+                    store.ClearAll();
+                    store.ReloadFrom(@"C:\Users\Admin\Source\Repos\RDF-Store-Polar-DB-Lab\SparqlEnfdPointWebApi\Data.ttl");
                 }
                 return store;
             }

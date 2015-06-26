@@ -12,7 +12,7 @@ namespace SparqlParseRun.SparqlClasses.Query
 {
     public class SparqlConstructQuery :SparqlQuery
     {
-        readonly List<DataSet> datasets = new List<DataSet>();
+      
         private SparqlGraphPattern constract;
 
         public SparqlConstructQuery(RdfQuery11Translator q) : base(q)
@@ -29,14 +29,8 @@ namespace SparqlParseRun.SparqlClasses.Query
             sparqlWhere = sparqlTriples;
         }
 
-        internal void Add(DataSet sparqlDataset)
-        {
-            datasets.Add(sparqlDataset);
-        }
 
-
-
-        internal void Create(SparqlGraphPattern sparqlTriples, SparqlGraphPattern sparqlWhere, SparqlSolutionModifier sparqlSolutionModifier)
+        internal void Create(SparqlGraphPattern sparqlTriples, ISparqlGraphPattern sparqlWhere, SparqlSolutionModifier sparqlSolutionModifier)
         {
             constract = sparqlTriples;
             this.sparqlWhere = sparqlWhere;
@@ -48,19 +42,14 @@ namespace SparqlParseRun.SparqlClasses.Query
            base.Run();
             ResultSet.GraphResult = q.Store.CreateTempGraph();
             foreach (var result in ResultSet.Results)
-            {   
                 foreach (var st in constract.Cast<SparqlTriple>())
-             
-                    st.Substitution(result, (s, p, o) =>
-                        ResultSet.GraphResult.Add(s, p, o));}
-
-            ResultSet.ResultType = ResultType.Construct;  
+                    st.Substitution(result, (s, p, o) =>    ResultSet.GraphResult.Add(s, p, o));
             return  ResultSet;
         }
 
-        public override SparqlQueryTypeEnum QueryType
-        {
-            get { return SparqlQueryTypeEnum.Construct; }
-        }
+        //public override SparqlQueryTypeEnum QueryType
+        //{
+        //    get { return SparqlQueryTypeEnum.Construct; }
+        //}
     }
 }
