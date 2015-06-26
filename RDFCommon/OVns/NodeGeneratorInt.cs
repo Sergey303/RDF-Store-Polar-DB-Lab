@@ -27,7 +27,7 @@ namespace RDFCommon.OVns
             coding_table.Fill(new string[0]);
             coding_table.BuildIndexes();
         }
-        public void Build()
+        public override void Build()
         {
            
             //coding_table.InsertPortion(SpecialTypesClass.GetAll());
@@ -84,6 +84,7 @@ namespace RDFCommon.OVns
             iriCoded=new OV_iriint(code, coding_table.GetStringByCode);
             return true;
         }
+
     }
     
 }

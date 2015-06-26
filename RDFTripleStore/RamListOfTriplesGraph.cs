@@ -115,7 +115,7 @@ namespace RDFTripleStore
         }
 
 
-        public string Name { get; private set; }
+        public string Name { get; set; }
         public NodeGenerator NodeGenerator { get { return this; }}
 
         public void Clear()

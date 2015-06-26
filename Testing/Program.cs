@@ -35,14 +35,15 @@ namespace TestingNs
                 //  var exampleDir = new DirectoryInfo(@"..\..\examples\bsbm");
             {
                 Console.WriteLine("example: " + exampleDir.Name);
-                if (exampleDir.Name != @"13.2.1 Specifying the Default Graph"
-                    //&& rqQueryFile.FullName != @"C:\Users\Admin\Source\Repos\SparqlWpf\UnitTestDotnetrdf_test\examples\insert where\query2.rq"
-                  ) continue;
+                //if (exampleDir.Name != @"13.2.1 Specifying the Default Graph"
+                //    //&& rqQueryFile.FullName != @"C:\Users\Admin\Source\Repos\SparqlWpf\UnitTestDotnetrdf_test\examples\insert where\query2.rq"
+                //  ) continue;
                 //var nameGraphsDir = new DirectoryInfo(Path.Combine(exampleDir.FullName, "named graphs"));
                 //if (nameGraphsDir.Exists) continue;
                 foreach (var ttlDatabase in exampleDir.GetFiles("*.ttl"))
                 {
                     var store = new StoreCascadingInt(exampleDir.FullName + "/tmp");
+                    store.ClearAll();
                     //using (StreamReader reader = new StreamReader(ttlDatabase.FullName))
                     store.ReloadFrom(ttlDatabase.FullName);
                 //  store.Start();

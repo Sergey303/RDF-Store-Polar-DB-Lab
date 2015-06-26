@@ -53,11 +53,13 @@ namespace RDFTripleStore
         public void FromTurtle(string gString)
         {
             Build(new TripleGeneratorBufferedParallel(gString,null));
+            NodeGenerator.Build();
         }
 
         public void FromTurtle(Stream inputStream)
         {
             Build(new TripleGeneratorBufferedParallel(inputStream, null));
+            NodeGenerator.Build();
             
         }
 
@@ -144,7 +146,7 @@ namespace RDFTripleStore
         }
         
 
-        public string Name { get; private set; }
+        public string Name { get; set; }
         public NodeGenerator NodeGenerator { get; set; }
         public void Clear() { table.Clear(); }
       

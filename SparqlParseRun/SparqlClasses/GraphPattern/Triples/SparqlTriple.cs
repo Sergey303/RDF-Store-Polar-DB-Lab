@@ -581,7 +581,7 @@ namespace SparqlParseRun.SparqlClasses.GraphPattern.Triples
             {
                 result.Add(quad.Object, oVariableNode);
             }
-            if (isGKnown)
+            if (!isGKnown)
             {
                 result.Add(quad.Graph, variableDataSet.Variable);
             }

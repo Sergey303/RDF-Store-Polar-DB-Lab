@@ -19,26 +19,20 @@ namespace RDFTripleStore
             
             NodeGenerator=
                 ng = NodeGeneratorInt.Create(path, table.TableCell.IsEmpty);
-            NamedGraphs = new NamedGraphsByFolders(new DirectoryInfo(path), ng, d => new GraphCascadingInt(d.FullName + "/"){NodeGenerator=NodeGenerator});
+            NamedGraphs = new NamedGraphsByFolders(new DirectoryInfo(path), ng, d => new GraphCascadingInt(d.FullName + "/"){NodeGenerator=NodeGenerator},
+                d=> { d.Delete(true); });
         }
 
         private readonly NodeGeneratorInt ng;
 
         public void ReloadFrom(string fileName)
-        {
-            ng.Clear();  //  ClearAll();
+        {   
             FromTurtle(fileName);
-            ng.Build();
         }
 
      
 
-        public void ReloadFrom(Stream baseStream)
-        {
-            ClearAll();
-          base.FromTurtle(baseStream);    
-        }
-
+       
        
         private SparqlResultSet Run(SparqlQuery queryContext)
         {

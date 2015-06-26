@@ -122,6 +122,11 @@ namespace RDFCommon.OVns
             iriCoded = iriString;
             return true;
         }
+
+        public virtual void Build()
+        {
+            
+        }
     }
     
 }

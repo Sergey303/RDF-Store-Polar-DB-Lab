@@ -14,8 +14,8 @@ namespace RDFTripleStore
     public class NamedGraphsByFolders : RdfNamedGraphs
     {
 
-        public NamedGraphsByFolders(DirectoryInfo directory, NodeGenerator ng, Func<DirectoryInfo, IGraph> graphCtor)
-            : base(ng, s => graphCtor(new DirectoryInfo(directory +"/"+ CodeGraphName2DirName(s))))
+        public NamedGraphsByFolders(DirectoryInfo directory, NodeGenerator ng, Func<DirectoryInfo, IGraph> graphCtor, Action<DirectoryInfo> graphDrop)
+            : base(ng, s => graphCtor(new DirectoryInfo(directory +"/"+ CodeGraphName2DirName(s))), s=> graphDrop(new DirectoryInfo(directory +"/"+ CodeGraphName2DirName(s))))
         {
             if(!directory.Exists) directory.Create();
             foreach (var graphDir in directory.EnumerateDirectories())

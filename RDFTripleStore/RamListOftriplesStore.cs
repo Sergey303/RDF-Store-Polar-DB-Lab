@@ -12,12 +12,12 @@ namespace RDFTripleStore
         public RamListOftriplesStore(string name)
             : base(name)
         {
-            rdfNamedGraphs = new RdfNamedGraphs(NodeGenerator, s => CreateTempGraph());
+            rdfNamedGraphs = new RdfNamedGraphs(NodeGenerator, s => CreateTempGraph(), s => {});
         }
 
         public RamListOftriplesStore()
         {
-            rdfNamedGraphs = new RdfNamedGraphs(NodeGenerator, s => CreateTempGraph());
+            rdfNamedGraphs = new RdfNamedGraphs(NodeGenerator, s => CreateTempGraph(), s => {});
         }
 
         public IStoreNamedGraphs NamedGraphs { get { return rdfNamedGraphs; } }

@@ -15,7 +15,7 @@ namespace RDFTripleStore
         private Dictionary<ObjectVariants,
             KeyValuePair<Dictionary<ObjectVariants, ObjectVariants>, Dictionary<ObjectVariants, HashSet<ObjectVariants>>>> triples = new Dictionary<ObjectVariants, KeyValuePair<Dictionary<ObjectVariants, ObjectVariants>, Dictionary<ObjectVariants, HashSet<ObjectVariants>>>>();
 
-        public string Name { get { return "g"; } }
+        public string Name { get; set; }
 
         public NodeGenerator NodeGenerator
         {

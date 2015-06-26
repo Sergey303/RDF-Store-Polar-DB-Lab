@@ -7,7 +7,7 @@ namespace RDFCommon
 {
     public interface IGraph
     {
-        string Name { get; }
+        string Name { get; set; }
 
         NodeGenerator NodeGenerator { get; }   
       
