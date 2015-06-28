@@ -61,6 +61,7 @@
     <Compile Include="ScaleCell.cs" />
     <Compile Include="ScaleInMemory.cs" />
     <Compile Include="ScaleMemory.cs" />
+    <Compile Include="ScalePaCell.cs" />
     <Compile Include="TableView.cs" />
     <Compile Include="TableViewImmutable.cs" />
   </ItemGroup>
