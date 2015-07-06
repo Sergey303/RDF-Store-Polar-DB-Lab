@@ -16,7 +16,7 @@ namespace GoTripleStore
             System.Diagnostics.Stopwatch sw = new System.Diagnostics.Stopwatch();
             Random rnd = new Random();
             TripleSetInt ttab = new TripleSetInt(path);
-            int npersons = 40000;
+            int npersons = 4000000;
             PaEntry.bufferBytes = 200000000;
 
             bool toload = false;
