@@ -1,22 +1,12 @@
-<ns:sparql xmlns:ns="http://www.w3.org/2005/sparql-results#">
-  <ns:head>
-    <ns:variable ns:name="?productLabel" />
-    <ns:variable ns:name="?offer" />
-    <ns:variable ns:name="?price" />
-    <ns:variable ns:name="?vendor" />
-    <ns:variable ns:name="?vendorTitle" />
-    <ns:variable ns:name="?review" />
-    <ns:variable ns:name="?revTitle" />
-    <ns:variable ns:name="?reviewer" />
-    <ns:variable ns:name="?revName" />
-    <ns:variable ns:name="?rating1" />
-    <ns:variable ns:name="?rating2" />
-  </ns:head>
-  <ns:results>
-    <ns:result>
-      <ns:binding ns:name="?productLabel">
-        <ns:literal>substituting meriting detesting</ns:literal>
-      </ns:binding>
-    </ns:result>
-  </ns:results>
-</ns:sparql>
+{ "head": { "vars": [ "?productLabel",
+"?offer",
+"?price",
+"?vendor",
+"?vendorTitle",
+"?review",
+"?revTitle",
+"?reviewer",
+"?revName",
+"?rating1",
+"?rating2",
+"?date" ] }, "results": { "bindings" : [{"?productLabel" : { "type" : "literal", "value" : "substituting meriting detesting" }}] } }

@@ -1,14 +1,18 @@
-﻿namespace SparqlParseRun.SparqlClasses.Expressions
+﻿using RDFCommon.OVns;
+
+namespace SparqlParseRun.SparqlClasses.Expressions
 {
     class SparqlStrLength  : SparqlExpression
     {
-        public SparqlStrLength(SparqlExpression value)
+        public SparqlStrLength(SparqlExpression value) :base(value.AggregateLevel, value.IsStoreUsed)
         {
-
-            IsAggragate = value.IsAggragate;
-            IsDistinct = value.IsDistinct;
-
-            Operator = result => ((string)value.TypedOperator(result).Content).Length;
+            if (value.Const != null)
+                Const = new OV_int(((string) value.Const.Content).Length);
+            else
+            {
+                Operator = result => ((string) value.TypedOperator(result).Content).Length;
+                TypedOperator = result => new OV_int(((string) value.TypedOperator(result).Content).Length);
+            }
         }
     }
 }

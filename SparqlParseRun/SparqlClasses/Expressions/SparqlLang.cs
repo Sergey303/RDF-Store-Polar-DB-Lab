@@ -7,11 +7,8 @@ namespace SparqlParseRun.SparqlClasses.Expressions
 {
     class SparqlLang  : SparqlExpression
     {
-        public SparqlLang(SparqlExpression value, NodeGenerator q)
+        public SparqlLang(SparqlExpression value)  :base(value.AggregateLevel, value.IsStoreUsed)
         {
-
-            IsAggragate = value.IsAggragate;
-            IsDistinct = value.IsDistinct;
             if (value.Const != null)
                 Const = new OV_string(((ILanguageLiteral) value.Const).Lang.Substring(1));
             else

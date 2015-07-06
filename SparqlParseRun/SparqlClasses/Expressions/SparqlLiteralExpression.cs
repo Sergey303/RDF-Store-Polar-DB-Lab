@@ -9,7 +9,7 @@ namespace SparqlParseRun.SparqlClasses.Expressions
         public SparqlLiteralExpression(ObjectVariants sparqlLiteralNode)
         {
             Const = sparqlLiteralNode;
-            SetExprType(sparqlLiteralNode.Variant);
+            //SetExprType(sparqlLiteralNode.Variant);
         }
 
 

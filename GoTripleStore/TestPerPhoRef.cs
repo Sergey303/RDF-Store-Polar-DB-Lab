@@ -10,7 +10,114 @@ namespace GoTripleStore
 {
     public class TestPerPhoRef
     {
-        public static void Main() // Main8()
+        public static void Main() // Main9()
+        {
+            string path = "../../../Databases/";
+            System.Diagnostics.Stopwatch sw = new System.Diagnostics.Stopwatch();
+            Random rnd = new Random();
+            TriplesGraphInt g = new TriplesGraphInt(path);
+            int npersons = 40000;
+            PaEntry.bufferBytes = 200000000;
+
+            bool toload = false;
+            toload = true;
+            if (toload)
+            {
+                sw.Restart();
+                TestDataGenerator generator = new TestDataGenerator(npersons, 2378459);
+                g.Build(generator.Generate().SelectMany(ele =>
+                {
+                    string id = ele.Name + ele.Attribute("id").Value;
+                    var seq = Enumerable.Repeat<Tuple<string, string, ObjectVariants>>(
+                        new Tuple<string, string, ObjectVariants>(id, "http://www.w3.org/1999/02/22-rdf-syntax-ns#type", new OV_iri(ele.Name.LocalName)), 1)
+                        .Concat(ele.Elements().Select(subele =>
+                        {
+                            XAttribute ratt = subele.Attribute("ref");
+                            Tuple<string, string, ObjectVariants> triple = null;
+                            if (ratt != null)
+                            {
+                                string r = (subele.Name == "reflected" ? "person" : "photo_doc") +
+                                    ratt.Value;
+                                triple = new Tuple<string, string, ObjectVariants>(id, subele.Name.LocalName, new OV_iri(r));
+                            }
+                            else
+                            {
+                                string value = subele.Value; // Нужны языки и другие варианты!
+                                bool possiblenumber = string.IsNullOrEmpty(value) ? false : true;
+                                if (possiblenumber)
+                                {
+                                    char c = value[0];
+                                    if (char.IsDigit(c) || c == '-') { } else possiblenumber = false;
+                                }
+                                triple = new Tuple<string, string, ObjectVariants>(id, subele.Name.LocalName,
+                                     possiblenumber ? (ObjectVariants)new OV_int(int.Parse(value)) : (ObjectVariants)new OV_string(value));
+                            }
+                            return triple;
+                        }));
+                    return seq;
+                }));
+                sw.Stop();
+                Console.WriteLine("Load ok. duration={0}", sw.ElapsedMilliseconds);
+            }
+            else { g.Warmup(); g.Start(); }
+
+            int ic = g.Code("person3322");
+            Console.WriteLine("person3322={0}", ic);
+            string s = g.Decode(ic);
+            Console.WriteLine("{0}", s);
+
+            int iname = g.Code("name");
+            Console.WriteLine("name={0}", iname);
+            string s2 = g.Decode(iname);
+            Console.WriteLine("{0}", s2);
+
+            //// Измерение скорости кодирования
+            //sw.Restart();
+            //for (int i = 0; i < 10000; i++) { ic = ttab.Code("person" + rnd.Next(npersons - 1)); }
+            //sw.Stop();
+            //Console.WriteLine("10000 Code ok. duration={0}", sw.ElapsedMilliseconds);
+
+            var query = g.GetTriplesWithSubjectPredicate(new OV_iriint(ic, null), new OV_iriint(iname, null));
+            foreach (var tr in query)
+            {
+                Console.WriteLine("{0} {1} {2}", tr.Subj, tr.Pred, tr.Obj);
+            }
+
+            // Измерение времени поиска по заданным предикату и субъекту
+            sw.Restart();
+            for (int i = 0; i < 10000; i++)
+            {
+                ic = g.Code("person" + rnd.Next(npersons - 1));
+                var names = g.GetTriplesWithSubjectPredicate(new OV_iriint(ic, null), new OV_iriint(iname, null));
+                if (names.Count() != 1) Console.WriteLine("NOT ONE NAME: {0}", names.Count());
+            }
+            sw.Stop();
+            Console.WriteLine("10000 person names ok. duration={0}", sw.ElapsedMilliseconds);
+
+            int ireflected = g.Code("reflected");
+            var qu3 = g.GetTriplesWithPredicateObject(new OV_iriint(ireflected, null), new OV_iriint(ic, null));
+            Console.WriteLine(qu3.Count());
+
+            int sum = 0;
+            int in_doc = g.Code("in_doc");
+            sw.Restart();
+            for (int i = 0; i < 10000; i++)
+            {
+                string id = "person" + rnd.Next(npersons - 1);
+                int iid = g.Code(id);
+                ObjectVariants ov = new OV_iriint(iid, null);
+
+                var qu4 = g.GetTriplesWithPredicateObject(new OV_iriint(ireflected, null), ov)
+                    .SelectMany(tr => g.GetTriplesWithSubjectPredicate(tr.Subj, new OV_iriint(in_doc, null)))
+                    .SelectMany(tr => g.GetTriplesWithSubjectPredicate(tr.Obj, new OV_iriint(iname, null)))
+                    ;
+                sum += qu4.Count();
+            }
+            sw.Stop();
+            Console.WriteLine("10000 person inv relations ok. duration={0} sum={1}", sw.ElapsedMilliseconds, sum);
+
+        }
+        public static void Main8() // Main8()
         {
             string path = "../../../Databases/";
             System.Diagnostics.Stopwatch sw = new System.Diagnostics.Stopwatch();

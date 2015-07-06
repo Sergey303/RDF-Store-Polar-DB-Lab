@@ -7,7 +7,7 @@ namespace RDFCommon
 {
     public interface IGraph
     {
-        string Name { get; }
+        string Name { get; set; }
 
         NodeGenerator NodeGenerator { get; }   
       
@@ -18,14 +18,14 @@ namespace RDFCommon
         /// </summary>
         /// <param name="o">Node</param>
         /// <returns></returns>
-        IEnumerable<T> GetTriplesWithObject<T>(ObjectVariants o, Func<ObjectVariants, ObjectVariants, T> createResult);
+        IEnumerable<TripleOVStruct> GetTriplesWithObject(ObjectVariants o);
 
         /// <summary>
         /// Selects all Triples where the Predicate is a given Node
         /// </summary>
         /// <param name="n">Node</param>
         /// <returns></returns>
-        IEnumerable<T> GetTriplesWithPredicate<T>(ObjectVariants p, Func<ObjectVariants, ObjectVariants,T> createResult);
+        IEnumerable<TripleOVStruct> GetTriplesWithPredicate(ObjectVariants p);
 
         
         /// <summary>
@@ -33,7 +33,7 @@ namespace RDFCommon
         /// </summary>
         /// <param name="n">Node</param>
         /// <returns></returns>
-        IEnumerable<T> GetTriplesWithSubject<T>(ObjectVariants s, Func<ObjectVariants, ObjectVariants,T> createResult);
+        IEnumerable<TripleOVStruct> GetTriplesWithSubject(ObjectVariants s);
 
         /// <summary>
         /// Selects all Triples with the given Subject and Predicate
@@ -57,7 +57,7 @@ namespace RDFCommon
         /// <param name="pred">Predicate</param>
         /// <param name="obj">Object</param>
         /// <returns></returns>
-        IEnumerable<ObjectVariants> GetTriplesWithPredicateObject(ObjectVariants pred, ObjectVariants obj);
+        IEnumerable<ObjectVariants> GetSubjects(ObjectVariants pred, ObjectVariants obj);
         IEnumerable<T> GetTriples<T>(Func<ObjectVariants,ObjectVariants,ObjectVariants, T> returns );
 
 
@@ -72,6 +72,8 @@ namespace RDFCommon
 
         bool Any();
         void FromTurtle(string gString);
+        void FromTurtle(Stream inputStream);
+
         void Warmup();
     }
 }

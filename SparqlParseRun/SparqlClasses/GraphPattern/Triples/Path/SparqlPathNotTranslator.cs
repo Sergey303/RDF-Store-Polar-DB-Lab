@@ -27,11 +27,9 @@ namespace SparqlParseRun.SparqlClasses.GraphPattern.Triples.Path
                 var variableNode = q.CreateBlankNode();
                 yield return new SparqlTriple((ObjectVariants) subjectNode, variableNode, (ObjectVariants) objectNode, q);
                 foreach (var pathTranslator in directed)
-                {
-                    SparqlExpression expr = new SparqlVarExpression(variableNode);
-                    expr = SparqlExpression.NotEquals(expr, new SparqlIriExpression(pathTranslator.predicate));
-                    yield return new SparqlFilter(expr);
-                }
+                    yield return
+                        new SparqlFilter(new SparqlNotEqualsExpression(new SparqlVarExpression(variableNode),
+                            new SparqlIriExpression(pathTranslator.predicate), q.Store.NodeGenerator));
             }
 
             //TODO drop subject object variables
@@ -42,11 +40,9 @@ namespace SparqlParseRun.SparqlClasses.GraphPattern.Triples.Path
                 var variableNode =q.CreateBlankNode();
                 yield return new SparqlTriple((ObjectVariants) objectNode, variableNode, (ObjectVariants) subjectNode, q);
                 foreach (var pathTranslator in inversed)
-                {
-                    SparqlExpression expr = new SparqlVarExpression(variableNode);
-                  expr=  SparqlExpression.NotEquals(expr,new SparqlIriExpression(pathTranslator.predicate));
-                    yield return new SparqlFilter(expr);
-                }
+                    yield return
+                        new SparqlFilter(new SparqlNotEqualsExpression(new SparqlVarExpression(variableNode),
+                            new SparqlIriExpression(pathTranslator.predicate), q.Store.NodeGenerator));
             }
         }
     }

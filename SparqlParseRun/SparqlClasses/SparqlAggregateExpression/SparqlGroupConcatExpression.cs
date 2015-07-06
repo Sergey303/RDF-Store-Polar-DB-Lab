@@ -7,20 +7,18 @@ namespace SparqlParseRun.SparqlClasses.SparqlAggregateExpression
 {
     class SparqlGroupConcatExpression : SparqlAggregateExpression
     {
-        public SparqlGroupConcatExpression() :base()
+        protected override void Create()
         {
-            TypedOperator = result =>
+            if (Expression.Const != null)
             {
-                var spraqlGroupOfResults = ((SpraqlGroupOfResults) result);
-                try
-                {
-                    return new OV_string(string.Join(Separator, spraqlGroupOfResults.Group.Select(TypedOperator)));
-                }
-                catch
-                {
-                }
-                return null;
-            };
+                Operator = result => string.Join(Separator, ((SparqlGroupOfResults)result).Group.Select(r=>Expression.Const.Content));
+                TypedOperator = result => new OV_string(string.Join(Separator, ((SparqlGroupOfResults)result).Group.Select(r=>Expression.Const.Content)));
+            }
+            else
+            {
+                Operator = result => string.Join(Separator, ((SparqlGroupOfResults) result).Group.Select(Expression.Operator));
+                TypedOperator = result => new OV_string(string.Join(Separator, ((SparqlGroupOfResults)result).Group.Select(Expression.Operator)));
+            }
         }
     }
 }

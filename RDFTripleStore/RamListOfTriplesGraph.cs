@@ -34,26 +34,26 @@ namespace RDFTripleStore
 
         }
 
-        public IEnumerable<T> GetTriplesWithSubject<T>(ObjectVariants subjectNode, Func<ObjectVariants,ObjectVariants, T> returns)
+        public IEnumerable<TripleOVStruct> GetTriplesWithSubject(ObjectVariants subjectNode)
         {
-            return triples.Where(triple => triple.Subject.Equals(subjectNode)).Select(triple =>  returns(triple.Predicate, triple.Object));
+            return triples.Where(triple => triple.Subject.Equals(subjectNode)).Select(triple =>  new TripleOVStruct(null, triple.Predicate, triple.Object));
         }
 
-        public IEnumerable<ObjectVariants> GetTriplesWithPredicateObject(ObjectVariants predicateNode, ObjectVariants objectNode)
+        public IEnumerable<ObjectVariants> GetSubjects(ObjectVariants predicateNode, ObjectVariants objectNode)
         {
             return triples.Where(triple => triple.Predicate .Equals( predicateNode) && triple.Object .Equals( objectNode)).Select(triple => triple.Subject);
         }
 
-        public IEnumerable<T> GetTriplesWithPredicate<T>(ObjectVariants predicateNode, Func<ObjectVariants, ObjectVariants, T> returns)
+        public IEnumerable<TripleOVStruct> GetTriplesWithPredicate(ObjectVariants predicateNode)
         {
-            return triples.Where(triple => triple.Predicate .Equals( predicateNode)).Select(triple => returns(triple.Subject, triple.Object));
+            return triples.Where(triple => triple.Predicate .Equals( predicateNode)).Select(triple => new TripleOVStruct(triple.Subject, null, triple.Object));
         }
 
 
 
-        public IEnumerable<T> GetTriplesWithObject<T>(ObjectVariants o, Func<ObjectVariants, ObjectVariants, T> returns)
+        public IEnumerable<TripleOVStruct> GetTriplesWithObject(ObjectVariants o)
         {
-            return triples.Where(triple => triple.Object.Equals(o)).Select(triple => returns(triple.Subject, triple.Predicate)); 
+            return triples.Where(triple => triple.Object.Equals(o)).Select(triple => new TripleOVStruct(triple.Subject, triple.Predicate, null)); 
         }
 
         public IEnumerable<T> GetTriples<T>(Func<ObjectVariants, ObjectVariants, ObjectVariants, T> returns)
@@ -104,13 +104,18 @@ namespace RDFTripleStore
                             (ObjectVariants) t.Object))));
         }
 
+        public void FromTurtle(Stream inputStream)
+        {
+            throw new NotImplementedException();
+        }
+
         public void Warmup()
         {
             
         }
 
 
-        public string Name { get; private set; }
+        public string Name { get; set; }
         public NodeGenerator NodeGenerator { get { return this; }}
 
         public void Clear()

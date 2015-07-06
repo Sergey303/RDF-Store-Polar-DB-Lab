@@ -67,6 +67,7 @@
     <Compile Include="TestTPack.cs" />
     <Compile Include="TPack.cs" />
     <Compile Include="TripleSetInt.cs" />
+    <Compile Include="TriplesGraphInt.cs" />
     <Compile Include="TripleStore.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -74,6 +75,10 @@
     <Content Include="Experiments.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\PolarDB\PolarDB.csproj">
+      <Project>{907bb4af-fbc9-4a1e-8f80-194af9337aa4}</Project>
+      <Name>PolarDB</Name>
+    </ProjectReference>
     <ProjectReference Include="..\RDFCommon\RDFCommon.csproj">
       <Project>{7eb60f80-87ca-4645-9e1f-051735195d92}</Project>
       <Name>RDFCommon</Name>

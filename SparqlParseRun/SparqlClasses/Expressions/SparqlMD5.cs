@@ -6,23 +6,16 @@ using RDFCommon;
 
 namespace SparqlParseRun.SparqlClasses.Expressions
 {
-    class SparqlMD5 : SparqlExpression
+    class SparqlMD5 :SparqlHashExpression
     {
-        readonly MD5 md5 = new MD5CryptoServiceProvider();
-
-             public SparqlMD5(SparqlExpression value)
+        public SparqlMD5(SparqlExpression value) : base(value)
         {
-
-            IsAggragate = value.IsAggragate;
-            IsDistinct = value.IsDistinct;
-            TypedOperator = result => value.TypedOperator(result).Change(o => CreateHash(o));
-
+            Create(value);            
         }
-
-        private string CreateHash(string f)
+        readonly MD5 md5 = new MD5CryptoServiceProvider();
+         protected override string CreateHash(string f)
         {
-            return string.Join("",
-                md5.ComputeHash(Encoding.UTF8.GetBytes(f)).Select( b => b.ToString("x2")));
+            return string.Join("", md5.ComputeHash(Encoding.UTF8.GetBytes(f)).Select( b => b.ToString("x2")));
         }
     }
 }

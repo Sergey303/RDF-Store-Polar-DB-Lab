@@ -6,16 +6,17 @@ namespace SparqlParseRun.SparqlClasses.Expressions
     class SparqlIsLiteral : SparqlExpression
     {
         public SparqlIsLiteral(SparqlExpression value)
+            : base(value.AggregateLevel, value.IsStoreUsed)
         {
-            IsAggragate = value.IsAggragate;
-            IsDistinct = value.IsDistinct;
-            SetExprType(ObjectVariantEnum.Bool);
+            //SetExprType(ObjectVariantEnum.Bool);
 
-            TypedOperator = result =>
+            if (value.Const != null)
+                Const = new OV_bool(value.Const is ILiteralNode);
+            else
             {
-                var func = value.TypedOperator(result);
-                return new OV_bool(func is ILiteralNode); 
-            };
+                Operator = result => value.TypedOperator(result) is ILiteralNode;
+                TypedOperator = result => new OV_bool(value.TypedOperator(result) is ILiteralNode); //todo 
+            }
         }
     }
 }

@@ -2,6 +2,7 @@
 using System.Linq;
 using RDFCommon;
 using RDFCommon.OVns;
+using SparqlParseRun.SparqlClasses.Expressions;
 using SparqlParseRun.SparqlClasses.GraphPattern.Triples.Node;
 using SparqlParseRun.SparqlClasses.Query.Result;
 
@@ -9,19 +10,21 @@ namespace SparqlParseRun.SparqlClasses.GraphPattern.Triples
 {
     public  class SparqlTripletsStoreCalls 
     {
-        private IStore store;
+        private readonly IStore store;
         
         public SparqlTripletsStoreCalls(IStore store)
         {
             this.store = store;
         }
+   
+
 
         public IEnumerable<SparqlResult> spO(ObjectVariants subjNode, ObjectVariants predicateNode,
             VariableNode obj, SparqlResult variablesBindings)
         {
-                return store
-                    .GetTriplesWithSubjectPredicate(subjNode, predicateNode)
-                    .Select(node =>variablesBindings.Add( node, obj));
+            return store.GetTriplesWithSubjectPredicate(subjNode, predicateNode)
+                .ToArray()
+                .Select(node => variablesBindings.Add(node, obj));
         }
 
         // from merged named graphs
@@ -88,8 +91,8 @@ namespace SparqlParseRun.SparqlClasses.GraphPattern.Triples
         public IEnumerable<SparqlResult> SpO( VariableNode sVar, ObjectVariants predicate, VariableNode oVar, SparqlResult variablesBindings)
         {
             return store
-                .GetTriplesWithPredicate(predicate, (s,o)=>
-               variablesBindings.Add( s, sVar, o, oVar));
+                .GetTriplesWithPredicate(predicate).
+                Select(t=>variablesBindings.Add( t.Subject, sVar, t.Object, oVar));
         }
 
         public IEnumerable<SparqlResult> SpOGraphs(VariableNode sVar, ObjectVariants predicate, VariableNode oVar, SparqlResult variablesBindings, DataSet graphs)
@@ -144,11 +147,10 @@ namespace SparqlParseRun.SparqlClasses.GraphPattern.Triples
         }
 
 
-        public IEnumerable<SparqlResult> sPO( ObjectVariants subj, VariableNode pred, VariableNode obj, SparqlResult variablesBindings)
+        public IEnumerable<TripleOVStruct> sPO( ObjectVariants subj)
         {
             return store
-                .GetTriplesWithSubject(subj, (p, o) =>
-                   variablesBindings.Add( p, pred, o, obj));
+                .GetTriplesWithSubject(subj);
         }
 
         public IEnumerable<SparqlResult> sPOGraphs( ObjectVariants subj, VariableNode pred,

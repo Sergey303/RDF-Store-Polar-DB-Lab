@@ -328,10 +328,10 @@ private readonly Prologue prologue = new Prologue();
 			value=new OV_int(t.val); 
 		} else if (la.kind == 7) {
 			Get();
-			value=new OV_decimal(t.val); 
+			value=new OV_decimal(t.val.Replace(".", ",")); 
 		} else if (la.kind == 8) {
 			Get();
-			value=new OV_double(t.val); 
+            value = new OV_double(t.val.Replace(".", ",")); 
 		} else SynErr(38);
 	}
 

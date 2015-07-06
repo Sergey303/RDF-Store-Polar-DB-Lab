@@ -1,3 +1,3 @@
 { "head": { "vars": [ "?givenName",
 "?x",
-"?date" ] }, "results": { "bindings" : [] } }
+"?date" ] }, "results": { "bindings" : [{"?givenName" : { "type" : "literal", "value" : "Bob" }}] } }

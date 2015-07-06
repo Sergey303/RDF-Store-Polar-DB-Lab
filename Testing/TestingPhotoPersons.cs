@@ -56,8 +56,8 @@ namespace TestingNs
 
        public static void Run(Action<string> runQueryReturnCount)
        {     
-           //SparqlQuery sparqlQuery = SparqlQueryParser.Parse(store, QGetPerson3123Info());
-           //Console.WriteLine(sparqlQuery.Run().ToJson());  
+       
+           //Console.WriteLine(runQueryReturnCount(QGetPerson3123Info()));  
            Performance.ComputeTime(() =>
            {
                for (int i = 0; i < 1000; i++)

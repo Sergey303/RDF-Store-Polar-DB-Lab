@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using GoTripleStore;
 using RDFCommon;
@@ -143,6 +144,10 @@ namespace TestingNs
         Build(new TripleGeneratorBufferedParallel(path, "g"));
 
         }
-        
+
+        public void FromTurtle(Stream inputStream)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

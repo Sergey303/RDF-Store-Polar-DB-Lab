@@ -23,13 +23,13 @@ namespace SparqlParseRun
             set
             {
                 store = value;
-                StoreCalls = new SparqlTripletsStoreCalls(Store);                
+             //   StoreCalls = new SparqlTripletsStoreCalls(Store);                
             }
         }
 
      
 
-        public SparqlTripletsStoreCalls StoreCalls;
+     //   public SparqlTripletsStoreCalls StoreCalls;
         private IStore store;
 
         public RdfQuery11Translator(IStore store1)
@@ -51,7 +51,7 @@ namespace SparqlParseRun
         //    return Variables.Values.Cast<>.Skip(p);
         //}
 
-        internal IVariableNode CreateExpressionAsVariable(VariableNode variableNode, SparqlExpression sparqlExpression)
+        internal SparqlExpressionAsVariable CreateExpressionAsVariable(VariableNode variableNode, SparqlExpression sparqlExpression)
         {
             return new SparqlExpressionAsVariable(variableNode, sparqlExpression, this);
         }
@@ -62,14 +62,13 @@ namespace SparqlParseRun
         {
        
             VariableNode graphVariable = sparqlNode as VariableNode;
-            return graphVariable != null ? new VariableDataSet(graphVariable, namedDataSet) : new DataSet(){(ObjectVariants) sparqlNode};
+            return graphVariable != null ? new VariableDataSet(graphVariable, namedDataSet) : new DataSet(){sparqlNode};
         
         }
 
       
         public new SparqlBlankNode CreateBlankNode(string blankNodeString)
-        {
-            blankNodeString = "blank " + blankNodeString;
+        {   
             VariableNode blankNode;
             if (Variables.TryGetValue(blankNodeString, out blankNode)) return (SparqlBlankNode)blankNode;
             Variables.Add(blankNodeString, blankNode = new SparqlBlankNode(blankNodeString, Variables.Count));
@@ -78,7 +77,7 @@ namespace SparqlParseRun
 
         public new SparqlBlankNode CreateBlankNode()
         {
-            var blankNode = new SparqlBlankNode("generated ", Variables.Count);
+            var blankNode = new SparqlBlankNode(store.NodeGenerator.CreateBlank(), Variables.Count);
             Variables.Add(Guid.NewGuid().ToString(), blankNode); //todo
 
             return blankNode;

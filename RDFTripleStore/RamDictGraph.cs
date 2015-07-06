@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -14,7 +15,7 @@ namespace RDFTripleStore
         private Dictionary<ObjectVariants,
             KeyValuePair<Dictionary<ObjectVariants, ObjectVariants>, Dictionary<ObjectVariants, HashSet<ObjectVariants>>>> triples = new Dictionary<ObjectVariants, KeyValuePair<Dictionary<ObjectVariants, ObjectVariants>, Dictionary<ObjectVariants, HashSet<ObjectVariants>>>>();
 
-        public string Name { get { return "g"; } }
+        public string Name { get; set; }
 
         public NodeGenerator NodeGenerator
         {
@@ -26,19 +27,19 @@ namespace RDFTripleStore
            triples.Clear();
         }
 
-        public IEnumerable<T> GetTriplesWithObject<T>(ObjectVariants o, Func<ObjectVariants, ObjectVariants, T> createResult)
+        public IEnumerable<TripleOVStruct> GetTriplesWithObject(ObjectVariants o)
         {
             KeyValuePair<Dictionary<ObjectVariants, ObjectVariants>, Dictionary<ObjectVariants, HashSet<ObjectVariants>>> finded;
-            if (triples.TryGetValue(o, out finded)) return Enumerable.Empty<T>();
+            if (triples.TryGetValue(o, out finded)) return Enumerable.Empty<TripleOVStruct>();
             return null;
         }
 
-        public IEnumerable<T> GetTriplesWithPredicate<T>(ObjectVariants p, Func<ObjectVariants, ObjectVariants, T> createResult)
+        public IEnumerable<TripleOVStruct> GetTriplesWithPredicate(ObjectVariants p)
         {
             throw new NotImplementedException();
         }
 
-        public IEnumerable<T> GetTriplesWithSubject<T>(ObjectVariants s, Func<ObjectVariants, ObjectVariants, T> createResult)
+        public IEnumerable<TripleOVStruct> GetTriplesWithSubject(ObjectVariants s)
         {
             throw new NotImplementedException();
         }
@@ -53,7 +54,7 @@ namespace RDFTripleStore
             throw new NotImplementedException();
         }
 
-        public IEnumerable<ObjectVariants> GetTriplesWithPredicateObject(ObjectVariants pred, ObjectVariants obj)
+        public IEnumerable<ObjectVariants> GetSubjects(ObjectVariants pred, ObjectVariants obj)
         {
             throw new NotImplementedException();
         }
@@ -94,6 +95,11 @@ namespace RDFTripleStore
         }
 
         public void FromTurtle(string gString)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void FromTurtle(Stream inputStream)
         {
             throw new NotImplementedException();
         }

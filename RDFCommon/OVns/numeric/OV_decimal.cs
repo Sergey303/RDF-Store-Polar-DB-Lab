@@ -6,6 +6,7 @@ namespace RDFCommon.OVns
     {
         public readonly decimal value;
 
+      
         public OV_decimal(decimal value)
         {
             this.value = value;
@@ -20,7 +21,7 @@ namespace RDFCommon.OVns
 
         public override object WritableValue
         {
-            get { return value; }
+            get { return Convert.ToDouble(value); }
         }
 
         // override object.Equals

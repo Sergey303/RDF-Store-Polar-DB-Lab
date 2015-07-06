@@ -9,18 +9,18 @@ namespace SparqlParseRun.SparqlClasses.Update
 {
     public class SparqlUpdateDeleteData : ISparqlUpdate
     {
-        private readonly SparqlQuardsPattern sparqlQuardsPattern;
+        private readonly SparqlQuadsPattern sparqlQuadsPattern;
 
-        public SparqlUpdateDeleteData(SparqlQuardsPattern sparqlQuardsPattern)
+        public SparqlUpdateDeleteData(SparqlQuadsPattern sparqlQuadsPattern)
         {
             // TODO: Complete member initialization
-            this.sparqlQuardsPattern = sparqlQuardsPattern;
+            this.sparqlQuadsPattern = sparqlQuadsPattern;
         }
 
         public void Run(IStore store)
         {
             throw new NotImplementedException();
-            foreach (var triple in sparqlQuardsPattern
+            foreach (var triple in sparqlQuadsPattern
                 .Where(pattern => pattern.PatternType == SparqlGraphPatternType.SparqlTriple)
                 .Cast<SparqlTriple>())
             {
@@ -29,7 +29,7 @@ namespace SparqlParseRun.SparqlClasses.Update
             }
 
             foreach (var sparqlGraphGraph in
-                sparqlQuardsPattern.Where(pattern => Equals(pattern.PatternType, SparqlGraphPatternType.Graph))
+                sparqlQuadsPattern.Where(pattern => Equals(pattern.PatternType, SparqlGraphPatternType.Graph))
                     .Cast<SparqlGraphGraph>())                                                                     
             {
                // if (sparqlGraphGraph.Name == null)

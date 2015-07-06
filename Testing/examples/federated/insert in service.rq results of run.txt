@@ -1,1 +1,1 @@
-<update status="ok" />
+{ "head": { "vars": [  ] }, "status" : fail}

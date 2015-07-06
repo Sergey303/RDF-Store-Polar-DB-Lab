@@ -33,11 +33,11 @@ namespace SparqlParseRun.SparqlClasses.Query.Result
                     throw new ArgumentOutOfRangeException();
                 }
                 RDF.Add(new XElement(rdf + "Description", id,
-                    g.GetTriplesWithSubject(s, (p,o) =>
+                    g.GetTriplesWithSubject(s).Select(t=>
                     {
                         string prf;
                         string localName;
-                        var ns = GetNsAndLocalName((string) p.Content, out localName);
+                        var ns = GetNsAndLocalName((string) t.Predicate.Content, out localName);
                         if (!prefixes.TryGetValue(ns, out prf))
                         {
                             prefixes.Add(ns, prf = "ns" + i++);
@@ -45,22 +45,22 @@ namespace SparqlParseRun.SparqlClasses.Query.Result
                         }
                         var x = new XElement(XName.Get(localName, prf));
 
-                        if (o is IIriNode)
+                        if (t.Object is IIriNode)
                         {
-                            x.Add(new XAttribute(rdf + "resource", o.ToString()));
+                            x.Add(new XAttribute(rdf + "resource", t.Object.ToString()));
                         }   
-                        else if (o is IBlankNode) //todo
+                        else if (t.Object is IBlankNode) //todo
                             {
-                                x.Add(new XAttribute(rdf + "nodeID", ((IBlankNode)o).Name));
+                                x.Add(new XAttribute(rdf + "nodeID", ((IBlankNode)t.Object).Name));
                             }
                         else
                         {
-                            ILiteralNode literal = o as ILiteralNode;
+                            ILiteralNode literal = t.Object as ILiteralNode;
                             if (literal != null)
                             {
                                 if (literal is ILanguageLiteral)
                                 {
-                                    x.Add(new XAttribute(XNamespace.Xml + "lang", ((ILanguageLiteral) o).Lang));
+                                    x.Add(new XAttribute(XNamespace.Xml + "lang", ((ILanguageLiteral) t.Object).Lang));
                                 }
                                 else if (literal is IStringLiteralNode)
                                 {
@@ -102,11 +102,11 @@ namespace SparqlParseRun.SparqlClasses.Query.Result
                     g.GetAllSubjects().Select(s => string.Format("\"{0}\" : {{ {1} }}",
                         s,
                         string.Join(" , ",
-                        g.GetTriplesWithSubject(s, Tuple.Create).GroupBy(po=> po.Item1).Select(pGroup =>
+                        g.GetTriplesWithSubject(s).GroupBy(po=> po.Predicate).Select(pGroup =>
                             pGroup.Count() > 1
                                 ? string.Format("\"{0}\" : [{1}]", pGroup.Key,
-                                    string.Join("," + Environment.NewLine, pGroup.Select(t => t.Item2).Select(ToJson)))
-                                : string.Format("\"{0}\" : {1}", pGroup.Key, ToJson(pGroup.First().Item2))))))));
+                                    string.Join("," + Environment.NewLine, pGroup.Select(t => t.Object).Select(ToJson)))
+                                : string.Format("\"{0}\" : {1}", pGroup.Key, ToJson(pGroup.First().Object))))))));
         }
 
         public static string ToJson(this ObjectVariants b)
@@ -153,15 +153,15 @@ namespace SparqlParseRun.SparqlClasses.Query.Result
                         string.Format(@"<{0}> 
             {1}", s,
                         string.Join(";" + Environment.NewLine+"          ",
-                            g.GetTriplesWithSubject(s, Tuple.Create)
-                            .GroupBy(po => po.Item1).Select(pGroup =>
+                            g.GetTriplesWithSubject(s)
+                            .GroupBy(po => po.Predicate).Select(pGroup =>
                                 string.Format("<{0}> {1}", pGroup.Key,
                                     string.Join("," + Environment.NewLine + "                                              ", 
                                     pGroup.Select(t =>
                                     {
-                                        if (t.Item2.Variant == ObjectVariantEnum.Iri)
-                                            return "<" + t.Item2 + ">";
-                                        else return "\"" + t.Item2 + "\"^^<" + ((ILiteralNode) t.Item2).DataType + ">";
+                                        if (t.Object.Variant == ObjectVariantEnum.Iri)
+                                            return "<" + t.Object + ">";
+                                        else return "\"" + t.Object + "\"^^<" + ((ILiteralNode) t.Object).DataType + ">";
                                     }))))))));
         }
 
@@ -193,33 +193,34 @@ namespace SparqlParseRun.SparqlClasses.Query.Result
                     throw new ArgumentOutOfRangeException();
                 }
                 RDF.Add(new XElement(rdf + "Description", id,
-                    g.GetTriplesWithSubject(s, (predicate, @object) =>
+                    g.GetTriplesWithSubject(s)
+                    .Select(t=>
                     {
                         string p;
-                        NamespaceLocalName ns = Prologue.SplitUri((string) predicate.Content);
+                        NamespaceLocalName ns = Prologue.SplitUri(t.Predicate.Content.ToString());
                         //if (!prefixes.TryGetValue(ns.@namespace, out p))
                         //{ 
                         //    RDF.Add);
                         //}
                         var x = new XElement(XName.Get("ns", ns.localname), new XAttribute(XNamespace.Xmlns + "ns", ns.@namespace));
-                        if (@object is IIriNode)
+                        if (t.Object is IIriNode)
                         {
-                            x.Add(new XAttribute(rdf + "resource", predicate.Content));
+                            x.Add(new XAttribute(rdf + "resource", t.Predicate.Content));
                         }
-                        else if (@object is ILiteralNode)
+                        else if (t.Object is ILiteralNode)
                         {
-                            ILiteralNode ol = ((ILiteralNode) @object);
+                            ILiteralNode ol = ((ILiteralNode) t.Object);
                             if (ol is ILanguageLiteral)
                                 x.Add(new XAttribute(XNamespace.Xml + "lang",
-                                    ((ILanguageLiteral) @object).Lang));
+                                    ((ILanguageLiteral) t.Object).Lang));
                             else if (!(ol is IStringLiteralNode))
                                 x.Add(new XAttribute(rdf + "datatype", ol.DataType));
 
                             x.Add(ol.Content);
                         }
-                        else if (@object is IBlankNode)
+                        else if (t.Object is IBlankNode)
                         {
-                            x.Add(new XAttribute(rdf + "nodeID", @object.ToString()));
+                            x.Add(new XAttribute(rdf + "nodeID", t.Object.ToString()));
                         }
                         else
                         {

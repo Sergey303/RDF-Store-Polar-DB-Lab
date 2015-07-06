@@ -1,55 +1,16 @@
-<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:ns0="http://www.w3.org/1999/02/22-rdf-syntax-ns" xmlns:ns1="http://xmlns.com/foaf/0.1" xmlns:ns2="http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/vocabulary" xmlns:ns3="http://purl.org/dc/elements/1.1" xmlns:ns4="http://purl.org/stuff/rev">
-  <rdf:Description rdf:about="http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromRatingSite1/Reviewer1">
-    <type rdf:resource="http://xmlns.com/foaf/0.1/Person" xmlns="ns0" />
-    <name xmlns="ns1">Ruggiero-Delane</name>
-    <mbox_sha1sum xmlns="ns1">fb3efd92e3c7a8d775a895ba476e11a3e8f3fac</mbox_sha1sum>
-    <country rdf:resource="ttU" xmlns="ns2" />
-    <publisher rdf:resource="http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromRatingSite1/RatingSite1" xmlns="ns3" />
-    <date rdf:datatype="http://www.w3.org/2001/XMLSchema#date" xmlns="ns3">2008-09-05T00:00:00</date>
-  </rdf:Description>
-  <rdf:Description rdf:about="http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromRatingSite1/Review1">
-    <reviewer rdf:resource="http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromRatingSite1/Reviewer1" xmlns="ns4" />
-  </rdf:Description>
-  <rdf:Description rdf:about="http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromRatingSite1/Review2">
-    <reviewer rdf:resource="http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromRatingSite1/Reviewer1" xmlns="ns4" />
-  </rdf:Description>
-  <rdf:Description rdf:about="http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromRatingSite1/Review3">
-    <reviewer rdf:resource="http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromRatingSite1/Reviewer1" xmlns="ns4" />
-  </rdf:Description>
-  <rdf:Description rdf:about="http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromRatingSite1/Review4">
-    <reviewer rdf:resource="http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromRatingSite1/Reviewer1" xmlns="ns4" />
-  </rdf:Description>
-  <rdf:Description rdf:about="http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromRatingSite1/Review5">
-    <reviewer rdf:resource="http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromRatingSite1/Reviewer1" xmlns="ns4" />
-  </rdf:Description>
-  <rdf:Description rdf:about="http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromRatingSite1/Review6">
-    <reviewer rdf:resource="http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromRatingSite1/Reviewer1" xmlns="ns4" />
-  </rdf:Description>
-  <rdf:Description rdf:about="http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromRatingSite1/Review7">
-    <reviewer rdf:resource="http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromRatingSite1/Reviewer1" xmlns="ns4" />
-  </rdf:Description>
-  <rdf:Description rdf:about="http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromRatingSite1/Review8">
-    <reviewer rdf:resource="http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromRatingSite1/Reviewer1" xmlns="ns4" />
-  </rdf:Description>
-  <rdf:Description rdf:about="http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromRatingSite1/Review9">
-    <reviewer rdf:resource="http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromRatingSite1/Reviewer1" xmlns="ns4" />
-  </rdf:Description>
-  <rdf:Description rdf:about="http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromRatingSite1/Review10">
-    <reviewer rdf:resource="http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromRatingSite1/Reviewer1" xmlns="ns4" />
-  </rdf:Description>
-  <rdf:Description rdf:about="http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromRatingSite1/Review11">
-    <reviewer rdf:resource="http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromRatingSite1/Reviewer1" xmlns="ns4" />
-  </rdf:Description>
-  <rdf:Description rdf:about="http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromRatingSite1/Review12">
-    <reviewer rdf:resource="http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromRatingSite1/Reviewer1" xmlns="ns4" />
-  </rdf:Description>
-  <rdf:Description rdf:about="http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromRatingSite1/Review13">
-    <reviewer rdf:resource="http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromRatingSite1/Reviewer1" xmlns="ns4" />
-  </rdf:Description>
-  <rdf:Description rdf:about="http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromRatingSite1/Review14">
-    <reviewer rdf:resource="http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromRatingSite1/Reviewer1" xmlns="ns4" />
-  </rdf:Description>
-  <rdf:Description rdf:about="http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromRatingSite1/Review15">
-    <reviewer rdf:resource="http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromRatingSite1/Reviewer1" xmlns="ns4" />
-  </rdf:Description>
-</rdf:RDF>
+{ "http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromRatingSite1/Reviewer1" : { "http://xmlns.com/foaf/0.1/name" : { "type" : "literal", "value" : "Ruggiero-Delane" } , "http://xmlns.com/foaf/0.1/mbox_sha1sum" : { "type" : "literal", "value" : "fb3efd92e3c7a8d775a895ba476e11a3e8f3fac" } , "http://purl.org/dc/elements/1.1/date" : { "type" : "literal", "value" : "04.09.0408 17:00:00 +07:00", "datatype": "http://www.w3.org/2001/XMLSchema#date" } , "http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/vocabulary/country" : { "type" : "uri", "value" : "http://downlode.org/rdf/iso-3166/countries#US" } , "http://www.w3.org/1999/02/22-rdf-syntax-ns#type" : { "type" : "uri", "value" : "http://xmlns.com/foaf/0.1/Person" } , "http://purl.org/dc/elements/1.1/publisher" : { "type" : "uri", "value" : "http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromRatingSite1/RatingSite1" } },
+"http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromRatingSite1/Review3" : { "http://purl.org/stuff/rev#reviewer" : { "type" : "uri", "value" : "http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromRatingSite1/Reviewer1" } },
+"http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromRatingSite1/Review2" : { "http://purl.org/stuff/rev#reviewer" : { "type" : "uri", "value" : "http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromRatingSite1/Reviewer1" } },
+"http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromRatingSite1/Review6" : { "http://purl.org/stuff/rev#reviewer" : { "type" : "uri", "value" : "http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromRatingSite1/Reviewer1" } },
+"http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromRatingSite1/Review5" : { "http://purl.org/stuff/rev#reviewer" : { "type" : "uri", "value" : "http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromRatingSite1/Reviewer1" } },
+"http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromRatingSite1/Review8" : { "http://purl.org/stuff/rev#reviewer" : { "type" : "uri", "value" : "http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromRatingSite1/Reviewer1" } },
+"http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromRatingSite1/Review7" : { "http://purl.org/stuff/rev#reviewer" : { "type" : "uri", "value" : "http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromRatingSite1/Reviewer1" } },
+"http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromRatingSite1/Review9" : { "http://purl.org/stuff/rev#reviewer" : { "type" : "uri", "value" : "http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromRatingSite1/Reviewer1" } },
+"http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromRatingSite1/Review11" : { "http://purl.org/stuff/rev#reviewer" : { "type" : "uri", "value" : "http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromRatingSite1/Reviewer1" } },
+"http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromRatingSite1/Review10" : { "http://purl.org/stuff/rev#reviewer" : { "type" : "uri", "value" : "http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromRatingSite1/Reviewer1" } },
+"http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromRatingSite1/Review12" : { "http://purl.org/stuff/rev#reviewer" : { "type" : "uri", "value" : "http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromRatingSite1/Reviewer1" } },
+"http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromRatingSite1/Review13" : { "http://purl.org/stuff/rev#reviewer" : { "type" : "uri", "value" : "http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromRatingSite1/Reviewer1" } },
+"http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromRatingSite1/Review14" : { "http://purl.org/stuff/rev#reviewer" : { "type" : "uri", "value" : "http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromRatingSite1/Reviewer1" } },
+"http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromRatingSite1/Review4" : { "http://purl.org/stuff/rev#reviewer" : { "type" : "uri", "value" : "http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromRatingSite1/Reviewer1" } },
+"http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromRatingSite1/Review15" : { "http://purl.org/stuff/rev#reviewer" : { "type" : "uri", "value" : "http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromRatingSite1/Reviewer1" } },
+"http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromRatingSite1/Review1" : { "http://purl.org/stuff/rev#reviewer" : { "type" : "uri", "value" : "http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromRatingSite1/Reviewer1" } } }

@@ -6,21 +6,15 @@ namespace RDFCommon.OVns
     {
 
         
-        public virtual ObjectVariants GetUri(string uri)
+        public virtual ObjectVariants GetUri(object uri)
         {
-          return new OV_iri(uri);
+          return new OV_iri((string) uri);
         }
 
         public SpecialTypesClass SpecialTypes { get; set; }
 
 
-        public ObjectVariants CreateBlankNode()
-        {
-            return
-                new OV_iri("Http://iis.nsk.su/.well-known/genid/blank"
-                              + BlankNodeGenerateNums()
-                              + BlankNodeGenerateNums());
-        }
+     
 
         public virtual ObjectVariants AddIri(string iri)
         {
@@ -34,10 +28,7 @@ namespace RDFCommon.OVns
             return ng;
         }
 
-        private long BlankNodeGenerateNums()
-        {
-            return (long)(random.NextDouble() * 1000 * 1000 * 1000 * 1000);
-        }
+       
 
         public ObjectVariants CreateLiteralNode(string p, string typeUriNode)
         {
@@ -92,19 +83,31 @@ namespace RDFCommon.OVns
 
         public ObjectVariants CreateBlankNode(string blankNodeString, string graph=null)
         {
-            if (graph != null) blankNodeString = graph + "/" + blankNodeString;
 
             return new OV_iri(blankNodeString); 
         }
-        public string CreateBlank(string graph, string blankNodeString)
+        public string CreateBlank(string blankNodeString, string graph)
         {
+            
+            blankNodeString = blankNodeString.Substring(2);
             if (graph != null) blankNodeString = graph + "/" + blankNodeString;
 
-            return blankNodeString;
+            return 
+            "http://iis.nsk.su/.well-known/genid/blank/"+ blankNodeString;
+        }
+        public ObjectVariants CreateBlankNode()
+        {
+            return
+                new OV_iri(CreateBlank());
+        }
+
+        public string BlankNodeGenerateNums()
+        {
+            return ((long)(random.NextDouble() * Math.Pow(10, 18))).ToString();
         }
         public string CreateBlank()
         {
-            return "";
+            return "http://iis.nsk.su/.well-known/genid/blank" + BlankNodeGenerateNums();
         }
         private Random random = new Random();
 
@@ -112,6 +115,17 @@ namespace RDFCommon.OVns
         public virtual ObjectVariants CreateLiteralOtherType(string p, string typeUriNode)
         {
             return new OV_typed(p, typeUriNode);   
+        }
+
+        public virtual bool TryGetUri(OV_iri iriString, out ObjectVariants iriCoded)
+        {
+            iriCoded = iriString;
+            return true;
+        }
+
+        public virtual void Build()
+        {
+            
         }
     }
     

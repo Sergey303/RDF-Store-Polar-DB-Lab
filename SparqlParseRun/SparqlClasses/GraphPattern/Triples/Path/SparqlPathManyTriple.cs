@@ -16,6 +16,7 @@ namespace SparqlParseRun.SparqlClasses.GraphPattern.Triples.Path
         private VariableNode sVariableNode;
         private VariableNode oVariableNode;
         private RdfQuery11Translator q;
+        private bool useCache=false;
 
         public SparqlPathManyTriple(ObjectVariants subject, SparqlPathTranslator pred, ObjectVariants @object, RdfQuery11Translator q)
         {
@@ -32,145 +33,99 @@ namespace SparqlParseRun.SparqlClasses.GraphPattern.Triples.Path
         {
             var bindings = variableBindings;
 
-
-
-
             Queue<ObjectVariants> newSubjects = new Queue<ObjectVariants>();
-            IEnumerable<ObjectVariants> fromVariable = null;
-            if (sVariableNode == null)
+            ObjectVariants[] fromVariable = null;
+            ObjectVariants o=null;
+            ObjectVariants s=null;
+            switch (NullablePairExt.Get(sVariableNode, oVariableNode))
             {
-                if (oVariableNode == null)
-                {
+                case NP.bothNull:
+                    
+                    return TestSOConnection(Subject, Object) ? bindings : Enumerable.Empty<SparqlResult>();
+                case NP.leftNull:
                     newSubjects.Enqueue(Subject);
-                    if (TestSOConnection(Subject, Object))
-                        foreach (var r in bindings)
-                            yield return r;
-                }
-                else
-                {
-                    ObjectVariants o = null;
-                    newSubjects.Enqueue(Subject);
-                    foreach (var binding in bindings)
+                    return bindings.SelectMany(binding =>
                     {
-                        o = binding[oVariableNode];
-                        if (o!=null)
-                        {
-                            if (TestSOConnection(Subject, o))
-                                yield return binding;
-                        }
+                          o = binding[oVariableNode];
+                        if (o != null)
+                            return TestSOConnection(Subject, o)
+                                ? Enumerable.Repeat(binding, 1)
+                                : Enumerable.Empty<SparqlResult>();
                         else
                         {
                             if (fromVariable == null)
-                                fromVariable = GetAllSConnections(Subject);
-                            foreach (var node in fromVariable)
-                                yield return binding.Add(node, oVariableNode);
+                                fromVariable = GetAllSConnections(Subject).ToArray();
+                            return fromVariable.Select(node => binding.Add(node, oVariableNode));
                         }
-                    }
-                }
-            }
-            else
-            {
-                if (oVariableNode == null) //s variable o const
-                {
-                    ObjectVariants s = null;
-                    foreach (var binding in bindings)
+                    });
+                case NP.rigthNull:
+                    return bindings.SelectMany(binding =>
                     {
                         s = binding[sVariableNode];
-                        if (s!=null)
-                        {
-                            if (TestSOConnection(s, Object))
-                                yield return binding;
-                        }
+                        if (s != null)
+                            return TestSOConnection(s, Object)
+                                ? Enumerable.Repeat(binding, 1)
+                                : Enumerable.Empty<SparqlResult>();
                         else
                         {
                             if (fromVariable == null)
-                                fromVariable = GetAllOConnections(Object);
-                            foreach (var node in fromVariable)
-                                yield return binding.Add(node, oVariableNode);
+                                fromVariable = GetAllOConnections(Object).ToArray();
+                            return fromVariable.Select(node => binding.Add(node, sVariableNode));
                         }
-                    }
-                }
-                else // both variables
-                {
-                    ObjectVariants o = null;
-                    ObjectVariants s = null;
-                
-                    if (bindings.All(
-                            binding => binding.ContainsKey(sVariableNode) || binding.ContainsKey(oVariableNode)))
-                        foreach (var binding in bindings)
-                        {
-                            s = binding[sVariableNode];
-                            o = binding[oVariableNode];
-                            if (s!=null)
-                            {
-                                if (o!=null)
-                                {
-                                    if (TestSOConnection(s, o))
-                                        yield return binding;
-                                }
-                                else
-                                {
-                                    foreach (var node in  GetAllSConnections(s))
-                                        yield return binding.Add( node, oVariableNode);
-                                }
-                            }
+                    });
+                case NP.bothNotNull:
+                  
 
-                            else if (o != null)
-                            {
-                                foreach (var node in  GetAllOConnections(o))
-                                    yield return binding.Add(node, sVariableNode);
-                            }
-                            else // both unknowns
-                            {
-                                throw new Exception();
-                            }
-                        }
-                    else
+                    return bindings.SelectMany(binding =>
                     {
-                        bothVariablesChache = predicatePath.CreateTriple(sVariableNode, oVariableNode, q)
-                            .Aggregate(Enumerable.Repeat(new SparqlResult(q), 1),
-                                (enumerable, triple) => triple.Run(enumerable))
-                            .Select(r => new KeyValuePair<ObjectVariants, ObjectVariants>(r[sVariableNode], r[oVariableNode]))
-                            .ToArray();
-
-                        foreach (var binding in bindings)     
+                        s = binding[sVariableNode];
+                        o = binding[oVariableNode];
+                        switch (NullablePairExt.Get(s, o))
                         {
-                            s = binding[sVariableNode];
-                            o = binding[oVariableNode];
-                            if (s!=null)
-                                if (o!=null)
-                                {
-                                    if (TestSOConnectionFromCache(s, o))
-                                        yield return binding;
-                                }
-                                else
-                                {
-                                    foreach (var node in GetAllSConnectionsFromCache(s))
-                                        yield return binding.Add(node, oVariableNode);
-                                }
-                            else if (o!=null)
-                                foreach (var node in GetAllOConnectionsFromCache(o))
-                                    yield return binding.Add(node, sVariableNode);
-                            else // both unknowns
-                            {
-                                if (bothVariablesCacheBySubject == null)
-                                {
-                                    bothVariablesCacheBySubject = new Dictionary<ObjectVariants, HashSet<ObjectVariants>>();
-                                    foreach (var pair in bothVariablesChache)
-                                    {
-                                        HashSet<ObjectVariants> nodes;
-                                        if (!bothVariablesCacheBySubject.TryGetValue(pair.Key, out nodes))
-                                            bothVariablesCacheBySubject.Add(pair.Key, new HashSet<ObjectVariants>() { pair.Value });
-                                        else nodes.Add(pair.Value);
-                                    }
-                                }
+                            case NP.bothNotNull:
+                                if ((useCache && TestSOConnectionFromCache(s, o)) || (TestSOConnection(s, o)))
+                                        return Enumerable.Repeat(binding, 1);
+                                    else return Enumerable.Empty<SparqlResult>();
+                            case NP.rigthNull:
+                                return GetAllSConnections(s).Select(node => binding.Add(node, oVariableNode));
+                                break;
+                            case NP.leftNull:
+                                return GetAllOConnections(o).Select(node => binding.Add(node, sVariableNode));
+                                break;
+                            case NP.bothNull:
+                                useCache = true;
+                                bothVariablesChache = predicatePath.CreateTriple(sVariableNode, oVariableNode, q)
+                      .Aggregate(Enumerable.Repeat(new SparqlResult(q), 1),
+                          (enumerable, triple) => triple.Run(enumerable))
+                      .Select(
+                          r =>
+                              new KeyValuePair<ObjectVariants, ObjectVariants>(r[sVariableNode], r[oVariableNode]))
+                      .ToArray();
+                                return bothVariablesCacheBySubject.Keys.SelectMany(GetAllSConnections,
+                                    (sbj, node) => binding.Add(sbj, sVariableNode, node, oVariableNode));
+                            default:
+                                throw new ArgumentOutOfRangeException();
+                        }
+                    });
+                 
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+        }
 
-                                foreach (var sbj in bothVariablesCacheBySubject.Keys)
-                                    foreach (var node in GetAllSConnectionsFromCache(sbj))
-                                        yield return
-                                            binding.Add(sbj, sVariableNode, node, oVariableNode);
-                            }}
-                    }
+        private void CreateCacheBySubject()
+        {
+            if (bothVariablesCacheBySubject == null)
+            {
+                bothVariablesCacheBySubject =
+                    new Dictionary<ObjectVariants, HashSet<ObjectVariants>>();
+                foreach (var pair in bothVariablesChache)
+                {
+                    HashSet<ObjectVariants> nodes;
+                    if (!bothVariablesCacheBySubject.TryGetValue(pair.Key, out nodes))
+                        bothVariablesCacheBySubject.Add(pair.Key,
+                            new HashSet<ObjectVariants>() {pair.Value});
+                    else nodes.Add(pair.Value);
                 }
             }
         }
@@ -180,44 +135,22 @@ namespace SparqlParseRun.SparqlClasses.GraphPattern.Triples.Path
 
         private IEnumerable<ObjectVariants> GetAllSConnections(ObjectVariants subj)
         {
-            HashSet<ObjectVariants> history = new HashSet<ObjectVariants>(){subj};
-              Queue<ObjectVariants> subjects =new Queue<ObjectVariants>();
-                    subjects.Enqueue(subj);
-            while (subjects.Count > 0)
-                foreach (var objt in RunTriple(subjects.Dequeue(), oVariableNode)
-                    .Select(sparqlResult => sparqlResult[oVariableNode])
-                    .Where(objt =>
-                    {
-                        var isNewS = !history.Contains(objt);
-                        if (isNewS)
-                        {
-                            history.Add(objt);
-                            subjects.Enqueue(objt);
-                        }
-                        return isNewS;
-                    }))
-                    yield return objt;
-        }
-
-        private IEnumerable<ObjectVariants> GetAllSConnectionsFromCache(ObjectVariants subj)
-        {
-            if (bothVariablesCacheBySubject == null)
-            {
-                bothVariablesCacheBySubject = new Dictionary<ObjectVariants, HashSet<ObjectVariants>>();
-                foreach (var pair in bothVariablesChache)
-                {
-                    HashSet<ObjectVariants> nodes;
-                    if (!bothVariablesCacheBySubject.TryGetValue(pair.Key, out nodes))
-                        bothVariablesCacheBySubject.Add(pair.Key, new HashSet<ObjectVariants>() { pair.Value });
-                    else nodes.Add(pair.Value);
-                }
-            }
+           if(useCache) CreateCacheBySubject();
             HashSet<ObjectVariants> history = new HashSet<ObjectVariants>() { subj };
             Queue<ObjectVariants> subjects = new Queue<ObjectVariants>();
             subjects.Enqueue(subj);
-                HashSet<ObjectVariants> objects;
             while (subjects.Count > 0)
-                if(bothVariablesCacheBySubject.TryGetValue(subjects.Dequeue(), out objects))
+            {
+                IEnumerable<ObjectVariants> objects;
+                if (useCache)
+                {
+                    HashSet<ObjectVariants> objectsSet;
+                    objects = bothVariablesCacheBySubject.TryGetValue(subjects.Dequeue(), out objectsSet)
+                        ? objectsSet
+                        : Enumerable.Empty<ObjectVariants>();}
+                else
+                    objects = RunTriple(subjects.Dequeue(), oVariableNode)
+                        .Select(sparqlResult => sparqlResult[oVariableNode]);
                 foreach (var objt in objects
                     .Where(objt =>
                     {
@@ -229,51 +162,28 @@ namespace SparqlParseRun.SparqlClasses.GraphPattern.Triples.Path
                         }
                         return isNewS;
                     }))
-                    yield return objt;
+                    yield return objt;}
         }
 
         private IEnumerable<ObjectVariants> GetAllOConnections(ObjectVariants objt)
         {
-             HashSet<ObjectVariants> history=new HashSet<ObjectVariants>(){objt};
-            Queue<ObjectVariants> objects = new Queue<ObjectVariants>();
-                    objects.Enqueue(objt);                      
-
-            while (objects.Count > 0)
-                foreach (var subjt in RunTriple(sVariableNode, objects.Dequeue())
-                    .Select(sparqlResult => sparqlResult[sVariableNode])
-                    .Where(subjt =>
-                    {
-                        var isNewS = !history.Contains(subjt);
-                        if (isNewS)
-                        {
-                            history.Add(subjt);
-                            objects.Enqueue(subjt);
-                        }
-                        return isNewS;
-                    }))
-                    yield return subjt;
-        }
-
-        private IEnumerable<ObjectVariants> GetAllOConnectionsFromCache(ObjectVariants objt)
-        {
-            if (bothVariablesCacheByObject == null)
-            {
-                bothVariablesCacheByObject = new Dictionary<ObjectVariants, HashSet<ObjectVariants>>();
-                foreach (var pair in bothVariablesChache)
-                {
-                    HashSet<ObjectVariants> nodes;
-                    if (!bothVariablesCacheByObject.TryGetValue(pair.Value, out nodes))
-                        bothVariablesCacheByObject.Add(pair.Value, new HashSet<ObjectVariants>() { pair.Key});
-                    else nodes.Add(pair.Key);
-                }
-            }
+            if (useCache)
+                CreateCacheByObject();
             HashSet<ObjectVariants> history = new HashSet<ObjectVariants>() { objt };
             Queue<ObjectVariants> objects = new Queue<ObjectVariants>();
             objects.Enqueue(objt);
 
-            HashSet<ObjectVariants> subjects=new HashSet<ObjectVariants>();
-            while (objects.Count > 0)
-                if(bothVariablesCacheByObject.TryGetValue(objects.Dequeue(), out subjects))
+            while (objects.Count > 0)  
+            {
+                IEnumerable<ObjectVariants> subjects;
+                if (useCache)
+                {
+                    HashSet<ObjectVariants> subjectsHashSet;
+                    subjects = bothVariablesCacheByObject.TryGetValue(objects.Dequeue(), out subjectsHashSet) ? subjectsHashSet : Enumerable.Empty<ObjectVariants>();
+                }
+                else
+                  subjects = RunTriple(sVariableNode, objects.Dequeue())
+                    .Select(sparqlResult => sparqlResult[sVariableNode]);
                 foreach (var subjt in subjects
                     .Where(subjt =>
                     {
@@ -286,6 +196,22 @@ namespace SparqlParseRun.SparqlClasses.GraphPattern.Triples.Path
                         return isNewS;
                     }))
                     yield return subjt;
+            }
+        }
+
+        private void CreateCacheByObject()
+        {
+            if (bothVariablesCacheByObject == null)
+            {
+                bothVariablesCacheByObject = new Dictionary<ObjectVariants, HashSet<ObjectVariants>>();
+                foreach (var pair in bothVariablesChache)
+                {
+                    HashSet<ObjectVariants> nodes;
+                    if (!bothVariablesCacheByObject.TryGetValue(pair.Value, out nodes))
+                        bothVariablesCacheByObject.Add(pair.Value, new HashSet<ObjectVariants>() {pair.Key});
+                    else nodes.Add(pair.Key);
+                }
+            }
         }
 
 
@@ -314,17 +240,7 @@ namespace SparqlParseRun.SparqlClasses.GraphPattern.Triples.Path
 
         private bool TestSOConnectionFromCache(ObjectVariants sbj, ObjectVariants objct)
         {
-            if (bothVariablesCacheBySubject==null)
-            {
-                bothVariablesCacheBySubject=new Dictionary<ObjectVariants, HashSet<ObjectVariants>>();
-                foreach (var pair in bothVariablesChache)
-            {
-                HashSet<ObjectVariants> nodes;
-                if (!bothVariablesCacheBySubject.TryGetValue(pair.Key, out nodes))
-                    bothVariablesCacheBySubject.Add(pair.Key, new HashSet<ObjectVariants>() { pair.Value });
-                else nodes.Add(pair.Value);    
-            }}
-
+         CreateCacheBySubject();
             HashSet<ObjectVariants> history = new HashSet<ObjectVariants>() { Subject };
             HashSet<ObjectVariants> objects;
             if (bothVariablesCacheBySubject.TryGetValue(sbj, out objects) && objects.Contains(objct))
@@ -354,6 +270,9 @@ namespace SparqlParseRun.SparqlClasses.GraphPattern.Triples.Path
            
         }
 
-        public new SparqlGraphPatternType PatternType { get{return SparqlGraphPatternType.PathTranslator;} }
+        public new SparqlGraphPatternType PatternType
+        {
+            get { return SparqlGraphPatternType.PathTranslator; }
+        }
     }
 }

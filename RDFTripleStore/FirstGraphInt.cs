@@ -353,6 +353,11 @@ namespace RDFTripleStore
             
         }
 
+        void IGraph.FromTurtle(Stream inputStream)
+        {
+            FromTurtle(inputStream);
+        }
+
         public void Warmup()
         {
                   table.Warmup();

@@ -87,7 +87,7 @@ namespace GoTripleStore
                 KeyProducer = v =>
                 {
                     object[] va = (object[])((object[])v)[1];
-                    return new SPO_Troyka((int)va[0], (int)va[1], ((object[])va[2]).Writeble2OVariant());
+                    return new SPO_Troyka((int)va[0], (int)va[1], ((object[])va[2]).Writable2OVariant());
                 },
                 Scale = null,
                 HalfProducer = spo => spo.GetHashCode()
@@ -100,7 +100,7 @@ namespace GoTripleStore
                 KeyProducer = v =>
                 {
                     object[] va = (object[])((object[])v)[1];
-                    return new SPO_Troyka((int)va[0], (int)va[1], ((object[])va[2]).Writeble2OVariant());
+                    return new SPO_Troyka((int)va[0], (int)va[1], ((object[])va[2]).Writable2OVariant());
                 }
             };
             // Индекс po
@@ -112,7 +112,7 @@ namespace GoTripleStore
                     KeyProducer = v =>
                     {
                         object[] va = (object[])((object[])v)[1];
-                        return new PO_Pair((int)va[1], ((object[])va[2]).Writeble2OVariant());
+                        return new PO_Pair((int)va[1], ((object[])va[2]).Writable2OVariant());
                     },
                     Scale = null,
                     HalfProducer = po => po.GetHashCode()
@@ -125,7 +125,7 @@ namespace GoTripleStore
                     KeyProducer = v =>
                     {
                         object[] va = (object[])((object[])v)[1];
-                        return new PO_Pair((int)va[1], ((object[])va[2]).Writeble2OVariant());
+                        return new PO_Pair((int)va[1], ((object[])va[2]).Writable2OVariant());
                     }
                 };
             }
@@ -137,7 +137,7 @@ namespace GoTripleStore
                     KeyProducer = v =>
                     {
                         object[] va = (object[])((object[])v)[1];
-                        return new PO_Pair((int)va[1], ((object[])va[2]).Writeble2OVariant());
+                        return new PO_Pair((int)va[1], ((object[])va[2]).Writable2OVariant());
                     }
                 };
                 index_po_base = new IndexDynamic<PO_Pair, IndexViewImmutable<PO_Pair>>(false)
@@ -147,7 +147,7 @@ namespace GoTripleStore
                     KeyProducer = v =>
                     {
                         object[] va = (object[])((object[])v)[1];
-                        return new PO_Pair((int)va[1], ((object[])va[2]).Writeble2OVariant());
+                        return new PO_Pair((int)va[1], ((object[])va[2]).Writable2OVariant());
                     }
                 };
             }
@@ -297,7 +297,7 @@ namespace GoTripleStore
                     object[] three = (object[])((object[])ent.Get())[1];
                     int s = (int)three[0];
                     int p = (int)three[1];
-                    var o = ((object[])three[2]).Writeble2OVariant(coding_table.GetStringByCode);
+                    var o = ((object[])three[2]).Writable2OVariant(coding_table.GetStringByCode);
                     return new TripleIntOV(s, p, o);
                 });
                 return query;
@@ -313,7 +313,7 @@ namespace GoTripleStore
                     object[] three = (object[])((object[])ent.Get())[1];
                     int s = (int)three[0];
                     int p = (int)three[1];
-                    var o = ((object[])three[2]).Writeble2OVariant(coding_table.GetStringByCode);
+                    var o = ((object[])three[2]).Writable2OVariant(coding_table.GetStringByCode);
                     return new TripleIntOV(s, p, o);
                 });
                 return qu;
@@ -336,7 +336,7 @@ namespace GoTripleStore
                     object[] three = (object[])((object[])ent.Get())[1];
                     int s = (int)three[0];
                     int p = (int)three[1];
-                    var o = ((object[])three[2]).Writeble2OVariant(coding_table.GetStringByCode);
+                    var o = ((object[])three[2]).Writable2OVariant(coding_table.GetStringByCode);
                     return new TripleIntOV(s, p, o);
                 });
                 return qu;
@@ -363,7 +363,7 @@ namespace GoTripleStore
                     object[] three = (object[])((object[])ent.Get())[1];
                     int s = (int)three[0];
                     int p = (int)three[1];
-                    var o = ((object[])three[2]).Writeble2OVariant(coding_table.GetStringByCode);
+                    var o = ((object[])three[2]).Writable2OVariant(coding_table.GetStringByCode);
                     return new TripleIntOV(s, p, o);
                 });
                 return qu;

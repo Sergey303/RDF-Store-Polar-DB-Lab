@@ -48,6 +48,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="IndexCascading.cs" />
+    <Compile Include="IndexCascadingDynamic.cs" />
+    <Compile Include="IndexCascadingImmutable.cs" />
     <Compile Include="IndexDynamic.cs" />
     <Compile Include="IInterfaces.cs" />
     <Compile Include="IndexHalfkeyImmutable.cs" />
@@ -59,6 +61,7 @@
     <Compile Include="ScaleCell.cs" />
     <Compile Include="ScaleInMemory.cs" />
     <Compile Include="ScaleMemory.cs" />
+    <Compile Include="ScalePaCell.cs" />
     <Compile Include="TableView.cs" />
     <Compile Include="TableViewImmutable.cs" />
   </ItemGroup>

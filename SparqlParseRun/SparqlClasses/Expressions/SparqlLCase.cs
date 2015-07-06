@@ -1,19 +1,19 @@
 ﻿using System;
 using RDFCommon;
-using RDFCommon.OVns;
 
 namespace SparqlParseRun.SparqlClasses.Expressions
 {
     class SparqlLCase :SparqlExpression
     {
-        private SparqlExpression sparqlExpression;
-
-        public SparqlLCase(SparqlExpression value, NodeGenerator q)
+        public SparqlLCase(SparqlExpression value)        :base(value.AggregateLevel, value.IsStoreUsed)
         {
-
-            IsAggragate = value.IsAggragate;
-            IsDistinct = value.IsDistinct;
-            TypedOperator = result => value.TypedOperator(result).Change(o => o.ToLower());
+            if (value.Const != null)
+                Const = value.Const.Change(o => o.ToLower());
+            else
+            {
+                Operator = result => value.Operator(result).ToLower();
+                TypedOperator = result => value.TypedOperator(result).Change(o => o.ToLower());
+            }
         }
     }
 }

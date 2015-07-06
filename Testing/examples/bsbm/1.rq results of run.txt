@@ -1,416 +1,104 @@
-<ns:sparql xmlns:ns="http://www.w3.org/2005/sparql-results#">
-  <ns:head>
-    <ns:variable ns:name="?product" />
-    <ns:variable ns:name="?label" />
-  </ns:head>
-  <ns:results>
-    <ns:result>
-      <ns:binding ns:name="?product">
-        <ns:uri>http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromProducer1/Product40</ns:uri>
-      </ns:binding>
-      <ns:binding ns:name="?label">
-        <ns:literal>splicer</ns:literal>
-      </ns:binding>
-    </ns:result>
-    <ns:result>
-      <ns:binding ns:name="?product">
-        <ns:uri>http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromProducer2/Product72</ns:uri>
-      </ns:binding>
-      <ns:binding ns:name="?label">
-        <ns:literal>unturned crooked tzetze</ns:literal>
-      </ns:binding>
-    </ns:result>
-    <ns:result>
-      <ns:binding ns:name="?product">
-        <ns:uri>http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromProducer2/Product80</ns:uri>
-      </ns:binding>
-      <ns:binding ns:name="?label">
-        <ns:literal>wheelwrights analogically dehorner</ns:literal>
-      </ns:binding>
-    </ns:result>
-    <ns:result>
-      <ns:binding ns:name="?product">
-        <ns:uri>http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromProducer3/Product106</ns:uri>
-      </ns:binding>
-      <ns:binding ns:name="?label">
-        <ns:literal>dryrot</ns:literal>
-      </ns:binding>
-    </ns:result>
-    <ns:result>
-      <ns:binding ns:name="?product">
-        <ns:uri>http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromProducer4/Product143</ns:uri>
-      </ns:binding>
-      <ns:binding ns:name="?label">
-        <ns:literal>fellations</ns:literal>
-      </ns:binding>
-    </ns:result>
-    <ns:result>
-      <ns:binding ns:name="?product">
-        <ns:uri>http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromProducer5/Product178</ns:uri>
-      </ns:binding>
-      <ns:binding ns:name="?label">
-        <ns:literal>mucked</ns:literal>
-      </ns:binding>
-    </ns:result>
-    <ns:result>
-      <ns:binding ns:name="?product">
-        <ns:uri>http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromProducer5/Product181</ns:uri>
-      </ns:binding>
-      <ns:binding ns:name="?label">
-        <ns:literal>thymi gnomons</ns:literal>
-      </ns:binding>
-    </ns:result>
-    <ns:result>
-      <ns:binding ns:name="?product">
-        <ns:uri>http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromProducer7/Product305</ns:uri>
-      </ns:binding>
-      <ns:binding ns:name="?label">
-        <ns:literal>nucleoplasmatic</ns:literal>
-      </ns:binding>
-    </ns:result>
-    <ns:result>
-      <ns:binding ns:name="?product">
-        <ns:uri>http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromProducer7/Product313</ns:uri>
-      </ns:binding>
-      <ns:binding ns:name="?label">
-        <ns:literal>doggones</ns:literal>
-      </ns:binding>
-    </ns:result>
-    <ns:result>
-      <ns:binding ns:name="?product">
-        <ns:uri>http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromProducer8/Product376</ns:uri>
-      </ns:binding>
-      <ns:binding ns:name="?label">
-        <ns:literal>conflictive cropper</ns:literal>
-      </ns:binding>
-    </ns:result>
-    <ns:result>
-      <ns:binding ns:name="?product">
-        <ns:uri>http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromProducer11/Product515</ns:uri>
-      </ns:binding>
-      <ns:binding ns:name="?label">
-        <ns:literal>streamlines disacknowledgements onuses</ns:literal>
-      </ns:binding>
-    </ns:result>
-    <ns:result>
-      <ns:binding ns:name="?product">
-        <ns:uri>http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromProducer11/Product525</ns:uri>
-      </ns:binding>
-      <ns:binding ns:name="?label">
-        <ns:literal>variegating</ns:literal>
-      </ns:binding>
-    </ns:result>
-    <ns:result>
-      <ns:binding ns:name="?product">
-        <ns:uri>http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromProducer14/Product657</ns:uri>
-      </ns:binding>
-      <ns:binding ns:name="?label">
-        <ns:literal>mimed</ns:literal>
-      </ns:binding>
-    </ns:result>
-    <ns:result>
-      <ns:binding ns:name="?product">
-        <ns:uri>http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromProducer14/Product662</ns:uri>
-      </ns:binding>
-      <ns:binding ns:name="?label">
-        <ns:literal>driveled</ns:literal>
-      </ns:binding>
-    </ns:result>
-    <ns:result>
-      <ns:binding ns:name="?product">
-        <ns:uri>http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromProducer16/Product738</ns:uri>
-      </ns:binding>
-      <ns:binding ns:name="?label">
-        <ns:literal>impermeabilities gyve</ns:literal>
-      </ns:binding>
-    </ns:result>
-    <ns:result>
-      <ns:binding ns:name="?product">
-        <ns:uri>http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromProducer16/Product740</ns:uri>
-      </ns:binding>
-      <ns:binding ns:name="?label">
-        <ns:literal>angaries pirouetting botticelli</ns:literal>
-      </ns:binding>
-    </ns:result>
-    <ns:result>
-      <ns:binding ns:name="?product">
-        <ns:uri>http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromProducer18/Product832</ns:uri>
-      </ns:binding>
-      <ns:binding ns:name="?label">
-        <ns:literal>chinaware</ns:literal>
-      </ns:binding>
-    </ns:result>
-    <ns:result>
-      <ns:binding ns:name="?product">
-        <ns:uri>http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromProducer20/Product904</ns:uri>
-      </ns:binding>
-      <ns:binding ns:name="?label">
-        <ns:literal>devaluate</ns:literal>
-      </ns:binding>
-    </ns:result>
-    <ns:result>
-      <ns:binding ns:name="?product">
-        <ns:uri>http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromProducer22/Product998</ns:uri>
-      </ns:binding>
-      <ns:binding ns:name="?label">
-        <ns:literal>detriments scraps smirky</ns:literal>
-      </ns:binding>
-    </ns:result>
-    <ns:result>
-      <ns:binding ns:name="?product">
-        <ns:uri>http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromProducer25/Product1134</ns:uri>
-      </ns:binding>
-      <ns:binding ns:name="?label">
-        <ns:literal>caesuric timbrels</ns:literal>
-      </ns:binding>
-    </ns:result>
-    <ns:result>
-      <ns:binding ns:name="?product">
-        <ns:uri>http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromProducer28/Product1295</ns:uri>
-      </ns:binding>
-      <ns:binding ns:name="?label">
-        <ns:literal>neocolonially</ns:literal>
-      </ns:binding>
-    </ns:result>
-    <ns:result>
-      <ns:binding ns:name="?product">
-        <ns:uri>http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromProducer28/Product1297</ns:uri>
-      </ns:binding>
-      <ns:binding ns:name="?label">
-        <ns:literal>disturbs amplifications comfortableness</ns:literal>
-      </ns:binding>
-    </ns:result>
-    <ns:result>
-      <ns:binding ns:name="?product">
-        <ns:uri>http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromProducer29/Product1320</ns:uri>
-      </ns:binding>
-      <ns:binding ns:name="?label">
-        <ns:literal>gauzes isthmic</ns:literal>
-      </ns:binding>
-    </ns:result>
-    <ns:result>
-      <ns:binding ns:name="?product">
-        <ns:uri>http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromProducer31/Product1404</ns:uri>
-      </ns:binding>
-      <ns:binding ns:name="?label">
-        <ns:literal>onerosities chirped internships</ns:literal>
-      </ns:binding>
-    </ns:result>
-    <ns:result>
-      <ns:binding ns:name="?product">
-        <ns:uri>http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromProducer31/Product1407</ns:uri>
-      </ns:binding>
-      <ns:binding ns:name="?label">
-        <ns:literal>undertaken uxoriousness benefits</ns:literal>
-      </ns:binding>
-    </ns:result>
-    <ns:result>
-      <ns:binding ns:name="?product">
-        <ns:uri>http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromProducer33/Product1493</ns:uri>
-      </ns:binding>
-      <ns:binding ns:name="?label">
-        <ns:literal>squints</ns:literal>
-      </ns:binding>
-    </ns:result>
-    <ns:result>
-      <ns:binding ns:name="?product">
-        <ns:uri>http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromProducer36/Product1597</ns:uri>
-      </ns:binding>
-      <ns:binding ns:name="?label">
-        <ns:literal>interns renouncing</ns:literal>
-      </ns:binding>
-    </ns:result>
-    <ns:result>
-      <ns:binding ns:name="?product">
-        <ns:uri>http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromProducer37/Product1675</ns:uri>
-      </ns:binding>
-      <ns:binding ns:name="?label">
-        <ns:literal>staunched</ns:literal>
-      </ns:binding>
-    </ns:result>
-    <ns:result>
-      <ns:binding ns:name="?product">
-        <ns:uri>http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromProducer37/Product1700</ns:uri>
-      </ns:binding>
-      <ns:binding ns:name="?label">
-        <ns:literal>callowness</ns:literal>
-      </ns:binding>
-    </ns:result>
-    <ns:result>
-      <ns:binding ns:name="?product">
-        <ns:uri>http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromProducer38/Product1728</ns:uri>
-      </ns:binding>
-      <ns:binding ns:name="?label">
-        <ns:literal>chanceries</ns:literal>
-      </ns:binding>
-    </ns:result>
-    <ns:result>
-      <ns:binding ns:name="?product">
-        <ns:uri>http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromProducer40/Product1843</ns:uri>
-      </ns:binding>
-      <ns:binding ns:name="?label">
-        <ns:literal>physiological</ns:literal>
-      </ns:binding>
-    </ns:result>
-    <ns:result>
-      <ns:binding ns:name="?product">
-        <ns:uri>http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromProducer41/Product1908</ns:uri>
-      </ns:binding>
-      <ns:binding ns:name="?label">
-        <ns:literal>predesignation</ns:literal>
-      </ns:binding>
-    </ns:result>
-    <ns:result>
-      <ns:binding ns:name="?product">
-        <ns:uri>http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromProducer42/Product1947</ns:uri>
-      </ns:binding>
-      <ns:binding ns:name="?label">
-        <ns:literal>proles leader</ns:literal>
-      </ns:binding>
-    </ns:result>
-    <ns:result>
-      <ns:binding ns:name="?product">
-        <ns:uri>http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromProducer42/Product1982</ns:uri>
-      </ns:binding>
-      <ns:binding ns:name="?label">
-        <ns:literal>sportscasters</ns:literal>
-      </ns:binding>
-    </ns:result>
-    <ns:result>
-      <ns:binding ns:name="?product">
-        <ns:uri>http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromProducer42/Product1997</ns:uri>
-      </ns:binding>
-      <ns:binding ns:name="?label">
-        <ns:literal>moles prosuffrage limiters</ns:literal>
-      </ns:binding>
-    </ns:result>
-    <ns:result>
-      <ns:binding ns:name="?product">
-        <ns:uri>http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromProducer42/Product2000</ns:uri>
-      </ns:binding>
-      <ns:binding ns:name="?label">
-        <ns:literal>lathered</ns:literal>
-      </ns:binding>
-    </ns:result>
-    <ns:result>
-      <ns:binding ns:name="?product">
-        <ns:uri>http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromProducer42/Product2003</ns:uri>
-      </ns:binding>
-      <ns:binding ns:name="?label">
-        <ns:literal>electromagnet triggered finitudes</ns:literal>
-      </ns:binding>
-    </ns:result>
-    <ns:result>
-      <ns:binding ns:name="?product">
-        <ns:uri>http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromProducer42/Product2025</ns:uri>
-      </ns:binding>
-      <ns:binding ns:name="?label">
-        <ns:literal>rurally</ns:literal>
-      </ns:binding>
-    </ns:result>
-    <ns:result>
-      <ns:binding ns:name="?product">
-        <ns:uri>http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromProducer43/Product2029</ns:uri>
-      </ns:binding>
-      <ns:binding ns:name="?label">
-        <ns:literal>garcon tomomania</ns:literal>
-      </ns:binding>
-    </ns:result>
-    <ns:result>
-      <ns:binding ns:name="?product">
-        <ns:uri>http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromProducer43/Product2037</ns:uri>
-      </ns:binding>
-      <ns:binding ns:name="?label">
-        <ns:literal>flows bounces varietal</ns:literal>
-      </ns:binding>
-    </ns:result>
-    <ns:result>
-      <ns:binding ns:name="?product">
-        <ns:uri>http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromProducer48/Product2238</ns:uri>
-      </ns:binding>
-      <ns:binding ns:name="?label">
-        <ns:literal>grounds cobnut</ns:literal>
-      </ns:binding>
-    </ns:result>
-    <ns:result>
-      <ns:binding ns:name="?product">
-        <ns:uri>http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromProducer48/Product2259</ns:uri>
-      </ns:binding>
-      <ns:binding ns:name="?label">
-        <ns:literal>densely saprophyte</ns:literal>
-      </ns:binding>
-    </ns:result>
-    <ns:result>
-      <ns:binding ns:name="?product">
-        <ns:uri>http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromProducer49/Product2308</ns:uri>
-      </ns:binding>
-      <ns:binding ns:name="?label">
-        <ns:literal>foreclosed sonarman</ns:literal>
-      </ns:binding>
-    </ns:result>
-    <ns:result>
-      <ns:binding ns:name="?product">
-        <ns:uri>http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromProducer50/Product2323</ns:uri>
-      </ns:binding>
-      <ns:binding ns:name="?label">
-        <ns:literal>palanquins milfoil chronologists</ns:literal>
-      </ns:binding>
-    </ns:result>
-    <ns:result>
-      <ns:binding ns:name="?product">
-        <ns:uri>http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromProducer54/Product2515</ns:uri>
-      </ns:binding>
-      <ns:binding ns:name="?label">
-        <ns:literal>mentioners</ns:literal>
-      </ns:binding>
-    </ns:result>
-    <ns:result>
-      <ns:binding ns:name="?product">
-        <ns:uri>http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromProducer59/Product2729</ns:uri>
-      </ns:binding>
-      <ns:binding ns:name="?label">
-        <ns:literal>nonethical inhabiting</ns:literal>
-      </ns:binding>
-    </ns:result>
-    <ns:result>
-      <ns:binding ns:name="?product">
-        <ns:uri>http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromProducer59/Product2736</ns:uri>
-      </ns:binding>
-      <ns:binding ns:name="?label">
-        <ns:literal>yasmaks</ns:literal>
-      </ns:binding>
-    </ns:result>
-    <ns:result>
-      <ns:binding ns:name="?product">
-        <ns:uri>http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromProducer61/Product2798</ns:uri>
-      </ns:binding>
-      <ns:binding ns:name="?label">
-        <ns:literal>antechamber secularly refiguring</ns:literal>
-      </ns:binding>
-    </ns:result>
-    <ns:result>
-      <ns:binding ns:name="?product">
-        <ns:uri>http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromProducer61/Product2801</ns:uri>
-      </ns:binding>
-      <ns:binding ns:name="?label">
-        <ns:literal>vicarages fridays</ns:literal>
-      </ns:binding>
-    </ns:result>
-    <ns:result>
-      <ns:binding ns:name="?product">
-        <ns:uri>http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromProducer61/Product2805</ns:uri>
-      </ns:binding>
-      <ns:binding ns:name="?label">
-        <ns:literal>eclair vituperates</ns:literal>
-      </ns:binding>
-    </ns:result>
-    <ns:result>
-      <ns:binding ns:name="?product">
-        <ns:uri>http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromProducer61/Product2816</ns:uri>
-      </ns:binding>
-      <ns:binding ns:name="?label">
-        <ns:literal>begrimmed</ns:literal>
-      </ns:binding>
-    </ns:result>
-  </ns:results>
-</ns:sparql>
+{ "head": { "vars": [ "?product",
+"?label",
+"?value1" ] }, "results": { "bindings" : [{"?product" : { "type" : "uri", "value" : "http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromProducer42/Product2003" },
+"?label" : { "type" : "literal", "value" : "electromagnet triggered finitudes" }},
+{"?product" : { "type" : "uri", "value" : "http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromProducer31/Product1407" },
+"?label" : { "type" : "literal", "value" : "undertaken uxoriousness benefits" }},
+{"?product" : { "type" : "uri", "value" : "http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromProducer61/Product2801" },
+"?label" : { "type" : "literal", "value" : "vicarages fridays" }},
+{"?product" : { "type" : "uri", "value" : "http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromProducer43/Product2029" },
+"?label" : { "type" : "literal", "value" : "garcon tomomania" }},
+{"?product" : { "type" : "uri", "value" : "http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromProducer5/Product178" },
+"?label" : { "type" : "literal", "value" : "mucked" }},
+{"?product" : { "type" : "uri", "value" : "http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromProducer28/Product1295" },
+"?label" : { "type" : "literal", "value" : "neocolonially" }},
+{"?product" : { "type" : "uri", "value" : "http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromProducer5/Product181" },
+"?label" : { "type" : "literal", "value" : "thymi gnomons" }},
+{"?product" : { "type" : "uri", "value" : "http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromProducer11/Product515" },
+"?label" : { "type" : "literal", "value" : "streamlines disacknowledgements onuses" }},
+{"?product" : { "type" : "uri", "value" : "http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromProducer37/Product1700" },
+"?label" : { "type" : "literal", "value" : "callowness" }},
+{"?product" : { "type" : "uri", "value" : "http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromProducer20/Product904" },
+"?label" : { "type" : "literal", "value" : "devaluate" }},
+{"?product" : { "type" : "uri", "value" : "http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromProducer22/Product998" },
+"?label" : { "type" : "literal", "value" : "detriments scraps smirky" }},
+{"?product" : { "type" : "uri", "value" : "http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromProducer11/Product525" },
+"?label" : { "type" : "literal", "value" : "variegating" }},
+{"?product" : { "type" : "uri", "value" : "http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromProducer42/Product1982" },
+"?label" : { "type" : "literal", "value" : "sportscasters" }},
+{"?product" : { "type" : "uri", "value" : "http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromProducer37/Product1675" },
+"?label" : { "type" : "literal", "value" : "staunched" }},
+{"?product" : { "type" : "uri", "value" : "http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromProducer59/Product2736" },
+"?label" : { "type" : "literal", "value" : "yasmaks" }},
+{"?product" : { "type" : "uri", "value" : "http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromProducer61/Product2816" },
+"?label" : { "type" : "literal", "value" : "begrimmed" }},
+{"?product" : { "type" : "uri", "value" : "http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromProducer28/Product1297" },
+"?label" : { "type" : "literal", "value" : "disturbs amplifications comfortableness" }},
+{"?product" : { "type" : "uri", "value" : "http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromProducer61/Product2805" },
+"?label" : { "type" : "literal", "value" : "eclair vituperates" }},
+{"?product" : { "type" : "uri", "value" : "http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromProducer2/Product72" },
+"?label" : { "type" : "literal", "value" : "unturned crooked tzetze" }},
+{"?product" : { "type" : "uri", "value" : "http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromProducer1/Product40" },
+"?label" : { "type" : "literal", "value" : "splicer" }},
+{"?product" : { "type" : "uri", "value" : "http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromProducer14/Product662" },
+"?label" : { "type" : "literal", "value" : "driveled" }},
+{"?product" : { "type" : "uri", "value" : "http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromProducer59/Product2729" },
+"?label" : { "type" : "literal", "value" : "nonethical inhabiting" }},
+{"?product" : { "type" : "uri", "value" : "http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromProducer36/Product1597" },
+"?label" : { "type" : "literal", "value" : "interns renouncing" }},
+{"?product" : { "type" : "uri", "value" : "http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromProducer43/Product2037" },
+"?label" : { "type" : "literal", "value" : "flows bounces varietal" }},
+{"?product" : { "type" : "uri", "value" : "http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromProducer7/Product313" },
+"?label" : { "type" : "literal", "value" : "doggones" }},
+{"?product" : { "type" : "uri", "value" : "http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromProducer16/Product738" },
+"?label" : { "type" : "literal", "value" : "impermeabilities gyve" }},
+{"?product" : { "type" : "uri", "value" : "http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromProducer54/Product2515" },
+"?label" : { "type" : "literal", "value" : "mentioners" }},
+{"?product" : { "type" : "uri", "value" : "http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromProducer18/Product832" },
+"?label" : { "type" : "literal", "value" : "chinaware" }},
+{"?product" : { "type" : "uri", "value" : "http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromProducer14/Product657" },
+"?label" : { "type" : "literal", "value" : "mimed" }},
+{"?product" : { "type" : "uri", "value" : "http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromProducer38/Product1728" },
+"?label" : { "type" : "literal", "value" : "chanceries" }},
+{"?product" : { "type" : "uri", "value" : "http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromProducer3/Product106" },
+"?label" : { "type" : "literal", "value" : "dryrot" }},
+{"?product" : { "type" : "uri", "value" : "http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromProducer50/Product2323" },
+"?label" : { "type" : "literal", "value" : "palanquins milfoil chronologists" }},
+{"?product" : { "type" : "uri", "value" : "http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromProducer41/Product1908" },
+"?label" : { "type" : "literal", "value" : "predesignation" }},
+{"?product" : { "type" : "uri", "value" : "http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromProducer8/Product376" },
+"?label" : { "type" : "literal", "value" : "conflictive cropper" }},
+{"?product" : { "type" : "uri", "value" : "http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromProducer48/Product2259" },
+"?label" : { "type" : "literal", "value" : "densely saprophyte" }},
+{"?product" : { "type" : "uri", "value" : "http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromProducer48/Product2238" },
+"?label" : { "type" : "literal", "value" : "grounds cobnut" }},
+{"?product" : { "type" : "uri", "value" : "http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromProducer61/Product2798" },
+"?label" : { "type" : "literal", "value" : "antechamber secularly refiguring" }},
+{"?product" : { "type" : "uri", "value" : "http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromProducer29/Product1320" },
+"?label" : { "type" : "literal", "value" : "gauzes isthmic" }},
+{"?product" : { "type" : "uri", "value" : "http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromProducer40/Product1843" },
+"?label" : { "type" : "literal", "value" : "physiological" }},
+{"?product" : { "type" : "uri", "value" : "http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromProducer42/Product2025" },
+"?label" : { "type" : "literal", "value" : "rurally" }},
+{"?product" : { "type" : "uri", "value" : "http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromProducer33/Product1493" },
+"?label" : { "type" : "literal", "value" : "squints" }},
+{"?product" : { "type" : "uri", "value" : "http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromProducer16/Product740" },
+"?label" : { "type" : "literal", "value" : "angaries pirouetting botticelli" }},
+{"?product" : { "type" : "uri", "value" : "http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromProducer42/Product2000" },
+"?label" : { "type" : "literal", "value" : "lathered" }},
+{"?product" : { "type" : "uri", "value" : "http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromProducer42/Product1947" },
+"?label" : { "type" : "literal", "value" : "proles leader" }},
+{"?product" : { "type" : "uri", "value" : "http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromProducer4/Product143" },
+"?label" : { "type" : "literal", "value" : "fellations" }},
+{"?product" : { "type" : "uri", "value" : "http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromProducer25/Product1134" },
+"?label" : { "type" : "literal", "value" : "caesuric timbrels" }},
+{"?product" : { "type" : "uri", "value" : "http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromProducer2/Product80" },
+"?label" : { "type" : "literal", "value" : "wheelwrights analogically dehorner" }},
+{"?product" : { "type" : "uri", "value" : "http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromProducer31/Product1404" },
+"?label" : { "type" : "literal", "value" : "onerosities chirped internships" }},
+{"?product" : { "type" : "uri", "value" : "http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromProducer49/Product2308" },
+"?label" : { "type" : "literal", "value" : "foreclosed sonarman" }},
+{"?product" : { "type" : "uri", "value" : "http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromProducer7/Product305" },
+"?label" : { "type" : "literal", "value" : "nucleoplasmatic" }},
+{"?product" : { "type" : "uri", "value" : "http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromProducer42/Product1997" },
+"?label" : { "type" : "literal", "value" : "moles prosuffrage limiters" }}] } }

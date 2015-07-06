@@ -14,26 +14,26 @@ namespace TestingNs
         public BSBmParams(IStore store)
         {
             this.store = store;
-            _products = this.store.GetTriplesWithPredicateObject(new OV_iri("http://www.w3.org/1999/02/22-rdf-syntax-ns#type"),
-                new OV_iri("http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/vocabulary/Product")).ToArray();
+            _products = this.store.GetSubjects(store.NodeGenerator.GetUri("http://www.w3.org/1999/02/22-rdf-syntax-ns#type"),
+                store.NodeGenerator.GetUri("http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/vocabulary/Product")).ToArray();
             _productCount = _products.Count();
 
-            _offers = this.store.GetTriplesWithPredicateObject(
-                new OV_iri("http://www.w3.org/1999/02/22-rdf-syntax-ns#type"),
-                new OV_iri("http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/vocabulary/Offer")).ToArray();
+            _offers = this.store.GetSubjects(
+                store.NodeGenerator.GetUri("http://www.w3.org/1999/02/22-rdf-syntax-ns#type"),
+                store.NodeGenerator.GetUri("http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/vocabulary/Offer")).ToArray();
             _offersCount = _offers.Count();
 
-            _review = this.store.GetTriplesWithPredicateObject(
-                new OV_iri("http://www.w3.org/1999/02/22-rdf-syntax-ns#type"),
-                new OV_iri("http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/vocabulary/Review")).ToArray();
+            _review = this.store.GetSubjects(
+                store.NodeGenerator.GetUri("http://www.w3.org/1999/02/22-rdf-syntax-ns#type"),
+                store.NodeGenerator.GetUri("http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/vocabulary/Review")).ToArray();
             _reviewCount = _review.Count();
-            _productFeature = this.store.GetTriplesWithPredicateObject(
-                new OV_iri("http://www.w3.org/1999/02/22-rdf-syntax-ns#type"),
-                new OV_iri("http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/vocabulary/ProductFeature")).ToArray();
+            _productFeature = this.store.GetSubjects(
+                store.NodeGenerator.GetUri("http://www.w3.org/1999/02/22-rdf-syntax-ns#type"),
+                store.NodeGenerator.GetUri("http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/vocabulary/ProductFeature")).ToArray();
             _productFeatureCount = _productFeature.Count();
-            _productType = this.store.GetTriplesWithPredicateObject(
-               new OV_iri("http://www.w3.org/1999/02/22-rdf-syntax-ns#type"),
-               new OV_iri("http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/vocabulary/ProductType")).ToArray();
+            _productType = this.store.GetSubjects(
+               store.NodeGenerator.GetUri("http://www.w3.org/1999/02/22-rdf-syntax-ns#type"),
+               store.NodeGenerator.GetUri("http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/vocabulary/ProductType")).ToArray();
             _productTypeCount = _productType.Count();
             random = new Random();
             words = File.ReadAllLines(@"C:\bsbm\titlewords.txt");

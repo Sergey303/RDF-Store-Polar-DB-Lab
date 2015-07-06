@@ -1,0 +1,34 @@
+﻿@inherits System.Web.Mvc.WebViewPage
+@using SparqlEnfdPointWebApi.Controllers
+
+@{
+    Layout = null;
+}
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Simple SPARQL UI</title>
+    
+</head>
+<body>
+    <div>
+        <ul>
+            @foreach (var query in UIQueryController.QuerieStrings.Take(100))
+            {
+                <li>
+                    <a href="~/sparql?query=@query">@query</a>
+                </li>
+            }
+        </ul> 
+        Input new query:           
+        
+        <form action='~/query/add' method="POST">
+            <textarea name="" cols="200" rows="30"></textarea>
+            <input type="submit" value="run" />
+        </form>
+    </div>       
+
+</body>
+</html>

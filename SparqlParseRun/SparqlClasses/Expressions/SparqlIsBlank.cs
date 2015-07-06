@@ -6,15 +6,19 @@ namespace SparqlParseRun.SparqlClasses.Expressions
 {
     class SparqlIsBlank : SparqlExpression
     {
-        private SparqlExpression sparqlExpression;
+      
 
-        public SparqlIsBlank(SparqlExpression value)
+        public SparqlIsBlank(SparqlExpression value)  :base(value.AggregateLevel, value.IsStoreUsed)
         {
-
-            IsAggragate = value.IsAggragate;
-            IsDistinct = value.IsDistinct;
-           SetExprType(ObjectVariantEnum.Bool);
-            TypedOperator = result => new OV_bool(sparqlExpression.TypedOperator(result) is IBlankNode); //todo 
+            //SetExprType(ObjectVariantEnum.Bool);
+            if(value.Const!=null)
+                Const=new OV_bool(value.Const is IBlankNode);
+            else
+            {
+                Operator = result => value.TypedOperator(result) is IBlankNode;
+                TypedOperator = result => new OV_bool(value.TypedOperator(result) is IBlankNode); //todo     
+            }
+            
         }
     }
 }

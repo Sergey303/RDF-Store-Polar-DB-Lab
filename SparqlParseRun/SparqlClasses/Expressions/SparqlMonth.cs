@@ -5,20 +5,25 @@ namespace SparqlParseRun.SparqlClasses.Expressions
 {
     class SparqlMonth : SparqlExpression
     {
-        private SparqlExpression sparqlExpression;
-
-        public SparqlMonth(SparqlExpression value)
+     
+        public SparqlMonth(SparqlExpression value)  :base(value.AggregateLevel, value.IsStoreUsed)
         {
-
-            IsAggragate = value.IsAggragate;
-            IsDistinct = value.IsDistinct;
-            TypedOperator = result =>
+            if (value.Const != null)
+                Const = new OV_int(GetMonth(value.Const.Content));
+            else
             {
-                var f = value.TypedOperator(result).Content;
-                if (f is DateTime)
-                    return new OV_int(((DateTime)f).Month);
-                throw new ArgumentException();
-            };
+                Operator = result => GetMonth(value.Operator(result));
+                TypedOperator = result => new OV_int(Operator(result));
+            }
+        }
+
+        private int GetMonth(dynamic o)
+        {
+            if (o is DateTime)
+                return ((DateTime)o).Month;
+            if (o is DateTimeOffset)
+                return ((DateTimeOffset)o).Month;
+            throw new ArgumentException();
         }
     }
 }

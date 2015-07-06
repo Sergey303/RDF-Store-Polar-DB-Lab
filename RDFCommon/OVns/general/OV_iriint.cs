@@ -35,13 +35,17 @@ namespace RDFCommon.OVns
             //   http://go.microsoft.com/fwlink/?LinkId=85238
             //
 
-            if (obj == null || GetType() != obj.GetType())
+            if (obj == null)
             {
                 return false;
             }
-
+            var iri = obj as OV_iri;
+            if (iri != null)
+                return UriString == iri.UriString;
+            var iriint = obj as OV_iriint;
+            if (iriint != null)
             return code == ((OV_iriint)obj).code;
-
+        return false;
         }
 
         // override object.GetHashCode

@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using RDFCommon;
+using RDFTripleStore;
 using SparqlParseRun;
 using SparqlParseRun.SparqlClasses;
 using SparqlParseRun.SparqlClasses.Query.Result;
@@ -15,77 +16,82 @@ namespace TestingNs
   
 
      
-        public static void InterpretMeas<T>(T Store, int i) where T:InterpretMeasure,IStore
-        {
-            Store.TrainingMode = true;
+        //public static void InterpretMeas<T>(T Store, int i) where T:InterpretMeasure,IStore
+        //{
+        //    Store.TrainingMode = true;
 
-            using (StreamWriter sr = new StreamWriter(@"..\..\output.txt", true))
-                sr.WriteLine("train");
-            SparqlTesting.OneParametrized(Store, i, 100);
+        //    using (StreamWriter sr = new StreamWriter(@"..\..\output.txt", true))
+        //        sr.WriteLine("train");
+        //    SparqlTesting.OneParametrized(Store, i, 100);
 
 
-            using (StreamWriter sr = new StreamWriter(@"..\..\output.txt", true))
-                sr.WriteLine("history count " + Store.history.Count);
+        //    using (StreamWriter sr = new StreamWriter(@"..\..\output.txt", true))
+        //        sr.WriteLine("history count " + Store.history.Count);
             
-            Store.TrainingMode = false;
-            SparqlTesting.OneParametrized(Store, i, 100);
+        //    Store.TrainingMode = false;
+        //    SparqlTesting.OneParametrized(Store, i, 100);
 
-        }
+        //}
 
-        public static void CallsAnalyze<T>(T Store, int i, int count=100)      where T: CacheMeasure,IStore
-        {
-            Store.TrainingMode = true;
-            using (StreamReader streamQueryParameters = new StreamReader(string.Format(
-                @"..\..\..\Testing\examples\bsbm\queries\parameters\param values for{0}m {1} query.txt", 1, i)))
-            {
-                var file = new FileInfo(string.Format(@"..\..\..\Testing\examples\bsbm\queries\parameters\{0}.rq", i));
-                var parametred = File.ReadAllText(file.FullName);
-                 for (int j = 0; j < count; j++)
-                {
-                    var consted = BSBmParams.QueryReadNewParameters(parametred, streamQueryParameters);
-                    SparqlQuery sparqlQuery = SparqlQueryParser.Parse(Store, consted);
-                    SparqlResultSet sparqlResultSet = sparqlQuery.Run();
-                    sparqlResultSet.ToJson();
-                }
-                Console.WriteLine("history count " + Store.history.Count);
-                using (StreamWriter sr = new StreamWriter(@"..\..\output.txt", true))
-                {
-                    sr.WriteLine("q"+i);
-                    sr.WriteLine(Store.Output());
-                }
-                //Store.TrainingMode = false;
+        //public static void CallsAnalyze<T>(T Store, int i, int count=100)      where T: CacheMeasure,IStore
+        //{
+        //    Store.TrainingMode = true;
+        //    using (StreamReader streamQueryParameters = new StreamReader(string.Format(
+        //        @"..\..\..\Testing\examples\bsbm\queries\parameters\param values for{0}m {1} query.txt", 1, i)))
+        //    {
+        //        var file = new FileInfo(string.Format(@"..\..\..\Testing\examples\bsbm\queries\parameters\{0}.rq", i));
+        //        var parametred = File.ReadAllText(file.FullName);
+        //         for (int j = 0; j < count; j++)
+        //        {
+        //            var consted = BSBmParams.QueryReadNewParameters(parametred, streamQueryParameters);
+        //            SparqlQuery sparqlQuery = SparqlQueryParser.Parse(Store, consted);
+        //            SparqlResultSet sparqlResultSet = sparqlQuery.Run();
+        //            sparqlResultSet.ToJson();
+        //        }
+        //        Console.WriteLine("history count " + Store.history.Count);
+        //        using (StreamWriter sr = new StreamWriter(@"..\..\output.txt", true))
+        //        {
+        //            sr.WriteLine("q"+i);
+        //            sr.WriteLine(Store.Output());
+        //        }
+        //        //Store.TrainingMode = false;
 
-                //RunTestParametred(Store, count: 1);
-            }
-        }
-        public static void CacheMeasureAllWithConstants<T>(T Store) where T : CacheMeasure, IStore
-        {
-            Store.TrainingMode = true;
-
-
-            Console.WriteLine("bsbm with constants train");
+        //        //RunTestParametred(Store, count: 1);
+        //    }
+        //}
+        //public static void CacheMeasureAllWithConstants<T>(T Store) where T : CacheMeasure, IStore
+        //{
+        //    Store.TrainingMode = true;
 
 
-            int i=8;
-            string file = string.Format(@"..\..\examples\bsbm\queries\with constants\{0}.rq", i);
-            var readAllText = File.ReadAllText(file);
-            var sparqlQuery = SparqlQueryParser.Parse(Store, readAllText);
-            sparqlQuery.Run().ToJson();
+        //    Console.WriteLine("bsbm with constants train");
 
-            Console.WriteLine("history count " + Store.history.Count);
-            using (StreamWriter sr = new StreamWriter(@"..\..\output.txt", true))
-            {  sr.WriteLine(i);
-            sr.WriteLine(Store.Output());  }
 
-            //for ideal cache
-            //cacheMeasure.TrainingMode = false;
-            //Console.WriteLine("bsbm with constants from history");
-            //RunTestParametred(50, 1);
+        //    int i=8;
+        //    string file = string.Format(@"..\..\examples\bsbm\queries\with constants\{0}.rq", i);
+        //    var readAllText = File.ReadAllText(file);
+        //    var sparqlQuery = SparqlQueryParser.Parse(Store, readAllText);
+        //    sparqlQuery.Run().ToJson();
 
-        }
+        //    Console.WriteLine("history count " + Store.history.Count);
+        //    using (StreamWriter sr = new StreamWriter(@"..\..\output.txt", true))
+        //    {  sr.WriteLine(i);
+        //    sr.WriteLine(Store.Output());  }
+
+        //    //for ideal cache
+        //    //cacheMeasure.TrainingMode = false;
+        //    //Console.WriteLine("bsbm with constants from history");
+        //    //RunTestParametred(50, 1);
+
+        //}
     
-        public static void RunBerlinsParameters(IStore Store)
+        public static void RunBerlinsParameters()
         {
+            var Store = new StoreCascadingInt("../../../Databases/int based/");
+            //Store.ReloadFrom(Config.Source_data_folder_path + "1.ttl");
+            Store.Start();
+            
+            //Store.Start();
             //Store.Warmup();
             Console.WriteLine("bsbm parametered");
             var paramvaluesFilePath = string.Format(@"..\..\examples\bsbm\queries\parameters\param values for{0} m.txt", Program.Millions);
@@ -94,7 +100,7 @@ namespace TestingNs
             //                    foreach (var file in fileInfos.Select(info => File.ReadAllText(info.FullName)))
             //                        QueryWriteParameters(file, streamQueryParameters, ts);
             //return;
-
+     
             using (StreamReader streamQueryParameters = new StreamReader(paramvaluesFilePath))
             {
                 for (int j = 0; j < 500; j++)
@@ -124,14 +130,14 @@ namespace TestingNs
 
                     var timer = new Stopwatch();
                     SparqlQuery sparqlQuery = null;
-                    if (i == 0)
+                  //  if (i == 0)
                     {
                         sparqlQuery = SparqlQueryParser.Parse(Store, readAllText);
                     }
 
                     totalparseMS[i] += GetTimeWthLast2Digits(timer);
                     var st1 = DateTime.Now;
-                    if (i == 0)
+                    //if (i == 0)
                     {
                         var sparqlResultSet = sparqlQuery.Run().ToJson();                        
                     }
@@ -177,14 +183,14 @@ namespace TestingNs
             Console.WriteLine("bsbm with constants");
                 var timer = new Stopwatch();
           //  using (
-            var Store = new SecondStringStore("../../../Databases/string based/");
+            var Store = new StoreCascadingInt("../../../Databases/int based/");
             {
                 Store.ReloadFrom(Config.Source_data_folder_path+"1.ttl");
                 SparqlQueryParser.Parse(Store, sq5);
-                          
-                //for (
-                         int i = 6; 
-                //i < 12; i++)
+
+                for (
+                         int i = 0;
+                i < 12; i++)
                 {
                     string file = string.Format(@"..\..\examples\bsbm\queries\with constants\{0}.rq", i + 1);
                     var readAllText = File.ReadAllText(file);
@@ -239,8 +245,14 @@ namespace TestingNs
 
 
 
-        public static void RunTestParametred(IStore Store, int count = 100)
+        public static void RunTestParametred(int count = 100)
         {
+
+            var Store = new StoreCascadingInt("../../../Databases/int based/");
+            Store.ReloadFrom(Config.Source_data_folder_path + "1.ttl");
+            SparqlQueryParser.Parse(Store, sq5);
+            //Store.Start();
+            //Store.Warmup();
             for (int i = 0; i < 12; i++)
             {
 
@@ -358,7 +370,7 @@ WHERE {
        public static void OneParametrized(IStore store, int i, int count)
         {
 
-        //   SparqlQueryParser.Parse(store, sq5);      
+          SparqlQueryParser.Parse(store, sq5);      
            store.Warmup();
             using (StreamReader streamQueryParameters = new StreamReader(string.Format(
                 @"..\..\..\Testing\examples\bsbm\queries\parameters\param values for{0}m {1} query.txt", 1, i)))

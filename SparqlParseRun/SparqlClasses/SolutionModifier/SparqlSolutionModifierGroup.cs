@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using SparqlParseRun.SparqlClasses.GraphPattern;
 using SparqlParseRun.SparqlClasses.Query.Result;
 using SparqlParseRun.SparqlClasses.SparqlAggregateExpression;
 
@@ -14,22 +15,22 @@ namespace SparqlParseRun.SparqlClasses.SolutionModifier
             this.q = q;
         }
 
-        public IEnumerable<SparqlResult> Group(IEnumerable<SparqlResult> enumerable)
+        public IEnumerable<SparqlGroupOfResults> Group(IEnumerable<SparqlResult> enumerable)
         {
                if(Count==1)
                    if (this[0].Variable != null)
-                   {
-                       return enumerable.GroupBy(result => this[0].Constrained(result)).Select( grouping => new SpraqlGroupOfResults(this[0].Variable, grouping.Key, q) { Group = grouping });
-                   }
-                   else return enumerable.GroupBy(result => this[0].Constrained(result)).Select(grouping => new SpraqlGroupOfResults(q) { Group = this[0].IsDistinct ? grouping.Distinct() : grouping });
-               var isDictinct = this.Any(constraint => constraint.IsDistinct);
-                   
-            var groups = enumerable
-                    .GroupBy(result =>this.Select(constraint => constraint.Constrained(result)).ToList(), new CollectionEqualityComparer())
-                    .Select(grouping => new SpraqlGroupOfResults(this.Select(constraint => constraint.Variable), grouping.Key, q) { Group = isDictinct ? grouping.Distinct() : grouping })
-                .ToArray();
-           
-            return groups;
+                       return enumerable.GroupBy(result => this[0].Constrained(result))
+                           .Select(grouping =>
+                               new SparqlGroupOfResults(this[0].Variable, grouping.Key, q) {Group = grouping});
+                   else
+                       return
+                           enumerable.GroupBy(result => this[0].Constrained(result))
+                               .Select(grouping => new SparqlGroupOfResults(q) {Group = grouping});
+
+
+            return enumerable
+                .GroupBy(result =>this.Select(constraint => constraint.Constrained(result)).ToList(), new CollectionEqualityComparer())
+                .Select(grouping => new SparqlGroupOfResults(this.Select(constraint => constraint.Variable), grouping.Key, q) { Group = grouping });
         }
     }
 }

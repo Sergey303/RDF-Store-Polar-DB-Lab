@@ -12,10 +12,10 @@ namespace SparqlParseRun.SparqlClasses.Update
     public class SparqlUpdateModify : ISparqlUpdate    
     {
         private readonly RdfQuery11Translator q;
-        private SparqlGraphPattern @where;
+        private ISparqlGraphPattern @where;
         private ObjectVariants with;
-        private SparqlQuardsPattern insert;
-        private SparqlQuardsPattern delete;
+        private SparqlQuadsPattern insert;
+        private SparqlQuadsPattern delete;
 
         public void SetWith(ObjectVariants iri)
         {
@@ -26,23 +26,23 @@ namespace SparqlParseRun.SparqlClasses.Update
             this.q = q;
         }
 
-        public SparqlUpdateModify(SparqlQuardsPattern sparqlUpdateDelete)
+        public SparqlUpdateModify(SparqlQuadsPattern sparqlUpdateDelete)
         {
             delete = sparqlUpdateDelete;
         }
      
 
-        internal void SetInsert(SparqlQuardsPattern sparqlUpdateInsert)
+        internal void SetInsert(SparqlQuadsPattern sparqlUpdateInsert)
         {
             insert = sparqlUpdateInsert;
         }
 
-        internal void SetDelete(SparqlQuardsPattern sparqlUpdateDelete)
+        internal void SetDelete(SparqlQuadsPattern sparqlUpdateDelete)
         {
             delete = sparqlUpdateDelete;
         }
 
-        internal void SetWhere(SparqlGraphPattern sparqlGraphPattern)
+        internal void SetWhere(ISparqlGraphPattern sparqlGraphPattern)
         {
             @where = sparqlGraphPattern;
         }
@@ -80,16 +80,16 @@ namespace SparqlParseRun.SparqlClasses.Update
 
             foreach (var result in results)
             {
+               
                 if (delete != null)
                 {
                     if (with == null)
                         foreach (SparqlTriple triple in defaultGraphTriplesDelete)
                             triple.Substitution(result,
-                                store.Delete,
-                                store.Name);
+                                store.Delete);
                     else
                         foreach (SparqlTriple triple in defaultGraphTriplesDelete)
-                            triple.Substitution(result,
+                            triple.Substitution(result,   
                                 with,
                                 store.NamedGraphs.Delete);
                     foreach (SparqlGraphGraph sparqlGraphPattern in graphPatternsDelete)
@@ -110,8 +110,7 @@ namespace SparqlParseRun.SparqlClasses.Update
                     if (with == null)
                     foreach (SparqlTriple triple in defaultGraphTriplesInsert)
                         triple.Substitution(result,
-                            store.Add,
-                            store.Name);
+                            store.Add);
                     else
                         foreach (SparqlTriple triple in defaultGraphTriplesInsert)
                             triple.Substitution(result,

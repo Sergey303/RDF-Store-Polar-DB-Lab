@@ -4,25 +4,13 @@ using RDFCommon.OVns;
 
 namespace SparqlParseRun.SparqlClasses.Expressions
 {
-    public class SparqlFloor : SparqlExpression
+    public class SparqlFloor : SparqlUnaryExpression
     {
         public SparqlFloor(SparqlExpression value)
+            : base(d => Math.Floor(d), value)
+            
         {
-            IsAggragate = value.IsAggragate;
-            IsDistinct = value.IsDistinct;
-          
-            TypedOperator = result =>
-            {
-                var val = value.TypedOperator(result);
-                dynamic content = val.Content;
-                if (content is decimal || content is double)
-                    return val.Change(d => Math.Floor(d));
-                if (content is float)
-                    return val.Change(d => Math.Floor((double)d));
-                if (content is int) //todo uint
-                    return val;
-                throw new ArgumentException("Ceil " + val);
-            };
+           
         }
     }
 }

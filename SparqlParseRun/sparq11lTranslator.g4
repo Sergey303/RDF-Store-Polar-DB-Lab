@@ -38,10 +38,10 @@ public RdfQuery11Translator q;
 }
  query returns [SparqlQuery value] : 
  (prologue 	{q.prolog.StringRepresentationOfProlog=$prologue.text;}
- ( selectQuery {$value=$selectQuery.value; $value.Type = SparqlQueryTypeEnum.Select; }
-  | constructQuery { $value=$constructQuery.value; $value.Type = SparqlQueryTypeEnum.Construct;}  
-  | describeQuery { $value=$describeQuery.value; $value.Type = SparqlQueryTypeEnum.Describe;}  
-  | askQuery { $value=$askQuery.value; $value.Type = SparqlQueryTypeEnum.Ask;}  )
+ ( selectQuery {$value=$selectQuery.value; $value.ResultSet.ResultType= ResultType.Select; }
+  | constructQuery { $value=$constructQuery.value; $value.ResultSet.ResultType= ResultType.Construct;}  
+  | describeQuery { $value=$describeQuery.value; $value.ResultSet.ResultType= ResultType.Describe;}  
+  | askQuery { $value=$askQuery.value; $value.ResultSet.ResultType= ResultType.Ask;}  )
 valuesClause 	{ $value.SetValues($valuesClause.value);} )
 | update {$value = $update.value;} ;
  prologue: ( baseDecl | prefixDecl )*;
@@ -50,35 +50,35 @@ valuesClause 	{ $value.SetValues($valuesClause.value);} )
  {
 	q.prolog.AddPrefix($PNAME_NS.text, $IRIREF.text);
  };
- selectQuery returns [SparqlSelectQuery value]: {$value=new SparqlSelectQuery(q);} selectClause datasetClause* whereClause solutionModifier {$solutionModifier.value.Add($selectClause.value);} {$value.Create($whereClause.value, $solutionModifier.value);};
- subSelect returns [SparqlSubSelect value] : selectClause whereClause solutionModifier {$solutionModifier.value.Add($selectClause.value);} valuesClause {$value=new SparqlSubSelect($whereClause.value, $solutionModifier.value, $valuesClause.value);};
- selectClause returns [SparqlSelect value] : SELECT {$value=new SparqlSelect();} ( DISTINCT {$value.IsDistinct=true;} | REDUCED {$value.IsReduced=true;} )? ( ( var {$value.Add($var.value);} | ( '(' expression AS var {$value.Add(q.CreateExpressionAsVariable($var.value, $expression.value));} ')' ) )+ | '*' {$value.IsAll();} );
+ selectQuery returns [SparqlQuery value]: {$value=new SparqlQuery(q);} selectClause datasetClause* whereClause solutionModifier {$solutionModifier.value.Add($selectClause.value);} {$value.Create($whereClause.value, $solutionModifier.value);};
+ subSelect returns [SparqlSubSelect value] : selectClause whereClause solutionModifier {$solutionModifier.value.Add($selectClause.value);} valuesClause {$value=new SparqlSubSelect($whereClause.value, $solutionModifier.value, $valuesClause.value, q);};
+ selectClause returns [SparqlSelect value] : SELECT {$value=new SparqlSelect(q);} ( DISTINCT {$value.IsDistinct=true;} | REDUCED {$value.IsReduced=true;} )? ( ( var {$value.Add($var.value);} | ( '(' expression AS var {$value.Add(q.CreateExpressionAsVariable($var.value, $expression.value));} ')' ) )+ | '*' {$value.IsAll();} );
  constructQuery returns [SparqlConstructQuery value] : CONSTRUCT {$value=new SparqlConstructQuery(q);} 
  ( constructTemplate datasetClause* whereClause solutionModifier { $value.Create($constructTemplate.value, $whereClause.value, $solutionModifier.value); }
  | datasetClause* WHERE '{'( triplesTemplate { $value.Create($triplesTemplate.value); } )? '}' solutionModifier { $value.Create($solutionModifier.value); } );
  describeQuery returns [SparqlDescribeQuery value] : DESCRIBE {$value=new SparqlDescribeQuery(q);} ( (varOrIri {$value.Add($varOrIri.value);})+ | '*' {$value.IsAll();} ) datasetClause* ( whereClause {$value.Create($whereClause.value);} )? solutionModifier {$value.Create($solutionModifier.value);};
- askQuery returns [SparqlAsqQuery value] : ASK {$value=new SparqlAsqQuery(q);}  datasetClause* whereClause solutionModifier {$value.Create($whereClause.value, $solutionModifier.value);};
+ askQuery returns [SparqlQuery value] : ASK {$value=new SparqlQuery(q);}  datasetClause* whereClause solutionModifier {$value.Create($whereClause.value, $solutionModifier.value);};
 datasetClause : FROM ( defaultGraphClause | namedGraphClause )	 ;
   defaultGraphClause : sourceSelector {q.ActiveGraphs.Add($sourceSelector.value);};
  namedGraphClause :NAMED sourceSelector {q.NamedGraphs.Add($sourceSelector.value);};
  sourceSelector returns [ObjectVariants value] : iri  {$value=$iri.value;};
 
- whereClause returns [SparqlGraphPattern value] : WHERE? groupGraphPattern {$value=$groupGraphPattern.value; };
+ whereClause returns [ISparqlGraphPattern value] : WHERE? groupGraphPattern {$value=$groupGraphPattern.value; };
  solutionModifier returns [SparqlSolutionModifier value]: {$value=new SparqlSolutionModifier();} ( groupClause {$value.Add($groupClause.value);} )? (havingClause {$value.Add($havingClause.value, q);})? (orderClause {$value.Add($orderClause.value);})? (limitOffsetClauses {$value.Add($limitOffsetClauses.value);} )? ;
  groupClause returns [SparqlSolutionModifierGroup value] : GROUP BY {$value=new SparqlSolutionModifierGroup(q);} 
  ( groupCondition  { $value.Add($groupCondition.value);})+;
  groupCondition returns [SparqlGroupConstraint value] : builtInCall {$value=new SparqlGroupConstraint($builtInCall.value);}
   | functionCall   {$value=new SparqlGroupConstraint($functionCall.value);}
-  | '(' expression {$value=new SparqlGroupConstraint($expression.value);} ( AS var  {$value=new SparqlGroupConstraint(new SparqlExpressionAsVariable($var.value, $expression.value, q));})? ')' 
+  | '(' expression {$value=new SparqlGroupConstraint($expression.value);} ( AS var  {$value=new SparqlGroupConstraint(q.CreateExpressionAsVariable($var.value, $expression.value));})? ')' 
   | var {$value=new SparqlGroupConstraint($var.value);};
  havingClause returns [SparqlSolutionModifierHaving value] : HAVING {$value=new SparqlSolutionModifierHaving();} (havingCondition {$value.Add($havingCondition.value);} )+;
  havingCondition returns [SparqlExpression value] : constraint { $value=$constraint.value;};
  orderClause returns [SparqlSolutionModifierOrder value]: ORDER BY {$value=new SparqlSolutionModifierOrder();} (orderCondition {$value.Add($orderCondition.value); } )+;
- orderCondition returns [SparqlOrderCondition value]: ( ( dir= ASC | dir= DESC ) brackettedExpression {$value = new SparqlOrderCondition($brackettedExpression.value, $dir.text);} )
-| ( brackettedExpression {$value=new SparqlOrderCondition($brackettedExpression.value);}
- | builtInCall {$value=new SparqlOrderCondition($builtInCall.value);}
- | functionCall {$value=new SparqlOrderCondition($functionCall.value);} 
- | var {$value=new SparqlOrderCondition($var.value);}  );
+ orderCondition returns [SparqlOrderCondition value]: ( ( dir= ASC | dir= DESC ) brackettedExpression {$value = new SparqlOrderCondition($brackettedExpression.value, $dir.text, q);} )
+| ( brackettedExpression {$value=new SparqlOrderCondition($brackettedExpression.value, q);}
+ | builtInCall {$value=new SparqlOrderCondition($builtInCall.value,q);}
+ | functionCall {$value=new SparqlOrderCondition($functionCall.value,q);} 
+ | var {$value=new SparqlOrderCondition($var.value,q);}  );
  limitOffsetClauses returns [SparqlSolutionModifierLimit value] : {$value=new SparqlSolutionModifierLimit();} (limitClause {$value.CreateLimit($limitClause.value); } ( offsetClause {$value.CreateOffset($offsetClause.value); } )? | offsetClause {$value.CreateOffset($offsetClause.value); }  ( limitClause  {$value.CreateLimit($limitClause.value); } )?);
  limitClause returns [int value]: LIMIT integer {$value=$integer.value;};
  offsetClause returns [int value]: OFFSET integer {$value=$integer.value;};
@@ -114,8 +114,8 @@ datasetClause : FROM ( defaultGraphClause | namedGraphClause )	 ;
 | insertClause {$value.SetInsert($insertClause.value);} ) 
 	({q.ActiveGraphs.Clear();} usingClause+)? 
 WHERE groupGraphPattern { $value.SetWhere($groupGraphPattern.value); };
- deleteClause returns [SparqlQuardsPattern value]: DELETE quadPattern { $value=$quadPattern.value;};
- insertClause returns [SparqlQuardsPattern value]: INSERT quadPattern { $value=$quadPattern.value;};
+ deleteClause returns [SparqlQuadsPattern value]: DELETE quadPattern { $value=$quadPattern.value;};
+ insertClause returns [SparqlQuadsPattern value]: INSERT quadPattern { $value=$quadPattern.value;};
  usingClause: USING ( iri {q.ActiveGraphs.Add($iri.value);} | NAMED iri  {q.NamedGraphs.Add($iri.value);} );
  graphOrDefault returns [string value] : DEFAULT | GRAPH? iriString {$value=$iriString.value; } ;
  graphRef returns [string value] : GRAPH iriString {$value=$iriString.value;};
@@ -123,15 +123,16 @@ WHERE groupGraphPattern { $value.SetWhere($groupGraphPattern.value); };
  | g = DEFAULT  {$value=new UpdateGraph(SparqlGrpahRefTypeEnum.Default); }
  | g = NAMED  {$value=new UpdateGraph( SparqlGrpahRefTypeEnum.Named); }
  | g = ALL {$value=new UpdateGraph(SparqlGrpahRefTypeEnum.All); };
- quadPattern returns [SparqlQuardsPattern value]: '{' quads '}' {$value=$quads.value;};
- quadData returns [SparqlQuardsPattern value]: '{' quads '}'{$value=$quads.value;};
- quads returns [SparqlQuardsPattern value]:  {$value=new SparqlQuardsPattern();} (triplesTemplate {$value.AddRange($triplesTemplate.value);} )? ( quadsNotTriples {$value.Add($quadsNotTriples.value);} '.'? (triplesTemplate {$value.AddRange($triplesTemplate.value);} )? )*;
+ quadPattern returns [SparqlQuadsPattern value]: '{' quads '}' {$value=$quads.value;};
+ quadData returns [SparqlQuadsPattern value]: '{' quads '}'{$value=$quads.value;};
+ quads returns [SparqlQuadsPattern value]:  {$value=new SparqlQuadsPattern();} (triplesTemplate {$value.AddRange($triplesTemplate.value);} )? ( quadsNotTriples {$value.Add($quadsNotTriples.value);} '.'? (triplesTemplate {$value.AddRange($triplesTemplate.value);} )? )*;
  quadsNotTriples returns [SparqlGraphGraph value] : GRAPH varOrIri {$value=new SparqlGraphGraph($varOrIri.value);} '{' ( triplesTemplate { $value.AddTriples($triplesTemplate.value);} )? '}';
  triplesTemplate returns [SparqlGraphPattern value] : triplesSameSubject {$value=$triplesSameSubject.value;} ( '.' ( tt= triplesTemplate {$value.AddRange($tt.value); } )? )?;
 
- groupGraphPattern  returns [SparqlGraphPattern value] : '{' ( subSelect {$value=$subSelect.value;} | groupGraphPatternSub  {$value=$groupGraphPatternSub.value;} ) '}';
+ groupGraphPattern  returns [ISparqlGraphPattern value] : '{' ( subSelect {$value=$subSelect.value;} | groupGraphPatternSub  {$value=$groupGraphPatternSub.value;} ) '}';
  groupGraphPatternSub  returns [SparqlGraphPattern value] : {$value=new SparqlGraphPattern();} 
-	(triplesBlock  {$value.AddRange($triplesBlock.value); })? ( graphPatternNotTriples  {$value.Add($graphPatternNotTriples.value); } '.'? ( triplesBlock  {$value.AddRange($triplesBlock.value); } )? )*;
+	(triplesBlock  {$value.AddRange($triplesBlock.value); })? 
+	( graphPatternNotTriples  {$value.Add($graphPatternNotTriples.value); } '.'? ( triplesBlock  {$value.AddRange($triplesBlock.value); } )? )*;
  triplesBlock  returns [SparqlGraphPattern value]: triplesSameSubjectPath  {$value=$triplesSameSubjectPath.value;} ( '.' (added=triplesBlock  {$value.AddRange($added.value);})? )?;
  graphPatternNotTriples  returns [ISparqlGraphPattern value]
  : groupOrUnionGraphPattern {$value=$groupOrUnionGraphPattern.value;}
@@ -145,7 +146,7 @@ WHERE groupGraphPattern { $value.SetWhere($groupGraphPattern.value); };
  optionalGraphPattern  returns [SparqlOptionalGraphPattern value] : OPTIONAL  groupGraphPattern  {$value=new SparqlOptionalGraphPattern($groupGraphPattern.value);};
  graphGraphPattern returns [ISparqlGraphPattern value]: GRAPH varOrIri{var temp=q.ActiveGraphs;  q.ActiveGraphs=q.SetNamedGraphOrVariable($varOrIri.value, q.NamedGraphs); } groupGraphPattern {$value=$groupGraphPattern.value; q.ActiveGraphs=temp;};
  serviceGraphPattern  returns [SparqlServicePattern value] : {$value=new SparqlServicePattern();} SERVICE (SILENT {$value.IsSilent();})? varOrIri groupGraphPattern  {$value.Create($varOrIri.value, $groupGraphPattern.text, q.prolog.StringRepresentationOfProlog, q);};
- bind returns [SparqlExpressionAsVariable value] : BIND '(' expression AS var ')' {$value=new SparqlExpressionAsVariable($var.value, $expression.value,q);};
+ bind returns [SparqlExpressionAsVariable value] : BIND '(' expression AS var ')' {$value=q.CreateExpressionAsVariable($var.value, $expression.value);};
  inlineData returns [ISparqlGraphPattern value] : VALUES dataBlock { $value=$dataBlock.value;};
  dataBlock returns [ISparqlGraphPattern value] : inlineDataOneVar {$value=$inlineDataOneVar.value;} | inlineDataFull {$value=$inlineDataFull.value;};
  inlineDataOneVar returns [SparqlInlineVariable value] : var { $value=new SparqlInlineVariable($var.value);} '{' (dataBlockValue { $value.Add($dataBlockValue.value);})* '}';
@@ -157,7 +158,7 @@ WHERE groupGraphPattern { $value.SetWhere($groupGraphPattern.value); };
  constraint returns [SparqlExpression value]: brackettedExpression {$value=$brackettedExpression.value;}
  | builtInCall {$value=$builtInCall.value;}
  | functionCall {$value=$functionCall.value;};
- functionCall returns [SparqlFunctionCall value] : iriString argList { $value=new SparqlFunctionCall($iriString.value, $argList.value,q.Store.NodeGenerator); };
+ functionCall returns [SparqlFunctionCall value] : iriString argList { $value=new SparqlFunctionCall($iriString.value, $argList.value); };
  argList returns [SparqlArgs value] : NIL | {$value = new SparqlArgs();} '('  (DISTINCT { $value.IsDistinct(); } )? expression { $value.Add($expression.value); } ( ',' expression { $value.Add($expression.value); } )* ')';
  expressionList returns [List<SparqlExpression> value] : NIL | '(' expression {$value=new List<SparqlExpression>(){$expression.value};} ( ',' expression { $value.Add($expression.value);} )* ')';
  constructTemplate returns [SparqlGraphPattern value] : '{' {$value=new SparqlGraphPattern();} ( constructTriples {$value.AddRange($constructTriples.value);} )? '}';
@@ -230,8 +231,8 @@ WHERE groupGraphPattern { $value.SetWhere($groupGraphPattern.value); };
 
  conditionalAndExpression returns [SparqlExpression value] :  relationalExpression { $value=$relationalExpression.value; } ( '&&' r= relationalExpression {$value=new SparqlAndExpression($value, $r.value);} )*;
  relationalExpression returns [SparqlExpression value] :  numericExpression { $value=$numericExpression.value; }  
- ( '=' r=numericExpression {$value=SparqlExpression.EqualsExpression($value, $r.value,q);}
-  | '!=' r=numericExpression {$value=SparqlExpression.NotEquals($value, $r.value);}
+ ( '=' r=numericExpression {$value=new SparqlEqualsExpression($value, $r.value, q.Store.NodeGenerator);}
+  | '!=' r=numericExpression {$value= new SparqlNotEqualsExpression($value, $r.value, q.Store.NodeGenerator);}
   | '<' r=numericExpression {$value=SparqlExpression.Smaller($value, $r.value);}
   | '>' r=numericExpression {$value=SparqlExpression.Greather($value, $r.value);}
   | '<=' r=numericExpression {$value=SparqlExpression.SmallerOrEquals($value, $r.value);}
@@ -253,17 +254,17 @@ WHERE groupGraphPattern { $value.SetWhere($groupGraphPattern.value); };
 |	primaryExpression { $value=$primaryExpression.value; };
  primaryExpression returns [SparqlExpression value] : brackettedExpression 	 {$value=$brackettedExpression.value;} 
  | builtInCall {$value=$builtInCall.value;} 
- | (iriString {$value=new SparqlIriExpression($iriString.value, q.Store.NodeGenerator);} ( argList {$value=new SparqlFunctionCall($iriString.value,  $argList.value,q.Store.NodeGenerator);} )?) 
+ | (iriString {$value=new SparqlIriExpression($iriString.value, q.Store.NodeGenerator);} ( argList {$value=new SparqlFunctionCall($iriString.value,  $argList.value);} )?) 
  | rDFLiteral {$value=new SparqlLiteralExpression($rDFLiteral.value);} 
  | numericLiteral {$value=new SparqlNumLiteralExpression($numericLiteral.value);} 
  | booleanLiteral {$value=new SparqlBoolLiteralExpression($booleanLiteral.value);} 
  | var {$value=new SparqlVarExpression($var.value);};
  brackettedExpression returns [SparqlExpression value] : '(' expression ')' { $value=$expression.value; };
  builtInCall returns [SparqlExpression value] :   aggregate { $value=$aggregate.value; }
-|	STR '(' expression ')'  { $value=new SparqlToString($expression.value,q.Store.NodeGenerator); }
-|	LANG '(' expression ')' { $value=new SparqlLang($expression.value, q.Store.NodeGenerator); }
+|	STR '(' expression ')'  { $value=new SparqlToString($expression.value); }
+|	LANG '(' expression ')' { $value=new SparqlLang($expression.value); }
 |	LANGMATCHES '(' lit = expression ',' lang = expression ')' { $value=new SparqlLangMatches($lit.value, $lang.value); }
-|	DATATYPE '(' expression ')' 	 { $value=new SparqlDataType($expression.value, q.Store.NodeGenerator); }
+|	DATATYPE '(' expression ')' 	 { $value=new SparqlDataType($expression.value); }
 |	BOUND  '(' var ')'    { $value=new SparqlBound($var.value); }
 |	IRI '(' expression ')' { $value=new SparqlUri($expression.value, q); }
 |	URI '(' expression ')'  { $value=new SparqlUri($expression.value,q); }
@@ -277,14 +278,14 @@ WHERE groupGraphPattern { $value.SetWhere($groupGraphPattern.value); };
 |	substringExpression  { $value=$substringExpression.value; }
 |	STRLEN '(' expression ')'  { $value=new SparqlStrLength($expression.value); }
 |	strReplaceExpression { $value=$strReplaceExpression.value; }
-|	UCASE '(' expression ')' 	{ $value=new SparqlUcase($expression.value, q.Store.NodeGenerator); }
-|	LCASE '(' expression ')' 	 { $value=new SparqlLCase($expression.value, q.Store.NodeGenerator); }
+|	UCASE '(' expression ')' 	{ $value=new SparqlUcase($expression.value); }
+|	LCASE '(' expression ')' 	 { $value=new SparqlLCase($expression.value); }
 |	ENCODE_FOR_URI '(' expression ')' { $value=new SparqlEncodeForUri($expression.value, q); }
 |	CONTAINS '(' lit = expression ',' pattern = expression ')'   { $value=new SparqlContains($lit.value, $pattern.value); }
 |	STRSTARTS '(' lit = expression ',' pattern = expression ')' { $value=new SparqlStrStarts($lit.value, $pattern.value); } 
 |	STRENDS '(' lit = expression ',' pattern = expression ')' { $value=new SparqlStrEnds($lit.value, $pattern.value); } 
-|	STRBEFORE '('  lit = expression ',' pattern =  expression ')' { $value=new SparqlStrBefore($lit.value, $pattern.value, q.Store.NodeGenerator); } 
-|	STRAFTER '('  lit = expression ',' pattern = expression ')' { $value=new SparqlStrAfter($lit.value, $pattern.value, q.Store.NodeGenerator); } 
+|	STRBEFORE '('  lit = expression ',' pattern =  expression ')' { $value=new SparqlStrBefore($lit.value, $pattern.value); } 
+|	STRAFTER '('  lit = expression ',' pattern = expression ')' { $value=new SparqlStrAfter($lit.value, $pattern.value); } 
 |	YEAR '(' expression ')'  { $value=new SparqlYear($expression.value); }
 |	MONTH '(' expression ')' { $value=new SparqlMonth($expression.value); }
 |	DAY '(' expression ')'{ $value=new SparqlDay($expression.value); } 
@@ -292,9 +293,9 @@ WHERE groupGraphPattern { $value.SetWhere($groupGraphPattern.value); };
 |	MINUTES '(' expression ')'{ $value=new SparqlMinutes($expression.value); } 
 |	SECONDS '(' expression ')'  { $value=new SparqlSeconds($expression.value); }
 |	TIMEZONE '(' expression ')' { $value=new SparqlTimeZone($expression.value); }
-|	TZ '(' expression ')' { $value=new SparqlTz($expression.value,q.Store.NodeGenerator); }
+|	TZ '(' expression ')' { $value=new SparqlTz($expression.value); }
 |	NOW NIL  { $value=new SparqlNow(); }
-|	UUID NIL 	{ $value=new SparqlUuid(q.Store.NodeGenerator); }
+|	UUID NIL 	{ $value=new SparqlUuid(); }
 |	STRUUID NIL 	 { $value=new SparqlStrUuid(); }
 |	MD5 '(' expression ')' { $value=new SparqlMD5($expression.value); }
 |	SHA1 '(' expression ')' { $value=new SparqlSHA1($expression.value); }
@@ -303,7 +304,7 @@ WHERE groupGraphPattern { $value.SetWhere($groupGraphPattern.value); };
 |	SHA512 '(' expression ')' { $value=new SparqlSHA512($expression.value); }
 |	COALESCE expressionList 	 { $value=new SparqlCoalesce($expressionList.value); }
 |	IF '(' condit=expression ',' ifTrue=expression ',' ifFalse= expression ')'  { $value=new SparqlIf($condit.value, $ifTrue.value, $ifFalse.value); } 
-|	STRLANG '(' lit=expression ',' lang=expression ')'   { $value=new SparqlStringLang($lit.value, $lang.value, q.Store.NodeGenerator); } 
+|	STRLANG '(' lit=expression ',' lang=expression ')'   { $value=new SparqlStringLang($lit.value, $lang.value); } 
 |	STRDT '(' lit= expression ',' type = expression ')'  { $value=new SparqlStrDataType($lit.value, $type.value,q.Store.NodeGenerator); } 
 |	SAMETERM '(' t1=expression ',' t2=expression ')'  { $value=new SparqlSameTerm($t1.value, $t2.value); } 
 |	ISIRI '(' expression ')' { $value=new SparqlIsIri($expression.value); }
@@ -316,7 +317,7 @@ WHERE groupGraphPattern { $value.SetWhere($groupGraphPattern.value); };
 |	notExistsFunc { $value=$notExistsFunc.value; };
  regexExpression returns [SparqlRegexExpression value] : REGEX  {$value=new SparqlRegexExpression();}  '(' v = expression {$value.SetVariableExpression($v.value);} ',' regex = expression ( ',' parameters = expression {$value.SetParameters($parameters.value);} )? ')' {$value.SetRegex($regex.value);};
  substringExpression returns [SparqlSubstringExpression value] :  SUBSTR {$value=new SparqlSubstringExpression();} '(' lit= expression {$value.SetString($lit.value);} ',' startExp = expression {$value.SetStartPosition($startExp.value);} ( ',' length= expression {$value.SetLength($length.value);} )? ')';
- strReplaceExpression returns [SparqlReplaceStrExpression value] : REPLACE {$value=new SparqlReplaceStrExpression();} '(' lit = expression  {$value.SetString($lit.value);} ',' pattern = expression  {$value.SetPattern($lit.value);}',' replacement = expression {$value.SetReplacement($replacement.value);} ( ',' parameters= expression {$value.SetParameters($parameters.value);} )? ')';
+ strReplaceExpression returns [SparqlReplaceStrExpression value] : REPLACE {$value=new SparqlReplaceStrExpression();} '(' lit = expression  {$value.SetString($lit.value);} ',' pattern = expression  {$value.SetPattern($lit.value);}',' replacement = expression {$value.SetReplacement($replacement.value);} ( ',' parameters= expression {$value.SetParameters($parameters.value);} )? {$value.Create();} ')';
  existsFunc returns [SparqlExistsExpression value] : EXISTS groupGraphPattern {$value=new SparqlExistsExpression($groupGraphPattern.value);};
  notExistsFunc  returns [SparqlNotExistsExpression value] : NOT EXISTS groupGraphPattern  {$value=new SparqlNotExistsExpression($groupGraphPattern.value);};
  aggregate returns [SparqlAggregateExpression value] :   
@@ -352,7 +353,7 @@ WHERE groupGraphPattern { $value.SetWhere($groupGraphPattern.value); };
  :  TRUE { $value=true; } 
  |	FALSE { $value=false; } ;
  string : STRING_LITERAL1 | STRING_LITERAL2 | STRING_LITERAL_LONG1 | STRING_LITERAL_LONG2;
- iri returns [ObjectVariants value] : iriString { $value=q.Store.NodeGenerator.GetUri($iriString.value);};
+ iri returns [ObjectVariants value] : iriString { $value=new OV_iri($iriString.value);};
  iriString returns [string value] : IRIREF {$value=$IRIREF.text.Substring(1, $IRIREF.text.Length-2);} 
  |	PNAME_LN {$value=q.prolog.GetUriFromPrefixed($PNAME_LN.text); } 
  | PNAME_NS {$value=q.prolog.GetUriFromPrefixedNamespace($PNAME_NS.text); };

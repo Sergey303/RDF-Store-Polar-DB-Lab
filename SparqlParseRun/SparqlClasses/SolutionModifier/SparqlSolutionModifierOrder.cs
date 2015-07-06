@@ -10,5 +10,9 @@ namespace SparqlParseRun.SparqlClasses.SolutionModifier
         {
            return this.Aggregate(enumerable, (current, order) => order.Order(current));
         }
+        public IEnumerable<SparqlResult> Order4Grouped(IEnumerable<SparqlResult> enumerable)
+        {
+           return this.Aggregate(enumerable, (current, order) => order.Order4Grouped(current));
+        }
     }
 }

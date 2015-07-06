@@ -9,12 +9,13 @@ namespace SparqlParseRun.SparqlClasses
     {
         //private SparqlGraphPattern sparqlGraphPattern;
 
-        public SparqlExistsExpression(ISparqlGraphPattern sparqlGraphPattern)
+        public SparqlExistsExpression(ISparqlGraphPattern sparqlGraphPattern)   : base(VariableDependenceGroupLevel.SimpleVariable, true)
         {
             // TODO: Complete member initialization
             //this.sparqlGraphPattern = sparqlGraphPattern;
-            SetExprType(ObjectVariantEnum.Bool);
-            TypedOperator = variableBinding => new OV_bool(sparqlGraphPattern.Run(Enumerable.Repeat(variableBinding, 1)).Any()); 
+            //SetExprType(ObjectVariantEnum.Bool);
+            Operator = variableBinding => sparqlGraphPattern.Run(Enumerable.Repeat(variableBinding, 1)).Any();
+            TypedOperator = variableBinding => new OV_bool(Operator(variableBinding));
         }
 
     }
