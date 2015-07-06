@@ -19,7 +19,7 @@ namespace GoTripleStore
             int npersons = 40000;
             PaEntry.bufferBytes = 200000000;
 
-            bool toload = false;
+            bool toload = true;
             toload = true;
             if (toload)
             {

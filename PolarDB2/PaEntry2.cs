@@ -54,8 +54,8 @@ namespace PolarDB2
         {
             if (tp.Vid != PTypeEnumeration.sequence) throw new Exception("Err in TPath formula: Count() can't be applyed to structure of vid " + tp.Vid);
             // Для внешних последовательностей длину берем из объекта cell
-            if (this.offset == this.cell.Root.offset) return this.cell.nElements;
-
+            if (this.offset == this.cell.Root.offset) return this.cell.NElements;
+            // Для остальных - двойное целое вначале
             return cell.ReadLong(this.offset);
         }
         public PaEntry2 Element(long index)
@@ -89,24 +89,7 @@ namespace PolarDB2
         }
         public IEnumerable<PaEntry2> Elements()
         {
-            if (tp.Vid != PTypeEnumeration.sequence) throw new Exception("Err in TPath formula: Elements() can't be applyed to structure of vid " + tp.Vid);
-            PTypeSequence mts = (PTypeSequence)tp;
-            PType t = mts.ElementType;
-            if (t.Vid == PTypeEnumeration.character) throw new Exception("Method Elements() can't be applied to strings");
-            //cell.SetOffset(this.offset);
-            //long llen = cell.br.ReadInt64();
-            long llen = this.Count();
-            if (llen > 0)
-            {
-                long offset = cell.GetOffset();
-                PaEntry2 entry = new PaEntry2(t, offset, cell);
-                for (long ii = 0; ii < llen; ii++)
-                {
-                    entry.offset = offset;
-                    if (ii < llen - 1) offset = entry.Skip(t, offset);
-                    yield return entry;
-                }
-            }
+            return Elements(0, this.Count());
         }
         public IEnumerable<PaEntry2> Elements(long start, long number)
         {
@@ -141,34 +124,31 @@ namespace PolarDB2
         public int Tag()
         {
             if (tp.Vid != PTypeEnumeration.union) throw new Exception("Err: Tag() needs union");
-            cell.SetOffset(offset);
-            return cell.br.ReadByte();
+            return cell.ReadByte(this.offset);
         }
         public PaEntry2 UElement()
         {
             int tag = this.Tag();
             PTypeUnion ptu = ((PTypeUnion)this.tp);
-            if (tag < 0 || tag >= ptu.variants.Length) throw new Exception("Err: tag is out of bound");
-            PType tel = ptu.variants[tag].Type;
+            if (tag < 0 || tag >= ptu.Variants.Length) throw new Exception("Err: tag is out of bound");
+            PType tel = ptu.Variants[tag].Type;
             return new PaEntry2(tel, offset + 1, cell);
         }
         public PaEntry2 UElementUnchecked(int tag)
         {
             PTypeUnion ptu = ((PTypeUnion)this.tp);
-            if (tag < 0 || tag >= ptu.variants.Length) throw new Exception("Err: tag is out of bound");
-            PType tel = ptu.variants[tag].Type;
+            if (tag < 0 || tag >= ptu.Variants.Length) throw new Exception("Err: tag is out of bound");
+            PType tel = ptu.Variants[tag].Type;
             return new PaEntry2(tel, offset + 1, cell);
         }
 
         public PValue GetValue()
         {
-            this.cell.SetOffset(offset);
-            return new PValue(this.tp, this.offset, GetPObject(tp, cell.br));
+            return new PValue(this.tp, this.offset, Get());
         }
         public object Get()
         {
-            this.cell.SetOffset(offset);
-            return GetPObject(tp, cell.br);
+            return cell.GetPObject(tp, this.offset);
         }
         // Следующие два метода не стоит применять в режимах отложенных вычислений. Есть побочный эффект
         public IEnumerable<object> ElementValues()

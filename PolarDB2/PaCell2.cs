@@ -34,6 +34,7 @@ namespace PolarDB2
         }
 
         // ============ Чтения данных ============
+        public long NElements { get { return this.NElements; } }
         public string ReadString(long off, out long offout)
         {
             this.SetOffset(off);
@@ -54,13 +55,18 @@ namespace PolarDB2
             int v = this.br.ReadByte();
             return v;
         }
+        public object GetPObject(PType typ, long off)
+        {
+            this.SetOffset(off);
+            return GetPO(typ, this.br);
+        }
         /// <summary>
         /// Читает P-объект из бинарного ридера, начиная с текущего места
         /// </summary>
         /// <param name="typ"></param>
         /// <param name="br"></param>
         /// <returns></returns>
-        private static object GetPObject(PType typ, System.IO.BinaryReader br)
+        internal static object GetPO(PType typ, System.IO.BinaryReader br)
         {
             switch (typ.Vid)
             {
@@ -91,7 +97,7 @@ namespace PolarDB2
                         object[] fields = new object[r_tp.Fields.Length];
                         for (int i = 0; i < r_tp.Fields.Length; i++)
                         {
-                            fields[i] = GetPObject(r_tp.Fields[i].Type, br);
+                            fields[i] = GetPO(r_tp.Fields[i].Type, br);
                         }
                         return fields;
                     }
@@ -101,7 +107,7 @@ namespace PolarDB2
                         PType tel = mts.ElementType;
                         long llen = br.ReadInt64();
                         object[] els = new object[llen];
-                        for (long ii = 0; ii < llen; ii++) els[ii] = GetPObject(tel, br);
+                        for (long ii = 0; ii < llen; ii++) els[ii] = GetPO(tel, br);
                         return els;
                     }
                 case PTypeEnumeration.union:
@@ -109,7 +115,7 @@ namespace PolarDB2
                         PTypeUnion mtu = (PTypeUnion)typ;
                         int v = br.ReadByte();
                         PType mt = mtu.Variants[v].Type;
-                        return new object[] { v, GetPObject(mt, br) };
+                        return new object[] { v, GetPO(mt, br) };
                     }
 
                 default: throw new Exception("Err in TPath Get(): type is not implemented " + typ.Vid);
