@@ -55,10 +55,18 @@ namespace PolarDB2
             int v = this.br.ReadByte();
             return v;
         }
+        public object GetPObject(PType typ, long off, out long offout)
+        {
+            this.SetOffset(off);
+            object v = GetPO(typ, this.br);
+            offout = this.GetOffset();
+            return v;
+        }
         public object GetPObject(PType typ, long off)
         {
             this.SetOffset(off);
-            return GetPO(typ, this.br);
+            object v = GetPO(typ, this.br);
+            return v;
         }
         /// <summary>
         /// Читает P-объект из бинарного ридера, начиная с текущего места

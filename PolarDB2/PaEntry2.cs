@@ -93,9 +93,9 @@ namespace PolarDB2
         }
         public IEnumerable<PaEntry2> Elements(long start, long number)
         {
+            if (tp.Vid != PTypeEnumeration.sequence) throw new Exception("Err in TPath formula: Elements() can't be applyed to structure of vid " + tp.Vid);
             if (number > 0)
             {
-                if (tp.Vid != PTypeEnumeration.sequence) throw new Exception("Err in TPath formula: Elements() can't be applyed to structure of vid " + tp.Vid);
                 PTypeSequence mts = (PTypeSequence)tp;
                 PType t = mts.ElementType;
                 PaEntry2 element = this.Element(start);
@@ -150,54 +150,30 @@ namespace PolarDB2
         {
             return cell.GetPObject(tp, this.offset);
         }
-        // Следующие два метода не стоит применять в режимах отложенных вычислений. Есть побочный эффект
+        // Следующие два метода возможно имеют побочный эффект
         public IEnumerable<object> ElementValues()
         {
-            if (tp.Vid != PTypeEnumeration.sequence) throw new Exception("Err in TPath formula: ElementValues() can't be applyed to structure of vid " + tp.Vid);
-            PType t = ((PTypeSequence)tp).ElementType;
-            long ll = this.Count();
-            if (ll == 0) yield break;
-            PaEntry2 first = this.Element(0);
-            this.cell.SetOffset(first.offset);
-            for (long ii = 0; ii < ll; ii++)
-            {
-                yield return GetPObject(t, this.cell.br);
-            }
+            return ElementValues(0, this.Count());
         }
         public IEnumerable<object> ElementValues(long start, long number)
         {
             if (tp.Vid != PTypeEnumeration.sequence) throw new Exception("Err in TPath formula: ElementValues() can't be applyed to structure of vid " + tp.Vid);
             PType t = ((PTypeSequence)tp).ElementType;
-            //if (!t.HasNoTail) throw new Exception("Method ElementValues() can't be applied to tail types");
             long ll = this.Count();
             // Надо проверить соответствие диапазона количеству элементов
             if (start < 0 || start + number > ll) throw new Exception("Err: Diapason is out of range");
             if (number == 0) yield break;
             PaEntry2 first = this.Element(start);
-            this.cell.SetOffset(first.offset);
+            long off = first.offset;
             for (long ii = 0; ii < number; ii++)
             {
-                yield return GetPObject(t, this.cell.br);
+                long offout;
+                object v = cell.GetPObject(t, off, out offout);
+                off = offout;
+                yield return v;
             }
         }
-        // depricated: недодуманная идея, использовать не рекомендуется
-        public void Scan(Func<object, bool> handler)
-        {
-            if (tp.Vid != PTypeEnumeration.sequence) throw new Exception("Err in TPath formula: ElementValues() can't be applyed to structure of vid " + tp.Vid);
-            PTypeSequence mts = (PTypeSequence)tp;
-            PType t = mts.ElementType;
-            long ll = this.Count();
-            if (ll == 0) return;
-            PaEntry2 first = this.Element(0);
-            this.cell.SetOffset(first.offset);
-            for (long ii = 0; ii < ll; ii++)
-            {
-                object pvalue = GetPObject(t, this.cell.br);
-                bool ok = handler(pvalue);
-                if (!ok) throw new Exception("Scan handler catched 'false' at element " + ii);
-            }
-        }
-        // Возможно, уже лучше: передавать нужно и offset
+        // Основной сканер: быстро пробегаем по элементам, обрабатываем пары (offset, pobject), возвращаем true
         public void Scan(Func<long, object, bool> handler)
         {
             if (tp.Vid != PTypeEnumeration.sequence) throw new Exception("Err in TPath formula: ElementValues() can't be applyed to structure of vid " + tp.Vid);
@@ -206,12 +182,13 @@ namespace PolarDB2
             long ll = this.Count();
             if (ll == 0) return;
             PaEntry2 first = this.Element(0);
-            this.cell.SetOffset(first.offset);
+            long off = first.offset;
             for (long ii = 0; ii < ll; ii++)
             {
-                long off = this.cell.GetOffset(); //this.offset;
-                object pvalue = GetPObject(t, this.cell.br);
-                bool ok = handler(off, pvalue);
+                long offout;
+                object pobject = cell.GetPObject(t, off, out offout);
+                bool ok = handler(off, pobject);
+                off = offout;
                 if (!ok) throw new Exception("Scan handler catched 'false' at element " + ii);
             }
         }
@@ -222,10 +199,6 @@ namespace PolarDB2
             if (tp.HasNoTail) return off + tp.HeadSize;
             if (tp.Vid == PTypeEnumeration.sstring)
             {
-                //cell.SetOffset(off);
-                //int len = cell.br.ReadInt32();
-                //char[] chrs = cell.br.ReadChars(len);
-                //return cell.fs.Position;
                 long offout;
                 cell.ReadString(off, out offout);
                 return offout;
@@ -244,8 +217,6 @@ namespace PolarDB2
             {
                 PTypeSequence mts = (PTypeSequence)tp;
                 PType tel = mts.ElementType;
-                //cell.SetOffset(off);
-                //long llen = cell.br.ReadInt64();
                 long llen = cell.ReadLong(off);
                 if (tel.HasNoTail) return off + 8 + llen * tel.HeadSize;
                 long element_offset = off + 8;
@@ -255,8 +226,6 @@ namespace PolarDB2
             if (tp.Vid == PTypeEnumeration.union)
             {
                 PTypeUnion mtu = (PTypeUnion)tp;
-                //cell.SetOffset(off);
-                //int v = cell.br.ReadByte();
                 int v = cell.ReadByte(off);
                 if (v < 0 || v >= mtu.Variants.Length) throw new Exception("Err in Skip (TPath-formula): wrong variant for union " + v);
                 PType mt = mtu.Variants[v].Type;
