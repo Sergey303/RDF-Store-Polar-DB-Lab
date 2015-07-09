@@ -20,8 +20,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RDFTurtleParser", "..\RDFTu
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VirtuosoBigData", "..\VirtuosoBigData\VirtuosoBigData.csproj", "{E00A8E14-E91D-48BE-960B-51E8A6EAB210}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PolarDB2", "..\PolarDB2\PolarDB2.csproj", "{1F26EB56-4D8E-454C-AD0E-502D00C99B7F}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PolarDB", "..\..\PolarDB\PolarDB.csproj", "{907BB4AF-FBC9-4A1E-8F80-194AF9337AA4}"
 EndProject
 Global
@@ -104,16 +102,6 @@ Global
 		{E00A8E14-E91D-48BE-960B-51E8A6EAB210}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{E00A8E14-E91D-48BE-960B-51E8A6EAB210}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{E00A8E14-E91D-48BE-960B-51E8A6EAB210}.Release|x86.ActiveCfg = Release|Any CPU
-		{1F26EB56-4D8E-454C-AD0E-502D00C99B7F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{1F26EB56-4D8E-454C-AD0E-502D00C99B7F}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{1F26EB56-4D8E-454C-AD0E-502D00C99B7F}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
-		{1F26EB56-4D8E-454C-AD0E-502D00C99B7F}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
-		{1F26EB56-4D8E-454C-AD0E-502D00C99B7F}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{1F26EB56-4D8E-454C-AD0E-502D00C99B7F}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{1F26EB56-4D8E-454C-AD0E-502D00C99B7F}.Release|Any CPU.Build.0 = Release|Any CPU
-		{1F26EB56-4D8E-454C-AD0E-502D00C99B7F}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
-		{1F26EB56-4D8E-454C-AD0E-502D00C99B7F}.Release|Mixed Platforms.Build.0 = Release|Any CPU
-		{1F26EB56-4D8E-454C-AD0E-502D00C99B7F}.Release|x86.ActiveCfg = Release|Any CPU
 		{907BB4AF-FBC9-4A1E-8F80-194AF9337AA4}.Debug|Any CPU.ActiveCfg = Debug|x86
 		{907BB4AF-FBC9-4A1E-8F80-194AF9337AA4}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
 		{907BB4AF-FBC9-4A1E-8F80-194AF9337AA4}.Debug|Mixed Platforms.Build.0 = Debug|x86
