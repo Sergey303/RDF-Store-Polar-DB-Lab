@@ -58,6 +58,7 @@
     <Compile Include="NameTableUniversal.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ScaleCascadingPaCell.cs" />
     <Compile Include="ScaleCell.cs" />
     <Compile Include="ScaleInMemory.cs" />
     <Compile Include="ScaleMemory.cs" />

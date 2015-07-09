@@ -56,6 +56,7 @@
     <Compile Include="RamListOftriplesStore.cs" />
     <Compile Include="RdfNamedGraphs.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ScaleCascading.cs" />
     <Compile Include="StoreCascadingInt.cs" />
     <Compile Include="GraphCascadingInt.cs" />
   </ItemGroup>
