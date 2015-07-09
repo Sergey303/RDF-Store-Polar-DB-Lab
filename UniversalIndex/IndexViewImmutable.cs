@@ -76,7 +76,7 @@ namespace Task15UniversalIndex
             if (Table.Count() > 0)
             {
                 PaEntry entry = Table.Element(0);
-                index_cell.Root.Scan(ob =>
+                index_cell.Root.Scan((off, ob) =>
                     {
                         entry.offset = (long)ob;
                         int c = (int)((object[])entry.Field(1).Get())[0];
