@@ -36,7 +36,8 @@
     <Reference Include="Antlr4.Runtime.net45">
       <HintPath>..\dll\Antlr4.Runtime.net45.dll</HintPath>
     </Reference>
-    <Reference Include="PolarDB">
+    <Reference Include="PolarDB, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\dll\PolarDB.dll</HintPath>
     </Reference>
     <Reference Include="System" />
@@ -44,7 +45,6 @@
     <Reference Include="System.Web" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
   </ItemGroup>
@@ -56,7 +56,6 @@
     <Compile Include="RamListOftriplesStore.cs" />
     <Compile Include="RdfNamedGraphs.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ScaleCascading.cs" />
     <Compile Include="StoreCascadingInt.cs" />
     <Compile Include="GraphCascadingInt.cs" />
   </ItemGroup>

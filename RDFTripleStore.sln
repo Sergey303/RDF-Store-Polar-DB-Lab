@@ -26,6 +26,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VirtuosoBigData", "Virtuoso
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SparqlEndPointWebApi", "SparqlEnfdPointWebApi\SparqlEndPointWebApi.csproj", "{434352F8-D5F8-41F8-9967-F3C74C994104}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnitTest", "UnitTest\UnitTest.csproj", "{001C512A-4090-4ADE-9885-12A35F9ACDB0}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -68,6 +70,10 @@ Global
 		{434352F8-D5F8-41F8-9967-F3C74C994104}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{434352F8-D5F8-41F8-9967-F3C74C994104}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{434352F8-D5F8-41F8-9967-F3C74C994104}.Release|Any CPU.Build.0 = Release|Any CPU
+		{001C512A-4090-4ADE-9885-12A35F9ACDB0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{001C512A-4090-4ADE-9885-12A35F9ACDB0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{001C512A-4090-4ADE-9885-12A35F9ACDB0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{001C512A-4090-4ADE-9885-12A35F9ACDB0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
