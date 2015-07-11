@@ -16,10 +16,10 @@ namespace GoTripleStore
             System.Diagnostics.Stopwatch sw = new System.Diagnostics.Stopwatch();
             Random rnd = new Random();
             TriplesGraphInt g = new TriplesGraphInt(path);
-            int npersons = 40000;
+            int npersons = 200000;
             PaEntry.bufferBytes = 200000000;
 
-            bool toload = true;
+            bool toload = false;
             toload = true;
             if (toload)
             {
