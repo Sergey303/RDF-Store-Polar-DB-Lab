@@ -101,6 +101,6 @@ namespace Task15UniversalIndex
         {
             foreach (var v in scell.Root.ElementValues()) ;
         }
-
+        public void ActivateCache() { scell.ActivateCache(); }
     }
 }

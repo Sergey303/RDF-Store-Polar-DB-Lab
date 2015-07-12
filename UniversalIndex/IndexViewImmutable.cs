@@ -45,6 +45,8 @@ namespace Task15UniversalIndex
             });
         }
         public void Warmup() { foreach (var v in index_cell.Root.ElementValues()); }
+        public void ActivateCache() { index_cell.ActivateCache(); if (Scale != null) Scale.ActivateCache(); }
+            
 
         public IEnumerable<PaEntry> GetAllByKey(long start, long number, Tkey key)
         {

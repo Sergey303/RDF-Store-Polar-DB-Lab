@@ -35,7 +35,14 @@ namespace Task15UniversalIndex
                 table_cell.Root.AppendElement(v);
             }
         }
-        public void Warmup() { foreach (var v in table_cell.Root.ElementValues()); }
+        public void Warmup() 
+        {
+            foreach (var v in table_cell.Root.ElementValues()); 
+        }
+        public void ActivateCache()
+        {
+            table_cell.ActivateCache();
+        }
         List<IIndexCommon> indexes = new List<IIndexCommon>();
         // По имеющейса опорной таблице и коннекторам индексов (в списке indexes), (заново) построить индексы 
         public void BuildIndexes() { foreach (var index in indexes) index.Build(); }

@@ -13,10 +13,11 @@ namespace GoTripleStore
         public static void Main() // Main9()
         {
             string path = "../../../Databases/";
+            PolarDB.MachineInfo.SetPathForTmp(path);
             System.Diagnostics.Stopwatch sw = new System.Diagnostics.Stopwatch();
             Random rnd = new Random();
             TriplesGraphInt g = new TriplesGraphInt(path);
-            int npersons = 200000;
+            int npersons = 400000;
             PaEntry.bufferBytes = 200000000;
 
             bool toload = false;

@@ -205,6 +205,8 @@ namespace Task15UniversalIndex
             CreateDiscaleDictionary();
         }
         void Warmup() { throw new NotImplementedException("in IndexCascadingImmutable"); }
+        public void ActivateCache() { index_cell.ActivateCache(); groups_index.ActivateCache(); }
+
         // Второй вариант группового словаря: получаем пару - диапазон и ScaleInMemory
         private Dictionary<int, Tuple<Diapason, ScaleInMemory>> gr_discale = null;
         public void CreateDiscaleDictionary()

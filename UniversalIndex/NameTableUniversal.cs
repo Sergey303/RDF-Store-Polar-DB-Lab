@@ -55,6 +55,12 @@ namespace Task15UniversalIndex
             table.RegisterIndex(s_index);
         }
         public void Warmup() { table.Warmup(); offset_array.Warmup(); s_index_array.Warmup(); }
+        public void ActivateCache()
+        {
+            table.ActivateCache();
+            offset_array.ActivateCache();
+            s_index_array.ActivateCache();
+        }
         public void Clear() 
         { 
             table.Clear(); 

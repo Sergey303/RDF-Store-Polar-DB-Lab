@@ -70,8 +70,7 @@ namespace Task15UniversalIndex
                 return new Diapason() { start = start, numb = number };
             }
         }
-        public void Warmup()
-        {
-        }
+        public void Warmup() {  }
+        public void ActivateCache() { }
     }
 }

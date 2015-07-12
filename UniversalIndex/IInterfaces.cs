@@ -59,5 +59,6 @@ namespace Task15UniversalIndex
         void Build(long n);
         Diapason GetDiapason(int key);
         void Warmup();
+        void ActivateCache();
     }
 }
