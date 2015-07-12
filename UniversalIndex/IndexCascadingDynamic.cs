@@ -58,6 +58,7 @@ namespace Task15UniversalIndex
         }
         public void CreateDiscaleDictionary() { index_arr.CreateDiscaleDictionary(); }
         public void Warmup() { }
+        public void ActivateCache() { index_arr.ActivateCache(); }
 
         public void OnAppendElement(PolarDB.PaEntry entry) { throw new NotImplementedException(); }
         public void DropIndex() { throw new NotImplementedException(); }

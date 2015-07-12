@@ -84,6 +84,13 @@ namespace GoTripleStore
             ps_index.CreateDiscaleDictionary();
             po_index.CreateDiscaleDictionary();
         }
+        public void ActivateCache()
+        {
+            nametable.ActivateCache();
+            table.ActivateCache();
+            ps_index.ActivateCache();
+            po_index.ActivateCache();
+        }
         public int Code(string s) { return nametable.GetCodeByString(s); }
         public string Decode(int c) { return nametable.GetStringByCode(c); }
         
