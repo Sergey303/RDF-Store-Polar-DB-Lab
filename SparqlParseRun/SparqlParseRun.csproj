@@ -95,6 +95,9 @@
     <Compile Include="SparqlClasses\GraphPattern\Triples\Path\SparqlPathSequence.cs" />
     <Compile Include="SparqlClasses\GraphPattern\Triples\Path\SparqlPathTranslator.cs" />
     <Compile Include="SparqlClasses\GraphPattern\Triples\Path\SparqlPathZeroOrMany.cs" />
+    <Compile Include="SparqlClasses\Query\Query.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="SparqlClasses\Query\Result\CollectionEqualityComparer.cs" />
     <Compile Include="SparqlClasses\Query\Result\RDFGraphSerialization.cs" />
     <Compile Include="SparqlClasses\Query\Result\SparqlResult.cs" />
@@ -184,7 +187,6 @@
     <Compile Include="SparqlClasses\GraphPattern\SparqlUnionGraphPattern.cs" />
     <Compile Include="SparqlClasses\Expressions\SparqlVarExpression.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SparqlClasses\Query\Query.cs" />
     <Compile Include="SparqlClasses\SolutionModifier\SparqlSelect.cs" />
     <Compile Include="SparqlClasses\Update\SparqlGrpahRefTypeEnum.cs" />
     <Compile Include="SparqlClasses\Update\SparqlUpadate.cs" />
