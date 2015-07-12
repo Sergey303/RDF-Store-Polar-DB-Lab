@@ -9,6 +9,8 @@ namespace UnitTest
         [TestMethod]
         public void TestMethod1()
         {
+            double five = 5.0;
+            Assert.AreEqual(five,5);
         }
     }
 }
