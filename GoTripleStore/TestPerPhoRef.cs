@@ -17,11 +17,11 @@ namespace GoTripleStore
             System.Diagnostics.Stopwatch sw = new System.Diagnostics.Stopwatch();
             Random rnd = new Random();
             TriplesGraphInt g = new TriplesGraphInt(path);
-            int npersons = 400;
-            PaEntry.bufferBytes = 200000000;
+            int npersons = 40000;
+            PaEntry.bufferBytes = 200 * 1000000;
 
             bool toload = false;
-            toload = true;
+            //toload = true;
             if (toload)
             {
                 sw.Restart();
@@ -60,7 +60,11 @@ namespace GoTripleStore
                 sw.Stop();
                 Console.WriteLine("Load ok. duration={0}", sw.ElapsedMilliseconds);
             }
-            else { g.Warmup(); g.Start(); }
+            else
+            {
+                g.Start();
+                g.ActivateCache();
+            }
 
             int ic = g.Code("person3322");
             Console.WriteLine("person3322={0}", ic);

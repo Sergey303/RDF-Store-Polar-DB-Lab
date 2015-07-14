@@ -124,12 +124,14 @@ namespace GoTripleStore
 
             sw.Stop();
             Console.WriteLine("Load data and nametable ok. Duration={0}", sw.ElapsedMilliseconds);
+
             sw.Restart();
 
             ps_index.Build();
 
             sw.Stop();
             Console.WriteLine("ps_index.Build() ok. Duration={0}", sw.ElapsedMilliseconds);
+            
             sw.Restart();
 
             po_index.Build();
@@ -137,6 +139,11 @@ namespace GoTripleStore
             sw.Stop();
             Console.WriteLine("Build index ok. Duration={0}", sw.ElapsedMilliseconds);
             sw.Restart();
+        }
+        public void TestBuild()
+        {
+            Console.WriteLine("TestBuild");
+            po_index.Build();
         }
 
         private void ProcessPortion(List<Tuple<string, string, ObjectVariants>> buff)

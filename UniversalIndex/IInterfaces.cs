@@ -27,6 +27,7 @@ namespace Task15UniversalIndex
         IEnumerable<PaEntry> GetAllByKey(Tkey key);
         long Count();
         void Warmup();
+        void ActivateCache();
         // Доступ к индексному массиву
         PaCell IndexCell { get; }
         IScale Scale { get; set; }
@@ -40,6 +41,7 @@ namespace Task15UniversalIndex
         void DeleteEntry(PaEntry record);
         IEnumerable<PaEntry> GetUndeleted(IEnumerable<PaEntry> elements);
         void Warmup();
+        void ActivateCache();
     }
     public interface IIndexCommon
     {
