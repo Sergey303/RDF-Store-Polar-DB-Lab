@@ -24,49 +24,49 @@ namespace Task15UniversalIndex
         }
         public Func<object, int> Key1Producer { get; set; }
         public Func<object, Tkey> Key2Producer { get; set; }
-        public Func<Tkey, int> Half2Producer { get; set; } // Второй ключ -> полуключ (возможно тождественное)
+        public Func<Tkey, int> Half2Producer { get; set; } // Второй ключ -> полуключ (возможно тождественное), если Half2Producer==null, значит используется ключ
         public IBearingTableImmutable Table { get; set; }
 
-        internal class GroupElement : IComparable
-        {
-            public int Key1 { get { return this.key1; } }
-            public int HKey2 { get { return this.hkey2; } }
-            private int key1;
-            private int hkey2;
-            private Func<Tkey> GetKey2 = null;
-            internal GroupElement(int key1, int hkey2, Func<Tkey> getkey2)
-            {
-                this.key1 = key1;
-                this.hkey2 = hkey2;
-                this.GetKey2 = getkey2;
-            }
-            private bool key2exists = false;
-            private Tkey key2;
-            private Tkey Key2
-            {
-                get
-                {
-                    if (!key2exists)
-                    {
-                        key2exists = true;
-                        key2 = GetKey2();
-                    }
-                    return key2;
-                }
-            }
-            public int CompareTo(object obj)
-            {
-                GroupElement rec = (GroupElement)obj;
-                int cmp = key1.CompareTo(rec.Key1);
-                if (cmp != 0) return cmp;
-                cmp = hkey2.CompareTo(rec.HKey2);
-                if (cmp != 0) return cmp;
-                //Tkey key2 = GetKey2();
-                //cmp = key2.CompareTo(rec.GetKey2());
-                cmp = Key2.CompareTo(rec.Key2);
-                return cmp;
-            }
-        }
+        //internal class GroupElement : IComparable
+        //{
+        //    public int Key1 { get { return this.key1; } }
+        //    public int HKey2 { get { return this.hkey2; } }
+        //    private int key1;
+        //    private int hkey2;
+        //    private Func<Tkey> GetKey2 = null;
+        //    internal GroupElement(int key1, int hkey2, Func<Tkey> getkey2)
+        //    {
+        //        this.key1 = key1;
+        //        this.hkey2 = hkey2;
+        //        this.GetKey2 = getkey2;
+        //    }
+        //    private bool key2exists = false;
+        //    private Tkey key2;
+        //    private Tkey Key2
+        //    {
+        //        get
+        //        {
+        //            if (!key2exists)
+        //            {
+        //                key2exists = true;
+        //                key2 = GetKey2();
+        //            }
+        //            return key2;
+        //        }
+        //    }
+        //    public int CompareTo(object obj)
+        //    {
+        //        GroupElement rec = (GroupElement)obj;
+        //        int cmp = key1.CompareTo(rec.Key1);
+        //        if (cmp != 0) return cmp;
+        //        cmp = hkey2.CompareTo(rec.HKey2);
+        //        if (cmp != 0) return cmp;
+        //        //Tkey key2 = GetKey2();
+        //        //cmp = key2.CompareTo(rec.GetKey2());
+        //        cmp = Key2.CompareTo(rec.Key2);
+        //        return cmp;
+        //    }
+        //}
 
         // Если не найден, то будет Diapason.Empty
         public Diapason GetDiapasonByKey1(int key1)
@@ -161,8 +161,46 @@ namespace Task15UniversalIndex
                 .Where(two => !(bool)((object[])two)[0]) // Проверка на неуничтоженность
                 .Select(two => ((object[])((object[])two)[1]));
         }
+
+        internal class HKeyKey : IComparable
+        {
+            public int HKey2 { get { return this.hkey2; } }
+            private int hkey2;
+            private Func<Tkey> GetKey2 = null;
+            internal HKeyKey(int hkey2, Func<Tkey> getkey2)
+            {
+                this.hkey2 = hkey2;
+                this.GetKey2 = getkey2;
+            }
+            private bool key2exists = false;
+            private Tkey key2;
+            private Tkey Key2
+            {
+                get
+                {
+                    if (!key2exists)
+                    {
+                        key2exists = true;
+                        key2 = GetKey2();
+                    }
+                    return key2;
+                }
+            }
+            public int CompareTo(object obj)
+            {
+                HKeyKey rec = (HKeyKey)obj;
+                int cmp;
+                cmp = hkey2.CompareTo(rec.HKey2);
+                if (cmp != 0) return cmp;
+                //Tkey key2 = GetKey2();
+                //cmp = key2.CompareTo(rec.GetKey2());
+                cmp = Key2.CompareTo(rec.Key2);
+                return cmp;
+            }
+        }
         public void Build()
         {
+            System.Diagnostics.Stopwatch sw = new System.Diagnostics.Stopwatch();            sw.Restart();
             index_cell.Clear();
             index_cell.Fill(new object[0]);
             if (Key1Producer == null) throw new Exception("Err: Key1Producer not defined");
@@ -176,20 +214,20 @@ namespace Task15UniversalIndex
                 return true;
             });
             index_cell.Flush();
-          
+            sw.Stop(); Console.WriteLine("Формирование index_cell ok. Duration={0}", sw.ElapsedMilliseconds);
+
+            sw.Restart();
             PaEntry entry = Table.Element(0);
-            index_cell.Root.SortByKey<GroupElement>(ob =>
-                new GroupElement((int)((object[])ob)[1], (int)((object[])ob)[2], () =>
-                {
-                    long off = (long)((object[])ob)[0];
-                    entry.offset = off;
-                    return Key2Producer(entry.Get());
-                }));
-            // BuildGroupsIndexSpecial:
+            // Сортировка по ключу1
+            index_cell.Root.SortByKey<int>(ob => (int)((object[])ob)[1]);
+            sw.Stop(); Console.WriteLine("Сортировака по первому ключу ok. Duration={0}", sw.ElapsedMilliseconds);
+
+            sw.Restart();
             groups_index.Clear();
             groups_index.Fill(new object[0]);
             int key1 = Int32.MinValue;
             int i = 0; // Теоретически, здесь есть проблема в том, что элементы могут выдаватьс не по индексу.
+            int previous_i = -1;
             foreach (object[] va in index_cell.Root.ElementValues())
             {
                 int k1 = (int)va[1];
@@ -197,11 +235,41 @@ namespace Task15UniversalIndex
                 {
                     groups_index.Root.AppendElement(i);
                     key1 = k1;
+                    if (i > 0)
+                    {
+                        if (typeof(Tkey) == 33.GetType())
+                            index_cell.Root.SortByKey<int>(previous_i, i - previous_i, ob => (int)((object[])ob)[2], null);
+                        else
+                            index_cell.Root.SortByKey<HKeyKey>(previous_i, i - previous_i,
+                                (object ob) => new HKeyKey((int)((object[])ob)[2], 
+                                    () =>
+                                    {
+                                        long off = (long)((object[])ob)[0];
+                                        entry.offset = off;
+                                        return Key2Producer(entry.Get());
+                                    }),
+                                    null);
+                    }
+                    previous_i = i;
                 }
                 i++;
             }
+            if (typeof(Tkey) == 33.GetType())
+                index_cell.Root.SortByKey<int>(previous_i, i - previous_i, ob => (int)((object[])ob)[2], null);
+            else
+                index_cell.Root.SortByKey<HKeyKey>(previous_i, i - previous_i,
+                    (object ob) => new HKeyKey((int)((object[])ob)[2],
+                        () =>
+                        {
+                            long off = (long)((object[])ob)[0];
+                            entry.offset = off;
+                            return Key2Producer(entry.Get());
+                        }),
+                        null);
             groups_index.Flush();
-            //CreateGroupDictionary();
+            index_cell.Flush();
+            sw.Stop(); Console.WriteLine("Создание groups_index ok. Duration={0}", sw.ElapsedMilliseconds);
+
             CreateDiscaleDictionary();
         }
         void Warmup() { throw new NotImplementedException("in IndexCascadingImmutable"); }
