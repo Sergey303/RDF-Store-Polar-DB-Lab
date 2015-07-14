@@ -163,7 +163,7 @@ namespace RDFTripleStore
             
             generator.Start(ProcessPortion);
             table.TableCell.Flush();
-             if(table.TableCell.IsEmpty) return;
+             if(!table.TableCell.Root.Elements().Any()) return;
 
             sw.Stop();
             Console.WriteLine("Load data and nametable ok. Duration={0}", sw.ElapsedMilliseconds);

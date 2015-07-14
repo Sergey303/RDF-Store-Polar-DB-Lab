@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace UnitTest
@@ -11,6 +12,7 @@ namespace UnitTest
         {
             double five = 5.0;
             Assert.AreEqual(five,5);
+            
         }
     }
 }

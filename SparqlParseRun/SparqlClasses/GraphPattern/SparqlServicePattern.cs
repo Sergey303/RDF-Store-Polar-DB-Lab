@@ -112,48 +112,11 @@ namespace SparqlParseRun.SparqlClasses.GraphPattern
                 string HtmlResult = wc.UploadString(urlString, query);
 
                 var load = XElement.Parse(HtmlResult);
-                foreach (var sparqlResult in FromXml(load)) yield return sparqlResult;
+                foreach (var sparqlResult in SparqlResultSet.FromXml(load, q)) yield return sparqlResult;
             }
         }
 
-        private IEnumerable<SparqlResult> FromXml(XElement load)
-        {
-            XNamespace xn = "http://www.w3.org/2005/sparql-results#";
-
-            return load
-                .Element(xn + "results")
-                .Elements()
-                .Select(xResult => new SparqlResult(q).Add(xResult.Elements()
-                    .Select(xb =>
-                    {
-                        var variable = q.GetVariable(xb.Attribute(xn + "name").Value);
-                        var node = xb.Elements().FirstOrDefault();
-                        return new KeyValuePair<VariableNode, ObjectVariants>(variable, Xml2Node(xn, node));
-                    })));
-        }
-
-        private ObjectVariants Xml2Node(XNamespace xn, XElement b)
-        {
-            if (b.Name == xn + "uri")
-            {
-                return new OV_iri(q.prolog.GetFromString(b.Value));
-            }
-            else if (b.Name == xn + "bnode")
-            {
-                return q.CreateBlankNode(b.Value);
-            }
-            else if (b.Name == xn + "literal")
-            {
-                var lang = b.Attribute(xn + "lang");
-                var type = b.Attribute(xn + "type");
-                if (lang != null)
-                    return new OV_langstring(b.Value, lang.Value);
-                else if (type != null)
-                    return q.Store.NodeGenerator.CreateLiteralNode(b.Value, q.prolog.GetFromString(type.Value));
-                else return new OV_string(b.Value);
-            }
-            throw new ArgumentOutOfRangeException();
-        }
+       
 
         //private IEnumerable<SparqlResult> FromJson(string load)
         //{
