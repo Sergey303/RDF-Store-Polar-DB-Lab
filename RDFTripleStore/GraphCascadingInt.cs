@@ -182,7 +182,14 @@ namespace RDFTripleStore
             Console.WriteLine("Build index ok. Duration={0}", sw.ElapsedMilliseconds);
             sw.Restart();
         }
-
+        public void ActivateCache()
+        {
+            var ng = NodeGenerator as NodeGeneratorInt;
+            ng.coding_table.ActivateCache();
+            table.ActivateCache();
+            ps_index.ActivateCache();
+            po_index.ActivateCache();
+        }
         private void ProcessPortion(List<TripleStrOV> buff)
         {
             // Пополнение таблицы имен
