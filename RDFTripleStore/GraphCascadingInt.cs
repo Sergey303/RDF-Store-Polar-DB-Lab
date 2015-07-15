@@ -116,7 +116,7 @@ namespace RDFTripleStore
         }
 
 
-        protected TableView table;
+        public TableView table;
         public TableView Table { get { return table; } }
         private IndexCascadingDynamic<int> ps_index;
         private IndexCascadingDynamic<ObjectVariants> po_index;

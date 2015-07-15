@@ -20,15 +20,15 @@ namespace SparqlParseRun.SparqlClasses.GraphPattern
         }
 
     
-        public new void Add(ISparqlGraphPattern node)
-        {
-            var filter = node as SparqlFilter;
-            SparqlTriple sparqlTriple;
-            if (filter == null || Count == 0 || (sparqlTriple = this[Count - 1] as SparqlTriple) == null  || filter.SparqlExpression.IsStoreUsed)
-                base.Add(node);
-            else
-                sparqlTriple.AddFilter(filter);
-        }
+        //public new void Add(ISparqlGraphPattern node)
+        //{
+        //    var filter = node as SparqlFilter;
+        //    SparqlTriple sparqlTriple;
+        //    if (filter == null || Count == 0 || (sparqlTriple = this[Count - 1] as SparqlTriple) == null  || filter.SparqlExpression.IsStoreUsed)
+        //        base.Add(node);
+        //    else
+        //        sparqlTriple.AddFilter(filter);
+        //}
     }
 }
 
