@@ -16,16 +16,18 @@ namespace TestingNs
     {
         static void Main(string[] args)
         {
-          //  var Store = new StoreCascadingInt("../../../Databases/int based/");
-          ////  Store.ReloadFrom(Config.Source_data_folder_path + "1.ttl");
-          //  Store.Start();
+            var Store = new StoreCascadingInt("../../../Databases/int based/");
+            //Store.ReloadFrom(Config.Source_data_folder_path + "1.ttl");
+            //return;
+            Store.Graph.ActivateCache();
+            Store.Graph.Start();
 
-          //  for (int i = 0; i < 12; i++)
-          //  {
-          //      SparqlTesting.OneParametrized(Store, i + 1, 100);
-          //  }
-            //  SparqlTesting.RunBerlinsWithConstants();
-(new SparqlExamplesTesting()).Examples();
+            for (int i = 0; i < 12; i++)
+            {
+                SparqlTesting.OneParametrized(Store, i + 1, 100);
+            }
+             //SparqlTesting.RunBerlinsWithConstants();
+
         }
 
     
@@ -52,7 +54,7 @@ namespace TestingNs
 
         private static void Reload(StoreCascadingInt store)
         {
-            store.Build(TestingPhotoPersons.data.Generate().SelectMany(ele =>
+            store.Graph.Build(TestingPhotoPersons.data.Generate().SelectMany(ele =>
             {
                 string id = ele.Name + ele.Attribute("id").Value;
                 var seq = Enumerable.Repeat(

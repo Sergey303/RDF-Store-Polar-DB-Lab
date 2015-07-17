@@ -89,7 +89,7 @@ namespace TestingNs
         {
             var Store = new StoreCascadingInt("../../../Databases/int based/");
             //Store.ReloadFrom(Config.Source_data_folder_path + "1.ttl");
-            Store.Start();
+            Store.Graph.Start();
             
             //Store.Start();
             //Store.Warmup();
@@ -184,8 +184,10 @@ namespace TestingNs
                 var timer = new Stopwatch();
           //  using (
             var Store = new StoreCascadingInt("../../../Databases/int based/");
+            Store.Graph.Start();
+            Store.Graph.ActivateCache();
             {
-                Store.ReloadFrom(Config.Source_data_folder_path+"1.ttl");
+           //     Store.ReloadFrom(Config.Source_data_folder_path+"1.ttl");
                 SparqlQueryParser.Parse(Store, sq5);
 
                 for (

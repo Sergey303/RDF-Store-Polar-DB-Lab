@@ -9,16 +9,18 @@ using SparqlParseRun.SparqlClasses.Query.Result;
 
 namespace RDFTripleStore
 {
-    public class StoreCascadingInt : GraphCascadingInt, IStore //CacheMeasure  GraphCached   InterpretMeasure
+    public class StoreCascadingInt : CachingGraphRamDict, IStore //CacheMeasure  GraphCached   InterpretMeasure
     {
 
         public StoreCascadingInt(string path)
                    //        : base(new SecondStringGraph(path)) 
-         :   base(path)
+         :   base()
         {
-            
-            NodeGenerator=
-                ng = NodeGeneratorInt.Create(path, table.TableCell.IsEmpty);
+
+            var graph=new GraphCascadingInt(path);
+            base.Graph = graph;
+            graph.NodeGenerator=
+                ng = NodeGeneratorInt.Create(path, graph.table.TableCell.IsEmpty);
             NamedGraphs = new NamedGraphsByFolders(new DirectoryInfo(path), ng, d => new GraphCascadingInt(d.FullName + "/"){NodeGenerator=NodeGenerator},
                 d=> { d.Delete(true); });
         }
