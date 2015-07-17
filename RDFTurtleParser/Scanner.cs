@@ -7,7 +7,7 @@ namespace RDFCommon {
 
 public class Token {
 	public int kind;    // token kind
-	public int pos;     // token position in bytes in the source text (starting at 0)
+	public long pos;     // token position in bytes in the source text (starting at 0)
 	public int charPos;  // token position in characters in the source text (starting at 0)
 	public int col;     // token column (starting at 1)
 	public int line;    // token line (starting at 1)
@@ -29,10 +29,10 @@ public class Buffer {
 	const int MIN_BUFFER_LENGTH = 1024; // 1KB
 	const int MAX_BUFFER_LENGTH = MIN_BUFFER_LENGTH * 64; // 64KB
 	byte[] buf;         // input buffer
-	int bufStart;       // position of first byte in buffer relative to input stream
-	int bufLen;         // length of buffer
-	int fileLen;        // length of input stream (may change if the stream is no file)
-	int bufPos;         // current position in buffer
+	long bufStart;       // position of first byte in buffer relative to input stream
+	long bufLen;         // length of buffer
+	long fileLen;        // length of input stream (may change if the stream is no file)
+	long bufPos;         // current position in buffer
 	Stream stream;      // input stream (seekable)
 	bool isUserStream;  // was the stream opened by the user?
 	
@@ -40,8 +40,8 @@ public class Buffer {
 		stream = s; this.isUserStream = isUserStream;
 		
 		if (stream.CanSeek) {
-			fileLen = (int) stream.Length;
-			bufLen = Math.Min(fileLen, MAX_BUFFER_LENGTH);
+			fileLen = (long) stream.Length;
+		    bufLen = fileLen > MAX_BUFFER_LENGTH ? MAX_BUFFER_LENGTH : (int)fileLen;
 			bufStart = Int32.MaxValue; // nothing in the buffer so far
 		} else {
 			fileLen = bufLen = bufStart = 0;
@@ -88,7 +88,7 @@ public class Buffer {
 	}
 
 	public int Peek () {
-		int curPos = Pos;
+		long curPos = Pos;
 		int ch = Read();
 		Pos = curPos;
 		return ch;
@@ -99,14 +99,14 @@ public class Buffer {
 	public string GetString (int beg, int end) {
 		int len = 0;
 		char[] buf = new char[end - beg];
-		int oldPos = Pos;
+		long  oldPos = Pos;
 		Pos = beg;
 		while (Pos < end) buf[len++] = (char) Read();
 		Pos = oldPos;
 		return new String(buf, 0, len);
 	}
 
-	public int Pos {
+	public long Pos {
 		get { return bufPos + bufStart; }
 		set {
 			if (value >= fileLen && stream != null && !stream.CanSeek) {
@@ -137,8 +137,8 @@ public class Buffer {
 	// Read the next chunk of bytes from the stream, increases the buffer
 	// if needed and updates the fields fileLen and bufLen.
 	// Returns the number of bytes read.
-	private int ReadNextStreamChunk() {
-		int free = buf.Length - bufLen;
+	private long ReadNextStreamChunk() {
+		long free = buf.Length - bufLen;
 		if (free == 0) {
 			// in the case of a growing input stream
 			// we can neither seek in the stream, nor can we
@@ -149,13 +149,20 @@ public class Buffer {
 			buf = newBuf;
 			free = bufLen;
 		}
-		int read = stream.Read(buf, bufLen, free);
-		if (read > 0) {
-			fileLen = bufLen = (bufLen + read);
-			return read;
-		}
+	    if (stream.Length <= bufLen) return 0;
+	    stream.Seek(bufLen, SeekOrigin.Begin);
+        long count = free + bufLen > stream.Length ? stream.Length - bufLen : free;
+	    for (int i = 0; i < count; i++)
+	    {                                                         
+	        buf[i]=(byte) stream.ReadByte();                      
+	    }
+		//int read = stream.Read(buf, bufLen, free);
+		//if (read > 0) {
+			fileLen = bufLen = (bufLen + count);
+			return count;
+		//}
 		// end of stream reached
-		return 0;
+	//	return 0;
 	}
 }
 
@@ -211,7 +218,7 @@ public class Scanner {
 	
 	Token t;          // current token
 	int ch;           // current input character
-	int pos;          // byte position of current character
+	long pos;          // byte position of current character
 	int charPos;      // position by unicode characters starting with 0
 	int col;          // column number of current character
 	int line;         // line number of current character
@@ -222,7 +229,7 @@ public class Scanner {
 	Token pt;         // current peek token
 	
 	char[] tval = new char[128]; // text of current token
-	int tlen;         // length of current token
+	long tlen;         // length of current token
 	
 	static Scanner() {
 		start = new Hashtable(128);
@@ -341,8 +348,10 @@ public class Scanner {
 
 
 	bool Comment0() {
-		int level = 1, pos0 = pos, line0 = line, col0 = col, charPos0 = charPos;
-		NextCh();
+	    int level = 1;
+	    long pos0 = pos;
+	    int line0 = line, col0 = col, charPos0 = charPos;
+	    NextCh();
 			for(;;) {
 				if (ch == 10) {
 					level--;
@@ -368,7 +377,7 @@ public class Scanner {
 		) NextCh();
 		if (ch == '#' && Comment0()) return NextToken();
 		int recKind = noSym;
-		int recEnd = pos;
+		long recEnd = pos;
 		t = new Token();
 		t.pos = pos; t.col = col; t.line = line; t.charPos = charPos;
 		int state;
@@ -423,7 +432,7 @@ public class Scanner {
 			case 11:
 				recEnd = pos; recKind = 5;
 				if (ch == '-' || ch >= '0' && ch <= '9' || ch >= 'A' && ch <= 'Z' || ch >= 'a' && ch <= 'z') {AddCh(); goto case 11;}
-				else {t.kind = 5; t.val = new String(tval, 0, tlen); CheckLiteral(); return t;}
+				else {t.kind = 5; t.val = new String(tval, 0, (int)tlen); CheckLiteral(); return t;}
 			case 12:
 				if (ch >= '0' && ch <= '9') {AddCh(); goto case 14;}
 				else if (ch == '+' || ch == '-') {AddCh(); goto case 13;}
@@ -1010,7 +1019,7 @@ public class Scanner {
 				else {t.kind = 18; break;}
 
 		}
-		t.val = new String(tval, 0, tlen);
+		t.val = new String(tval, 0, (int)tlen);
 		return t;
 	}
 	

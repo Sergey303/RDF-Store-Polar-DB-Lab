@@ -35,7 +35,7 @@ namespace SparqlParseRun.SparqlClasses.Update
                 try
                 {
                     var gXml = XElement.Parse(gString);
-                    graph.FromXml(gXml);
+                    graph.AddFromXml(gXml);
                 }
                 catch (Exception)
                 {

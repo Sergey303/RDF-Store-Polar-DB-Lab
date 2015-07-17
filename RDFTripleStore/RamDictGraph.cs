@@ -99,6 +99,11 @@ namespace RDFTripleStore
             throw new NotImplementedException();
         }
 
+        public void Build(IEnumerable<TripleStrOV> triples)
+        {
+            throw new NotImplementedException();
+        }
+
         public void FromTurtle(Stream inputStream)
         {
             throw new NotImplementedException();

@@ -9,51 +9,49 @@ using SparqlParseRun.SparqlClasses.Query.Result;
 
 namespace RDFTripleStore
 {
-    public class StoreCascadingInt : CachingGraphRamDict, IStore //CacheMeasure  GraphCached   InterpretMeasure
+    public class StoreCascadingInt : GraphCascadingInt, IStore //CacheMeasure  GraphCached   InterpretMeasure
     {
 
         public StoreCascadingInt(string path)
-                   //        : base(new SecondStringGraph(path)) 
-         :   base()
+            //        : base(new SecondStringGraph(path)) 
+            : base(path)
         {
 
-            var graph=new GraphCascadingInt(path);
-            base.Graph = graph;
-            graph.NodeGenerator=
-                ng = NodeGeneratorInt.Create(path, graph.table.TableCell.IsEmpty);
-            NamedGraphs = new NamedGraphsByFolders(new DirectoryInfo(path), ng, d => new GraphCascadingInt(d.FullName + "/"){NodeGenerator=NodeGenerator},
-                d=> { d.Delete(true); });
+            NodeGenerator =
+                ng = NodeGeneratorInt.Create(path, table.TableCell.IsEmpty);
+            NamedGraphs = new NamedGraphsByFolders(new DirectoryInfo(path), ng, d => new GraphCascadingInt(d.FullName + "/") { NodeGenerator = NodeGenerator },
+                d => { d.Delete(true); });
         }
 
         private readonly NodeGeneratorInt ng;
 
         public void ReloadFrom(string fileName)
-        {   
+        {
             FromTurtle(fileName);
         }
 
-     
 
-       
-       
+
+
+
         private SparqlResultSet Run(SparqlQuery queryContext)
         {
-             return queryContext.Run();
+            return queryContext.Run();
         }
 
 
         public IStoreNamedGraphs NamedGraphs { get; set; }
         public void ClearAll()
         {
-           base.Clear();
+            base.Clear();
         }
 
         public IGraph CreateTempGraph()
         {
-           return new RamListOfTriplesGraph("temp");
+            return new RamListOfTriplesGraph("temp");
         }
 
 
-   
+
     }
 }

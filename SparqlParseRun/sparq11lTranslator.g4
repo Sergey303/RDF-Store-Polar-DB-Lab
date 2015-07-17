@@ -467,7 +467,7 @@ SAMPLE : [Ss][Aa][Mm][Pp][Ll][Ee];
 GROUP_CONCAT : [Gg][Rr][Oo][Uu][Pp]'_'[Cc][Oo][Nn][Cc][Aa][Tt];
 TRUE : [Tt][Rr][Uu][Ee];
 FALSE : [Ff][Aa][Ll][Ss][Ee];
-IRIREF	: '<'([a-zA-Zà-ÿÀ-ß0-9:/\\#.%-@_])*'>';
+IRIREF	: '<'([a-zA-Zà-ÿÀ-ß0-9:/\\#.%-@_~])*'>';
 //IRIREF : '<' ([^<>"{}|^`\]-[\x00-\x20])* '>';
 PNAME_LN : PNAME_NS PN_LOCAL;
 PNAME_NS : PN_PREFIX? ':';

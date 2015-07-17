@@ -16,21 +16,52 @@ namespace TestingNs
     {
         static void Main(string[] args)
         {
-            var Store = new StoreCascadingInt("../../../Databases/int based/");
-            //Store.ReloadFrom(Config.Source_data_folder_path + "1.ttl");
-            //return;
-            Store.Graph.ActivateCache();
-            Store.Graph.Start();
-
-            for (int i = 0; i < 12; i++)
-            {
-                SparqlTesting.OneParametrized(Store, i + 1, 100);
-            }
-             //SparqlTesting.RunBerlinsWithConstants();
+         //   RunAllLUBMByOne();
+              RunAllBerlinByOne();
+            //SparqlTesting.RunBerlinsWithConstants();
 
         }
 
-    
+        private static void RunAllBerlinByOne()
+        {
+            var Store = new StoreCascadingInt("../../../Databases/int based/");
+            Performance.ComputeTime(() => Store.ReloadFrom(Config.Source_data_folder_path + "100M.ttl"), "load 100млн ", true);
+
+            return;
+            Store.ActivateCache();
+            Store.Start();
+
+            for (int i = 0; i < 12; i++)
+            {
+                SparqlTesting.OneBerlinParametrized(Store, i + 1, 100);
+            }
+        }
+
+        private static void RunAllLUBMByOne()
+        {
+            var Store = new StoreCascadingInt("../../../Databases/int based/");
+            if (false)
+            {
+                Store.Clear();
+                foreach (
+                    var owlFile in
+                        new DirectoryInfo(@"C:\Users\Admin\Source\Repos\RDF-Store-Polar-DB-Lab\Testing\examples\lubm")
+                            .GetFiles("*.owl"))
+                {
+                    Store.AddFromXml(XElement.Load(owlFile.FullName));
+                }
+            }
+            else
+            {
+                Console.WriteLine(Store.table.Elements().Count());
+             //   Store.ActivateCache();
+                Store.Start();
+            }
+            for (int i = 0; i < 14; i++)
+            {
+                SparqlTesting.OneLUMB(Store, i + 1, 100);
+            }
+        }
 
         private static  void MainPersons(string[] args)
         {
@@ -54,7 +85,7 @@ namespace TestingNs
 
         private static void Reload(StoreCascadingInt store)
         {
-            store.Graph.Build(TestingPhotoPersons.data.Generate().SelectMany(ele =>
+            store.Build(TestingPhotoPersons.data.Generate().SelectMany(ele =>
             {
                 string id = ele.Name + ele.Attribute("id").Value;
                 var seq = Enumerable.Repeat(

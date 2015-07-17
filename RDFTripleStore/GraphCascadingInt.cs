@@ -52,7 +52,7 @@ namespace RDFTripleStore
 
         public void FromTurtle(string gString)
         {
-            Build(new TripleGeneratorBufferedParallel(gString,null));
+            Build(new TripleGeneratorBuffered(gString,null));
             NodeGenerator.Build();
         }
 
@@ -148,7 +148,7 @@ namespace RDFTripleStore
 
         public string Name { get; set; }
         public NodeGenerator NodeGenerator { get; set; }
-        public void Clear() { table.Clear(); }
+        
       
 
         public void Warmup() { table.Warmup(); }
@@ -197,6 +197,10 @@ namespace RDFTripleStore
             var dic = ng.coding_table.InsertPortion(buff.SelectMany(t =>
             {
                 ObjectVariants ov = t.Object;
+                if(ov==null) {Console.WriteLine(t.Subject);
+                    return Enumerable.Empty<string>();
+                } 
+                else
                 if (ov.Variant == ObjectVariantEnum.Iri)
                 {
                     return new string[] { t.Subject, t.Predicate, ((OV_iri)ov).Name };
@@ -207,7 +211,7 @@ namespace RDFTripleStore
                 }
             }));
             // Пополнение триплетов
-            table.Add(buff.Select(t =>
+            table.Add(buff.Where(t=>t.Object!=null).Select(t =>
             {
                 ObjectVariants ov = t.Object;
                 if (ov.Variant == ObjectVariantEnum.Iri)
@@ -225,10 +229,6 @@ namespace RDFTripleStore
         {
             System.Diagnostics.Stopwatch sw = new System.Diagnostics.Stopwatch();
             sw.Start();
-            
-
-            table.Clear();
-            table.Fill(new object[0]);
             int portion = 1000000;
             List<TripleStrOV> buff = new List<TripleStrOV>();
             foreach (TripleStrOV tri in triples)
@@ -260,6 +260,12 @@ namespace RDFTripleStore
             sw.Stop();
             Console.WriteLine("Build index ok. Duration={0}", sw.ElapsedMilliseconds);
             sw.Restart();
+        }
+
+        public void Clear()
+        {
+            table.Clear();
+            table.Fill(new object[0]);
         }
     }
 }

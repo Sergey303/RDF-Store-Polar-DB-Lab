@@ -109,6 +109,11 @@ namespace RDFTripleStore
             Graph.FromTurtle(gString);
         }
 
+        public void Build(IEnumerable<TripleStrOV> triples)
+        {
+            throw new NotImplementedException();
+        }
+
         public void FromTurtle(Stream inputStream)
         {
             Graph.FromTurtle(inputStream);
