@@ -140,11 +140,6 @@ namespace GoTripleStore
             Console.WriteLine("Build index ok. Duration={0}", sw.ElapsedMilliseconds);
             sw.Restart();
         }
-        public void TestBuild()
-        {
-            Console.WriteLine("TestBuild");
-            po_index.Build();
-        }
 
         private void ProcessPortion(List<Tuple<string, string, ObjectVariants>> buff)
         {

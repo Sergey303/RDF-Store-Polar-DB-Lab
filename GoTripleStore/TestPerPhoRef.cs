@@ -17,7 +17,7 @@ namespace GoTripleStore
             System.Diagnostics.Stopwatch sw = new System.Diagnostics.Stopwatch();
             Random rnd = new Random();
             TriplesGraphInt g = new TriplesGraphInt(path);
-            int npersons = 400000;
+            int npersons = 10000000;
             PaEntry.bufferBytes = 400 * 1000000;
 
             bool toload = false;
@@ -62,8 +62,8 @@ namespace GoTripleStore
             }
             else
             {
-                g.Start();
                 g.ActivateCache();
+                g.Start();
             }
 
             int ic = g.Code("person3322");
@@ -105,22 +105,24 @@ namespace GoTripleStore
 
             int sum = 0;
             int in_doc = g.Code("in_doc");
-            sw.Restart();
-            for (int i = 0; i < 10000; i++)
+            if (!toload || (toload && npersons < 4000000))
             {
-                string id = "person" + rnd.Next(npersons - 1);
-                int iid = g.Code(id);
-                ObjectVariants ov = new OV_iriint(iid, null);
+                sw.Restart();
+                for (int i = 0; i < 10000; i++)
+                {
+                    string id = "person" + rnd.Next(npersons - 1);
+                    int iid = g.Code(id);
+                    ObjectVariants ov = new OV_iriint(iid, null);
 
-                var qu4 = g.GetTriplesWithPredicateObject(new OV_iriint(ireflected, null), ov)
-                    .SelectMany(tr => g.GetTriplesWithSubjectPredicate(tr.Subj, new OV_iriint(in_doc, null)))
-                    .SelectMany(tr => g.GetTriplesWithSubjectPredicate(tr.Obj, new OV_iriint(iname, null)))
-                    ;
-                sum += qu4.Count();
+                    var qu4 = g.GetTriplesWithPredicateObject(new OV_iriint(ireflected, null), ov)
+                        .SelectMany(tr => g.GetTriplesWithSubjectPredicate(tr.Subj, new OV_iriint(in_doc, null)))
+                        .SelectMany(tr => g.GetTriplesWithSubjectPredicate(tr.Obj, new OV_iriint(iname, null)))
+                        ;
+                    sum += qu4.Count();
+                }
+                sw.Stop();
+                Console.WriteLine("10000 person inv relations ok. duration={0} sum={1}", sw.ElapsedMilliseconds, sum);
             }
-            sw.Stop();
-            Console.WriteLine("10000 person inv relations ok. duration={0} sum={1}", sw.ElapsedMilliseconds, sum);
-
         }
         public static void Main8() // Main8()
         {
