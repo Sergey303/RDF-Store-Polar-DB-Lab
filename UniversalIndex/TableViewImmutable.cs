@@ -17,6 +17,7 @@ namespace Task15UniversalIndex
         {
             table_cell.Clear();
         }
+        public void ActivateCache() { table_cell.ActivateCache(); }
 
         public virtual void Fill(IEnumerable<object> elements)
         {

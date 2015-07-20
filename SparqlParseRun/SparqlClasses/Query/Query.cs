@@ -23,7 +23,7 @@ namespace SparqlParseRun
         public SparqlQuery(RdfQuery11Translator q)
         {
             this.q = q;
-            ResultSet=new SparqlResultSet(q);
+            ResultSet=new SparqlResultSet(q.prolog);
 
         }
 

@@ -30,10 +30,12 @@ namespace SparqlParseRun.SparqlClasses.Query.Result
         public SparqlUpdateStatus UpdateStatus;
 
         internal Dictionary<string, VariableNode> Variables = new Dictionary<string, VariableNode>();
+        private readonly Prologue prologue;
 
-        public SparqlResultSet(RdfQuery11Translator q)
+        public SparqlResultSet(Prologue prologue=null)
         {
-            this.q = q;
+            
+            this.prologue = prologue;
         }
 
         public XElement ToXml()
@@ -54,7 +56,7 @@ namespace SparqlParseRun.SparqlClasses.Query.Result
                                             BindingToXml(xn, value)))))));
                 case ResultType.Describe:
                 case ResultType.Construct:
-                    return GraphResult.ToXml(q.prolog);
+                    return GraphResult.ToXml(prologue);
                 case ResultType.Ask:
                     return new XElement(xn + "sparql", //new XAttribute(XNamespace.Xmlns , xn),
                         new XElement(xn + "head",
@@ -157,6 +159,74 @@ namespace SparqlParseRun.SparqlClasses.Query.Result
             }
         }
 
+        public string ToCommaSeparatedValues()
+        {
+            string headVars;
+            switch (ResultType)
+            {
+                case ResultType.Select:
+                    headVars = string.Join(",", Variables.Keys);
+                    return
+                      headVars+Environment.NewLine+
+                         string.Join(Environment.NewLine, 
+                         Results.Select(result=>
+                             string.Join(",",
+                             result.GetSelected((var, value) => value))));
+                case ResultType.Describe:
+                case ResultType.Construct:
+                    return GraphResult.ToTurtle();
+                case ResultType.Ask:
+                    return AnyResult.ToString();
+                case ResultType.Update:
+                    return UpdateStatus.ToString();
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+        }
+        public string FromCommaSeparatedValues()
+        {
+         
+            throw new NotImplementedException();
+        }
+
+        public static IEnumerable<SparqlResult> FromXml(XElement load, RdfQuery11Translator q)
+        {
+            XNamespace xn = "http://www.w3.org/2005/sparql-results#";
+
+            return load
+                .Element(xn + "results")
+                .Elements()
+                .Select(xResult => new SparqlResult(q).Add(xResult.Elements()
+                    .Select(xb =>
+                    {
+                        var variable = q.GetVariable(xb.Attribute(xn + "name").Value);
+                        var node = xb.Elements().FirstOrDefault();
+                        return new KeyValuePair<VariableNode, ObjectVariants>(variable, Xml2Node(xn, node, q));
+                    })));
+        }
+
+        private static ObjectVariants Xml2Node(XNamespace xn, XElement b, RdfQuery11Translator q)
+        {
+            if (b.Name == xn + "uri")
+            {
+                return new OV_iri(q.prolog.GetFromString(b.Value));
+            }
+            else if (b.Name == xn + "bnode")
+            {
+                return q.CreateBlankNode(b.Value);
+            }
+            else if (b.Name == xn + "literal")
+            {
+                var lang = b.Attribute(xn + "lang");
+                var type = b.Attribute(xn + "type");
+                if (lang != null)
+                    return new OV_langstring(b.Value, lang.Value);
+                else if (type != null)
+                    return q.Store.NodeGenerator.CreateLiteralNode(b.Value, q.prolog.GetFromString(type.Value));
+                else return new OV_string(b.Value);
+            }
+            throw new ArgumentOutOfRangeException();
+        }
     
     }
 

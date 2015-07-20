@@ -16,93 +16,54 @@ namespace TestingNs
     {
         static void Main(string[] args)
         {
-          //  var Store = new StoreCascadingInt("../../../Databases/int based/");
-          ////  Store.ReloadFrom(Config.Source_data_folder_path + "1.ttl");
-          //  Store.Start();
+         //   RunAllLUBMByOne();
+              RunAllBerlinByOne();
+            //SparqlTesting.RunBerlinsWithConstants();
 
-          //  for (int i = 0; i < 12; i++)
-          //  {
-          //      SparqlTesting.OneParametrized(Store, i + 1, 100);
-          //  }
-         TestExamples();
-             //  SparqlTesting.RunBerlinsWithConstants();
         }
 
-        private static void TestExamples()
+        private static void RunAllBerlinByOne()
         {
-            DirectoryInfo examplesRoot = new DirectoryInfo(@"..\..\examples");
-            foreach (var exampleDir in examplesRoot.GetDirectories().Skip(0))
-                //  var exampleDir = new DirectoryInfo(@"..\..\examples\bsbm");
+            var Store = new StoreCascadingInt("../../../Databases/int based/");
+            Performance.ComputeTime(() => Store.ReloadFrom(Config.Source_data_folder_path + "100M.ttl"), "load 100млн ", true);
+
+            return;
+            Store.ActivateCache();
+            Store.Start();
+
+            for (int i = 0; i < 12; i++)
             {
-                Console.WriteLine("example: " + exampleDir.Name);
-                if (exampleDir.Name != @"federated subquery"
-                    //&& rqQueryFile.FullName != @"C:\Users\Admin\Source\Repos\SparqlWpf\UnitTestDotnetrdf_test\examples\insert where\query2.rq"
-                  ) continue;
-                //var nameGraphsDir = new DirectoryInfo(Path.Combine(exampleDir.FullName, "named graphs"));
-                //if (nameGraphsDir.Exists) continue;
-                foreach (var ttlDatabase in exampleDir.GetFiles("*.ttl"))
-                {
-                    var store = new StoreCascadingInt(exampleDir.FullName + "/tmp");
-                    store.ClearAll();
-                    //using (StreamReader reader = new StreamReader(ttlDatabase.FullName))
-                    store.ReloadFrom(ttlDatabase.FullName);
-                //  store.Start();
-                  var nameGraphsDir = new DirectoryInfo(Path.Combine(exampleDir.FullName, "named graphs"));
-                  if (nameGraphsDir.Exists)
-                      foreach (var namedGraphFile in nameGraphsDir.GetFiles())
-                      {
-                          IGraph graph;
-                          using (StreamReader reader = new StreamReader(namedGraphFile.FullName))
-                          {
-                              var readLine = reader.ReadLine();
-                              if (readLine == null) continue;
-                              var headComment = readLine.Trim();
-                              if (!headComment.StartsWith("#")) continue;
-                              headComment = headComment.Substring(1);
-                              //Uri uri;
-                              //if (!Uri.TryCreate(headComment, UriKind.Absolute, out uri)) continue;Prologue.SplitUri(uri.AbsoluteUri).FullName
-                              graph = store.NamedGraphs.CreateGraph(headComment);
-
-                          }
-                          graph.FromTurtle(namedGraphFile.FullName);
-                      }
-
-                    foreach (var rqQueryFile in exampleDir.GetFiles("*.rq"))
-                    {
-
-                        Console.WriteLine("query file: " + rqQueryFile);
-                        var outputFile = rqQueryFile.FullName + " results of run.txt";
-                        SparqlResultSet sparqlResultSet = null;
-                        //  try
-                        var query = rqQueryFile.OpenText().ReadToEnd();
-
-                        SparqlQuery sparqlQuery = null;
-                        {
-                            //Perfomance.ComputeTime(() =>
-                            {
-                                sparqlQuery = SparqlQueryParser.Parse(store, query);
-                            } //, exampleDir.Name+" "+rqQueryFile.Name+" parse ", true);
-
-                            if (sparqlQuery != null)
-                                // Perfomance.ComputeTime(() =>
-                            {
-                                sparqlResultSet = sparqlQuery.Run();
-                                File.WriteAllText(outputFile, sparqlResultSet.ToJson().ToString());
-                            } //, exampleDir.Name + " " + rqQueryFile.Name + " run ", true);
-                            //    Assert.AreEqual(File.ReadAllText(rqQueryFile.FullName + " expected results.txt"),
-                            //      File.ReadAllText(outputFile));
-                        }
-                        //  catch (Exception e)
-                        {
-                            // Assert.(e.Message);
-                        }
-                    }
-                }
+                SparqlTesting.OneBerlinParametrized(Store, i + 1, 100);
             }
         }
 
-        private static
-           void MainPersons(string[] args)
+        private static void RunAllLUBMByOne()
+        {
+            var Store = new StoreCascadingInt("../../../Databases/int based/");
+            if (false)
+            {
+                Store.Clear();
+                foreach (
+                    var owlFile in
+                        new DirectoryInfo(@"C:\Users\Admin\Source\Repos\RDF-Store-Polar-DB-Lab\Testing\examples\lubm")
+                            .GetFiles("*.owl"))
+                {
+                    Store.AddFromXml(XElement.Load(owlFile.FullName));
+                }
+            }
+            else
+            {
+                Console.WriteLine(Store.table.Elements().Count());
+             //   Store.ActivateCache();
+                Store.Start();
+            }
+            for (int i = 0; i < 14; i++)
+            {
+                SparqlTesting.OneLUMB(Store, i + 1, 100);
+            }
+        }
+
+        private static  void MainPersons(string[] args)
         {
             TestingPhotoPersons.Npersons = 40*1000;
             string path = "../../../Databases/int based/" + TestingPhotoPersons.Npersons/1000+"/";

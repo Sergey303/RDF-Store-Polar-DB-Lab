@@ -2,11 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Xml.Linq;
-using RDFCommon;
-using RDFCommon;
 using RDFCommon.OVns;
 
-namespace SparqlParseRun.SparqlClasses.Query.Result
+namespace RDFCommon
 {
     public static class RdfGraphSerialization
     {
@@ -165,9 +163,38 @@ namespace SparqlParseRun.SparqlClasses.Query.Result
                                     }))))))));
         }
 
-        public static void FromXml(this IGraph g, XElement x)
+        public static void AddFromXml(this IGraph g, XElement xRDF)
         {
-            throw new NotImplementedException();
+            g.Build(xRDF.Elements().SelectMany(Selector));
+        }
+
+        private static IEnumerable<TripleStrOV> Selector(XElement xItem)
+        {
+            XNamespace rdf = XNamespace.Get("http://www.w3.org/1999/02/22-rdf-syntax-ns#");
+            var s = xItem.Attribute(rdf+"about").Value;
+            yield return   new TripleStrOV(s, "http://www.w3.org/1999/02/22-rdf-syntax-ns#type", new OV_iri(xItem.Name.ToString()));
+            foreach (var xProp in xItem.Elements())
+            {
+                var p = xProp.Name.ToString();
+                var valueIriAttribute = xProp.Attribute(rdf+"resource");
+                //todo lang var valueIriAttribute = xProp.Attribute(rdf+"http://www.w3.org/1999/02/22-rdf-syntax-ns#resource");
+                if(valueIriAttribute!=null)
+                    yield return new TripleStrOV(s, p, new OV_iri(valueIriAttribute.Value));
+                else if(xProp.Elements().Any())
+                    foreach (var xObj in xProp.Elements())
+                    {
+                        var o = xObj.Attribute(rdf + "about");
+                        if(o==null) throw new Exception();
+                        yield return new TripleStrOV(s,p, new OV_iri(o.Value));
+                        yield return   new TripleStrOV(o.Value, "http://www.w3.org/1999/02/22-rdf-syntax-ns#type", new OV_iri(xItem.Name.ToString()));
+                    }
+                else if (xProp.Attribute(XNamespace.Xml+ "lang") != null) throw new NotImplementedException();
+                else if (xProp.Attribute(rdf+"datatype") != null) throw new NotImplementedException();
+                //  yield return new TripleStrOV(s, p, new OV_string(xProp.Value));
+                else 
+                    yield return new TripleStrOV(s, p, new OV_string(xProp.Value));
+
+            }
         }
 
         public static XElement ToXml(this IGraph g, Prologue prolog)

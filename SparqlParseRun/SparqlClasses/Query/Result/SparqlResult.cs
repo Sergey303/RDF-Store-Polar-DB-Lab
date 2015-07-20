@@ -47,6 +47,18 @@ namespace SparqlParseRun.SparqlClasses.Query.Result
             }
         }
 
+        public ObjectVariants this[int index]
+        {
+            get
+            {
+                return rowArray[index];
+            }
+            set
+            {
+                rowArray[index] = value;
+
+            }
+        }
      
         public bool ContainsKey(VariableNode var)
         {

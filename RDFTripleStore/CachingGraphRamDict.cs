@@ -9,59 +9,69 @@ using RDFCommon.OVns;
 
 namespace RDFTripleStore
 {
-    class RamDictGraph :IGraph
+    public class CachingGraphRamDict : IGraph
     {
-        private NodeGenerator ng = RDFCommon.OVns.NodeGenerator.Create();
-        private Dictionary<ObjectVariants,
-            KeyValuePair<Dictionary<ObjectVariants, ObjectVariants>, Dictionary<ObjectVariants, HashSet<ObjectVariants>>>> triples = new Dictionary<ObjectVariants, KeyValuePair<Dictionary<ObjectVariants, ObjectVariants>, Dictionary<ObjectVariants, HashSet<ObjectVariants>>>>();
+        public GraphCascadingInt Graph { get; set; }
 
-        public string Name { get; set; }
+        //private readonly Dictionary<ObjectVariants, IEnumerable<>> sCache = new Dictionary<ObjectVariants>();
+        //private readonly Dictionary<ObjectVariants> pCache = new Dictionary<ObjectVariants>();
+        //private readonly Dictionary<ObjectVariants> oCache = new Dictionary<ObjectVariants>();
+        private readonly Dictionary<KeyValuePair<int, int>, ObjectVariants[]> spCache = new Dictionary<KeyValuePair<int, int>, ObjectVariants[]>();
+        //private readonly Dictionary<KeyValuePair<ObjectVariants, ObjectVariants>> soCache = new Dictionary<KeyValuePair<ObjectVariants, ObjectVariants>>();
+        //private readonly Dictionary<KeyValuePair<ObjectVariants, ObjectVariants>> poCache = new Dictionary<KeyValuePair<ObjectVariants, ObjectVariants>>();
+        //private readonly Dictionary<Tuple<ObjectVariants, ObjectVariants, ObjectVariants>> spo = new Dictionary<Tuple<ObjectVariants, ObjectVariants, ObjectVariants>>();
+
+        public string Name { get { return Graph.Name; } set { Graph.Name = value; }}
 
         public NodeGenerator NodeGenerator
         {
-            get { return ng; }          
+            get { return Graph.NodeGenerator; }          
         }
 
         public void Clear()
         {
-           triples.Clear();
+           Graph.Clear();
         }
 
         public IEnumerable<TripleOVStruct> GetTriplesWithObject(ObjectVariants o)
         {
-            KeyValuePair<Dictionary<ObjectVariants, ObjectVariants>, Dictionary<ObjectVariants, HashSet<ObjectVariants>>> finded;
-            if (triples.TryGetValue(o, out finded)) return Enumerable.Empty<TripleOVStruct>();
-            return null;
+            return Graph.GetTriplesWithObject(o);
         }
 
         public IEnumerable<TripleOVStruct> GetTriplesWithPredicate(ObjectVariants p)
         {
-            throw new NotImplementedException();
+            return Graph.GetTriplesWithObject(p);
         }
 
         public IEnumerable<TripleOVStruct> GetTriplesWithSubject(ObjectVariants s)
         {
-            throw new NotImplementedException();
+            return Graph.GetTriplesWithSubject(s);
         }
 
         public IEnumerable<ObjectVariants> GetTriplesWithSubjectPredicate(ObjectVariants subj, ObjectVariants pred)
         {
-            throw new NotImplementedException();
+            ObjectVariants[] objects;
+            var key = new KeyValuePair<int, int>(((OV_iriint) subj).code, ((OV_iriint) pred).code);
+            if (spCache.TryGetValue(key, out objects))
+            return objects;
+             objects = Graph.GetTriplesWithSubjectPredicate(subj, pred).ToArray();
+            spCache.Add(key, objects);
+            return objects;
         }
 
         public IEnumerable<ObjectVariants> GetTriplesWithSubjectObject(ObjectVariants subj, ObjectVariants obj)
         {
-            throw new NotImplementedException();
+            return Graph.GetTriplesWithSubjectObject(subj, obj);
         }
 
         public IEnumerable<ObjectVariants> GetSubjects(ObjectVariants pred, ObjectVariants obj)
         {
-            throw new NotImplementedException();
+            return Graph.GetSubjects(pred, obj);
         }
 
         public IEnumerable<T> GetTriples<T>(Func<ObjectVariants, ObjectVariants, ObjectVariants, T> returns)
         {
-            throw new NotImplementedException();
+            return Graph.GetTriples(returns);
         }
 
         public void Add(ObjectVariants s, ObjectVariants p, ObjectVariants o)
@@ -71,7 +81,7 @@ namespace RDFTripleStore
 
         public bool Contains(ObjectVariants subject, ObjectVariants predicate, ObjectVariants obj)
         {
-            throw new NotImplementedException();
+            return Graph.Contains(subject, predicate, obj);
         }
 
         public void Delete(ObjectVariants subject, ObjectVariants predicate, ObjectVariants obj)
@@ -96,7 +106,7 @@ namespace RDFTripleStore
 
         public void FromTurtle(string gString)
         {
-            throw new NotImplementedException();
+            Graph.FromTurtle(gString);
         }
 
         public void Build(IEnumerable<TripleStrOV> triples)
@@ -106,17 +116,12 @@ namespace RDFTripleStore
 
         public void FromTurtle(Stream inputStream)
         {
-            throw new NotImplementedException();
+            Graph.FromTurtle(inputStream);
         }
 
         public void Warmup()
         {
-            throw new NotImplementedException();
-        }
-
-        public void Dispose()
-        {
-            throw new NotImplementedException();
-        }
+          Graph.Warmup();
+        }       
     }
 }

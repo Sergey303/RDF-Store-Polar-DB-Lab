@@ -40,6 +40,8 @@
       <HintPath>..\dll\Microsoft.VisualStudio.QualityTools.UnitTestFramework.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <Choose>
     <When Condition="('$(VisualStudioVersion)' == '10.0' or '$(VisualStudioVersion)' == '') and '$(TargetFrameworkVersion)' == 'v3.5'">
@@ -50,13 +52,21 @@
     <Otherwise />
   </Choose>
   <ItemGroup>
-    <Compile Include="UnitTest1.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="UnitTest1.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Testing\Testing.csproj">
-      <Project>{17ddd8b8-d2ba-48be-b53f-c366d3467ea3}</Project>
-      <Name>Testing</Name>
+    <ProjectReference Include="..\RDFCommon\RDFCommon.csproj">
+      <Project>{7EB60F80-87CA-4645-9E1F-051735195D92}</Project>
+      <Name>RDFCommon</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\RDFTripleStore\RDFTripleStore.csproj">
+      <Project>{16601FE6-F095-410B-9F63-EFC948C2B939}</Project>
+      <Name>RDFTripleStore</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SparqlParseRun\SparqlParseRun.csproj">
+      <Project>{AE8CBEDB-A66E-4705-953E-C16793426E89}</Project>
+      <Name>SparqlParseRun</Name>
     </ProjectReference>
   </ItemGroup>
   <Choose>

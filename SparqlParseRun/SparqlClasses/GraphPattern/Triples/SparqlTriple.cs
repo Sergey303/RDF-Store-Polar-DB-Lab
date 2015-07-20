@@ -186,21 +186,21 @@ namespace SparqlParseRun.SparqlClasses.GraphPattern.Triples
                 case StoreCallCase.spo:
                     return spo(Subject, Predicate, Object, variableBinding);
                 case StoreCallCase.spO:
-                    return q.Store.GetTriplesWithSubjectPredicate(Subject, Predicate).ToArray().Select(o=>variableBinding.Add(o, oVariableNode));
+                    return q.Store.GetTriplesWithSubjectPredicate(Subject, Predicate).Select(o=>variableBinding.Add(o, oVariableNode));
                 case StoreCallCase.sPo:
-                    return q.Store.GetTriplesWithSubjectObject(Subject, Object).ToArray().Select(p => variableBinding.Add(p, pVariableNode));
+                    return q.Store.GetTriplesWithSubjectObject(Subject, Object).Select(p => variableBinding.Add(p, pVariableNode));
                     
                 case StoreCallCase.sPO:
-                    return q.Store.GetTriplesWithSubject(Subject).ToArray().Select(t => SetValues(variableBinding, t));
+                    return q.Store.GetTriplesWithSubject(Subject).Select(t => SetValues(variableBinding, t));
                     
                 case StoreCallCase.Spo:
-                    return q.Store.GetSubjects(Predicate, Object).ToArray().Select(s => variableBinding.Add(s, sVariableNode));
+                    return q.Store.GetSubjects(Predicate, Object).Select(s => variableBinding.Add(s, sVariableNode));
                     
                 case StoreCallCase.SpO:
-                    return q.Store.GetTriplesWithPredicate(Predicate).ToArray().Select(t =>     SetValues(variableBinding, t));
+                    return q.Store.GetTriplesWithPredicate(Predicate).Select(t =>     SetValues(variableBinding, t));
                     
                 case StoreCallCase.SPo:
-                    return q.Store.GetTriplesWithObject(Object).ToArray().Select(t => SetValues(variableBinding, t));
+                    return q.Store.GetTriplesWithObject(Object).Select(t => SetValues(variableBinding, t));
                     
                 case StoreCallCase.SPO:
                     return q.Store.GetTriples((s, p, o) => variableBinding.Add(s, sVariableNode, p, pVariableNode, o, oVariableNode));
@@ -212,40 +212,40 @@ namespace SparqlParseRun.SparqlClasses.GraphPattern.Triples
                     return graphs.SelectMany(graph =>
                         q.Store.NamedGraphs
                             .GetObject(Subject, Predicate, graph)
-                            .ToArray()
+                            
                             .Select(o => variableBinding.Add(o, oVariableNode)));
                 case StoreCallCase.gsPo:
                     return graphs.SelectMany(graph =>
                         q.Store.NamedGraphs
                             .GetPredicate(Subject, Object, graph)
-                            .ToArray()
+                            
                             .Select(p => variableBinding.Add(p, pVariableNode)));
                 case StoreCallCase.gsPO:
                     return graphs.SelectMany(g => 
                         q.Store
                         .NamedGraphs
                         .GetTriplesWithSubjectFromGraph(Subject, g)
-                        .ToArray()
+                        
                         .Select(quad => SetValues(variableBinding, quad)));
                 case StoreCallCase.gSpo:
                     return graphs.SelectMany(graph =>
                         q.Store.NamedGraphs
                             .GetSubject(Predicate, Object, graph)
-                            .ToArray()
+                            
                             .Select(s => variableBinding.Add(s, sVariableNode)));
                 case StoreCallCase.gSpO:
                     return graphs.SelectMany(g =>
                         q.Store
                             .NamedGraphs
                             .GetTriplesWithPredicateFromGraph(Predicate, g)
-                            .ToArray()
+                            
                             .Select(quad => SetValues(variableBinding, quad)));
                 case StoreCallCase.gSPo:
                     return graphs.SelectMany(g =>
                         q.Store
                             .NamedGraphs
                             .GetTriplesWithObjectFromGraph(Object, g)
-                            .ToArray()
+                            
                             .Select(quad => SetValues(variableBinding, quad)));
                 case StoreCallCase.gSPO:
                     return graphs.SelectMany(g=> q.Store.NamedGraphs.GetTriplesFromGraph(g, (s, p, o) => variableBinding.Add(s, sVariableNode, p, pVariableNode, o, oVariableNode))); 
@@ -254,19 +254,19 @@ namespace SparqlParseRun.SparqlClasses.GraphPattern.Triples
                     return (variableDataSet.Any()
                         ? variableDataSet.Where(g => q.Store.NamedGraphs.Contains(Subject, Predicate, Object, g))
                         : q.Store.NamedGraphs.GetGraph(Subject, Predicate, Object))
-                        .ToArray()
+                        
                         .Select(g =>variableBinding.Add( g, variableDataSet.Variable)); 
                 case StoreCallCase.GspO:
                     if(variableDataSet.Any())           
                         return  variableDataSet.SelectMany(g => q.Store
                             .NamedGraphs
                             .GetObject(Subject, Predicate, g)
-                        .ToArray()
+                        
                             .Select(o =>variableBinding.Add( o, oVariableNode, g, variableDataSet.Variable)));
                     else return q.Store
                         .NamedGraphs
                         .GetTriplesWithSubjectPredicate(Subject, Predicate)
-                        .ToArray()
+                        
                             .Select(quad => SetValues(variableBinding, quad));
 
                     // if graphVariable is null, ctor check this.
@@ -274,38 +274,38 @@ namespace SparqlParseRun.SparqlClasses.GraphPattern.Triples
                     if (variableDataSet.Any())
                         return variableDataSet.SelectMany(g => 
                             q.Store.NamedGraphs.GetPredicate(Subject, Object, g)
-                                                    .ToArray()
+                                                    
                             .Select(p =>variableBinding.Add( p, pVariableNode, g, variableDataSet.Variable)));
                     else   return q.Store
                         .NamedGraphs
                         .GetTriplesWithSubjectObject(Subject, Object)
-                                                .ToArray()
+                                                
                             .Select(quad => SetValues(variableBinding, quad));
                 case StoreCallCase.GsPO:
                     if (variableDataSet.Any())
                         return variableDataSet.SelectMany(g => q.Store
                             .NamedGraphs
                             .GetTriplesWithSubjectFromGraph(Subject, g)
-                                                    .ToArray()
+                                                    
                             .Select(quad => SetValues(variableBinding, quad)));
                     else
                         return q.Store
                             .NamedGraphs
                             .GetTriplesWithSubject(Subject)
-                                                    .ToArray()
+                                                    
                             .Select(quad => SetValues(variableBinding, quad));
                 case StoreCallCase.GSpo:
                     if (variableDataSet.Any())
                         return variableDataSet.SelectMany(g => q.Store
                             .NamedGraphs
                             .GetSubject(Predicate, Object, g)
-                                    .ToArray()
+                                    
                             .Select(s =>variableBinding.Add( s, sVariableNode, g, variableDataSet.Variable)));
                     else 
                         return q.Store
                             .NamedGraphs
                             .GetTriplesWithPredicateObject(Predicate, Object)
-                            .ToArray()
+                            
                             .Select(quad => SetValues(variableBinding, quad));
                 case StoreCallCase.GSpO:
                     ObjectVariants predicate = Predicate;
@@ -313,23 +313,23 @@ namespace SparqlParseRun.SparqlClasses.GraphPattern.Triples
                         return
                             variableDataSet.SelectMany(
                                 g => q.Store.NamedGraphs.GetTriplesWithPredicateFromGraph(predicate, g)
-                                    .ToArray()
+                                    
                                     .Select(quad => SetValues(variableBinding, quad)));
                     else
                         return q.Store.NamedGraphs.GetTriplesWithPredicate(predicate)
-                                                    .ToArray()
+                                                    
                             .Select(quad => SetValues(variableBinding, quad));
                 case StoreCallCase.GSPo:
                     if (variableDataSet.Any())
                         return variableDataSet.SelectMany(g => q.Store
                             .NamedGraphs
                             .GetTriplesWithObjectFromGraph(Object, g))
-                            .ToArray()
+                            
                             .Select(quad => SetValues(variableBinding, quad));
                     return q.Store
                         .NamedGraphs
                         .GetTriplesWithObject(Object)
-                        .ToArray()
+                        
                         .Select(quad=>SetValues(variableBinding, quad));
                 case StoreCallCase.GSPO:
                         if (variableDataSet.Any())

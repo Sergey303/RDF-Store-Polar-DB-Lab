@@ -49,6 +49,7 @@ namespace Task15UniversalIndex
             else keyents = new Dictionary<Tkey, List<PaEntry>>();
         }
         public void Warmup() { IndexArray.Warmup(); }
+        public void ActivateCache() { IndexArray.ActivateCache(); }
 
         public IEnumerable<PolarDB.PaEntry> GetAllByKey(long start, long number, Tkey key)
         {

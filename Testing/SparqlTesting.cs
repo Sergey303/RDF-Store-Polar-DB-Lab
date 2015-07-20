@@ -184,8 +184,10 @@ namespace TestingNs
                 var timer = new Stopwatch();
           //  using (
             var Store = new StoreCascadingInt("../../../Databases/int based/");
+            Store.Start();
+            Store.ActivateCache();
             {
-                Store.ReloadFrom(Config.Source_data_folder_path+"1.ttl");
+           //     Store.ReloadFrom(Config.Source_data_folder_path+"1.ttl");
                 SparqlQueryParser.Parse(Store, sq5);
 
                 for (
@@ -367,7 +369,7 @@ WHERE {
 	?product rdfs:label ?label .
 	FILTER regex(?label, ""^s"")}";
 
-       public static void OneParametrized(IStore store, int i, int count)
+       public static void OneBerlinParametrized(IStore store, int i, int count)
         {
 
           SparqlQueryParser.Parse(store, sq5);      
@@ -431,6 +433,66 @@ WHERE {
                 }
             }
         }
+       public static void OneLUMB(IStore store, int i, int count)
+       {
+
+           SparqlQueryParser.Parse(store, sq5);
+           store.Warmup();
+           {
+               var file = new FileInfo(string.Format(@"..\..\..\Testing\examples\lubm\q ({0}).rq", i));
+               var q = File.ReadAllText(file.FullName);
+               double min = int.MaxValue, max = -1, average = 0;
+               double averageParse = 0;
+               double averageCLS = 0;
+               double averageRun = 0;
+               for (int j = 0; j < count; j++)
+               {         
+                   Stopwatch timer = new Stopwatch();
+                   timer.Restart();
+                   var sparqlQuery = SparqlQueryParser.Parse(store, q);
+                   timer.Stop();
+
+                   double time1 = SparqlTesting.GetTimeWthLast2Digits(timer);
+                   averageParse += (double)((int)(100 * time1 / count)) / 100;
+
+                   timer.Restart();
+                   var sparqlResultSet = sparqlQuery.Run();
+                   timer.Stop();
+
+                   double time2 = SparqlTesting.GetTimeWthLast2Digits(timer);
+                   averageCLS += (double)((int)(100 * time2 / count)) / 100;
+
+                   timer.Restart();
+                   sparqlResultSet.Results.ToArray();
+                   timer.Stop();
+
+                   double time3 = SparqlTesting.GetTimeWthLast2Digits(timer);
+                   averageRun += (double)((int)(100 * time3 / count)) / 100;
+
+                   var time = time1 + time2 + time3;
+                   average += (double)((int)(100 * time)) / 100;
+
+
+                   if (time > max) max = time;
+                   if (min > time) min = time;
+
+                   File.WriteAllText(@"..\..\..\Testing\examples\lubm\q ({0}).json", sparqlResultSet.ToJson());
+               }
+               using (StreamWriter r = new StreamWriter(@"..\..\output.txt", true))
+               {
+                   r.WriteLine(DateTimeOffset.Now);
+                   r.WriteLine("q " + i);
+                   r.WriteLine("average " + average / count);
+                   r.WriteLine("qps " + ((double)((int)(100000 * count / average)) / 100));
+                   r.WriteLine("min " + min);
+                   r.WriteLine("max " + max);
+                   r.WriteLine("memory usage (bytes)" + GC.GetTotalMemory(false));
+                   r.WriteLine("parse (ms)" + averageParse);
+                   r.WriteLine("create linq stack " + averageCLS);
+                   r.WriteLine("run " + averageRun);
+               }
+           }
+       }
         
     }
 }

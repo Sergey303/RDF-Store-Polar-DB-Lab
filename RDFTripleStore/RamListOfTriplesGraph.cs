@@ -104,6 +104,11 @@ namespace RDFTripleStore
                             (ObjectVariants) t.Object))));
         }
 
+        public void Build(IEnumerable<TripleStrOV> triples)
+        {
+            throw new NotImplementedException();
+        }
+
         public void FromTurtle(Stream inputStream)
         {
             throw new NotImplementedException();
