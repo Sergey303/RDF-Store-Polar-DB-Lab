@@ -1,7 +1,12 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Net;
 using System.Web.Http;
 using System.Web.Mvc;
+using System.Xml.Linq;
+using RDFCommon;
+using SparqlEndpointForm;
+using SparqlParseRun.SparqlClasses;
 
 namespace SparqlEnfdPointWebApi.Controllers
 {
@@ -30,6 +35,36 @@ namespace SparqlEnfdPointWebApi.Controllers
         {
           QuerieStrings.Add(q);
             return new HttpStatusCodeResult(HttpStatusCode.OK);
+        }
+        [System.Web.Mvc.Route("load")]
+        // GET: Query
+        [System.Web.Mvc.HttpGet]
+        public ActionResult LoadXml()
+        {
+
+            //var gString = System.IO.File.ReadAllText(@"");
+            
+                var gXml = XElement.Load(@"C:\Users\Admin\Source\Repos\RDF-Store-Polar-DB-Lab\SparqlEnfdPointWebApi\fogInOne.xml");
+                RdfStores.Store.AddFromXml(gXml);
+            
+            return new HttpStatusCodeResult(HttpStatusCode.OK);
+        }
+
+      
+        [System.Web.Mvc.HttpPost]
+        public ActionResult Run([FromBody] string QueryText)
+        {
+            try
+            {
+                ViewBag.SparqlResultSet = SparqlQueryParser.Parse(RdfStores.Store, QueryText).Run();
+                return View("default");
+
+            }
+            catch (Exception ex)
+            {
+                ViewBag.ErrorMessage = ex.Message;
+                return View("default");
+            }
         }
     }
 }

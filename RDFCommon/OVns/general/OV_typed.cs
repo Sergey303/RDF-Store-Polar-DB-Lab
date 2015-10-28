@@ -40,7 +40,9 @@ namespace RDFCommon.OVns
 
         public override int GetHashCode()
         {
-            return unchecked((1277 ^ value.GetHashCode()) * (31 ^ turi.GetHashCode()) *(127*Variant.GetHashCode()));
+          //  return unchecked((1277 ^ value.GetHashCode()) * (31 ^ turi.GetHashCode()) *(127*Variant.GetHashCode()));
+          return Tuple.Create(value, Variant).GetHashCode();
+            //  return (value +turi+ Variant.ToString()).ToCharArray().GetHash();
         }
 
         public override object Content { get { return value; } }

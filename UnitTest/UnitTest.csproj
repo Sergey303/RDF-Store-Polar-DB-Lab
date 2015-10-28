@@ -34,13 +34,53 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject />
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\dll\Microsoft.VisualStudio.QualityTools.UnitTestFramework.dll</HintPath>
     </Reference>
+    <Reference Include="MPHTest">
+      <HintPath>..\Testing\MPHTest.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
-    <Reference Include="System.Xml" />
+    <Reference Include="System.Data.HashFunction.BernsteinHash">
+      <HintPath>..\packages\System.Data.HashFunction.BernsteinHash.1.8.1.0\lib\net45\System.Data.HashFunction.BernsteinHash.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Data.HashFunction.Blake2">
+      <HintPath>..\packages\System.Data.HashFunction.Blake2.1.8.1.0\lib\net45\System.Data.HashFunction.Blake2.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Data.HashFunction.Buzhash">
+      <HintPath>..\packages\System.Data.HashFunction.Buzhash.1.8.1.0\lib\net45\System.Data.HashFunction.Buzhash.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Data.HashFunction.CityHash">
+      <HintPath>..\packages\System.Data.HashFunction.CityHash.1.8.1.0\lib\net45\System.Data.HashFunction.CityHash.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Data.HashFunction.Core">
+      <HintPath>..\packages\System.Data.HashFunction.Core.1.8.1.0\lib\net45\System.Data.HashFunction.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Data.HashFunction.ELF64">
+      <HintPath>..\packages\System.Data.HashFunction.ELF64.1.8.1.0\lib\net45\System.Data.HashFunction.ELF64.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Data.HashFunction.FNV">
+      <HintPath>..\packages\System.Data.HashFunction.FNV.1.8.1.0\lib\net45\System.Data.HashFunction.FNV.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Data.HashFunction.Interfaces">
+      <HintPath>..\packages\System.Data.HashFunction.Interfaces.1.0.0.0\lib\net45\System.Data.HashFunction.Interfaces.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Data.HashFunction.Jenkins">
+      <HintPath>..\packages\System.Data.HashFunction.Jenkins.1.8.1.0\lib\net45\System.Data.HashFunction.Jenkins.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Data.HashFunction.MurmurHash">
+      <HintPath>..\packages\System.Data.HashFunction.MurmurHash.1.8.1.0\lib\net45\System.Data.HashFunction.MurmurHash.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Data.HashFunction.xxHash">
+      <HintPath>..\packages\System.Data.HashFunction.xxHash.1.8.1.0\lib\net45\System.Data.HashFunction.xxHash.dll</HintPath>
+    </Reference>
+    <Reference Include="System.XML" />
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <Choose>
@@ -64,10 +104,13 @@
       <Project>{16601FE6-F095-410B-9F63-EFC948C2B939}</Project>
       <Name>RDFTripleStore</Name>
     </ProjectReference>
-    <ProjectReference Include="..\SparqlParseRun\SparqlParseRun.csproj">
-      <Project>{AE8CBEDB-A66E-4705-953E-C16793426E89}</Project>
-      <Name>SparqlParseRun</Name>
+    <ProjectReference Include="..\UniversalIndex\UniversalIndex.csproj">
+      <Project>{e4ab7a63-7b55-43e9-b1aa-c8e0f8aa87e3}</Project>
+      <Name>UniversalIndex</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">

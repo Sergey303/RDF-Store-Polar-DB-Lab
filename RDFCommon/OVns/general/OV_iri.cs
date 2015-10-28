@@ -48,8 +48,9 @@ namespace RDFCommon.OVns
         // override object.GetHashCode
         public override int GetHashCode()
         {
-            var hashCode = uriString.GetHashCode();
-            return unchecked((11 ^ hashCode) * (13 ^ Variant.GetHashCode()));
+            //var hashCode = uriString.GetHashCode();
+            return Tuple.Create(uriString, Variant).GetHashCode();
+            //return unchecked((11 ^ hashCode) * (13 ^ Variant.GetHashCode()));
         }
 
         public string UriString

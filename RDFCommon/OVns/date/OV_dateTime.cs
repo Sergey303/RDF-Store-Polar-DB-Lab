@@ -2,7 +2,7 @@ using System;
 
 namespace RDFCommon.OVns
 {
-    public class OV_dateTime : ObjectVariants
+    public class OV_dateTime : ObjectVariants  , ILiteralNode
     {
         public readonly DateTimeOffset value;
 
@@ -18,8 +18,20 @@ namespace RDFCommon.OVns
 
         public override object WritableValue
         {
-            get { return value.ToFileTime(); }
+            get {
+                try
+                {
+                    return value.ToFileTime();
+                }
+                catch (Exception e)
+                {
+                    var d = value;
+                    throw;
+                }
+            }
         }
+
+        public string DataType { get{ return SpecialTypesClass.DateTime;} }
 
         public override object Content
         {
@@ -52,8 +64,9 @@ namespace RDFCommon.OVns
 
         public override int GetHashCode()
         {
-            var hashCode = value.GetHashCode();
-            return unchecked((47^ hashCode)  * (53^Variant.GetHashCode()));
+            //var hashCode = value.GetHashCode();
+            //return unchecked((47^ hashCode)  * (53^Variant.GetHashCode()));
+            return Tuple.Create(value, Variant).GetHashCode();
         }
 
 

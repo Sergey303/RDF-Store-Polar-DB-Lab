@@ -43,8 +43,11 @@ namespace RDFCommon.OVns
 
         public override int GetHashCode()
         {
-            var hashCode = value.GetHashCode();
-            return unchecked((101 ^ hashCode) * (727 ^ Variant.GetHashCode()));
+           // var hashCode = value.GetHashCode();
+            return Tuple.Create(value, Variant).GetHashCode();
+            //return value.GetHashCode() + Variant.GetHashCode();
+            //return  (value + Variant).ToCharArray().GetHash();
+            //   return unchecked((101 ^ hashCode) * (727 ^ Variant.GetHashCode()));
             //return Variant.GetHashCode() << 17 | (hashCode & (1 << 17 - 1));
         }
 
@@ -55,7 +58,7 @@ namespace RDFCommon.OVns
             return new OV_string(changing(value));
         }
 
-        public string DataType { get { return SpecialTypesClass.Integer; } }
+        public string DataType { get { return SpecialTypesClass.String; } }
         public override string ToString()
         {
             return value;

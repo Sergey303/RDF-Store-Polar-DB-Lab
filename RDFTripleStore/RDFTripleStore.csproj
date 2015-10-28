@@ -33,20 +33,9 @@
     <StartupObject />
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Antlr4.Runtime.net45">
-      <HintPath>..\dll\Antlr4.Runtime.net45.dll</HintPath>
-    </Reference>
-    <Reference Include="PolarDB, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\dll\PolarDB.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Web" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ICache.cs" />
@@ -62,9 +51,9 @@
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
-    <ProjectReference Include="..\GoTripleStore\GoTripleStore.csproj">
-      <Project>{1f8f5775-2b6c-4ccd-8c59-6fc80bec60ae}</Project>
-      <Name>GoTripleStore</Name>
+    <ProjectReference Include="..\..\PolarDB\PolarDB.csproj">
+      <Project>{907bb4af-fbc9-4a1e-8f80-194af9337aa4}</Project>
+      <Name>PolarDB</Name>
     </ProjectReference>
     <ProjectReference Include="..\RDFCommon\RDFCommon.csproj">
       <Project>{7eb60f80-87ca-4645-9e1f-051735195d92}</Project>

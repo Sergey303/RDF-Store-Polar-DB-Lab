@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Net;
+using System.Text;
 using System.Xml.Linq;
 using RDFCommon;
 using RDFCommon.OVns;
@@ -25,10 +26,11 @@ namespace SparqlParseRun.SparqlClasses.Update
 
         public override void RunUnSilent(IStore store)
         {
-            using (WebClient wc = new WebClient())
+            using (LongWebClient wc = new LongWebClient() { })
             {
                 //  wc.Headers[HttpRequestHeader.ContentType] = "application/sparql-query"; //"query="+ 
-                string gString = wc.DownloadString((string) @from.Content);
+                var gData = wc.DownloadData((string) @from.Content);
+                string gString = Encoding.UTF8.GetString(gData);
                 var graph = (Graph != null)
                     ? store.NamedGraphs.CreateGraph(Graph)
                     : store;

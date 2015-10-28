@@ -94,7 +94,7 @@ namespace TestingNs
             //Store.Start();
             //Store.Warmup();
             Console.WriteLine("bsbm parametered");
-            var paramvaluesFilePath = string.Format(@"..\..\examples\bsbm\queries\parameters\param values for{0} m.txt", Program.Millions);
+            var paramvaluesFilePath = string.Format(@"..\..\examples\bsbm\queries\parameters\param values for{0} m.txt", Class1.Millions);
             //            using (StreamWriter streamQueryParameters = new StreamWriter(paramvaluesFilePath))
             //                for (int j = 0; j < 1000; j++)
             //                    foreach (var file in fileInfos.Select(info => File.ReadAllText(info.FullName)))
@@ -158,7 +158,7 @@ namespace TestingNs
             }
             using (StreamWriter r = new StreamWriter(@"..\..\output.txt", true))
             {
-                r.WriteLine("milions " + Program.Millions);
+                r.WriteLine("milions " + Class1.Millions);
                 r.WriteLine("date time " + DateTime.Now);
                 r.WriteLine("max memory usage " + maxMemoryUsage);
                 r.WriteLine("average " + string.Join(", ", results.Select(l => l == 0 ? "inf" : (500 * 1000 / l).ToString())));

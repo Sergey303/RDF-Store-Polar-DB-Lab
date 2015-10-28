@@ -30,16 +30,19 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="PolarDB, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\dll\PolarDB.dll</HintPath>
+    <Reference Include="Mnemosyne">
+      <HintPath>..\packages\Mnemosyne.1.0.0.1\lib\Mnemosyne.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Data.HashFunction.Core">
+      <HintPath>..\packages\System.Data.HashFunction.Core.1.8.1.0\lib\net45\System.Data.HashFunction.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Data.HashFunction.Interfaces">
+      <HintPath>..\packages\System.Data.HashFunction.Interfaces.1.0.0.0\lib\net45\System.Data.HashFunction.Interfaces.dll</HintPath>
+    </Reference>
     <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
@@ -126,7 +129,7 @@
     <Compile Include="OVns\ObjectVariantsEx.cs" />
     <Compile Include="OVns\ObjectVariantsPolarType.cs" />
     <Compile Include="OVns\other\OV_anyURI.cs" />
-    <Compile Include="OVns\general\OV_language.cs" />
+    <Compile Include="OVns\other\OV_language.cs" />
     <Compile Include="OVns\other\OV_normalizedString.cs" />
     <Compile Include="OVns\other\OV_token.cs" />
     <Compile Include="OVns\other\OV_NMTOKEN.cs" />
@@ -148,11 +151,19 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RDFGraphSerialization.cs" />
     <Compile Include="Triple.cs" />
+    <Compile Include="WebClient.cs">
+      <SubType>Component</SubType>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
+    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\PolarDB\PolarDB.csproj">
+      <Project>{907bb4af-fbc9-4a1e-8f80-194af9337aa4}</Project>
+      <Name>PolarDB</Name>
+    </ProjectReference>
     <ProjectReference Include="..\UniversalIndex\UniversalIndex.csproj">
       <Project>{e4ab7a63-7b55-43e9-b1aa-c8e0f8aa87e3}</Project>
       <Name>UniversalIndex</Name>

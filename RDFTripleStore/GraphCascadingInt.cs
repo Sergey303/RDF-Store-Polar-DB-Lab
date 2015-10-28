@@ -17,7 +17,7 @@ namespace RDFTripleStore
 
         public void Add(ObjectVariants s, ObjectVariants p, ObjectVariants o)
         {
-            throw new NotImplementedException();
+         //po_index.
         }
         public bool Contains(ObjectVariants subj, ObjectVariants pred, ObjectVariants obj)
         {
@@ -27,7 +27,7 @@ namespace RDFTripleStore
 
         public void Delete(ObjectVariants subject, ObjectVariants predicate, ObjectVariants obj)
         {
-            throw new NotImplementedException();
+        
         }
 
         public IEnumerable<ObjectVariants> GetAllSubjects()
@@ -42,12 +42,12 @@ namespace RDFTripleStore
 
         public long GetTriplesCount()
         {
-            throw new NotImplementedException();
+            return table.Elements().Count(row => !(bool) row.Field(0).Get());
         }
 
         public bool Any()
         {
-            throw new NotImplementedException();
+            return table.Elements().Any(row => !(bool)row.Field(0).Get());            
         }
 
         public void FromTurtle(string gString)
@@ -65,9 +65,9 @@ namespace RDFTripleStore
 
         public IEnumerable<T> GetTriples<T>(Func<ObjectVariants,ObjectVariants,ObjectVariants, T> returns)
         {
+            if (Table.TableCell.Root.Count()==0) return Enumerable.Empty<T>();
             return ps_index.GetRecordsAll()
-                .Cast<object[]>()
-                
+                .Cast<object[]>()   
                 .Select(rec => returns(NodeGenerator.GetUri(rec[0]), NodeGenerator.GetUri(rec[1]), rec[2].ToOVariant(NodeGenerator)));
         }
 
@@ -137,7 +137,7 @@ namespace RDFTripleStore
                 table,
                 ob => (int)((object[])((object[])ob)[1])[1],
                 ob => ((object[])((object[])ob)[1])[2].ToOVariant(NodeGenerator),
-                ov => ov.GetHashCode());
+                ov => 1);
         }
         public void Start() 
         { 

@@ -28,6 +28,7 @@ namespace RDFTripleStore
         public void ReloadFrom(string fileName)
         {
             FromTurtle(fileName);
+            ActivateCache();
         }
 
 

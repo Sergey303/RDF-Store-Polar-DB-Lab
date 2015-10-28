@@ -48,8 +48,10 @@ namespace RDFCommon.OVns
 
         public override int GetHashCode()
         {
-            int hashCode=value.GetHashCode();
-            return unchecked((23 ^ hashCode) * (29 ^ Variant.GetHashCode()));
+            return Tuple.Create(value, Variant).GetHashCode();
+
+            //int hashCode=value.GetHashCode();
+            //return unchecked((23 ^ hashCode) * (29 ^ Variant.GetHashCode()));
         }
 
         public override object Content { get { return value; } }

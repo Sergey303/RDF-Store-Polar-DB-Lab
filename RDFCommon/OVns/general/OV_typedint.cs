@@ -4,13 +4,13 @@ namespace RDFCommon.OVns
 {
     public class OV_typedint : ObjectVariants, ILiteralNode
     {
-        internal readonly string value; public readonly int curi;
+        internal readonly string value; public readonly int typeIriCode;
         private readonly Func<int, string> nameTable;
 
-        public OV_typedint(string value, int curi, Func<int, string> nameTable)
+        public OV_typedint(string value, int typeIriCode, Func<int, string> nameTable)
         {
             this.value = value;
-            this.curi = curi;
+            this.typeIriCode = typeIriCode;
             this.nameTable = nameTable;
         }
 
@@ -21,7 +21,7 @@ namespace RDFCommon.OVns
 
         public override object WritableValue
         {
-            get { return new object[] { value, curi }; }
+            get { return new object[] { value, typeIriCode }; }
         }
 
         public override bool Equals(object obj)
@@ -32,13 +32,15 @@ namespace RDFCommon.OVns
             }
 
             var other = ((OV_typedint)obj);
-            return value == other.value && curi.Equals(other.curi);
+            return value == other.value && typeIriCode.Equals(other.typeIriCode);
         }
 
       
         public override int GetHashCode()
         {
-            return unchecked((89 ^ value.GetHashCode()) * (97 ^ curi.GetHashCode()) * (227 * Variant.GetHashCode()));
+          //  return unchecked((89 ^ value.GetHashCode()) * (97 ^ curi.GetHashCode()) * (227 * Variant.GetHashCode()));
+            return Tuple.Create(value, Variant).GetHashCode();
+           // return (typeIriCode + value + Variant).ToCharArray().GetHash();
         }
 
         public override string ToString()
@@ -49,10 +51,10 @@ namespace RDFCommon.OVns
         public override object Content { get { return value; } }
         public override ObjectVariants Change(Func<dynamic, dynamic> changing)
         {
-            return new OV_typedint(changing(value), curi, nameTable);
+            return new OV_typedint(changing(value), typeIriCode, nameTable);
         }
 
-        public string DataType { get { return nameTable(curi); } }
+        public string DataType { get { return nameTable(typeIriCode); } }
         public override int CompareTo(object obj)
         {
             int baseComp = base.CompareTo(obj);

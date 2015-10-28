@@ -45,8 +45,12 @@ namespace RDFCommon.OVns
 
         public override int GetHashCode()
         {
-            var hashCode = value.GetHashCode();
-            return unchecked((41 ^ hashCode) * (43 ^ Variant.GetHashCode()));
+        //    var hashCode = value.GetHashCode();
+          //  return unchecked((41 ^ hashCode) * (43 ^ Variant.GetHashCode()));
+            return Tuple.Create(value, Variant).GetHashCode();
+          //  return value.GetHashCode() + Variant.GetHashCode();
+           // return (value + Variant.ToString()).ToCharArray().GetHash();
+
         }
 
 

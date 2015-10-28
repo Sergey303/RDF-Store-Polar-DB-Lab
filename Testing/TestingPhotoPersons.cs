@@ -6,7 +6,6 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 using Polar.Data;
-using PolarDB;
 using RDFCommon.OVns;
 using SparqlParseRun;
 using SparqlParseRun.SparqlClasses;

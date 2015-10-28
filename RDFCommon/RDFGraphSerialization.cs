@@ -116,18 +116,20 @@ namespace RDFCommon
             else if (b is ILiteralNode)
             {
                 var literalNode = ((ILiteralNode) b);
+                string content = literalNode.Content.ToString();
+                content = content.Replace('"', '\'');
                 if (literalNode is ILanguageLiteral)
                 {
-                    return "{ \"type\" : \"literal\", \"value\" : \"" + literalNode.Content +
+                    return "{ \"type\" : \"literal\", \"value\" : \"" + content +
                          "\", \"xml:lang\": \"" + ((ILanguageLiteral)literalNode).Lang + "\" }";
                 }
                 else if (literalNode is IStringLiteralNode)
                 {
-                    return "{ \"type\" : \"literal\", \"value\" : \"" + literalNode.Content + "\" }";
+                    return "{ \"type\" : \"literal\", \"value\" : \"" + content + "\" }";
                 }
                 else 
                 {
-                    return "{ \"type\" : \"literal\", \"value\" : \"" + literalNode.Content +
+                    return "{ \"type\" : \"literal\", \"value\" : \"" + content +
                            "\", \"datatype\": \"" + literalNode.DataType + "\" }";
                 }
             }
@@ -157,44 +159,76 @@ namespace RDFCommon
                                     string.Join("," + Environment.NewLine + "                                              ", 
                                     pGroup.Select(t =>
                                     {
-                                        if (t.Object.Variant == ObjectVariantEnum.Iri)
+                                        if (t.Object is IIriNode)
                                             return "<" + t.Object + ">";
+                                        else if ((t.Object is OV_langstring)) return "\"" + t.Object + "\"@" + ((OV_langstring)t.Object).Lang;
                                         else return "\"" + t.Object + "\"^^<" + ((ILiteralNode) t.Object).DataType + ">";
                                     }))))))));
         }
 
         public static void AddFromXml(this IGraph g, XElement xRDF)
         {
-            g.Build(xRDF.Elements().SelectMany(Selector));
+            g.Build(xRDF.Elements().SelectMany(element => Xml2Triples(element,g)));
         }
 
-        private static IEnumerable<TripleStrOV> Selector(XElement xItem)
+        private static IEnumerable<TripleStrOV> Xml2Triples(XElement xItem, IGraph graph)
         {
             XNamespace rdf = XNamespace.Get("http://www.w3.org/1999/02/22-rdf-syntax-ns#");
-            var s = xItem.Attribute(rdf+"about").Value;
-            yield return   new TripleStrOV(s, "http://www.w3.org/1999/02/22-rdf-syntax-ns#type", new OV_iri(xItem.Name.ToString()));
+            var s = "http://fogid.net/e/" + xItem.Attribute(rdf + "about").Value;
+            yield return   new TripleStrOV(s, "http://www.w3.org/1999/02/22-rdf-syntax-ns#type", new OV_iri("http://fogid.net/o/"+xItem.Name.ToString()));
             foreach (var xProp in xItem.Elements())
             {
-                var p = xProp.Name.ToString();
-                var valueIriAttribute = xProp.Attribute(rdf+"resource");
-                //todo lang var valueIriAttribute = xProp.Attribute(rdf+"http://www.w3.org/1999/02/22-rdf-syntax-ns#resource");
-                if(valueIriAttribute!=null)
-                    yield return new TripleStrOV(s, p, new OV_iri(valueIriAttribute.Value));
-                else if(xProp.Elements().Any())
-                    foreach (var xObj in xProp.Elements())
-                    {
-                        var o = xObj.Attribute(rdf + "about");
-                        if(o==null) throw new Exception();
-                        yield return new TripleStrOV(s,p, new OV_iri(o.Value));
-                        yield return   new TripleStrOV(o.Value, "http://www.w3.org/1999/02/22-rdf-syntax-ns#type", new OV_iri(xItem.Name.ToString()));
-                    }
-                else if (xProp.Attribute(XNamespace.Xml+ "lang") != null) throw new NotImplementedException();
-                else if (xProp.Attribute(rdf+"datatype") != null) throw new NotImplementedException();
-                //  yield return new TripleStrOV(s, p, new OV_string(xProp.Value));
-                else 
-                    yield return new TripleStrOV(s, p, new OV_string(xProp.Value));
-
+                if (xProp.Name == "iisstore")
+                {
+                    //var iisstoreNode = graph.NodeGenerator.CreateBlank();
+                    //yield return new TripleStrOV(s,"http://fogid.net/o/iisstore",new OV_iri(iisstoreNode));
+                    //foreach (var attribute in xProp.Attributes())
+                    //    yield return
+                    //        new TripleStrOV(iisstoreNode, "http://fogid.net/o/" + attribute.Name,
+                    //            attribute.Name == "originalname" || attribute.Name == "uri"
+                    //                ? new OV_iri(attribute.Value)
+                    //                : (ObjectVariants) String2Node(attribute.Value));
+                }
+                else
+                {
+                    var p = "http://fogid.net/o/" + xProp.Name.ToString();
+                    var valueIriAttribute = xProp.Attribute(rdf + "resource");
+                    //todo lang var valueIriAttribute = xProp.Attribute(rdf+"http://www.w3.org/1999/02/22-rdf-syntax-ns#resource");
+                    if (valueIriAttribute != null)
+                        yield return new TripleStrOV(s, p, new OV_iri("http://fogid.net/e/" + valueIriAttribute.Value));
+                    else if (xProp.Elements().Any())
+                        foreach (var xObj in xProp.Elements())
+                        {
+                            var o = xObj.Attribute(rdf + "about");
+                            if (o == null) throw new Exception();
+                            yield return new TripleStrOV(s, p, new OV_iri("http://fogid.net/e/" + o.Value));
+                            yield return new TripleStrOV(o.Value, "http://www.w3.org/1999/02/22-rdf-syntax-ns#type", new OV_iri("http://fogid.net/o/" + xItem.Name.ToString()));
+                        }
+                    else if (xProp.Attribute(XNamespace.Xml + "lang") != null)
+                        yield return new TripleStrOV(s, p, new OV_langstring(xProp.Value, xProp.Attribute(XNamespace.Xml + "lang").Value));
+                    else if (xProp.Attribute(rdf + "datatype") != null)
+                        yield return new TripleStrOV(s, p, graph.NodeGenerator.CreateLiteralNode(xProp.Value, xProp.Attribute(rdf + "datatype").Value));
+                    else
+                        yield return new TripleStrOV(s, p, (ObjectVariants)String2Node(xProp.Value));
+                }
+             
             }
+        }
+
+        static ILiteralNode String2Node(string literal)
+        {
+            //DateTime date;
+            //if(DateTime.TryParse(literal, out date))
+            //    return new OV_dateTime(date);
+            int i;
+            if(Int32.TryParse(literal, out i))
+                return new OV_int(i);
+            long l;
+            if (Int64.TryParse(literal, out l))
+                return new OV_long(l);
+            //todo
+
+            return new OV_string(literal);
         }
 
         public static XElement ToXml(this IGraph g, Prologue prolog)

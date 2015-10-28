@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Web;
+using System.Xml.Linq;
 using RDFCommon;
 using RDFTripleStore;
 
@@ -11,20 +12,33 @@ namespace SparqlEndpointForm
     {
         private static StoreCascadingInt store;
 
+        public static object locker=new object();
+
         public static StoreCascadingInt Store
         {
             get
             {
-                if (store == null)
+              
                 {
-                    store = new StoreCascadingInt(AppDomain.CurrentDomain.BaseDirectory+"../Databases/int based/");
-                    store.ClearAll();
-                    store.ReloadFrom(@"C:\Users\Admin\Source\Repos\RDF-Store-Polar-DB-Lab\SparqlEnfdPointWebApi\Data.ttl");
+                    return store;
+                    
                 }
-                return store;
             }
         }
 
+        internal static void Create()
+        {   
+                store = new StoreCascadingInt(AppDomain.CurrentDomain.BaseDirectory + "../Databases/int based/");
+
+                store.Start();
+            //    store.ActivateCache();
+              //  store.ClearAll();
+
+                //store.AddFromXml(XElement.Load(@"C:\deployed\0001.xml"));
+                //File.WriteAllText("C:/deployed/all.fog.ttl",store.ToTurtle());
+            //    store.ReloadFrom(@"C:\deployed\1.ttl");
+            
+        }
     
         
     }

@@ -62,20 +62,26 @@ namespace SparqlEnfdPointWebApi.Controllers
                 var graphs = GetGraphsParames();
                 //if (Request.HttpMethod == "POST" && Request.ContentType == @"application\url-encoded")
                 //    query = HttpUtility.UrlDecode(query);
-                var resultSet = SparqlQueryParser.Parse(RdfStores.Store, (graphs ?? "") + query).Run();
-                if (Request.AcceptTypes != null && Request.AcceptTypes.Contains("text/xml"))
+                SparqlResultSet resultSet;
+                lock (RdfStores.locker)
                 {
-                    return Content(resultSet.ToXml().ToString(), "text/xml");
+                    var sparqlQuery = SparqlQueryParser.Parse(RdfStores.Store, (graphs ?? "") + query);
+                    resultSet = sparqlQuery.Run();
+
+                    if (Request.AcceptTypes != null && Request.AcceptTypes.Contains("text/xml"))
+                    {
+                        return Content(resultSet.ToXml().ToString(), "text/xml");
+                    }
+                    else if (Request.AcceptTypes != null && Request.AcceptTypes.Contains("text/json"))
+                    {
+                        return Json(resultSet.ToJson(),
+                            JsonRequestBehavior.AllowGet);
+                    }
+                    else //default 
+                        return Content(resultSet.ToXml().ToString(), "application/sparql-results+xml");
                 }
-                else if (Request.AcceptTypes != null && Request.AcceptTypes.Contains("text/json"))
-                {
-                    return Json(resultSet.ToJson(),
-                        JsonRequestBehavior.AllowGet);
-                }
-                else //default 
-                    return Content(resultSet.ToXml().ToString(), "application/sparql-results+xml");
             }
-            
+
 
             //service description   TODO
             return Content(@"<?xml version='1.0' encoding='utf-8'?>
@@ -179,7 +185,8 @@ namespace SparqlEnfdPointWebApi.Controllers
                     }
                     else if (Request.AcceptTypes != null && Request.AcceptTypes.Contains("text/json"))
                     {
-                        return Json(res.ToJson(),
+                        var json = res.ToJson();
+                        return Json(json,
                             JsonRequestBehavior.AllowGet);
                     }
                     else //default 

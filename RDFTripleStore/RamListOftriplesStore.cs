@@ -37,10 +37,7 @@ namespace RDFTripleStore
             FromTurtle(filePath);
         }
 
-        public void Warmup()
-        {
-            throw new System.NotImplementedException();
-        }
+      
 
         public void Close()
         {

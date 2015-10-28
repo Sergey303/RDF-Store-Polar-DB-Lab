@@ -13,7 +13,7 @@
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <PlatformTarget>x64</PlatformTarget>
+    <PlatformTarget>x86</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -33,15 +33,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Antlr4.Runtime.net45">
-      <HintPath>..\dll\Antlr4.Runtime.net45.dll</HintPath>
-    </Reference>
     <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\dll\Microsoft.VisualStudio.QualityTools.UnitTestFramework.dll</HintPath>
-    </Reference>
-    <Reference Include="PolarDB">
-      <HintPath>..\dll\PolarDB.dll</HintPath>
     </Reference>
     <Reference Include="SparqlParseRun, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -50,13 +44,11 @@
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BSBmParams.cs" />
+    <Compile Include="Class1.cs" />
     <Compile Include="Config.cs" />
     <Compile Include="examples\bsbm\queries\parameters\Sarr.cs" />
     <Compile Include="Performance.cs" />
@@ -68,6 +60,7 @@
     <Compile Include="TestingPhotoPersons.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="all.fog.ttl" />
     <None Include="App.config" />
     <None Include="examples\10.1 BIND Assigning to Variables\Data.ttl" />
     <None Include="examples\10.1 BIND Assigning to Variables\query1.rq" />
@@ -205,6 +198,7 @@
     <None Include="examples\insert data\Data.ttl" />
     <None Include="examples\insert data\query1.rq" />
     <None Include="examples\insert data\query2.rq" />
+    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="examples\10.1 BIND Assigning to Variables\query1.rq expected results.txt" />
@@ -393,26 +387,37 @@
     <Content Include="examples\insert data\query2.rq results of run.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\PolarDB\PolarDB.csproj">
+      <Project>{907bb4af-fbc9-4a1e-8f80-194af9337aa4}</Project>
+      <Name>PolarDB</Name>
+    </ProjectReference>
     <ProjectReference Include="..\GoTripleStore\GoTripleStore.csproj">
       <Project>{1f8f5775-2b6c-4ccd-8c59-6fc80bec60ae}</Project>
       <Name>GoTripleStore</Name>
     </ProjectReference>
     <ProjectReference Include="..\RDFCommon\RDFCommon.csproj">
-      <Project>{7EB60F80-87CA-4645-9E1F-051735195D92}</Project>
+      <Project>{7eb60f80-87ca-4645-9e1f-051735195d92}</Project>
       <Name>RDFCommon</Name>
     </ProjectReference>
     <ProjectReference Include="..\RDFTripleStore\RDFTripleStore.csproj">
-      <Project>{16601FE6-F095-410B-9F63-EFC948C2B939}</Project>
+      <Project>{16601fe6-f095-410b-9f63-efc948c2b939}</Project>
       <Name>RDFTripleStore</Name>
     </ProjectReference>
     <ProjectReference Include="..\RDFTurtleParser\RDFTurtleParser.csproj">
       <Project>{bbdc3ba5-1ecd-40b5-b3a3-c6b498e07cd1}</Project>
       <Name>RDFTurtleParser</Name>
     </ProjectReference>
+    <ProjectReference Include="..\UnitTest\UnitTest.csproj">
+      <Project>{001c512a-4090-4ade-9885-12a35f9acdb0}</Project>
+      <Name>UnitTest</Name>
+    </ProjectReference>
     <ProjectReference Include="..\UniversalIndex\UniversalIndex.csproj">
-      <Project>{E4AB7A63-7B55-43E9-B1AA-C8E0F8AA87E3}</Project>
+      <Project>{e4ab7a63-7b55-43e9-b1aa-c8e0f8aa87e3}</Project>
       <Name>UniversalIndex</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{82A7F48D-3B50-4B1E-B82E-3ADA8210C358}" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

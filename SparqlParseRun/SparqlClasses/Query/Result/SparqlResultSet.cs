@@ -152,13 +152,16 @@ namespace SparqlParseRun.SparqlClasses.Query.Result
                     headVars = string.Format(@"""head"": {{ ""vars"": [ {0} ] }}",
                         string.Join("," + Environment.NewLine,
                             Variables.Keys.Select(v => string.Format("\"{0}\"", v))));
-                    return string.Format("{{ {0}, \"status\" : {1}}}", headVars, UpdateStatus);
+                    return string.Format("{{ {0}, \"status\" : \"{1}\"}}", headVars, UpdateStatus);
 
                 default:
                     throw new ArgumentOutOfRangeException();
             }
         }
-
+        public static string GetValue(VariableNode vari, ObjectVariants value)
+        {
+            return value.ToString();
+        }
         public string ToCommaSeparatedValues()
         {
             string headVars;
